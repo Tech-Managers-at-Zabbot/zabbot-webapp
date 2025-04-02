@@ -2,6 +2,7 @@ import React from "react";
 // import Image from "next/image";
 import Head from "next/head";
 import LandingPageNavbar from "@/components/landingPage/landingNav";
+import HeroSection from "@/components/landingPage/Hero";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       </Head>
       <main className="bg-white">
       <LandingPageNavbar />
+      <HeroSection />
       </main>
     </div>
   );

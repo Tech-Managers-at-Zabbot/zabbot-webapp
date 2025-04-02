@@ -1,17 +1,19 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 
 interface DropdownProps {
   options: string[];
   icon?: React.ReactNode;
   placeholder?: string;
-  selectedOption?: string
+  selectedOption?: string;
+  mobile?: boolean; // New prop for mobile styling
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
   options,
   icon,
   placeholder = "Select an option",
+  mobile = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -24,22 +26,31 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <div className="relative leading-[145%] font-[600] text-[#E4DBDB]"
-    style={{fontFamily: 'Inter'}}
+    <div
+      className={`relative leading-[145%] font-[600] text-[#E4DBDB] ${
+        mobile ? "w-full" : "w-auto"
+      }`}
+      style={{ fontFamily: "Inter" }}
     >
       <button
         onClick={toggleDropdown}
-        className="p-3 hover:cursor-pointer text-[#E4DBDB] rounded-lg flex items-center justify-between focus:outline-none transition-colors"
-        style={{fontFamily: 'Inter'}}
+        className={`${
+          mobile ? "w-full px-4 py-3" : "p-3"
+        } hover:cursor-pointer text-[#E4DBDB] rounded-lg flex items-center justify-between focus:outline-none transition-colors ${
+          mobile ? "bg-[#3a3a3a]" : ""
+        }`}
+        style={{ fontFamily: "Inter" }}
       >
         <div className="flex items-center">
-          {icon && (
-            <span className="mr-2 pr-2 py-1">{icon}</span>
-          )}
-          {selectedOption || placeholder}
+          {icon && <span className="mr-2 pr-2 py-1">{icon}</span>}
+          <span className={mobile ? "text-sm" : ""}>
+            {selectedOption || placeholder}
+          </span>
         </div>
         <svg
-          className={`ml-2 transition-transform ${isOpen ? "transform rotate-180" : ""}`}
+          className={`ml-2 transition-transform ${
+            isOpen ? "transform rotate-180" : ""
+          } ${mobile ? "w-4 h-4" : ""}`}
           width="21"
           height="22"
           viewBox="0 0 21 22"
@@ -64,16 +75,28 @@ const Dropdown: React.FC<DropdownProps> = ({
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-          {options.map((option, index) => (
-            <div
-              key={index}
-              onClick={() => handleOptionClick(option)}
-              className="p-3 hover:bg-gray-100 cursor-pointer"
-            >
-              {option}
+        <div
+          className={`absolute z-10 ${
+            mobile ? "w-full" : "w-full min-w-[180px]"
+          } mt-1 bg-[#292424] border border-gray-600 rounded-lg shadow-lg`}
+        >
+          {options.length > 0 ? (
+            options.map((option, index) => (
+              <div
+                key={index}
+                onClick={() => handleOptionClick(option)}
+                className={`p-3 hover:bg-[#3a3a3a] cursor-pointer ${
+                  mobile ? "text-sm" : ""
+                }`}
+              >
+                {option}
+              </div>
+            ))
+          ) : (
+            <div className={`p-3 text-gray-400 ${mobile ? "text-sm" : ""}`}>
+              No options available
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
