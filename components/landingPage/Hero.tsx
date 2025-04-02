@@ -75,7 +75,7 @@ const HeroSection = () => {
         <section className="lg:w-[45%] flex items-center">
           <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
             <Image
-              src="/landingPage/landing-map.png"
+              src="/landingPage/landing-map.svg"
               alt="two phones on a world map with flags"
               fill
               className="object-contain"
