@@ -21,7 +21,7 @@ const LandingPageNavbar = () => {
         <div className="flex items-center">
           <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[48.85px] lg:w-[172px]">
             <Image
-              src="/general/zabbot-logo-white.png"
+              src="/general/zabbot-logo-white.svg"
               alt="Zabbot Logo"
               fill
               className="object-contain"
@@ -49,7 +49,7 @@ const LandingPageNavbar = () => {
             </div>
 
             <div className="flex justify-center items-center ml-4">
-              <button className="py-4 px-6 rounded-lg hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
+              <button className="py-4 px-6 rounded-lg font-[600] hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
                 Get Started
               </button>
             </div>
