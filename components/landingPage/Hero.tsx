@@ -21,18 +21,17 @@ const HeroSection = () => {
           </div>
 
           <div className="text-4xl sm:text-5xl md:text-[56px] font-[400] leading-[112%]">
-            Practice Learning a Language <br />
-            with Ease—We&apos;re So Glad <br />
-            You&apos;re Here! Get Ready to <br />
-            Explore, Grow, and Have Fun <br />
-            Along the Way. Let’s See Where <br />
+            Practice Learning a Language
+            with Ease—We&apos;re So Glad
+            You&apos;re Here! Get Ready to
+            Explore, Grow, and Have Fun
+            Along the Way. Let&apos;s See Where
             This Adventure Takes You!
           </div>
 
           <div className="text-lg sm:text-xl md:text-[25px] font-[400]">
             From your first words to fluent conversations, we&apos;re here{" "}
-            <br />
-            to make learning natural, engaging, and fun. <br />
+            to make learning natural, engaging, and fun.
             Start practicing today and watch your confidence grow!
           </div>
 
@@ -72,7 +71,7 @@ const HeroSection = () => {
         </section>
 
         {/* Images Section */}
-        <section className="lg:w-[50%] items-center">
+        <section className="lg:w-[50%] relative">
           <main className="flex justify-between">
             <div className="relative mt-10">
               <Image
@@ -96,7 +95,7 @@ const HeroSection = () => {
             </div>
           </main>
 
-          <main>
+          <main className="relative">
             <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
               <Image
                 src="/landingPage/landing-map.svg"
@@ -106,10 +105,10 @@ const HeroSection = () => {
                 priority
               />
             </div>
-            <div className="absolute w-[230px] h-[80px] left-[1325px] top-[570px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
+            <div className="absolute bottom-0 right-0 w-[30%] max-w-[230px] aspect-[230/80]">
               <Image
                 src="/landingPage/landing-lessons-songs.svg"
-                alt="two phones on a world map with flags"
+                alt="lessons and songs illustration"
                 fill
                 className="object-contain"
                 priority
