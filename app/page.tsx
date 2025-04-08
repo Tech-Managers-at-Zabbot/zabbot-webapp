@@ -8,6 +8,7 @@ import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
 import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
 import Testimonial from "@/components/landingPage/Testimonial";
 import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
+import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
 // import CarouselSection from "@/components/landingPage/CarouselSection";
 
 const Home = () => {
@@ -30,6 +31,7 @@ const Home = () => {
         <GlobalCommunityComponent />
         <Testimonial />
         <AILanguageComponent />
+        <UseCaseComponent />
       </main>
     </div>
   );
