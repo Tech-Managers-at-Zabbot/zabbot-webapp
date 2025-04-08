@@ -5,6 +5,7 @@ import LandingPageNavbar from "@/components/landingPage/landingNav";
 import HeroSection from "@/components/landingPage/Hero";
 import FeaturesSection from "@/components/landingPage/Features";
 import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
+import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
 // import CarouselSection from "@/components/landingPage/CarouselSection";
 
 const Home = () => {
@@ -24,6 +25,7 @@ const Home = () => {
       <HeroSection />
       <FeaturesSection />
       <WhyZabbotComponent />
+      <GlobalCommunityComponent />
       </main>
     </div>
   );
