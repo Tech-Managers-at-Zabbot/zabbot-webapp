@@ -55,7 +55,7 @@ const FeaturesSection = () => {
         </div>
       </section>
       <section>
-      <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[251px] lg:w-full">
             <Image
               src="/landingPage/on-track.svg"
