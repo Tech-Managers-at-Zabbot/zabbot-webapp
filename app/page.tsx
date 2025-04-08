@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="bg-white">
        <Head>
-        <title>Èdèdún - AI Powered Yorùbá Platform</title>
+        <title>Zabbot - AI Powered Language Platform</title>
         <meta
           name="description"
           content="Welcome to Zabbot Language Learning Platform"

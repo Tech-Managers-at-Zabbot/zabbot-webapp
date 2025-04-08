@@ -37,8 +37,11 @@ const LandingPageNavbar = () => {
               <div>
                 <Dropdown options={[]} placeholder="Use Cases" />
               </div>
-              <div>
+              {/* <div>
                 <Dropdown options={[]} placeholder="Resources" />
+              </div> */}
+              <div className="flex items-center justify-center">
+                <div>Help</div>
               </div>
               <div className="flex items-center justify-center">
                 <div>Pricing</div>

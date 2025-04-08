@@ -30,7 +30,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       className={`relative leading-[145%] font-[600] text-[#E4DBDB] ${
         mobile ? "w-full" : "w-auto"
       }`}
-      style={{ fontFamily: "Inter" }}
+      // style={{ fontFamily: "Inter" }}
     >
       <button
         onClick={toggleDropdown}
@@ -39,7 +39,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         } hover:cursor-pointer text-[#E4DBDB] rounded-lg flex items-center justify-between focus:outline-none transition-colors ${
           mobile ? "bg-[#3a3a3a]" : ""
         }`}
-        style={{ fontFamily: "Inter" }}
+        // style={{ fontFamily: "Inter" }}
       >
         <div className="flex items-center">
           {icon && <span className="mr-2 pr-2 py-1">{icon}</span>}

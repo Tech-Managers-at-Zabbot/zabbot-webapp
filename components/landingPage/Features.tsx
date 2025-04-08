@@ -17,11 +17,11 @@ const FeaturesSection = () => {
           Here are the <span className="text-[#F6E2C2]">reasons</span> you try
         </div>
       </section>
-      <section className="flex justify-between items-center">
+      <section className="flex gap-8 justify-center items-center">
         <div className="flex items-center">
           <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[517px] lg:w-[390px]">
             <Image
-              src="/landingPage/personalised-learning.svg"
+              src="/landingPage/learn-faster.svg"
               alt="Zabbot Logo"
               fill
               className="object-contain"
@@ -33,7 +33,7 @@ const FeaturesSection = () => {
         <div className="flex items-center">
           <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[517px] lg:w-[390px]">
             <Image
-              src="/landingPage/stay-motivated.svg"
+              src="/landingPage/fun.svg"
               alt="Zabbot Logo"
               fill
               className="object-contain"
@@ -45,7 +45,7 @@ const FeaturesSection = () => {
         <div className="flex items-center">
           <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[517px] lg:w-[390px]">
             <Image
-              src="/landingPage/learn-anytime.svg"
+              src="/landingPage/real-conversations.svg"
               alt="Zabbot Logo"
               fill
               className="object-contain"
