@@ -7,6 +7,7 @@ import FeaturesSection from "@/components/landingPage/Features";
 import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
 import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
 import Testimonial from "@/components/landingPage/Testimonial";
+import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
 // import CarouselSection from "@/components/landingPage/CarouselSection";
 
 const Home = () => {
@@ -28,6 +29,7 @@ const Home = () => {
         <WhyZabbotComponent />
         <GlobalCommunityComponent />
         <Testimonial />
+        <AILanguageComponent />
       </main>
     </div>
   );
