@@ -3,22 +3,25 @@ import Image from "next/image";
 
 const GlobalCommunityComponent = () => {
   return (
-    <div className="text-black flex p-0">
-      <main className="flex w-full p-0 justify-between">
-        <section className="flex">
+    <div className="text-black">
+      <main className="flex flex-col md:flex-row w-full p-0">
+        {/* Right image (shows first on mobile) */}
+        <section className="order-2 md:order-1 flex justify-center md:justify-start w-full md:w-auto">
           <div className="relative">
             <Image
               src="/landingPage/community.svg"
               alt="two phones on a world map with flags"
               width={700}
-                height={533.87}
+              height={533.87}
               className="object-contain"
               priority
             />
           </div>
         </section>
-        <section className="flex justify-end items-end p-0">
-        <div className="relative">
+        
+        {/* Left image (shows second on mobile) */}
+        <section className="order-1 md:order-2 flex justify-center md:justify-end w-full md:w-auto">
+          <div className="relative">
             <Image
               src="/landingPage/global-orange.svg"
               alt="two phones on a world map with flags"

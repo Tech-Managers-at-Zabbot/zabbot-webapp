@@ -7,7 +7,7 @@ const Testimonial = () => {
     return (
         <div className="w-full py-[82px] bg-[#F0F7FF] flex flex-col gap-[10px] justify-center items-center">
             <section>
-            <p className="text-lg text-[#333333] tetx-center mb-8 bg-[#FBCCBD] p-[10px] text-[16px] font-[400] rounded-[16px]">Testimonials</p>
+            <p className="text-lg text-[#333333]  mb-8 bg-[#FBCCBD] p-[10px] text-[16px] font-[400] rounded-[16px]">Testimonials</p>
             </section>
 
             <section>
