@@ -9,6 +9,7 @@ import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
 import Testimonial from "@/components/landingPage/Testimonial";
 import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
 import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
+import QuestionsSection from "@/components/landingPage/QuestionsSection";
 // import CarouselSection from "@/components/landingPage/CarouselSection";
 
 const Home = () => {
@@ -32,6 +33,7 @@ const Home = () => {
         <Testimonial />
         <AILanguageComponent />
         <UseCaseComponent />
+        <QuestionsSection />
       </main>
     </div>
   );
