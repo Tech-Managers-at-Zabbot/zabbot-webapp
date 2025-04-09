@@ -4,9 +4,9 @@ import Image from "next/image";
 const WhyZabbotComponent = () => {
   return (
     <div className="p-0 relative bg-white">
-      <main className="text-[#000000] w-full flex flex-col lg:flex-row justify-between px-4 sm:px-8 md:px-16 lg:px-[100px] gap-8 lg:gap-0">
+      <main className="text-[#000000] w-full flex flex-col lg:flex-row justify-between gap-8 lg:gap-0">
         {/* Text Content Section */}
-        <section className="flex flex-col gap-6 sm:gap-8 lg:gap-[31px] w-full lg:w-[55%] pt-12 md:pt-16 lg:pt-[100px]">
+        <section className="flex flex-col gap-6 sm:gap-8 lg:gap-[31px] w-full lg:w-[55%] sm:px-8 md:px-16 lg:px-[100px] pt-12 md:pt-16 lg:pt-[100px]">
           <div className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] text-[#000000] font-[500] leading-[100%]">
             Why Zabbot Stands Out <br className="hidden sm:block" />
             from the rest
@@ -45,8 +45,8 @@ const WhyZabbotComponent = () => {
         </section>
 
         {/* Image Section - Will stack below on mobile */}
-        <div className="w-full lg:w-[45%] flex justify-center lg:justify-end items-start pt-8 lg:pt-0">
-          <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+        <div className="w-full lg:w-[45%] flex justify-end lg:justify-end items-end">
+          <div className="relative flex justify-end items-end w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
             <Image
               src="/landingPage/global.svg"
               alt="Zabbot global illustration"
