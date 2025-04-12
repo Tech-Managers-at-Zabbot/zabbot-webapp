@@ -7,10 +7,11 @@ const QuestionsSection = () => {
     <div className="bg-white flex py-12 xl:py-20 flex-col gap-8 xl:gap-[50px] px-6 sm:px-8 md:px-16 lg:px-[112px]">
       <header className="text-3xl lg:text-4xl xl:text-[48px] text-center font-[500] text-[#0B0B0B] leading-tight xl:leading-[100%]">
         <div className="inline-flex flex-wrap justify-center gap-x-1">
-          We&apos;ve got you <span className="text-[#F15B29] whitespace-nowrap">Covered</span>
+          We&apos;ve got you{" "}
+          <span className="text-[#F15B29] whitespace-nowrap">Covered</span>
         </div>
       </header>
-      
+
       <main className="flex flex-col lg:flex-row lg:justify-between gap-6 lg:gap-8 xl:gap-12">
         {/* FAQ Section 1 */}
         <section className="w-full lg:w-[48%] flex flex-col gap-4 xl:gap-[30px]">

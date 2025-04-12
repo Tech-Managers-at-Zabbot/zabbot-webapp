@@ -18,7 +18,7 @@ const GlobalCommunityComponent = () => {
             />
           </div>
         </section>
-        
+
         {/* Left image (shows second on mobile) */}
         <section className="order-1 md:order-2 flex justify-center md:justify-end w-full md:w-auto">
           <div className="relative">

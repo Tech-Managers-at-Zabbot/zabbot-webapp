@@ -53,6 +53,12 @@ const LandingPageNavbar = () => {
 
             <div className="flex justify-center items-center ml-4">
               <button className="py-4 px-6 rounded-lg font-[600] hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
+                Stay Updated...
+              </button>
+            </div>
+
+            <div className="flex justify-center items-center ml-4">
+              <button className="py-4 px-6 rounded-lg font-[600] hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
                 Get Started
               </button>
             </div>

@@ -21,18 +21,15 @@ const HeroSection = () => {
           </div>
 
           <div className="text-4xl sm:text-5xl md:text-[56px] font-[400] leading-[112%]">
-            Practice Learning a Language
-            with Ease—We&apos;re So Glad
-            You&apos;re Here! Get Ready to
-            Explore, Grow, and Have Fun
-            Along the Way. Let&apos;s See Where
-            This Adventure Takes You!
+            Practice Learning a Language with Ease—We&apos;re So Glad
+            You&apos;re Here! Get Ready to Explore, Grow, and Have Fun Along the
+            Way. Let&apos;s See Where This Adventure Takes You!
           </div>
 
           <div className="text-lg sm:text-xl md:text-[25px] font-[400]">
-            From your first words to fluent conversations, we&apos;re here{" "}
-            to make learning natural, engaging, and fun.
-            Start practicing today and watch your confidence grow!
+            From your first words to fluent conversations, we&apos;re here to
+            make learning natural, engaging, and fun. Start practicing today and
+            watch your confidence grow!
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-[18px] items-start sm:items-center">

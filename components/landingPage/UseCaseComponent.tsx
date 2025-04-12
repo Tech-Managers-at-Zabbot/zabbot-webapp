@@ -19,8 +19,8 @@ const UseCaseComponent = () => {
           </div>
           <div className="text-[#333333] font-[400] text-sm xl:text-[16px] leading-relaxed xl:leading-[189%]">
             Turn language learning into a fun adventure with interactive
-            challenges, rewards, and progress tracking—learn while
-            you play and stay motivated every step of the way!
+            challenges, rewards, and progress tracking—learn while you play and
+            stay motivated every step of the way!
           </div>
         </section>
 

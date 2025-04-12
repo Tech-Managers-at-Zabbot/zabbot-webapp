@@ -1,5 +1,4 @@
 import React from "react";
-// import Image from "next/image";
 import Head from "next/head";
 import LandingPageNavbar from "@/components/landingPage/landingNav";
 import HeroSection from "@/components/landingPage/Hero";
@@ -10,7 +9,6 @@ import Testimonial from "@/components/landingPage/Testimonial";
 import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
 import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
 import QuestionsSection from "@/components/landingPage/QuestionsSection";
-// import CarouselSection from "@/components/landingPage/CarouselSection";
 
 const Home = () => {
   return (
@@ -22,7 +20,6 @@ const Home = () => {
           content="Welcome to Zabbot Language Learning Platform"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {/* <link rel="icon" /> */}
       </Head>
       <main className="bg-white">
         <LandingPageNavbar />
