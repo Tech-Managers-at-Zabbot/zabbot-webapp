@@ -10,6 +10,7 @@ interface NormalInputProps {
   type: string;
   error?: boolean;
   errorMessage?: string;
+  color?: string;
 }
 
 const NormalInputField: React.FC<NormalInputProps> = ({
@@ -21,6 +22,7 @@ const NormalInputField: React.FC<NormalInputProps> = ({
   type,
   error,
   errorMessage,
+  color= '#80838D'
 }) => {
   return (
     <div>
@@ -31,9 +33,10 @@ const NormalInputField: React.FC<NormalInputProps> = ({
         onChange={onChange}
         required={required}
         placeholder={placeholder}
-        className={`mt-1 text-[#80838D] bg-[#F0F0F3] border-1 block w-full px-3 h-[52px] py-2 rounded-md shadow-sm ${
+        className={`mt-1 font-[500] bg-[#F0F0F3] border-1 block w-full px-3 h-[52px] py-2 rounded-md shadow-sm ${
           error ? "border-[#D42620]" : "border-[#80838D]"
         }`}
+        style={{color}}
       />
       {error && (
         <p className="text-[#D42620] mt-2 text-xs font-medium">

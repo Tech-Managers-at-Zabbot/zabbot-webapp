@@ -1,0 +1,24 @@
+import axios from 'axios';
+import { waitingListSchema } from "@/schemas/waitinglist.schema";
+
+const API_BASE_URL = 'http://localhost:3010/api';
+
+export const joinWaitingList = async (formData: {
+  name: string;
+  email: string;
+  country: string;
+  sendUpdates: boolean;
+  betaTest: boolean;
+  contributeRecordings: boolean;
+}) => {
+  const parsed = waitingListSchema.safeParse(formData);
+          if (!parsed.success) {
+            throw new Error("Please select all fields");
+          }
+    const response = await axios.post(`${API_BASE_URL}/waiting-list/join`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+};

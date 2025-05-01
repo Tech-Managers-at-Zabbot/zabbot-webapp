@@ -2,16 +2,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import NormalInputField from "../NormalInputField";
-import PhoneInputCustom from "../PhoneNumberInput";
+// import PhoneInputCustom from "../PhoneNumberInput";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import InAppButton from "../InAppButton";
+import Link from "next/link";
+
 
 const RegisterAuth: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
+  // const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState({
@@ -57,12 +59,11 @@ const RegisterAuth: React.FC = () => {
     );
   };
 
-
   return (
     <div className="w-full max-w-md mx-auto py-4">
           <div className="text-[#000000] mb-10 w-full flex flex-col gap-[8px]">
           <h1 className="text-[27.65px] font-[700] leading-[31.8px]">Create your account</h1>
-          <p className="text-[#645D5D] font-[400] text-[14px] leading-[145%]">Don’t have an account? <span className="text-[#EB5017] hover:cursor-pointer">Login</span></p>
+          <p className="text-[#645D5D] font-[400] text-[14px] leading-[145%]">Already have an account?  <Link href="/login" style={{ textDecoration: "none", color: "#eb512f" }}><span className="text-[#EB5017] hover:cursor-pointer">Login</span></Link></p>
         </div>
       <form className="space-y-4">
         <div>
@@ -125,7 +126,7 @@ const RegisterAuth: React.FC = () => {
             errorMessage="Email is required"
           />
         </div>
-        <div>
+        {/* <div>
           <label
             htmlFor="phoneNumber"
             className="block text-sm font-medium text-[#60646C]"
@@ -143,7 +144,7 @@ const RegisterAuth: React.FC = () => {
             error={error.phoneError}
             errorMessage="Phone Number is required"
           />
-        </div>
+        </div> */}
         <div>
           <label
             htmlFor="password"

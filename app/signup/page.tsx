@@ -15,7 +15,7 @@ const SignupPage = () => {
       </Head>
       <main className="flex flex-col min-h-screen md:flex-row relative">
         <section className="bg-[#333333] hidden md:block md:w-1/2 lg:w-1/2 pt-20">
-        <AuthBanner />
+        <AuthBanner isLogin={false}/>
         </section>
         <section className="bg-white w-full md:w-1/2 lg:w-1/2 flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 py-20 min-h-screen">
         <RegisterAuth />

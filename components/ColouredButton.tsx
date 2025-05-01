@@ -10,7 +10,10 @@ export interface ButtonProps {
   paddingLeft?: string;
   paddingRight?: string;
   hoverEffect?: boolean;
+  backgroundColor?: string;
   width?: string;
+  padding?: string;
+  boxShadow?: string;
   onClick?: () => void;
 }
 
@@ -23,12 +26,16 @@ const ColouredButton: React.FC<ButtonProps> = ({
   paddingBottom,
   paddingLeft,
   paddingRight,
+  padding,
+  boxShadow = "0 4px 0 0 rgba(0, 0, 0, 0.2)",
+  backgroundColor='#333333',
   width = "230px",
+
   onClick,
 }) => {
   return (
     <button
-      className={`hover:cursor-pointer bg-[#333333] shadow-[0_4px_0_0_rgba(0,0,0,0.2)]
+      className={`hover:cursor-pointer
   hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]
   hover:translate-y-0.5
   active:shadow-none
@@ -42,7 +49,10 @@ const ColouredButton: React.FC<ButtonProps> = ({
         paddingBottom,
         paddingLeft,
         paddingRight,
-        width
+        width,
+        padding,
+        backgroundColor,
+        boxShadow
       }}
     >
       {children || title}

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Dropdown from "./landingDropDown";
 import device from "@/constants/breakpoints";
 import { useMatchMediaQuery } from "@/hooks/viewPorts";
+import Link from "next/link";
 
 const LandingPageNavbar = () => {
   //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -52,15 +53,25 @@ const LandingPageNavbar = () => {
             </div>
 
             <div className="flex justify-center items-center ml-4">
+            <Link
+            href="/waiting-list-auth"
+            style={{ textDecoration: "none", color: "#eb512f" }}
+          >
               <button className="py-4 px-6 rounded-lg font-[600] hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
                 Stay Updated...
               </button>
+              </Link>
             </div>
 
             <div className="flex justify-center items-center ml-4">
-              <button className="py-4 px-6 rounded-lg font-[600] hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
+            <Link
+            href="/signup"
+            style={{ textDecoration: "none", color: "#eb512f" }}
+          >
+              <button disabled className="py-4 px-6 rounded-lg font-[600] bg-white/80 w-full h-[55px] flex justify-center items-center text-black">
                 Get Started
               </button>
+              </Link>
             </div>
           </div>
         )}

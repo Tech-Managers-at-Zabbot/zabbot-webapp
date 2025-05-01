@@ -11,7 +11,9 @@ export interface ButtonProps {
   paddingRight?: string;
   hoverEffect?: boolean;
   width?: string;
-  onClick?: () => void;
+  disabled?: boolean;
+  color?: string;
+  onClick?: (e:unknown) => void;
 }
 
 const InAppButton: React.FC<ButtonProps> = ({
@@ -24,15 +26,17 @@ const InAppButton: React.FC<ButtonProps> = ({
   paddingLeft,
   paddingRight,
   width = "230px",
+  disabled,
+  color='white',
   onClick,
 }) => {
   return (
     <button
-      className={`hover:cursor-pointer bg-[#1F1F1F] shadow-[0_4px_0_0_rgba(0,0,0,0.2)]
-  hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]
-  hover:translate-y-0.5
-  active:shadow-none
-  active:translate-y-1
+      className={`${!disabled ? 'hover:cursor-pointer' : ''} ${!disabled ? 'bg-[#F9C10F]' : 'bg-[#E0E1E6]'} shadow-[0_4px_0_0_rgba(0,0,0,0.2)]
+      ${!disabled ? 'hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]' : ''}
+  ${!disabled ? 'hover:translate-y-0.5' : ''}
+  ${!disabled ? 'active:shadow-none' : ''}
+  ${!disabled ? 'active:translate-y-1' : ''}
   transition-all font-[700] text-white`}
       onClick={onClick}
       style={{
@@ -42,8 +46,10 @@ const InAppButton: React.FC<ButtonProps> = ({
         paddingBottom,
         paddingLeft,
         paddingRight,
-        width
+        width,
+        color
       }}
+      disabled={disabled}
     >
       {children || title}
     </button>
