@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const FoundersListBottomInformation = () => {
     return (
-      <motion.div className="min-h-screen w-full">
+      <motion.div className="w-full">
         <motion.div
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}

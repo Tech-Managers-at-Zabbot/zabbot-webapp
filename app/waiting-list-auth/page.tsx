@@ -84,7 +84,7 @@ export default function WaitingListPage() {
           </div>
 
           {/* BOTTOM PART */}
-          <div className="w-full min-h-screen pt-20 lg:pt-60 bg-[#E3F5FF]">
+          <div className="w-full pt-20 pb-20 lg:pt-60 bg-[#E3F5FF]">
             <FoundersListBottomInformation />
           </div>
         </motion.div>
