@@ -113,7 +113,7 @@ const WaitingListAuthComponent: React.FC = () => {
           console.error("Error joining waiting list", error);
           addAlert(
             "Error",
-            `Error joining waiting list: ${error}`,
+            `Error joining waiting list: ${error?.response?.data?.message}`,
             "error"
           );
           return;
@@ -134,19 +134,22 @@ const WaitingListAuthComponent: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto py-4 relative">
-      <div className="text-[white] text-center mb-10 w-full flex flex-col gap-[8px]">
-        <h1 className="text-[27.65px] font-[700] leading-[31.8px]">
-          Register to join the waiting list 😊
+    <div className="w-full max-w-lg mx-auto py-4 relative">
+      <div className="text-[black] text-center mb-10 w-full flex flex-col gap-[8px]">
+        <h1 className="text-[26px] text-[#101928] font-inter font-[600] leading-[120%]">
+        Let’s achieve 2,000 early supporters!
         </h1>
+        <div className="font-[400] text-[16px] text-[#667185] leading-[145%]">
+        Sign up, then share with others too.
+        </div>
       </div>
-      <form className="space-y-4">
+      <form className="space-y-4 flex flex-col gap-[16px]">
         <div>
           <label
             htmlFor="lastName"
-            className="block text-sm font-medium text-[white]"
+            className="block text-sm font-medium text-[black]"
           >
-            Name
+            NAME
           </label>
           <NormalInputField
           color='#162B6E'
@@ -156,7 +159,7 @@ const WaitingListAuthComponent: React.FC = () => {
               setName(e.target.value);
               setError({ ...error, nameError: false });
             }}
-            placeholder="Input your name"
+            placeholder="Type your name here"
             type="text"
             error={error.nameError}
             errorMessage="Name is required"
@@ -165,9 +168,9 @@ const WaitingListAuthComponent: React.FC = () => {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-[white]"
+            className="block text-sm font-medium text-[black]"
           >
-            Email
+            EMAIL
           </label>
           <NormalInputField
           color='#162B6E'
@@ -177,7 +180,7 @@ const WaitingListAuthComponent: React.FC = () => {
               setEmail(e.target.value);
               setError({ ...error, emailError: false });
             }}
-            placeholder="Input your email address"
+            placeholder="Type your email here"
             type="email"
             error={error.emailError}
             errorMessage="Email is required"
@@ -186,9 +189,9 @@ const WaitingListAuthComponent: React.FC = () => {
         <div>
           <label
             htmlFor="phoneNumber"
-            className="block text-sm font-medium text-[white]"
+            className="block text-sm font-medium text-[black]"
           >
-            Country of Residence
+            YOUR HOME COUNTRY
           </label>
           {!useOtherCountry ? (
             <NationalityInput
@@ -208,7 +211,7 @@ const WaitingListAuthComponent: React.FC = () => {
                 setOtherCountry(e.target.value);
                 setError({ ...error, countryError: false });
               }}
-              placeholder="Input your country"
+              placeholder="Type your home country"
               type="text"
               error={error.countryError}
               errorMessage="Country is required"
@@ -235,8 +238,10 @@ const WaitingListAuthComponent: React.FC = () => {
           </div>
         </div>
 
+
         {/* Checkboxes section */}
         <div className="space-y-3 mt-4">
+        <div className="text-[#162B6E] font-[600] text-[16px] leading-[145%]">Pick one. Pick more</div>
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -248,9 +253,9 @@ const WaitingListAuthComponent: React.FC = () => {
             />
             <label
               htmlFor="sendUpdates"
-              className="ml-2 block text-sm text-[white]"
+              className="ml-2 block text-sm text-[black]"
             >
-              Receive progress updates
+              Get Updates - cheer us on!
             </label>
           </div>
           <div className="flex items-center">
@@ -264,9 +269,9 @@ const WaitingListAuthComponent: React.FC = () => {
             />
             <label
               htmlFor="betaTest"
-              className="ml-2 block text-sm text-[white]"
+              className="ml-2 block text-sm text-[black]"
             >
-              Be a beta tester
+              Be a beta tester - shape the experience.
             </label>
           </div>
           <div className="flex items-center">
@@ -280,9 +285,9 @@ const WaitingListAuthComponent: React.FC = () => {
             />
             <label
               htmlFor="contributeRecordings"
-              className="ml-2 block text-sm text-[white]"
+              className="ml-2 block text-sm text-[black]"
             >
-              Contribute Yorùbá Recordings (~15 minutes)
+              Record Yorùbá - lend your voice to build a TTS engine.
             </label>
           </div>
           {checkboxError && (
@@ -293,8 +298,8 @@ const WaitingListAuthComponent: React.FC = () => {
         </div>
 
         <div className="mt-6">
-          <InAppButton width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
-          {isPending ? <CustomSpinner /> : <div className="text-[#162B6E]">Join us</div>}
+          <InAppButton borderRadius="8.15px" backgroundColor="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
+          {isPending ? <CustomSpinner /> : <div className="text-[white]">Sign up</div>}
           </InAppButton>
         </div>
       </form>

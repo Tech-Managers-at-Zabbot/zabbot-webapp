@@ -11,7 +11,7 @@ export function useJoinWaitingList() {
         // toast.success(data?.message || "Service Request Created Successfully");
       },
       onError: (error:any) => {
-        console.error('Error creating Service Request:', error);
+        console.error('Error creating Service Request:', error.response.data.message);
         // toast.error(error?.response?.data?.message || "Error creating space");
       },
     });

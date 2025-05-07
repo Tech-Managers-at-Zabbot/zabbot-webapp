@@ -1,10 +1,31 @@
+"use client";
 import Head from "next/head";
 import Image from "next/image";
 import WaitingListAuth from "@/components/authPage/WaitingListAuth";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import FoundersListBottomInformation from "@/components/waiting-list/BottomInfo";
+import FoundersMascotComponent from "@/components/waiting-list/MascotComponent";
 
 export default function WaitingListPage() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-[#A6DFFF] p-0 m-0 overflow-x-hidden">
+    <div className="p-0 m-0 overflow-x-hidden">
       <Head>
         <title>Practice Learning a Language with Ease</title>
         <meta
@@ -14,88 +35,59 @@ export default function WaitingListPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <div className="bg-[#A6DFFF] w-full h-full relative z-10 m-0 p-0">
-        {/* Logo Only - No Navigation */}
-        <div className="px-4 sm:px-6 mt-4 lg:px-8">
-          <div className="flex justify-start">
-            <div className="relative h-10 w-28 sm:h-12 sm:w-32 md:h-14 md:w-36 lg:h-16 lg:w-40">
-              <Image
-                src={"/general/zabbot-logo-black.png"}
-                alt="Language Learning Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
-
-          {/* Main Content Section */}
-          <div className="flex flex-col-reverse lg:flex-row items-center justify-between max-w-7xl mx-auto">
-            {/* Left Side - Text and Form */}
-            <div className="lg:w-1/2 mb-12 lg:mb-0 flex flex-col">
-              {/* Main Heading */}
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#162B6E] mb-6">
-                Practice Learning a 
-                Language <br /> with Ease...
-              </h1>
-
-              {/* Auth Form */}
-              <div className="w-full mb-10 rounded-xl bg-[#162B6E] p-6 max-h-[700px] max-w-md">
-                <WaitingListAuth />
-              </div>
+      <div className="w-full h-full relative z-10 m-0 p-0">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={isMounted ? "show" : "hidden"}
+          className="flex flex-col items-center"
+        >
+          {/* TOP PART - Reordered for mobile */}
+          <div className="flex pt-20 md:pt-40 bg-[#A6DFFF] flex-col w-full lg:flex-row justify-between items-center">
+            {/* Show mascot first on mobile */}
+            <div className="lg:hidden w-full">
+              <FoundersMascotComponent />
             </div>
 
-            {/* Right Side - Image and Flags */}
-            <div className="lg:w-1/2 relative lg:-mt-4">
-              {/* Flags */}
-              <div className="flex justify-center mb-4">
-                <div className="p-4 rounded-lg">
+            {/* Form and Logo - positioned differently for mobile */}
+            <motion.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 10,
+              }}
+              className="w-full relative lg:absolute lg:left-50 lg:top-30 flex flex-col justify-center items-center max-h-[1000px] max-w-[550px] px-4 lg:px-0 mt-10 lg:mt-0"
+            >
+              <div className="flex mb-6 lg:mb-10 justify-start max-w-7xl w-full">
+                <div className="relative w-full max-w-[350px] mx-auto lg:mx-0">
                   <Image
-                    src="/general/flags.svg"
-                    alt="Language Flags"
-                    width={324}
-                    height={78}
+                    src={"/general/zabbot-logo-blue.svg"}
+                    alt="Language Learning Logo"
+                    width={350}
+                    height={118}
+                    priority
+                    className="w-full h-auto"
                   />
                 </div>
               </div>
-
-              <div className="mb-6 p-2 rounded-lg bg-white text-[#414141] flex flex-col gap-2 relative">
-                {/* Speech bubble arrow pointing down */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full">
-                  <div
-                    className="w-0 h-0 
-                    border-l-[12px] border-l-transparent 
-                    border-t-[20px] border-t-white 
-                    border-r-[12px] border-r-transparent"
-                  ></div>
-                </div>
-                
-                <div className="flex items-center">
-                  <span className="text-[#162B6E] text-lg">Join other users from all over the world</span>
-                </div>
-                <div className="flex items-center">
-                  <p className="text-lg text-[#162B6E] mb-8">
-                    From your first words to fluent conversations, we&apos;re here to
-                    make learning natural, engaging, and fun. Start practicing
-                    today and watch your confidence grow!
-                  </p>
-                </div>
+              <div className="shadow-2xl rounded-[24px] px-6 lg:px-10 py-10 lg:py-[70px] bg-[white] w-full">
+                <WaitingListAuth />
               </div>
+            </motion.div>
 
-              {/* Mascot */}
-              <div className="relative">
-                <Image
-                  src="/general/mascot-globe-left.png"
-                  alt="Language Learning Mascot"
-                  width={600}
-                  height={600}
-                  className="w-full"
-                  priority
-                />
-              </div>
+            {/* Show mascot on desktop (right side) */}
+            <div className="hidden lg:block w-full">
+              <FoundersMascotComponent />
             </div>
           </div>
-        </div>
+
+          {/* BOTTOM PART */}
+          <div className="w-full min-h-screen pt-20 lg:pt-60 bg-[#E3F5FF]">
+            <FoundersListBottomInformation />
+          </div>
+        </motion.div>
       </div>
     </div>
   );

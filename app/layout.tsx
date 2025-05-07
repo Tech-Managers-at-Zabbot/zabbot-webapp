@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import 'animate.css';
 import { Providers } from '../components/Providers';
+import { Inter, Lexend } from 'next/font/google'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +14,18 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const lexend = Lexend({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-lexend',
+})
 
 export const metadata: Metadata = {
   title: "Zabbot",
@@ -26,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lexend.variable} antialiased`}>
         <Providers>
           {children}
         </Providers>

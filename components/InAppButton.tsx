@@ -13,6 +13,7 @@ export interface ButtonProps {
   width?: string;
   disabled?: boolean;
   color?: string;
+  backgroundColor?: string;
   onClick?: (e:unknown) => void;
 }
 
@@ -28,16 +29,17 @@ const InAppButton: React.FC<ButtonProps> = ({
   width = "230px",
   disabled,
   color='white',
+  backgroundColor="#F9C10F",
   onClick,
 }) => {
   return (
     <button
-      className={`${!disabled ? 'hover:cursor-pointer' : ''} ${!disabled ? 'bg-[#F9C10F]' : 'bg-[#E0E1E6]'} shadow-[0_4px_0_0_rgba(0,0,0,0.2)]
+      className={`${!disabled ? 'hover:cursor-pointer' : ''} shadow-[0_4px_0_0_rgba(0,0,0,0.2)]
       ${!disabled ? 'hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]' : ''}
   ${!disabled ? 'hover:translate-y-0.5' : ''}
   ${!disabled ? 'active:shadow-none' : ''}
   ${!disabled ? 'active:translate-y-1' : ''}
-  transition-all font-[700] text-white`}
+  transition-all font-[700]`}
       onClick={onClick}
       style={{
         borderRadius,
@@ -47,7 +49,8 @@ const InAppButton: React.FC<ButtonProps> = ({
         paddingLeft,
         paddingRight,
         width,
-        color
+        color,
+        backgroundColor: !disabled ? backgroundColor : "#E0E1E6"
       }}
       disabled={disabled}
     >

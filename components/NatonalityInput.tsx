@@ -91,7 +91,9 @@ const NationalityInput: React.FC<NationalityInputProps> = ({
         <div className="flex items-center px-3 py-3.5 w-full cursor-pointer">
           {selectedCountry ? (
             <div className="flex items-center">
-              <span className="text-xl mr-2">{selectedCountry.flag}</span>
+              <div className="inline-flex items-center justify-center w-6 h-6 text-2xl mr-2 rounded-full bg-gray-100">
+    {selectedCountry.flag}
+  </div>
               <span className="text-sm text-[#999999]">
                 {selectedCountry.name}
               </span>
