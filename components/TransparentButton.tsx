@@ -1,4 +1,3 @@
-/* eslint-disable */
 export interface ButtonProps {
   title?: string;
   borderRadius?: string;
