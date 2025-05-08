@@ -8,6 +8,7 @@ import { Alerts, useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
 import { useJoinWaitingList } from '../../services/waitingList/mutation';
+import { MessageIcon } from "@/constants/SvgPaths";
 
 const WaitingListAuthComponent: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -81,6 +82,14 @@ const WaitingListAuthComponent: React.FC = () => {
       return;
     }
 
+    console.log('jess',{
+      name,
+      email,
+      country: useOtherCountry ? otherCountry : country,
+      sendUpdates: checkboxes.sendUpdates,
+      betaTest: checkboxes.betaTest,
+      contributeSkills: checkboxes.contributeRecordings,
+    })
     try {
       waitingListData({
         name,
@@ -88,13 +97,13 @@ const WaitingListAuthComponent: React.FC = () => {
         country: useOtherCountry ? otherCountry : country,
         sendUpdates: checkboxes.sendUpdates,
         betaTest: checkboxes.betaTest,
-        contributeRecordings: checkboxes.contributeRecordings,
+        contributeSkills: checkboxes.contributeRecordings,
       },
       {
         onSuccess: () => {
           addAlert(
             "Success",
-            "You have successfully joined the waiting list",
+            "You have successfully joined the founders list",
             "success"
           );
           setEmail("");
@@ -110,10 +119,10 @@ const WaitingListAuthComponent: React.FC = () => {
           return router.push('/success-page')
         },
         onError: (error) => {
-          console.error("Error joining waiting list", error);
+          console.error("Error joining founders list", error);
           addAlert(
             "Error",
-            `Error joining waiting list: ${error?.response?.data?.message}`,
+            `Error joining founders list: ${error?.response?.data?.message || error}`,
             "error"
           );
           return;
@@ -134,9 +143,9 @@ const WaitingListAuthComponent: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto py-4 relative">
+    <div className="w-full max-w-lg mx-auto py-4 relative" style={{fontFamily: 'Inter'}}>
       <div className="text-[black] text-center mb-10 w-full flex flex-col gap-[8px]">
-        <h1 className="text-[26px] text-[#101928] font-inter font-[600] leading-[120%]">
+        <h1 className="text-[24px] text-[#101928] font-[600] leading-[120%]">
         Let’s achieve 2,000 early supporters!
         </h1>
         <div className="font-[400] text-[16px] text-[#667185] leading-[145%]">
@@ -147,12 +156,14 @@ const WaitingListAuthComponent: React.FC = () => {
         <div>
           <label
             htmlFor="lastName"
-            className="block text-sm font-medium text-[black]"
+            className="block text-sm font-medium text-[#101928]"
           >
             NAME
           </label>
           <NormalInputField
-          color='#162B6E'
+          border="1px solid #D0D5DD"
+          backgroundColor="#ffffff"
+          color='#101928'
             id="lastName"
             value={name}
             onChange={(e: any) => {
@@ -168,12 +179,14 @@ const WaitingListAuthComponent: React.FC = () => {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-[black]"
+            className="block text-sm font-medium text-[#101928]"
           >
             EMAIL
           </label>
           <NormalInputField
-          color='#162B6E'
+          border="1px solid #D0D5DD"
+          backgroundColor="#ffffff"
+          color='#101928'
             id="email"
             value={email}
             onChange={(e: any) => {
@@ -184,17 +197,21 @@ const WaitingListAuthComponent: React.FC = () => {
             type="email"
             error={error.emailError}
             errorMessage="Email is required"
+            icon={<MessageIcon />}
           />
         </div>
         <div>
           <label
             htmlFor="phoneNumber"
-            className="block text-sm font-medium text-[black]"
+            className="block text-sm mb-1 font-medium text-[#101928]"
           >
             YOUR HOME COUNTRY
           </label>
           {!useOtherCountry ? (
             <NationalityInput
+            border="1px solid #D0D5DD"
+          backgroundColor="#ffffff"
+          color='#101928'
               value={country}
               onChange={(countryName: string) => setCountry(countryName)}
               placeholder="Select your Country"
@@ -204,7 +221,9 @@ const WaitingListAuthComponent: React.FC = () => {
             />
           ) : (
             <NormalInputField
-            color='#162B6E'
+            border="1px solid #D0D5DD"
+            backgroundColor="#ffffff"
+            color='#101928'
               id="otherCountry"
               value={otherCountry}
               onChange={(e: any) => {
@@ -304,10 +323,10 @@ const WaitingListAuthComponent: React.FC = () => {
         </div>
       </form>
       <Alerts
-        position="top-right"
+        position="top-left"
         direction="right"
         timer={3000}
-        className="rounded-md relative z-50 !w-80"
+        className="rounded-md relative z-1000 !w-80"
       />
     </div>
   );

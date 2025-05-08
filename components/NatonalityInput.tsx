@@ -18,6 +18,9 @@ interface NationalityInputProps {
   initialCountryCode?: string;
   error?: boolean;
   errorMessage?: string;
+  color?: string;
+  backgroundColor?: string;
+  border?: string;
 }
 
 const NationalityInput: React.FC<NationalityInputProps> = ({
@@ -27,6 +30,9 @@ const NationalityInput: React.FC<NationalityInputProps> = ({
   initialCountryCode = "US",
   error,
   errorMessage,
+  color= '#80838D',
+  backgroundColor="#F0F0F3",
+  border="1px solid #80838D"
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,27 +85,25 @@ const NationalityInput: React.FC<NationalityInputProps> = ({
   return (
     <div className="w-full relative">
       <div
-        className={`flex text-[#999999] items-center border-1 px-3 h-[52px] py-2 bg-[#F0F0F3] rounded-md overflow-hidden ${
-          error ? "border-[#D42620]" : "border-[#80838D]"
-        }`}
+        className={`flex font-[400] text-[#999999] items-center border-1 px-3 h-[52px] py-2 bg-[#F0F0F3] rounded-md shadow-sm overflow-hidden`}
         onClick={() => {
           setModalVisible(true);
           setFilteredCountries(countriesData);
         }}
-        style={{ fontFamily: "Inter" }}
+        style={{ fontFamily: "Inter", color, backgroundColor, border: error ? "1px soild #D42620" : border }}
       >
         <div className="flex items-center px-3 py-3.5 w-full cursor-pointer">
           {selectedCountry ? (
             <div className="flex items-center">
-              <div className="inline-flex items-center justify-center w-6 h-6 text-2xl mr-2 rounded-full bg-gray-100">
+              <div className="inline-flex items-center justify-center w-6 h-6 text-2xl mr-2 rounded-full">
     {selectedCountry.flag}
   </div>
-              <span className="text-sm text-[#999999]">
+              <span className="">
                 {selectedCountry.name}
               </span>
             </div>
           ) : (
-            <span className="text-sm text-gray-400">{placeholder}</span>
+            <span className="text-gray-400">{placeholder}</span>
           )}
           <ChevronDown size={16} className="text-gray-500 ml-auto" />
         </div>
@@ -113,7 +117,7 @@ const NationalityInput: React.FC<NationalityInputProps> = ({
 
       {/* Country Selection Modal */}
       {modalVisible && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center sm:items-center justify-center">
+        <div className="fixed font-[400] inset-0 z-50 bg-black/60 flex items-center sm:items-center justify-center">
           <div className="bg-white w-full max-w-md rounded-t-2xl sm:rounded-xl max-h-[80vh] flex flex-col">
             {/* Modal Header */}
             <div className="flex justify-between items-center p-4 border-b border-gray-200">

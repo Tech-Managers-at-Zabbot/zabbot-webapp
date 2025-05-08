@@ -10,9 +10,9 @@ export const waitingListSchema = z.object({
   country: z.string().trim().nonempty('Please Select Country'),
   sendUpdates: z.boolean().default(false),
   betaTest: z.boolean().default(false),
-  contributeRecordings: z.boolean().default(false)
+  contributeSkills: z.boolean().default(false)
 }).refine(
-  (data) => data.sendUpdates || data.betaTest || data.contributeRecordings, 
+  (data) => data.sendUpdates || data.betaTest || data.contributeSkills, 
   {
     message: "Please select at least one option",
     path: ["sendUpdates"]

@@ -3,46 +3,41 @@ import React, { useState } from "react";
 import Link from "next/link";
 import InAppButton from "./InAppButton";
 import { CustomSpinner } from "./CustomSpinner";
+import Image from "next/image";
 
 const SuccessComponent = () => {
   const [loading, setLoading] = useState(false);
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#A6DFFF] p-4">
-      <div className="bg-[#24A5EE] rounded-lg shadow-md p-8 max-w-md w-full text-center">
+    <div className="flex flex-col gap-6 items-center justify-center h-screen bg-[#E3F5FF] p-4" style={{fontFamily: 'Lexend'}}>
+       <div className="relative flex mb-4 justify-center items-center w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px]">
+                      <Image
+                        src={"/general/zabbot-logo-blue.svg"}
+                        alt="Language Learning Logo"
+                        width={350}
+                        height={118}
+                        priority
+                        className="w-full h-auto"
+                      />
+                    </div>
+      <div className="bg-[white] flex flex-col gap-[22px] min-h-[318.51px] rounded-lg shadow-md p-8 max-w-[586px] w-full text-center">
         {/* Success Icon */}
-        <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-12 w-12 text-green-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
-        </div>
-
         {/* Title */}
-        <p className="text-lg text-green-900 font-semibold mb-4">Success!</p>
+        <p className="text-lg text-[#09111D] font-[500] text-[26.48px] leading-[35.3px] mb-4">Hooray! 🎉</p>
         
-        {/* Success Message */}
-        <h2 className="text-2xl font-bold text-[white] mb-2">Congratulations</h2>
-        
-        <p className="text-[white] mb-8">Thank you for joining our waiting list, please check your email for further information.</p>
+        <div className="mb-10 text-[#8B9298] font-[400] text-[20px] leading-[30px]">You have joined our founders circle! <br />
+        Please share with others.  Check your inbox for more information.
+        </div>
 
         {/* Home Button */}
         <Link href="/" passHref>
-        <InAppButton color="black" width="100%" onClick={() => setLoading(true)}>
-          {loading ? <CustomSpinner /> : "Home"}
+        <InAppButton borderRadius="8.15px" backgroundColor="#162B6E" disabled={loading} color="#FFFFFF" width="100%" onClick={() => setLoading(true)}>
+          {loading ? <CustomSpinner /> : "Thank You"}
           </InAppButton>
+
         </Link>
+      </div>
+      <div className="text-[#8B9298] font-[400] text-[20px] leading-[49px]">
+      Click here to follow and cheer us on! <span className="text-[#0D5EBA]"><Link href="https://www.linkedin.com/company/zabbot/" target="blank" className="">LinkedIn</Link></span> 
       </div>
     </div>
   );

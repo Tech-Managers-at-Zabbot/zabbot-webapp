@@ -40,8 +40,8 @@ const FoundersMascotComponent = () => {
                   <Image
                     src="/general/flags.svg"
                     alt="Language Flags"
-                    width={333}
-                    height={60}
+                    width={500}
+                    height={80}
                   />
                 </div>
               </motion.div>
@@ -50,8 +50,8 @@ const FoundersMascotComponent = () => {
               <div
                 className="relative"
               >
-                <section className="flex flex-col gap-[12px]">
-                <div className="font-[700] text-[57.86px] leading-[100%] text-[#162B6E] font-lexend">Practice & Learn <br /> Yorùbá with Ease!</div>
+                <section className="flex flex-col gap-[12px]" style={{fontFamily: 'Lexend'}}>
+                <div className="font-[700] text-[57.86px] leading-[100%] text-[#162B6E]">Practice & Learn <br /> Yorùbá with Ease!</div>
                 <div className="text-[#000000] font-[400] text-[29px] leading-[159%]">We want you in our founding circle. </div>
                   </section>
                  <motion.div 

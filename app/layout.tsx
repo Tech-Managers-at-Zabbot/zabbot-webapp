@@ -5,6 +5,7 @@ import 'animate.css';
 import { Providers } from '../components/Providers';
 import { Inter, Lexend } from 'next/font/google'
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

@@ -11,6 +11,9 @@ interface NormalInputProps {
   error?: boolean;
   errorMessage?: string;
   color?: string;
+  backgroundColor?: string;
+  border?: string;
+  icon?: React.ReactNode; // Add icon prop
 }
 
 const NormalInputField: React.FC<NormalInputProps> = ({
@@ -22,22 +25,37 @@ const NormalInputField: React.FC<NormalInputProps> = ({
   type,
   error,
   errorMessage,
-  color= '#80838D'
+  color = '#80838D',
+  backgroundColor = "#F0F0F3",
+  border = "1px solid #80838D",
+  icon
 }) => {
   return (
     <div>
-      <input
-        id={id}
-        type={type}
-        value={value}
-        onChange={onChange}
-        required={required}
-        placeholder={placeholder}
-        className={`mt-1 font-[500] bg-[#F0F0F3] border-1 block w-full px-3 h-[52px] py-2 rounded-md shadow-sm ${
-          error ? "border-[#D42620]" : "border-[#80838D]"
-        }`}
-        style={{color}}
-      />
+      <div className="relative">
+        <input
+          id={id}
+          type={type}
+          value={value}
+          onChange={onChange}
+          required={required}
+          placeholder={placeholder}
+          className={`mt-1 font-[400] block w-full px-3 h-[56px] py-2 rounded-md shadow-sm placeholder:text-[#98A2B3] ${
+            icon ? 'pr-10' : ''
+          }`}
+          style={{ 
+            fontFamily: "Inter", 
+            color, 
+            backgroundColor, 
+            border: error ? "1px solid #D42620" : border 
+          }}
+        />
+        {icon && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            {icon}
+          </div>
+        )}
+      </div>
       {error && (
         <p className="text-[#D42620] mt-2 text-xs font-medium">
           {errorMessage}
@@ -47,5 +65,4 @@ const NormalInputField: React.FC<NormalInputProps> = ({
   );
 };
 
-//focus:outline-none focus:ring-[#001C4C] focus:border-[#001C4C]
 export default NormalInputField;

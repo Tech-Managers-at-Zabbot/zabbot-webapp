@@ -9,7 +9,7 @@ export const joinWaitingList = async (formData: {
   country: string;
   sendUpdates: boolean;
   betaTest: boolean;
-  contributeRecordings: boolean;
+  contributeSkills: boolean;
 }) => {
   const parsed = waitingListSchema.safeParse(formData);
           if (!parsed.success) {

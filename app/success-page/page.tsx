@@ -16,9 +16,9 @@ const Otp = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <main className="flex flex-col bg-[#A6DFFF] min-h-screen relative">
+      <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
       {/* <LandingPageNavbar /> */}
-        <section className="hidden md:block w-full pt-20">
+        <section className="hidden md:block w-full">
         <SuccessComponent />
         </section>
       </main>
