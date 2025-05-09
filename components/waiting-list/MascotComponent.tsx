@@ -23,7 +23,7 @@ const FoundersMascotComponent = () => {
             {/* Right Side - Image and Flags */}
             <motion.div 
               variants={item}
-              className="relative flex flex-col gap-[10px]"
+              className="relative flex flex-col gap-[10px] items-center xl:items-start"
             >
               {/* Flags */}
               <motion.div 
@@ -50,7 +50,7 @@ const FoundersMascotComponent = () => {
               <div
                 className="relative"
               >
-                <section className="flex flex-col gap-[12px]" style={{fontFamily: 'Lexend'}}>
+                <section className="flex flex-col gap-[12px] xl:text-left lg:text-left text-center" style={{fontFamily: 'Lexend'}}>
                 <div className="font-[700] text-[57.86px] leading-[100%] text-[#162B6E]">Practice & Learn <br /> Yorùbá with Ease!</div>
                 <div className="text-[#000000] font-[400] text-[29px] leading-[159%]">We want you in our founding circle. </div>
                   </section>

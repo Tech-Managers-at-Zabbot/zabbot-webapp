@@ -47,7 +47,7 @@ export default function WaitingListPage() {
           {/* TOP PART */}
           <div className="flex flex-col lg:flex-row w-full bg-[#A6DFFF] px-4 md:px-6 lg:px-10 pt-10 md:pt-16 lg:pt-20">
             {/* Logo - always on top */}
-            <div className="lg:w-[50%] xl:w-[40%] flex justify-start mb-6 lg:mb-10 lg:absolute lg:left-20 lg:top-20">
+            <div className="lg:w-[50%] xl:w-[40%] flex xl:justify-start lg:justify-start justify-center mb-6 lg:mb-10 lg:absolute lg:left-20 lg:top-20">
               <div className="relative xl:w-[340px] w-[300px] h-[118px]">
                 <Image
                   src="/general/zabbot-logo-blue.svg"
