@@ -24,7 +24,7 @@ const SuccessComponent = () => {
         {/* Title */}
         <p className="text-lg text-[#09111D] font-[500] text-[26.48px] leading-[35.3px] mb-4">Hooray! 🎉</p>
         
-        <div className="mb-10 text-[#8B9298] font-[400] text-[20px] leading-[30px]">You have joined our founders circle! <br />
+        <div className="mb-10 text-[#8B9298] font-[400] lg:text-[20px] text-[16px] leading-[30px]">You have joined our founders circle! <br />
         Please share with others.  Check your inbox for more information.
         </div>
 
@@ -36,7 +36,7 @@ const SuccessComponent = () => {
 
         </Link>
       </div>
-      <div className="text-[#8B9298] font-[400] text-[20px] leading-[49px]">
+      <div className="text-[#8B9298] font-[400] md:text-[20px] text-[14px] leading-[49px]">
       Click here to follow and cheer us on! <span className="text-[#0D5EBA]"><Link href="https://www.linkedin.com/company/zabbot/" target="blank" className="">LinkedIn</Link></span> 
       </div>
     </div>

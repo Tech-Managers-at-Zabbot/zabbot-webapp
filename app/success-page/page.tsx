@@ -18,7 +18,7 @@ const Otp = () => {
       </Head>
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
       {/* <LandingPageNavbar /> */}
-        <section className="hidden md:block w-full">
+        <section className="w-full">
         <SuccessComponent />
         </section>
       </main>
