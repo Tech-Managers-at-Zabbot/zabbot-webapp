@@ -18,7 +18,7 @@ const WaitingListAuthComponent: React.FC = () => {
   const { addAlert } = useAlert();
 
   const [name, setName] = useState("");
-  const [country, setCountry] = useState("US");
+  const [country, setCountry] = useState("United States");
   const [checkboxes, setCheckboxes] = useState({
     sendUpdates: false,
     betaTest: false,

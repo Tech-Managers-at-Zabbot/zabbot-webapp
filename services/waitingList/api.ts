@@ -2,6 +2,7 @@ import axios from 'axios';
 import { waitingListSchema } from "@/schemas/waitinglist.schema";
 
 const API_BASE_URL = 'https://zabbot-backend-hzbq7.ondigitalocean.app/api';
+// "http://localhost:3010/api"
 
 export const joinWaitingList = async (formData: {
   name: string;
