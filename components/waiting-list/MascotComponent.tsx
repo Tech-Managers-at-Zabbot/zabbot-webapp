@@ -19,7 +19,7 @@ const FoundersMascotComponent = () => {
       };
 
     return(
-        <div className="flex flex-col w-full lg:flex-row justify-end items-center">
+        <div className="flex flex-col w-full lg:flex-row justify-center items-center">
             {/* Right Side - Image and Flags */}
             <motion.div 
               variants={item}
@@ -48,7 +48,7 @@ const FoundersMascotComponent = () => {
 
               {/* Mascot */}
               <div
-                className="relative"
+                className="relative w-full"
               >
                 <section className="flex flex-col gap-[12px] xl:text-left lg:text-left text-center" style={{fontFamily: 'Lexend'}}>
                 <div className="font-[700] text-[30px] md:text-[57.86px] xl:text-[57.86px] lg:text-[40px] leading-[100%] text-[#162B6E]">Practice & Learn <br /> Yorùbá with Ease!</div>
@@ -59,11 +59,11 @@ const FoundersMascotComponent = () => {
                 className="relative mt-6"
               >
                 <Image
-                  src="/general/image.png"
+                  src="/general/image.svg"
                   alt="Language Learning Mascot"
-                  width={1000}
+                  width={750}
                   height={1000}
-                  className="w-full"
+                  className=""
                   priority
                 />
               </motion.div>

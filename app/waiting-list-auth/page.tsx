@@ -47,7 +47,7 @@ export default function WaitingListPage() {
           {/* TOP PART */}
           <div className="flex flex-col lg:flex-row w-full bg-[#A6DFFF] px-4 md:px-6 lg:px-10 pt-10 md:pt-16 lg:pt-20">
             {/* Logo - always on top */}
-            <div className="lg:w-[50%] xl:w-[40%] flex xl:justify-start lg:justify-start justify-center lg:mb-6 lg:absolute lg:left-20 lg:top-20">
+            <div className="lg:w-[50%] xl:w-[40%] flex xl:justify-start lg:justify-start justify-center  lg:absolute lg:left-20 lg:top-20">
               <div className="relative xl:w-[340px] lg:w-[250px] md:w-[220px] w-[200px] h-[118px]">
                 <Image
                   src="/general/zabbot-logo-blue.svg"
@@ -63,13 +63,13 @@ export default function WaitingListPage() {
             <div className="flex flex-col lg:flex-row w-full items-center justify-between">
               {/* Form container */}
               <section className="w-full lg:w-[45%] flex justify-center order-2 lg:order-1 mt-8 lg:mt-0">
-                <div className="shadow-2xl xl:max-w-[500px] 2xl:max-w-[620px] max-w-[550px] rounded-[24px] px-6 lg:px-10 py-10 lg:py-[10px] 2xl:py-[20px] bg-white w-full lg:mt-30 lg:ml-10 xl:absolute 2xl:left-10 2xl:top-20 xl:top-20 relative z-20">
+                <div className="shadow-2xl xl:max-w-[500px] 2xl:max-w-[550px] max-w-[550px] rounded-[24px] px-6 lg:px-10 py-10 lg:py-[10px] 2xl:py-[10px] bg-white w-full lg:mt-30 lg:ml-10 xl:absolute 2xl:left-10 2xl:top-20 xl:top-20 relative z-20">
                   <WaitingListAuth />
                 </div>
               </section>
 
               {/* Mascot component */}
-              <div className="w-full lg:w-[45%] xl:mt-2 flex justify-center order-1 lg:order-2 pb-8 lg:pb-0">
+              <div className="w-full lg:w-[50%] xl:mt-2 flex items-center justify-center order-1 lg:order-2 pb-8 lg:pb-0">
                 <FoundersMascotComponent />
               </div>
             </div>
