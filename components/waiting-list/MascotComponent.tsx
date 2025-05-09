@@ -51,8 +51,8 @@ const FoundersMascotComponent = () => {
                 className="relative"
               >
                 <section className="flex flex-col gap-[12px] xl:text-left lg:text-left text-center" style={{fontFamily: 'Lexend'}}>
-                <div className="font-[700] text-[57.86px] leading-[100%] text-[#162B6E]">Practice & Learn <br /> Yorùbá with Ease!</div>
-                <div className="text-[#000000] font-[400] text-[29px] leading-[159%]">We want you in our founding circle. </div>
+                <div className="font-[700] text-[30px] md:text-[57.86px] xl:text-[57.86px] lg:text-[40px] leading-[100%] text-[#162B6E]">Practice & Learn <br /> Yorùbá with Ease!</div>
+                <div className="text-[#000000] font-[400] md:text-[29px] lg:text-[22px] xl:text-[29px] text-[20px] leading-[100%]">We want you in our founding circle. </div>
                   </section>
                  <motion.div 
                 animate={floatAnimation}
