@@ -252,7 +252,7 @@ const WaitingListAuthComponent: React.FC = () => {
               htmlFor="useOtherCountry"
               className="ml-2 block text-sm text-[red] italic"
             >
-              Home Country not part of the list?
+              Home Country not on list?
             </label>
           </div>
         </div>

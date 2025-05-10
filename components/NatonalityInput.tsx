@@ -142,7 +142,7 @@ const NationalityInput: React.FC<NationalityInputProps> = ({
                 className="flex-1 py-2.5 text-[#80838D] bg-transparent focus:outline-none"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search nationalities..."
+                placeholder="Search..."
                 autoCapitalize="none"
               />
               {searchQuery.length > 0 && (
