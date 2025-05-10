@@ -122,7 +122,7 @@ const NationalityInput: React.FC<NationalityInputProps> = ({
             {/* Modal Header */}
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <h3 className="text-lg font-bold text-gray-800">
-                Select Nationality
+                Select Home Country
               </h3>
               <button
                 className="p-1"

@@ -82,14 +82,14 @@ const WaitingListAuthComponent: React.FC = () => {
       return;
     }
 
-    console.log('jess',{
-      name,
-      email,
-      country: useOtherCountry ? otherCountry : country,
-      sendUpdates: checkboxes.sendUpdates,
-      betaTest: checkboxes.betaTest,
-      contributeSkills: checkboxes.contributeRecordings,
-    })
+    // console.log('jess',{
+    //   name,
+    //   email,
+    //   country: useOtherCountry ? otherCountry : country,
+    //   sendUpdates: checkboxes.sendUpdates,
+    //   betaTest: checkboxes.betaTest,
+    //   contributeSkills: checkboxes.contributeRecordings,
+    // })
     try {
       waitingListData({
         name,
@@ -252,7 +252,7 @@ const WaitingListAuthComponent: React.FC = () => {
               htmlFor="useOtherCountry"
               className="ml-2 block text-sm text-[red] italic"
             >
-              Country not part of the list?
+              Home Country not part of the list?
             </label>
           </div>
         </div>
