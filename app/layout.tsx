@@ -31,6 +31,9 @@ const lexend = Lexend({
 export const metadata: Metadata = {
   title: "Zabbot",
   description: "Zabbot Language Learning App",
+  icons: {
+    icon: "/favicon.png"
+  },
 };
 
 export default function RootLayout({

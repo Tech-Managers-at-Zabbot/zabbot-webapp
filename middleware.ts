@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === '/') {
-    return NextResponse.redirect(new URL('/waiting-list-auth', request.url))
+    return NextResponse.redirect(new URL('/founders-circle', request.url))
   }
   
   return NextResponse.next()
