@@ -103,7 +103,7 @@ const WaitingListAuthComponent: React.FC = () => {
         onSuccess: () => {
           addAlert(
             "Success",
-            "You have successfully joined the founders list",
+            "You have successfully joined the founders circle",
             "success"
           );
           setEmail("");
@@ -122,7 +122,7 @@ const WaitingListAuthComponent: React.FC = () => {
           console.error("Error joining founders list", error);
           addAlert(
             "Error",
-            `Error joining founders list: ${error?.response?.data?.message || error}`,
+            `Error joining founders circle: ${error?.response?.data?.message || error}`,
             "error"
           );
           return;
