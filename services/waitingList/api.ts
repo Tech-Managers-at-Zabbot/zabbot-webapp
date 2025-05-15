@@ -4,8 +4,7 @@ import { waitingListSchema } from "@/schemas/waitinglist.schema";
 const API_BASE_URL = "https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1";
 
 // 'http://localhost:3010/api/v1'
-// 'https://zabbot-backend-hzbq7.ondigitalocean.app/api';
-// "http://localhost:3010/api"
+// 'https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1';
 
 export const joinWaitingList = async (formData: {
   name: string;
