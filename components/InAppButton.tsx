@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 
 export interface ButtonProps {
@@ -14,6 +15,7 @@ export interface ButtonProps {
   disabled?: boolean;
   color?: string;
   backgroundColor?: string;
+  type?: any;
   onClick?: (e:unknown) => void;
 }
 
@@ -28,6 +30,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   paddingRight,
   width = "230px",
   disabled,
+  type,
   color='white',
   backgroundColor="#F9C10F",
   onClick,
@@ -53,6 +56,7 @@ const InAppButton: React.FC<ButtonProps> = ({
         backgroundColor: !disabled ? backgroundColor : "#E0E1E6"
       }}
       disabled={disabled}
+      type={type}
     >
       {children || title}
     </button>

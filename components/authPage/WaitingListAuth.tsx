@@ -75,21 +75,19 @@ const WaitingListAuthComponent: React.FC = () => {
     }
   };
 
+const handleFormKeyDown = (e: React.KeyboardEvent) => {
+  // Only prevent default if someone is trying to submit the form while the nationality modal is open
+  if (e.key === 'Enter') {
+    e.preventDefault();
+  }
+};
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateForm()) {
       return;
     }
-
-    // console.log('jess',{
-    //   name,
-    //   email,
-    //   country: useOtherCountry ? otherCountry : country,
-    //   sendUpdates: checkboxes.sendUpdates,
-    //   betaTest: checkboxes.betaTest,
-    //   contributeSkills: checkboxes.contributeRecordings,
-    // })
     try {
       waitingListData({
         name,
@@ -152,7 +150,7 @@ const WaitingListAuthComponent: React.FC = () => {
         Sign up, then share with others too.
         </div>
       </div>
-      <form className="space-y-4 flex flex-col gap-[16px]">
+      <form className="space-y-4 flex flex-col gap-[16px]" onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
         <div>
           <label
             htmlFor="lastName"
@@ -208,17 +206,17 @@ const WaitingListAuthComponent: React.FC = () => {
             YOUR HOME COUNTRY
           </label>
           {!useOtherCountry ? (
-            <NationalityInput
-            border="1px solid #D0D5DD"
-          backgroundColor="#ffffff"
-          color='#101928'
-              value={country}
-              onChange={(countryName: string) => setCountry(countryName)}
-              placeholder="Select your Country"
-              initialCountryCode="US"
-              error={error.countryError}
-              errorMessage="Country is required"
-            />
+              <NationalityInput
+                border="1px solid #D0D5DD"
+                backgroundColor="#ffffff"
+                color='#101928'
+                value={country}
+                onChange={(countryName: string) => setCountry(countryName)}
+                placeholder="Select your Country"
+                initialCountryCode="US"
+                error={error.countryError}
+                errorMessage="Country is required"
+              />
           ) : (
             <NormalInputField
             border="1px solid #D0D5DD"
@@ -317,7 +315,7 @@ const WaitingListAuthComponent: React.FC = () => {
         </div>
 
         <div className="mt-6">
-          <InAppButton borderRadius="8.15px" backgroundColor="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
+          <InAppButton type={'submit'} borderRadius="8.15px" backgroundColor="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
           {isPending ? <CustomSpinner /> : <div className="text-[white]">Sign up</div>}
           </InAppButton>
         </div>
