@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
@@ -10,13 +11,15 @@ import { useRouter } from "next/navigation";
 import { useJoinWaitingList } from '../../services/waitingList/mutation';
 import { MessageIcon } from "@/constants/SvgPaths";
 
+
+const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_COUNTRY_LENGTH = 57;
+
 const WaitingListAuthComponent: React.FC = () => {
   const [email, setEmail] = useState("");
-
   const router = useRouter()
-
   const { addAlert } = useAlert();
-
   const [name, setName] = useState("");
   const [country, setCountry] = useState("United States");
   const [checkboxes, setCheckboxes] = useState({
@@ -31,24 +34,71 @@ const WaitingListAuthComponent: React.FC = () => {
     nameError: false,
     countryError: false,
     emailError: false,
+    nameLengthError: false,
+    emailLengthError: false,
+    countryLengthError: false,
   });
 
   const [checkboxError, setCheckboxError] = useState(false);
-
   const { mutate:waitingListData, isPending } = useJoinWaitingList()
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);
+    setName(value);
+    setError({ 
+      ...error, 
+      nameError: false,
+      nameLengthError: value.length >= MAX_NAME_LENGTH
+    });
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.slice(0, MAX_EMAIL_LENGTH);
+    setEmail(value);
+    setError({ 
+      ...error, 
+      emailError: false,
+      emailLengthError: value.length >= MAX_EMAIL_LENGTH
+    });
+  };
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.slice(0, MAX_COUNTRY_LENGTH);
+    setOtherCountry(value);
+    setError({ 
+      ...error, 
+      countryError: false,
+      countryLengthError: value.length >= MAX_COUNTRY_LENGTH
+    });
+  };
+
   const validateForm = () => {
+    let isValid = true;
+    const newErrors = { ...error };
+
     if (!name) {
-      setError({ ...error, nameError: true });
-      return false;
+      newErrors.nameError = true;
+      isValid = false;
+    }
+    if (name.length > MAX_NAME_LENGTH) {
+      newErrors.nameLengthError = true;
+      isValid = false;
     }
     if (!email) {
-      setError({ ...error, emailError: true });
-      return false;
+      newErrors.emailError = true;
+      isValid = false;
+    }
+    if (email.length > MAX_EMAIL_LENGTH) {
+      newErrors.emailLengthError = true;
+      isValid = false;
     }
     if ((!country && !useOtherCountry) || (useOtherCountry && !otherCountry)) {
-      setError({ ...error, countryError: true });
-      return false;
+      newErrors.countryError = true;
+      isValid = false;
+    }
+    if (useOtherCountry && otherCountry.length > MAX_COUNTRY_LENGTH) {
+      newErrors.countryLengthError = true;
+      isValid = false;
     }
     if (
       !checkboxes.sendUpdates &&
@@ -56,9 +106,11 @@ const WaitingListAuthComponent: React.FC = () => {
       !checkboxes.contributeRecordings
     ) {
       setCheckboxError(true);
-      return false;
+      isValid = false;
     }
-    return true;
+
+    setError(newErrors);
+    return isValid;
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,12 +127,11 @@ const WaitingListAuthComponent: React.FC = () => {
     }
   };
 
-const handleFormKeyDown = (e: React.KeyboardEvent) => {
-  // Only prevent default if someone is trying to submit the form while the nationality modal is open
-  if (e.key === 'Enter') {
-    e.preventDefault();
-  }
-};
+  const handleFormKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -125,8 +176,7 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
           );
           return;
         },
-      }
-    );
+      });
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -144,7 +194,7 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
     <div className="w-full max-w-lg mx-auto py-4 relative" style={{fontFamily: 'Inter'}}>
       <div className="text-[black] text-center mb-10 w-full flex flex-col gap-[8px]">
         <h1 className="text-[24px] text-[#101928] font-[600] leading-[120%]">
-        Let’s achieve 2,000 early supporters!
+        Let's achieve 2,000 early supporters!
         </h1>
         <div className="font-[400] text-[16px] text-[#667185] leading-[145%]">
         Sign up, then share with others too.
@@ -159,19 +209,22 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
             NAME
           </label>
           <NormalInputField
-          border="1px solid #D0D5DD"
-          backgroundColor="#ffffff"
-          color='#101928'
+            border="1px solid #D0D5DD"
+            backgroundColor="#ffffff"
+            color='#101928'
             id="lastName"
             value={name}
-            onChange={(e: any) => {
-              setName(e.target.value);
-              setError({ ...error, nameError: false });
-            }}
+            onChange={handleNameChange}
             placeholder="Type your name here"
             type="text"
-            error={error.nameError}
-            errorMessage="Name is required"
+            error={error.nameError || error.nameLengthError}
+            errorMessage={
+              error.nameError 
+                ? "Name is required" 
+                : error.nameLengthError 
+                  ? `Maximum ${MAX_NAME_LENGTH} characters reached` 
+                  : ""
+            }
           />
         </div>
         <div>
@@ -182,19 +235,22 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
             EMAIL
           </label>
           <NormalInputField
-          border="1px solid #D0D5DD"
-          backgroundColor="#ffffff"
-          color='#101928'
+            border="1px solid #D0D5DD"
+            backgroundColor="#ffffff"
+            color='#101928'
             id="email"
             value={email}
-            onChange={(e: any) => {
-              setEmail(e.target.value);
-              setError({ ...error, emailError: false });
-            }}
+            onChange={handleEmailChange}
             placeholder="Type your email here"
             type="email"
-            error={error.emailError}
-            errorMessage="Email is required"
+            error={error.emailError || error.emailLengthError}
+            errorMessage={
+              error.emailError 
+                ? "Email is required" 
+                : error.emailLengthError 
+                  ? `Maximum ${MAX_EMAIL_LENGTH} characters reached` 
+                  : ""
+            }
             icon={<MessageIcon />}
           />
         </div>
@@ -219,19 +275,22 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
               />
           ) : (
             <NormalInputField
-            border="1px solid #D0D5DD"
-            backgroundColor="#ffffff"
-            color='#101928'
+              border="1px solid #D0D5DD"
+              backgroundColor="#ffffff"
+              color='#101928'
               id="otherCountry"
               value={otherCountry}
-              onChange={(e: any) => {
-                setOtherCountry(e.target.value);
-                setError({ ...error, countryError: false });
-              }}
+              onChange={handleCountryChange}
               placeholder="Type your home country"
               type="text"
-              error={error.countryError}
-              errorMessage="Country is required"
+              error={error.countryError || error.countryLengthError}
+              errorMessage={
+                error.countryError 
+                  ? "Country is required" 
+                  : error.countryLengthError 
+                    ? `Maximum ${MAX_COUNTRY_LENGTH} characters reached` 
+                    : ""
+              }
             />
           )}
           <div className="flex items-center mt-2">
@@ -242,7 +301,7 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
               checked={useOtherCountry}
               onChange={(e) => {
                 setUseOtherCountry(e.target.checked);
-                setError({ ...error, countryError: false });
+                setError({ ...error, countryError: false, countryLengthError: false });
               }}
               className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
             />
@@ -254,7 +313,6 @@ const handleFormKeyDown = (e: React.KeyboardEvent) => {
             </label>
           </div>
         </div>
-
 
         {/* Checkboxes section */}
         <div className="space-y-3 mt-4">

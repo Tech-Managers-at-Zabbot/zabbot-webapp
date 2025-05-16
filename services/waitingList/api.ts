@@ -15,13 +15,24 @@ export const joinWaitingList = async (formData: {
   contributeSkills: boolean;
 }) => {
   const parsed = waitingListSchema.safeParse(formData);
-          if (!parsed.success) {
-            throw new Error("Please select all fields");
-          }
+  
+  if (!parsed.success) {
+    // Extract the first error message
+    const errorMessages = parsed.error.errors.map(err => err.message);
+    throw new Error(errorMessages[0] || "Please check your input and try again");
+  }
+
+  try {
     const response = await axios.post(`${API_BASE_URL}/waiting-list/join`, formData, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
     return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Network error occurred");
+    }
+    throw new Error("An unexpected error occurred");
+  }
 };
