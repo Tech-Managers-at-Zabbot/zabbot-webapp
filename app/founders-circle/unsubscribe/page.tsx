@@ -4,13 +4,13 @@
 import Head from "next/head";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from 'next/navigation';
 import Link from "next/link";
 import { useUnsubscribeFromSendgridFoundersList } from "@/services/waitingList/query";
 
-export default function UnsubscribePage() {
-  const [isMounted, setIsMounted] = useState(false);
+// Create a separate component that uses useSearchParams
+function UnsubscribeContent() {
   const searchParams = useSearchParams();
   const token: any = searchParams.get('token');
 
@@ -20,6 +20,77 @@ export default function UnsubscribePage() {
     isError, 
     error 
   } = useUnsubscribeFromSendgridFoundersList(token);
+
+  // Determine status based on react-query state
+  const getUnsubscribeStatus = () => {
+    if (isLoading) return "processing";
+    if (isError) return "error";
+    if (data) return "success";
+    return "processing";
+  };
+
+  const getErrorMessage = () => {
+    if (isError) {
+      return (error as any)?.message || "An unexpected error occurred. Please try again later.";
+    }
+    return "";
+  };
+
+  return (
+    <>
+      {getUnsubscribeStatus() === "processing" && (
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-gray-600">Processing your request...</p>
+          <div className="w-8 h-8 border-4 border-[#83BECC] border-t-[#162B6E] rounded-full animate-spin"></div>
+        </div>
+      )}
+      
+      {getUnsubscribeStatus() === "success" && (
+        <div className="flex flex-col items-center gap-4">
+          <div className="text-[#162B6E] text-5xl">✓</div>
+          <p className="text-lg text-gray-700">
+            You have been successfully unsubscribed from our mailing list.
+          </p>
+          <p className="text-gray-600 mb-4">
+            We hope to see you again soon!
+          </p>
+          <Link href="/" passHref>
+            <button className="bg-[#162B6E] hover:bg-[#0f1f4d] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+              Resubscribe
+            </button>
+          </Link>
+        </div>
+      )}
+      
+      {getUnsubscribeStatus() === "error" && (
+        <div className="flex flex-col items-center gap-4">
+          <div className="text-red-500 text-5xl">✗</div>
+          <p className="text-red-500">
+            {getErrorMessage()}
+          </p>
+          <Link href="/" passHref>
+            <button className="bg-[#162B6E] hover:bg-[#0f1f4d] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+              Return Home
+            </button>
+          </Link>
+        </div>
+      )}
+    </>
+  );
+}
+
+// Loading fallback component
+function UnsubscribeLoading() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-gray-600">Loading...</p>
+      <div className="w-8 h-8 border-4 border-[#83BECC] border-t-[#162B6E] rounded-full animate-spin"></div>
+    </div>
+  );
+}
+
+export default function UnsubscribePage() {
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -47,21 +118,6 @@ export default function UnsubscribePage() {
       repeat: Infinity,
       ease: "easeInOut"
     }
-  };
-
-  // Determine status based on react-query state
-  const getUnsubscribeStatus = () => {
-    if (isLoading) return "processing";
-    if (isError) return "error";
-    if (data) return "success";
-    return "processing";
-  };
-
-  const getErrorMessage = () => {
-    if (isError) {
-      return (error as any)?.message || "An unexpected error occurred. Please try again later.";
-    }
-    return "";
   };
 
   return (
@@ -110,43 +166,9 @@ export default function UnsubscribePage() {
                       We're Sad to See You Go
                     </h1>
                     
-                    {getUnsubscribeStatus() === "processing" && (
-                      <div className="flex flex-col items-center gap-4">
-                        <p className="text-gray-600">Processing your request...</p>
-                        <div className="w-8 h-8 border-4 border-[#83BECC] border-t-[#162B6E] rounded-full animate-spin"></div>
-                      </div>
-                    )}
-                    
-                    {getUnsubscribeStatus() === "success" && (
-                      <div className="flex flex-col items-center gap-4">
-                        <div className="text-[#162B6E] text-5xl">✓</div>
-                        <p className="text-lg text-gray-700">
-                          You have been successfully unsubscribed from our mailing list.
-                        </p>
-                        <p className="text-gray-600 mb-4">
-                          We hope to see you again soon!
-                        </p>
-                        <Link href="/" passHref>
-                          <button className="bg-[#162B6E] hover:bg-[#0f1f4d] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
-                            Resubscribe
-                          </button>
-                        </Link>
-                      </div>
-                    )}
-                    
-                    {getUnsubscribeStatus() === "error" && (
-                      <div className="flex flex-col items-center gap-4">
-                        <div className="text-red-500 text-5xl">✗</div>
-                        <p className="text-red-500">
-                          {getErrorMessage()}
-                        </p>
-                        <Link href="/" passHref>
-                          <button className="bg-[#162B6E] hover:bg-[#0f1f4d] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
-                            Return Home
-                          </button>
-                        </Link>
-                      </div>
-                    )}
+                    <Suspense fallback={<UnsubscribeLoading />}>
+                      <UnsubscribeContent />
+                    </Suspense>
                   </div>
                 </motion.div>
               </section>
