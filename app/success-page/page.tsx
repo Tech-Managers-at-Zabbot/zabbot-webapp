@@ -3,7 +3,7 @@
 import SuccessComponent from "@/components/SuccessComponent";
 import Head from "next/head";
 
-const Otp = () => {
+const SuccessPage = () => {
 
 
   return (
@@ -26,4 +26,4 @@ const Otp = () => {
   );
 };
 
-export default Otp;
+export default SuccessPage;

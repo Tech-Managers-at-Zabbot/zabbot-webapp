@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
@@ -9,12 +10,12 @@ const SuccessComponent = () => {
   const [loading, setLoading] = useState(false);
   return (
     <div
-      className="flex flex-col gap-6 items-center justify-center h-screen bg-[#E3F5FF] p-4"
+      className="flex flex-col items-center justify-center min-h-screen bg-[#E3F5FF] px-4 py-8"
       style={{ fontFamily: "Lexend" }}
     >
-      <div className="relative flex mb-4 justify-center items-center w-full max-w-[280px] sm:max-w-[320px] md:max-w-[350px]">
+      <div className="w-full max-w-md mx-auto mb-6">
         <Image
-          src={"/general/zabbot-logo-blue.svg"}
+          src="/general/zabbot-logo-blue.svg"
           alt="Language Learning Logo"
           width={350}
           height={118}
@@ -22,23 +23,23 @@ const SuccessComponent = () => {
           className="w-full h-auto"
         />
       </div>
-      <div className="bg-[white] flex flex-col gap-[22px] min-h-[318.51px] rounded-lg shadow-md p-8 max-w-[586px] w-full text-center">
-        {/* Success Icon */}
+      
+      <div className="bg-white flex flex-col gap-4 rounded-lg shadow-md p-6 md:p-8 max-w-lg w-full text-center mx-auto">
         {/* Title */}
-        <p className="text-lg text-[#09111D] font-[500] text-[26.48px] leading-[35.3px] mb-4">
+        <p className="text-xl md:text-2xl lg:text-3xl text-[#09111D] font-medium">
           Hooray! 🎉
         </p>
 
-        <div className="mb-10 text-[#8B9298] font-[400] lg:text-[20px] text-[16px] leading-[30px]">
+        <div className="mb-4 md:mb-8 text-[#8B9298] text-sm md:text-base lg:text-lg">
           You have joined our founders circle! <br />
           Please share with others. Check your inbox for more information.<br/>
           If you do not see our email in your inbox, please check the promotions folder of your mail.
         </div>
 
         {/* Home Button */}
-        <Link href="/" passHref>
+        <Link href="/" passHref className="w-full mt-2">
           <InAppButton
-            borderRadius="8.15px"
+            borderRadius="8px"
             backgroundColor="#162B6E"
             disabled={loading}
             color="#FFFFFF"
@@ -49,13 +50,15 @@ const SuccessComponent = () => {
           </InAppButton>
         </Link>
       </div>
-      <div className="text-[#8B9298] font-[400] md:text-[20px] text-[14px] leading-[49px]">
+      
+      <div className="text-[#8B9298] text-xs md:text-sm lg:text-base mt-6 text-center">
         Click here to follow and cheer us on!{" "}
         <span className="text-[#0D5EBA]">
           <Link
             href="https://www.linkedin.com/company/zabbot/"
-            target="blank"
-            className=""
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
           >
             LinkedIn
           </Link>
