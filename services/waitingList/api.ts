@@ -6,7 +6,7 @@ const API_BASE_URL = "https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1";
 // 'http://localhost:3010/api/v1'
 // 'https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1';
 
-export const joinWaitingList = async (formData: {
+export const joinFoundersList = async (formData: {
   name: string;
   email: string;
   country: string;
@@ -17,7 +17,6 @@ export const joinWaitingList = async (formData: {
   const parsed = waitingListSchema.safeParse(formData);
   
   if (!parsed.success) {
-    // Extract the first error message
     const errorMessages = parsed.error.errors.map(err => err.message);
     throw new Error(errorMessages[0] || "Please check your input and try again");
   }
@@ -36,3 +35,16 @@ export const joinWaitingList = async (formData: {
     throw new Error("An unexpected error occurred");
   }
 };
+
+
+export const unSubscribeFromFoundersList = async (token: string) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/notification/notification/founding-list/unsubscribe?token=${token}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Network error occurred");
+    }
+    throw new Error("An unexpected error occurred");
+  }
+}

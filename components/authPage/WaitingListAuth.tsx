@@ -8,7 +8,7 @@ import NationalityInput from "../NatonalityInput";
 import { Alerts, useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
-import { useJoinWaitingList } from '../../services/waitingList/mutation';
+import { useJoinFoundersList } from '../../services/waitingList/mutation';
 import { MessageIcon } from "@/constants/SvgPaths";
 
 
@@ -40,7 +40,7 @@ const WaitingListAuthComponent: React.FC = () => {
   });
 
   const [checkboxError, setCheckboxError] = useState(false);
-  const { mutate:waitingListData, isPending } = useJoinWaitingList()
+  const { mutate:waitingListData, isPending } = useJoinFoundersList()
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.slice(0, MAX_NAME_LENGTH);

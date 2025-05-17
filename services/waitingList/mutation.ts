@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from "@tanstack/react-query";
-import {  joinWaitingList } from "./api";
+import {  joinFoundersList } from "./api";
 // import Cookies from "js-cookie";
 
-export function useJoinWaitingList() {
+export function useJoinFoundersList() {
     // const queryClient = useQueryClient();
     return useMutation({
-      mutationFn: joinWaitingList,
+      mutationFn: joinFoundersList,
       onSuccess: async () => {
         // toast.success(data?.message || "Service Request Created Successfully");
       },
