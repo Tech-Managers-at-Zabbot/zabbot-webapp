@@ -39,7 +39,7 @@ export const joinFoundersList = async (formData: {
 
 export const unSubscribeFromFoundersList = async (token: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/notification/notification/founding-list/unsubscribe?token=${token}`);
+    const response = await axios.get(`${API_BASE_URL}/waiting-list/unsubscribe?token=${token}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
