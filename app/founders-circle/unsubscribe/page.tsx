@@ -51,11 +51,11 @@ function UnsubscribeContent() {
           <p className="text-lg text-gray-700">
             You have been successfully unsubscribed from our mailing list.
           </p>
-          <p className="text-gray-600 mb-4">
+          {/* <p className="text-gray-600 mb-4">
             We hope to see you again soon!
-          </p>
+          </p> */}
           <Link href="/" passHref>
-            <button className="bg-[#162B6E] hover:bg-[#0f1f4d] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+            <button className="bg-[#162B6E] shadow-[0_4px_0_0_rgba(0,0,0,0.2)] hover:bg-[#0f1f4d] hover:cursor-pointer text-white font-semibold py-3 px-6 rounded-[8.15px] transition-all duration-300 transform hover:scale-105">
               Home
             </button>
           </Link>
@@ -69,7 +69,7 @@ function UnsubscribeContent() {
             {getErrorMessage()}
           </p>
           <Link href="/" passHref>
-            <button className="bg-[#162B6E] hover:bg-[#0f1f4d] text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+           <button className="bg-[#162B6E] shadow-[0_4px_0_0_rgba(0,0,0,0.2)] hover:bg-[#0f1f4d] hover:cursor-pointer text-white font-semibold py-3 px-6 rounded-[8.15px] transition-all duration-300 transform hover:scale-105">
               Return Home
             </button>
           </Link>
@@ -152,9 +152,9 @@ export default function UnsubscribePage() {
           >
             <div className="shadow-2xl max-w-[550px] rounded-[24px] px-6 md:px-10 py-10 bg-white w-full">
               <div className="flex flex-col items-center text-center gap-6">
-                <h1 className="text-[#162B6E] font-bold text-3xl md:text-4xl">
+                {/* <h1 className="text-[#162B6E] font-bold text-3xl md:text-4xl">
                   We're Sad to See You Go <br /> <br /> We'll Miss You! <br />  😢 <br/> We Hope to See You Again Soon!
-                </h1>
+                </h1> */}
                 
                 <Suspense fallback={<UnsubscribeLoading />}>
                   <UnsubscribeContent />
@@ -164,7 +164,7 @@ export default function UnsubscribePage() {
           </motion.div>
           
           {/* Footer */}
-          <footer 
+          {/* <footer 
             style={{fontFamily: 'Lexend'}} 
             className="w-full px-4 sm:px-6 md:px-10 mt-12 mb-10"
           >
@@ -188,7 +188,7 @@ export default function UnsubscribePage() {
                 </Link>
               </div>
             </motion.div>
-          </footer>
+          </footer> */}
         </motion.div>
       </div>
     </div>
