@@ -317,6 +317,41 @@ const WaitingListAuthComponent: React.FC = () => {
         {/* Checkboxes section */}
         <div className="space-y-3 mt-4">
         <div className="text-[#162B6E] font-[600] text-[16px] leading-[145%]">Pick one. Pick more</div>
+
+                  <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="betaTest"
+              name="betaTest"
+              checked={checkboxes.betaTest}
+              onChange={handleCheckboxChange}
+              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <label
+              htmlFor="betaTest"
+              className="ml-2 block text-sm text-[black]"
+            >
+              Get FREE access as a beta tester
+            </label>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="contributeRecordings"
+              name="contributeRecordings"
+              checked={checkboxes.contributeRecordings}
+              onChange={handleCheckboxChange}
+              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <label
+              htmlFor="contributeRecordings"
+              className="ml-2 block text-sm text-[black]"
+            >
+              Record in Yorùbá - be part of the experience
+            </label>
+          </div>
+          
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -333,38 +368,7 @@ const WaitingListAuthComponent: React.FC = () => {
               Get Updates - cheer us on!
             </label>
           </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="betaTest"
-              name="betaTest"
-              checked={checkboxes.betaTest}
-              onChange={handleCheckboxChange}
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            />
-            <label
-              htmlFor="betaTest"
-              className="ml-2 block text-sm text-[black]"
-            >
-              Be a beta tester - shape the experience.
-            </label>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="contributeRecordings"
-              name="contributeRecordings"
-              checked={checkboxes.contributeRecordings}
-              onChange={handleCheckboxChange}
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-            />
-            <label
-              htmlFor="contributeRecordings"
-              className="ml-2 block text-sm text-[black]"
-            >
-              Record Yorùbá - lend your voice to build a TTS engine.
-            </label>
-          </div>
+
           {checkboxError && (
             <p className="mt-1 text-sm text-red-600">
               Please select at least one option
