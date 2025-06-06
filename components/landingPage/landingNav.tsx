@@ -5,6 +5,8 @@ import Dropdown from "./landingDropDown";
 import device from "@/constants/breakpoints";
 import { useMatchMediaQuery } from "@/hooks/viewPorts";
 import Link from "next/link";
+import { appColors } from "@/constants/colors";
+import ColouredButton from "../ColouredButton";
 
 const LandingPageNavbar = () => {
   //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,7 +17,7 @@ const LandingPageNavbar = () => {
   //   const showMobileMenu = isTabletOrBelow || mobileMenuOpen;
 
   return (
-    <nav className="bg-black px-4 sm:px-6 md:px-8 lg:px-[112px] h-16 md:h-20 lg:h-[126px] w-full">
+    <nav className="bg-[#24A5EE] px-4 sm:px-6 md:px-8 lg:px-[112px] h-16 md:h-20 lg:h-[126px] w-full">
       {/* Main Navbar Content */}
       <div className="flex items-center justify-between h-full w-full">
         {/* Logo Section */}
@@ -31,10 +33,9 @@ const LandingPageNavbar = () => {
           </div>
         </div>
 
-        {/* Desktop Navigation (hidden on tablet and below) */}
-        {!isLaptopOrBelow && (
-          <div className="flex items-center space-x-8">
-            <div className="flex text-[#E4DBDB] font-[600] bg-[#292424] gap-8 py-4 px-10 rounded-[40px]">
+            <div
+              className={`flex text-[${appColors.officeBrown100}] font-[600] bg-[#207EC5] gap-8 py-4 px-10 rounded-[40px]`}
+            >
               <div>
                 <Dropdown options={[]} placeholder="Use Cases" />
               </div>
@@ -52,7 +53,7 @@ const LandingPageNavbar = () => {
               </div>
             </div>
 
-            <div className="flex justify-center items-center ml-4">
+            {/* <div className="flex justify-center items-center ml-4">
             <Link
             href="/waiting-list-auth"
             style={{ textDecoration: "none", color: "#eb512f" }}
@@ -61,20 +62,26 @@ const LandingPageNavbar = () => {
                 Stay Updated...
               </button>
               </Link>
-            </div>
+            </div> */}
 
             <div className="flex justify-center items-center ml-4">
-            <Link
-            href="/signup"
-            style={{ textDecoration: "none", color: "#eb512f" }}
-          >
-              <button disabled className="py-4 px-6 rounded-lg font-[600] bg-white/80 w-full h-[55px] flex justify-center items-center text-black">
-                Get Started
-              </button>
+              <Link
+                href="/signup"
+                style={{ textDecoration: "none", color: "#eb512f" }}
+              >
+                <ColouredButton
+                  boxShadow="0"
+                  color="#000000"
+                  backgroundColor="#F9C10F"
+                  borderRadius="48px"
+                  padding="16px 24px"
+                  height=""
+                  width="167px"
+                >
+                  Get Started
+                </ColouredButton>
               </Link>
             </div>
-          </div>
-        )}
 
         {/* Mobile Menu Button (shown on laptop and below) */}
         {/* {isLaptopOrBelow && (
