@@ -13,7 +13,7 @@ interface NormalInputProps {
   color?: string;
   backgroundColor?: string;
   border?: string;
-  icon?: React.ReactNode; // Add icon prop
+  icon?: React.ReactNode;
 }
 
 const NormalInputField: React.FC<NormalInputProps> = ({

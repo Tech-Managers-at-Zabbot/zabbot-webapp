@@ -6,15 +6,17 @@ import NormalInputField from "../NormalInputField";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import InAppButton from "../InAppButton";
 import Link from "next/link";
-
+import { appColors } from "@/constants/colors";
 
 const RegisterAuth: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   // const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [error, setError] = useState({
     firstNameError: false,
@@ -24,16 +26,25 @@ const RegisterAuth: React.FC = () => {
     passwordError: false,
     genderError: false,
     ageGroupError: false,
+    confirmPasswordError: false,
   });
 
   // Password validation states
   const [passwordValidations, setPasswordValidations] = useState({
-    hasAlphabet: false,
-    hasCapitalLetter: false,
-    hasNumber: false,
-    hasSpecialChar: false,
+    // hasAlphabet: false,
+    // hasCapitalLetter: false,
+    // hasNumber: false,
+    // hasSpecialChar: false,
     isLengthValid: false,
   });
+
+  // const [confirmPasswordValidations, setConfirmPasswordValidations] = useState({
+  //   // hasAlphabet: false,
+  //   // hasCapitalLetter: false,
+  //   // hasNumber: false,
+  //   // hasSpecialChar: false,
+  //   isLengthValid: false,
+  // });
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -42,34 +53,78 @@ const RegisterAuth: React.FC = () => {
 
     // Validate password
     setPasswordValidations({
-      hasAlphabet: /[a-zA-Z]/.test(value),
-      hasCapitalLetter: /[A-Z]/.test(value),
-      hasNumber: /[0-9]/.test(value),
-      hasSpecialChar: /[@%$!]/.test(value),
+      // hasAlphabet: /[a-zA-Z]/.test(value),
+      // hasCapitalLetter: /[A-Z]/.test(value),
+      // hasNumber: /[0-9]/.test(value),
+      // hasSpecialChar: /[@%$!]/.test(value),
       isLengthValid: value.length >= 8,
     });
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      firstNameError: !firstName.trim(),
+      lastNameError: !lastName.trim(),
+      phoneError: false, // Since phone is commented out
+      emailError: !email.trim(),
+      passwordError: !password.trim() || password.length < 8,
+      genderError: false,
+      ageGroupError: false,
+      confirmPasswordError:
+        !confirmPassword.trim() || password !== confirmPassword,
+    };
+
+    setError(newErrors);
+    return !Object.values(newErrors).some((error) => error);
+  };
+
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    setError({ ...error, confirmPasswordError: false });
+
+    // Validate confirm password length
+    // setConfirmPasswordValidations({
+    //   isLengthValid: value.length >= 8,
+    // });
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (validateForm()) {
+      console.log("Form is valid, proceed with registration");
+    }
   };
 
   // Helper function to render validation icon
   const renderValidationIcon = (isValid: boolean) => {
     return isValid ? (
-      <span className="text-green-500">✓</span>
+      <span style={{ color: appColors.primaryGreen }}>✓</span>
     ) : (
-      <span className="text-red-500">✗</span>
+      <span style={{ color: appColors.error400 }}>X</span>
     );
   };
 
   return (
-    <div className="w-full max-w-md mx-auto py-4">
-          <div className="text-[#000000] mb-10 w-full flex flex-col gap-[8px]">
-          <h1 className="text-[27.65px] font-[700] leading-[31.8px]">Create your account</h1>
-          <p className="text-[#645D5D] font-[400] text-[14px] leading-[145%]">Already have an account?  <Link href="/login" style={{ textDecoration: "none", color: "#eb512f" }}><span className="text-[#EB5017] hover:cursor-pointer">Login</span></Link></p>
-        </div>
-      <form className="space-y-4">
+    <div
+      className="w-full border-0 max-w-[35rem] mx-auto"
+      style={{ fontFamily: "Inter" }}
+    >
+      <div className="mb-10 w-full flex flex-col gap-[8px]">
+        <h1
+          className="text-[27.65px] font-[600] leading-[31.8px]"
+          style={{ fontFamily: "Inter", color: appColors.black }}
+        >
+          Create your account
+        </h1>
+      </div>
+      <form className="space-y-4 flex flex-col">
         <div>
           <label
             htmlFor="firstName"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
             First Name
           </label>
@@ -80,16 +135,19 @@ const RegisterAuth: React.FC = () => {
               setFirstName(e.target.value);
               setError({ ...error, firstNameError: false });
             }}
-            placeholder="Input your first name"
+            placeholder="Type your first name"
             type="text"
+            color="#80838D"
             error={error.firstNameError}
+            backgroundColor="#E3EFFC"
+            border={"0"}
             errorMessage="First name is required"
           />
         </div>
         <div>
           <label
             htmlFor="lastName"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
             Last Name
           </label>
@@ -100,18 +158,21 @@ const RegisterAuth: React.FC = () => {
               setLastName(e.target.value);
               setError({ ...error, lastNameError: false });
             }}
-            placeholder="Input your last name"
+            placeholder="Type your last name"
             type="text"
+            color="#80838D"
             error={error.lastNameError}
+            backgroundColor="#E3EFFC"
+            border={"0"}
             errorMessage="Last name is required"
           />
         </div>
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Email
+            Email Address
           </label>
           <NormalInputField
             id="email"
@@ -120,16 +181,19 @@ const RegisterAuth: React.FC = () => {
               setEmail(e.target.value);
               setError({ ...error, emailError: false });
             }}
-            placeholder="Input your email address"
+            placeholder="Type your email address"
             type="email"
             error={error.emailError}
+            color="#80838D"
+            backgroundColor="#E3EFFC"
+            border={"0"}
             errorMessage="Email is required"
           />
         </div>
         {/* <div>
           <label
             htmlFor="phoneNumber"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
             Phone Number
           </label>
@@ -148,7 +212,7 @@ const RegisterAuth: React.FC = () => {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
             Password
           </label>
@@ -160,12 +224,16 @@ const RegisterAuth: React.FC = () => {
               placeholder="Create your password"
               type={showPassword ? "text" : "password"}
               error={error.passwordError}
+              color="#80838D"
+              backgroundColor="#E3EFFC"
+              border={"0"}
               errorMessage="Password is required"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 pointer-events-auto"
+              style={{ top: "1px", height: "56px" }} // Fixed height and top position
             >
               {showPassword ? (
                 <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
@@ -176,7 +244,7 @@ const RegisterAuth: React.FC = () => {
           </div>
           {/* Password validation checklist */}
           <div className="mt-2 text-xs text-gray-600 font-[500] space-y-1">
-            <div
+            {/* <div
               className={`flex leading-[21.33px] items-center ${
                 passwordValidations.hasAlphabet
                   ? "text-green-500"
@@ -215,23 +283,103 @@ const RegisterAuth: React.FC = () => {
             >
               {renderValidationIcon(passwordValidations.hasSpecialChar)}{" "}
               Password should have at least one @%$! character
-            </div>
+            </div> */}
             <div
-              className={`flex leading-[21.33px] items-center ${
+              className={`flex font-[500] leading-[21.33px] items-center ${
                 passwordValidations.isLengthValid
-                  ? "text-green-500"
-                  : "text-gray-500"
+                  ? `text-[${appColors.primaryGreen}]`
+                  : `text-[${appColors.error400}]`
               } gap-2`}
             >
               {renderValidationIcon(passwordValidations.isLengthValid)} Password
-              should be at least eight characters long
+              Password should be a minimum of eight (8) characters
             </div>
           </div>
         </div>
-        <div className="mt-6">
-          <InAppButton width="100%">
-            <div>Signup</div>
-          </InAppButton>
+
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
+          >
+            Confirm Password
+          </label>
+          <div className="relative">
+            <NormalInputField
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder="Confirm your password"
+              type={showConfirmPassword ? "text" : "password"}
+              error={error.confirmPasswordError}
+              color="#80838D"
+              backgroundColor="#E3EFFC"
+              border={"0"}
+              errorMessage={
+                confirmPassword && password !== confirmPassword
+                  ? "Passwords do not match"
+                  : "Confirm password is required"
+              }
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 pointer-events-auto"
+              style={{ top: "1px", height: "56px" }} // Fixed height and top position
+            >
+              {showConfirmPassword ? (
+                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
+              ) : (
+                <AiOutlineEye className="h-5 w-5 text-gray-500" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        <div
+          className="flex mb-8 gap-[20px] font-[500] text-[12px] leading-[145%] justify-center mt-4 items-center"
+          style={{ fontFamily: "Lexend", color: appColors.darkRoyalBlueForBtn }}
+        >
+          <input
+            type="checkbox"
+            id="sendUpdates"
+            name="sendUpdates"
+            // checked={checkboxes.sendUpdates}
+            // onChange={handleCheckboxChange}
+            className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
+          />
+          <div className="block">
+          <label htmlFor="" className="block">
+            I agree to the{" "}
+            <span
+              className={`underline hover:cursor-pointer hover:text-[${appColors.darkRoyalBlueForBtn}]`}
+            >
+              Terms of Service and Privacy Policy
+            </span>
+          </label>
+          </div>
+        </div>
+        <InAppButton
+          disabled
+          disabledColor={appColors.disabledButtonBlue}
+          backgroundColor={appColors.darkRoyalBlueForBtn}
+          width="100%"
+          onClick={handleSubmit}
+        >
+          <div>Continue</div>
+        </InAppButton>
+
+        <div
+          className="text-[#645D5D] gap-[6px] flex justify-center items-center mt-6 font-[500] text-[16px] leading-[145%]"
+          style={{ fontFamily: "Lexend", color: appColors.darkRoyalBlueForBtn }}
+        >
+          <div>Already have an account?</div>
+          <Link
+            href="/login"
+            style={{ textDecoration: "none", color: appColors.normalBlue }}
+          >
+            <span className="hover:cursor-pointer">Login</span>
+          </Link>
         </div>
       </form>
       {/* <Alerts

@@ -20,7 +20,7 @@ export interface ButtonProps {
 
 const ColouredButton: React.FC<ButtonProps> = ({
   title,
-  borderRadius = "8px",
+  borderRadius = "8.15px",
   children,
   height = '73px',
   paddingTop,
@@ -42,7 +42,7 @@ const ColouredButton: React.FC<ButtonProps> = ({
   hover:translate-y-0.5
   active:shadow-none
   active:translate-y-1
-  transition-all font-[700]`}
+  transition-all font-[700] flex items-center justify-center`}
       onClick={onClick}
       style={{
         borderRadius,
@@ -55,7 +55,8 @@ const ColouredButton: React.FC<ButtonProps> = ({
         color,
         padding,
         backgroundColor,
-        boxShadow
+        boxShadow,
+        fontFamily: 'Lexend'
       }}
     >
       {children || title}

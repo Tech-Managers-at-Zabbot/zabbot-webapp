@@ -1,16 +1,17 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { appColors } from "@/constants/colors";
 
-const AuthBanner = ({ isLogin }: { isLogin: boolean }) => {
+const AuthBanner = () => {
   return (
-    <div className="mx-auto bg-[#333333] px-16 max-w-full h-full flex flex-col">
-      <section className="mb-[78px] animate__animated animate__fadeIn animate__delay-1s">
+    <div className="bg-[url('/auth-pages/auth-page-left-background.png')] border-0 bg-cover bg-center px-16 pt-16 max-w-full h-full flex justify-between flex-col">
+      <section className=" animate__animated animate__fadeIn animate__delay-1s">
         <Link href="/">
           <div className="flex items-center">
             <div className="relative h-12 w-32 lg:h-[77px] lg:w-[273px]">
               <Image
-                src={"/general/zabbot-logo-white.svg"}
+                src={"/general/zabbot-logo-blue.svg"}
                 alt="Èdèdún Logo"
                 fill
                 className="object-contain"
@@ -21,32 +22,31 @@ const AuthBanner = ({ isLogin }: { isLogin: boolean }) => {
         </Link>
       </section>
 
-      <section className="w-[562px]">
+      <section
+        className="text-[50px]"
+        style={{ color: appColors.darkRoyalBlueForBtn, fontFamily: "Lexend" }}
+      >
         <h1
           className={
-            "text-[50px] leading-[57px] lg:text-[50px] font-semibold mb-4 lg:mb-[5px] animate__animated animate__fadeInUp"
+            "leading-[70px] font-semibold animate__animated animate__fadeInUp"
           }
         >
-          {/* m */}
-          <span className="block ">Zabbot AI Powered </span>
-          <span className="block mb-4 lg:mb-[24px]">Language Platform</span>
+          <span className="block ">Celebrate Your Heritage.</span>
+          <span className="block">Start with Yorùbá.</span>
         </h1>
-        <p className="text-[20px] font-[400] leading-[28x] lg:text-lg animate__animated animate__fadeInUp animate__delay-1s">
-          <br />
-          {!isLogin
-            ? "Create an account to contribute to the Zabbot AI Powered Yorùbá Platform (APYP)"
-            : "Welcome back, please login to continue"}
+        <p className="leading-[70px] font-[300] animate__animated animate__fadeInUp animate__delay-1s">
+          Learn. Speak. Belong.
         </p>
       </section>
 
-      <section className="relative flex mt-6 animate__animated animate__fadeInUp animate__delay-1s">
-        <div className="relative flex justify-center h-[400px] w-[600px] max-w-[800px] lg:max-w-[800px]">
+      <section className="relative bottom-0 flex items-center justify-center animate__animated animate__fadeInUp animate__delay-1s">
+        <div className="relative flex items-center justify-center">
           <Image
-            src="/general/flying-owl.svg"
+            src="/general/grand-ma-owl.png"
             alt="Authentication Page Image"
             // fill
-            width={250}
-            height={50}
+            width={650}
+            height={600}
             className="object-contain rounded-xl"
             priority
           />

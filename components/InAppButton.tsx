@@ -16,6 +16,7 @@ export interface ButtonProps {
   color?: string;
   backgroundColor?: string;
   type?: any;
+  disabledColor?:string;
   onClick?: (e:unknown) => void;
 }
 
@@ -33,6 +34,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   type,
   color='white',
   backgroundColor="#F9C10F",
+  disabledColor="#E0E1E6",
   onClick,
 }) => {
   return (
@@ -53,7 +55,7 @@ const InAppButton: React.FC<ButtonProps> = ({
         paddingRight,
         width,
         color,
-        backgroundColor: !disabled ? backgroundColor : "#E0E1E6"
+        backgroundColor: !disabled ? backgroundColor : disabledColor
       }}
       disabled={disabled}
       type={type}

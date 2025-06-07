@@ -2,8 +2,8 @@
 import React from "react";
 import Image from "next/image";
 import Dropdown from "./landingDropDown";
-import device from "@/constants/breakpoints";
-import { useMatchMediaQuery } from "@/hooks/viewPorts";
+// import device from "@/constants/breakpoints";
+// import { useMatchMediaQuery } from "@/hooks/viewPorts";
 import Link from "next/link";
 import { appColors } from "@/constants/colors";
 import ColouredButton from "../ColouredButton";
@@ -11,13 +11,13 @@ import ColouredButton from "../ColouredButton";
 const LandingPageNavbar = () => {
   //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   //   const isTabletOrBelow = useMatchMediaQuery(device.tablet);
-  const isLaptopOrBelow = useMatchMediaQuery(device.laptopWide);
+  // const isLaptopOrBelow = useMatchMediaQuery(device.laptopWide);
 
   // Show mobile menu on tablet and below, or when explicitly toggled
   //   const showMobileMenu = isTabletOrBelow || mobileMenuOpen;
 
   return (
-    <nav className="bg-[#24A5EE] px-4 sm:px-6 md:px-8 lg:px-[112px] h-16 md:h-20 lg:h-[126px] w-full">
+    <nav className="bg-[#24A5EE] px-[112px] h-16 md:h-20 lg:h-[120px] w-full">
       {/* Main Navbar Content */}
       <div className="flex items-center justify-between h-full w-full">
         {/* Logo Section */}
@@ -33,27 +33,28 @@ const LandingPageNavbar = () => {
           </div>
         </div>
 
-            <div
-              className={`flex text-[${appColors.officeBrown100}] font-[600] bg-[#207EC5] gap-8 py-4 px-10 rounded-[40px]`}
-            >
-              <div>
-                <Dropdown options={[]} placeholder="Use Cases" />
-              </div>
-              {/* <div>
+        <div
+          className={`flex text-[${appColors.officeBrown100}] font-[600] bg-[#207EC5] gap-8 py-4 px-10 rounded-[40px]`}
+          style={{fontFamily: "Lexend"}}
+        >
+          <div className="hover:cursor-pointer">
+            <Dropdown options={[]} placeholder="Use Cases" />
+          </div>
+          {/* <div>
                 <Dropdown options={[]} placeholder="Resources" />
               </div> */}
-              <div className="flex items-center justify-center">
-                <div>Help</div>
-              </div>
-              <div className="flex items-center justify-center">
-                <div>Pricing</div>
-              </div>
-              <div className="flex items-center justify-center">
-                <div>About Us</div>
-              </div>
-            </div>
+          <div className="flex items-center justify-center">
+            <div>Help</div>
+          </div>
+          <div className="flex items-center justify-center">
+            <div>Pricing</div>
+          </div>
+          <div className="flex items-center justify-center">
+            <div>About Us</div>
+          </div>
+        </div>
 
-            {/* <div className="flex justify-center items-center ml-4">
+        {/* <div className="flex justify-center items-center ml-4">
             <Link
             href="/waiting-list-auth"
             style={{ textDecoration: "none", color: "#eb512f" }}
@@ -64,24 +65,24 @@ const LandingPageNavbar = () => {
               </Link>
             </div> */}
 
-            <div className="flex justify-center items-center ml-4">
-              <Link
-                href="/signup"
-                style={{ textDecoration: "none", color: "#eb512f" }}
-              >
-                <ColouredButton
-                  boxShadow="0"
-                  color="#000000"
-                  backgroundColor="#F9C10F"
-                  borderRadius="48px"
-                  padding="16px 24px"
-                  height=""
-                  width="167px"
-                >
-                  Get Started
-                </ColouredButton>
-              </Link>
-            </div>
+        <div className="flex justify-center items-center ml-4">
+          <Link
+            href="/signup"
+            style={{ textDecoration: "none", color: "#eb512f" }}
+          >
+            <ColouredButton
+              boxShadow="0"
+              color="#000000"
+              backgroundColor="#F9C10F"
+              borderRadius="48px"
+              padding="16px 24px"
+              height=""
+              width="167px"
+            >
+              Get Started
+            </ColouredButton>
+          </Link>
+        </div>
 
         {/* Mobile Menu Button (shown on laptop and below) */}
         {/* {isLaptopOrBelow && (
