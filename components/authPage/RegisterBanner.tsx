@@ -43,7 +43,7 @@ const AuthBanner = () => {
         <div className="relative flex items-center justify-center">
           <Image
             src="/general/grand-ma-owl.png"
-            alt="Authentication Page Image"
+            alt="Zabbot Grand Ma Mascot Owl"
             // fill
             width={650}
             height={600}

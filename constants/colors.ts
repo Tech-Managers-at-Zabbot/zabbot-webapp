@@ -12,4 +12,6 @@ export const appColors = {
     disabledButtonBlue: "#80BBFF",
     primaryGreen: "#30A46C",
     error400: "#D42620",
+    officeBrown: "#645D5D",
+    redPrimary500: "#EB5017",
 }

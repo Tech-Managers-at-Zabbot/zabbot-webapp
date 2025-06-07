@@ -233,7 +233,7 @@ const RegisterAuth: React.FC = () => {
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 pointer-events-auto"
-              style={{ top: "1px", height: "56px" }} // Fixed height and top position
+              style={{ top: "1px", height: "56px" }}
             >
               {showPassword ? (
                 <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />

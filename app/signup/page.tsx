@@ -1,5 +1,5 @@
 "use client";
-import AuthBanner from "@/components/authPage/AuthBanner";
+import AuthBanner from "@/components/authPage/RegisterBanner";
 import RegisterAuth from "@/components/authPage/RegisterAuth";
 import Head from "next/head";
 import { useState } from "react";
