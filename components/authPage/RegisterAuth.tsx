@@ -348,14 +348,20 @@ const RegisterAuth: React.FC = () => {
             // onChange={handleCheckboxChange}
             className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
           />
+          {/* terms-of-service */}
           <div className="block">
           <label htmlFor="" className="block">
             I agree to the{" "}
+            <Link
+            href="/terms-of-service"
+            style={{ textDecoration: "none"  }}
+          >
             <span
-              className={`underline hover:cursor-pointer hover:text-[${appColors.darkRoyalBlueForBtn}]`}
+              className={`underline hover:cursor-pointer hover:text-[#0098DE]`}
             >
               Terms of Service and Privacy Policy
             </span>
+          </Link>
           </label>
           </div>
         </div>

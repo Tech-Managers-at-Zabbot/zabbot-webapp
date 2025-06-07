@@ -22,7 +22,7 @@ const TermsOfServicePage = () => {
         <div className="max-w-7xl mx-auto">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 mb-6 hover:cursor-pointer text-blue-600 hover:text-blue-800 transition-colors"
+            className="flex items-center gap-2 mb-6 hover:cursor-pointer text-[#012657] hover:text-[#0098DE] transition-colors"
             aria-label="Go back to previous page"
           >
             <FiArrowLeft className="w-5 h-5" />
