@@ -1,0 +1,226 @@
+"use client";
+import React, { useState, useEffect } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import InAppButton from "../InAppButton";
+import NormalInputField from "../NormalInputField";
+import { PiWarningCircle } from "react-icons/pi";
+import { IoChevronBackSharp } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
+import { appColors } from "@/constants/colors";
+import { Alerts, useAlert } from "next-alert";
+import { useRouter } from "next/navigation";
+import { CustomSpinner } from "../CustomSpinner";
+
+const ChangePasswordComponent: React.FC = () => {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [hasStartedTypingConfirm, setHasStartedTypingConfirm] = useState(false);
+  const { addAlert } = useAlert();
+  const router = useRouter();
+
+  const [passwordValidations, setPasswordValidations] = useState({
+    isLengthValid: false,
+  });
+
+  // Check if passwords match and update validation state
+  useEffect(() => {
+    // Only show password mismatch error if user has started typing confirm password
+    if (hasStartedTypingConfirm && confirmPassword.length > 0) {
+      if (newPassword !== confirmPassword) {
+        setConfirmPasswordError("Passwords do not match");
+      } else {
+        setConfirmPasswordError("");
+      }
+    } else {
+      setConfirmPasswordError("");
+    }
+
+    // Enable button only if all validations pass
+    const allPasswordValidationsPass =
+      Object.values(passwordValidations).every(Boolean);
+    const passwordsMatch =
+      newPassword === confirmPassword && confirmPassword.length > 0;
+    const shouldEnableButton = allPasswordValidationsPass && passwordsMatch;
+
+    setButtonDisabled(!shouldEnableButton);
+  }, [
+    newPassword,
+    confirmPassword,
+    passwordValidations,
+    hasStartedTypingConfirm,
+  ]);
+
+  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNewPassword(value);
+
+    setPasswordValidations({
+      isLengthValid: value.length >= 8,
+    });
+  };
+
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    // Mark that user has started typing in confirm password field
+    if (!hasStartedTypingConfirm) {
+      setHasStartedTypingConfirm(true);
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true)
+
+    if (newPassword !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      setLoading(false)
+      return;
+    }
+
+    if (!Object.values(passwordValidations).every(Boolean)) {
+      setLoading(false)
+      return;
+    }
+
+    addAlert("Success", "Password changed successfully", "success");
+
+    setLoading(false)
+
+    return router.push('/success-page')
+
+    // console.log("Password changed successfully");
+  };
+
+  const renderValidationIcon = (isValid: boolean) => {
+    return isValid ? (
+      <span className="text-[#30A46C]">✓</span>
+    ) : (
+      <span className="text-[#D42620] font-[500] text-[13.33px] leading-[21.33px]">
+        <PiWarningCircle size={16} />
+      </span>
+    );
+  };
+
+  return (
+    <div className="w-full max-w-[615px] border-1 border-[#D0D0D0] bg-white rounded-2xl py-[60px] flex flex-col gap-[60px] mx-auto px-[60px]">
+      <div className="flex items-center justify-between">
+        <div className="hover:cursor-pointer">
+          <IoChevronBackSharp size={28} color="#1C2024" />
+        </div>
+        <h1 className="text-2xl text-[#1C2024] font-bold">Change Password</h1>
+        <div className="hover:cursor-pointer">
+          <IoCloseOutline size={28} color="#1C2024" />
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label
+            htmlFor="newPassword"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C] mb-2"
+          >
+            New Password
+          </label>
+          <div className="relative">
+            <NormalInputField
+              id="newPassword"
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+              placeholder="Input your password"
+              type={showNewPassword ? "text" : "password"}
+              border="0"
+            />
+            <button
+              type="button"
+              onClick={() => setShowNewPassword(!showNewPassword)}
+              className="absolute hover:cursor-pointer inset-y-0 right-0 pr-3 flex items-center"
+            >
+              {showNewPassword ? (
+                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
+              ) : (
+                <AiOutlineEye className="h-5 w-5 text-gray-500" />
+              )}
+            </button>
+          </div>
+
+          {/* Password validation checklist */}
+          <div className="mt-2 text-xs text-gray-600 space-y-1">
+            <div
+              className={`flex items-center font-[500] text-[13.33px] leading-[21.33px] gap-2 ${
+                passwordValidations.isLengthValid
+                  ? "text-[#30A46C]"
+                  : "text-[#D42620]"
+              }`}
+            >
+              {renderValidationIcon(passwordValidations.isLengthValid)} Password
+              should be at least eight characters long
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-[15px] font-medium text-[#60646C] mb-2"
+          >
+            Confirm Password
+          </label>
+          <div className="relative">
+            <NormalInputField
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder="Confirm your password"
+              border="0"
+              type={showConfirmPassword ? "text" : "password"}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute inset-y-0 hover:cursor-pointer right-0 pr-3 flex items-center"
+            >
+              {showConfirmPassword ? (
+                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
+              ) : (
+                <AiOutlineEye className="h-5 w-5 text-gray-500" />
+              )}
+            </button>
+          </div>
+          {confirmPasswordError && (
+            <p className="text-[#D7263D] text-sm mt-1">
+              {confirmPasswordError}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-6">
+          <InAppButton
+            backgroundColor={appColors.darkRoyalBlueForBtn}
+            width="100%"
+            disabledColor="#80BBFF"
+            disabled={buttonDisabled || loading}
+          >
+            { loading ? <CustomSpinner /> : <div>Save Password</div> }
+          </InAppButton>
+        </div>
+      </form>
+      <Alerts
+        position="top-left"
+        direction="right"
+        timer={3000}
+        className="rounded-md relative z-1000 !w-80"
+      />
+    </div>
+  );
+};
+
+export default ChangePasswordComponent;

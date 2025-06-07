@@ -1,4 +1,5 @@
-import ChangePasswordComponent from "@/components/changePasswordFlow/ChangePasswordComponent";
+import ForgotPassword from "@/components/changePasswordFlow/ForgotPasswordComponent";
+
 import Navbar from "@/components/general/Navbar";
 import Head from "next/head";
 
@@ -16,7 +17,7 @@ const ChangePassword = () => {
       <main className="flex flex-col bg-[#E3EFFC] min-h-screen relative">
         <Navbar />
         <section className="hidden md:block w-full pt-20">
-          <ChangePasswordComponent />
+          <ForgotPassword />
         </section>
       </main>
     </div>

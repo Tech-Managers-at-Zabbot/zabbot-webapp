@@ -96,7 +96,7 @@ const LoginAuth: React.FC = () => {
       <div className="text-[#645D5D] justify-center items-center flex gap-[20px] font-[400] text-[14px] leading-[145%]">
         <div>Forgot your password?</div>{" "}
         <Link
-          href="/signup"
+          href="/forgot-password"
           style={{ textDecoration: "none", color: appColors.redPrimary500 }}
         >
           <span className="font-[600] hover:cursor-pointer">Reset it here.</span>
