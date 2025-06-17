@@ -2,6 +2,7 @@ import Navbar from "@/components/general/Navbar";
 import OtpComponent from "@/components/OtpComponent";
 import Head from "next/head";
 import Image from "next/image";
+import { Suspense } from 'react';
 
 const Otp = () => {
   return (
@@ -17,7 +18,9 @@ const Otp = () => {
       <main className="flex flex-col bg-[#E3EFFC] pb-30 min-h-screen relative">
         <Navbar />
         <section className="md:block w-full pt-20">
+          <Suspense fallback={<div>Loading...</div>}>
           <OtpComponent />
+          </Suspense>
         </section>
         <section className="absolute bottom-0 xl:right-70 lg:right-20 flex items-center justify-center animate__animated animate__fadeInUp animate__delay-1s">
           <div className="relative flex items-center justify-center">

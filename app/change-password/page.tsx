@@ -1,6 +1,7 @@
 import ChangePasswordComponent from "@/components/changePasswordFlow/ChangePasswordComponent";
 import Navbar from "@/components/general/Navbar";
 import Head from "next/head";
+import { Suspense } from 'react';
 
 const ChangePassword = () => {
   return (
@@ -16,7 +17,9 @@ const ChangePassword = () => {
       <main className="flex flex-col bg-[#E3EFFC] min-h-screen relative">
         <Navbar />
         <section className="w-full pt-20">
+          <Suspense fallback={<div>Loading...</div>}>
           <ChangePasswordComponent />
+          </Suspense>
         </section>
       </main>
     </div>
