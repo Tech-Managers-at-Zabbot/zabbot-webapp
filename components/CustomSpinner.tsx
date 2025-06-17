@@ -7,8 +7,12 @@ interface CustomSpinnerProps {
 export const CustomSpinner: React.FC<CustomSpinnerProps> = ({spinnerColor= 'white'}) => {
   return (
     <div className="flex items-center justify-center space-x-2">
-      <div className={`w-4 h-4 border-2 border-${spinnerColor} border-t-transparent rounded-full animate-spin`}></div>
-      <span>Processing...</span>
+      <div className={`w-4 h-4 border-2 rounded-full animate-spin`}
+      style={{borderColor: spinnerColor, borderTopColor: 'transparent'}}
+      ></div>
+      <span className='font-medium'
+      style={{color: spinnerColor}}
+      >Processing...</span>
     </div>
   );
 };

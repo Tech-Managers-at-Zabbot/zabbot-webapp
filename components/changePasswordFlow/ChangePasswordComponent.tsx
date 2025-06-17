@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -10,6 +11,8 @@ import { appColors } from "@/constants/colors";
 import { Alerts, useAlert } from "next-alert";
 import { useRouter } from "next/navigation";
 import { CustomSpinner } from "../CustomSpinner";
+import { useSearchParams } from "next/navigation";
+import { useResetPassword } from "@/services/generalApi/authentication/mutation";
 
 const ChangePasswordComponent: React.FC = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -22,6 +25,9 @@ const ChangePasswordComponent: React.FC = () => {
   const [hasStartedTypingConfirm, setHasStartedTypingConfirm] = useState(false);
   const { addAlert } = useAlert();
   const router = useRouter();
+    const searchParams = useSearchParams();
+    const token = searchParams ? searchParams.get("token") : null;
+  const { mutate: resetPassword, isPending:isResetPasswordPending } = useResetPassword();
 
   const [passwordValidations, setPasswordValidations] = useState({
     isLengthValid: false,
@@ -91,12 +97,28 @@ const ChangePasswordComponent: React.FC = () => {
       return;
     }
 
-    addAlert("Success", "Password changed successfully", "success");
-
     setLoading(false)
 
-    return router.push('/success-page')
-
+    resetPassword(
+      { newPassword, token: token || "", confirmNewPassword: confirmPassword },
+      {
+        onSuccess: () => {
+            addAlert(
+            "Success",
+            "Password changed successfully",
+            "success"
+          );
+        return router.push('/success-page')
+        },
+        onError: (error: any) => {
+          addAlert(
+            "Error",
+            error?.response?.data?.message || "An error occurred, please try again",
+            "error"
+          );
+        },
+      }
+    );
     // console.log("Password changed successfully");
   };
 
@@ -110,117 +132,117 @@ const ChangePasswordComponent: React.FC = () => {
     );
   };
 
-  return (
-    <div className="w-full max-w-[615px] border-1 border-[#D0D0D0] bg-white rounded-2xl py-[60px] flex flex-col gap-[60px] mx-auto px-[60px]">
-      <div className="flex items-center justify-between">
-        <div className="hover:cursor-pointer">
-          <IoChevronBackSharp size={28} color="#1C2024" />
+return (
+  <div className="w-full max-w-[615px] border border-[#D0D0D0] bg-white rounded-2xl py-6 md:py-[60px] flex flex-col gap-6 md:gap-[60px] mx-auto px-4 sm:px-6 md:px-[60px]">
+    <div className="flex items-center justify-between">
+      <div className="hover:cursor-pointer" onClick={() => router.back()}>
+        <IoChevronBackSharp className="w-6 h-6 md:w-7 md:h-7" color="#1C2024" />
+      </div>
+      <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">Change Password</h1>
+      <div className="hover:cursor-pointer" onClick={() => router.push('/login')}>
+        <IoCloseOutline className="w-6 h-6 md:w-7 md:h-7" color="#1C2024" />
+      </div>
+    </div>
+
+    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+      <div>
+        <label
+          htmlFor="newPassword"
+          className="block text-sm sm:text-[15px] leading-[20px] font-medium text-[#60646C] mb-1 sm:mb-2"
+        >
+          New Password
+        </label>
+        <div className="relative">
+          <NormalInputField
+            id="newPassword"
+            value={newPassword}
+            onChange={handleNewPasswordChange}
+            placeholder="Input your password"
+            type={showNewPassword ? "text" : "password"}
+            border="0"
+          />
+          <button
+            type="button"
+            onClick={() => setShowNewPassword(!showNewPassword)}
+            className="absolute hover:cursor-pointer inset-y-0 right-0 pr-3 flex items-center"
+          >
+            {showNewPassword ? (
+              <AiOutlineEyeInvisible className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+            ) : (
+              <AiOutlineEye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+            )}
+          </button>
         </div>
-        <h1 className="text-2xl text-[#1C2024] font-bold">Change Password</h1>
-        <div className="hover:cursor-pointer">
-          <IoCloseOutline size={28} color="#1C2024" />
+
+        {/* Password validation checklist */}
+        <div className="mt-1 sm:mt-2 text-xs text-gray-600 space-y-1">
+          <div
+            className={`flex items-center font-[500] text-xs sm:text-[13.33px] leading-[21.33px] gap-2 ${
+              passwordValidations.isLengthValid
+                ? "text-[#30A46C]"
+                : "text-[#D42620]"
+            }`}
+          >
+            {renderValidationIcon(passwordValidations.isLengthValid)} Password
+            should be at least eight characters long
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="newPassword"
-            className="block text-[15px] leading-[20px] font-medium text-[#60646C] mb-2"
+      <div>
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm sm:text-[15px] font-medium text-[#60646C] mb-1 sm:mb-2"
+        >
+          Confirm Password
+        </label>
+        <div className="relative">
+          <NormalInputField
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            placeholder="Confirm your password"
+            border="0"
+            type={showConfirmPassword ? "text" : "password"}
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute inset-y-0 hover:cursor-pointer right-0 pr-3 flex items-center"
           >
-            New Password
-          </label>
-          <div className="relative">
-            <NormalInputField
-              id="newPassword"
-              value={newPassword}
-              onChange={handleNewPasswordChange}
-              placeholder="Input your password"
-              type={showNewPassword ? "text" : "password"}
-              border="0"
-            />
-            <button
-              type="button"
-              onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute hover:cursor-pointer inset-y-0 right-0 pr-3 flex items-center"
-            >
-              {showNewPassword ? (
-                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-              ) : (
-                <AiOutlineEye className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          </div>
-
-          {/* Password validation checklist */}
-          <div className="mt-2 text-xs text-gray-600 space-y-1">
-            <div
-              className={`flex items-center font-[500] text-[13.33px] leading-[21.33px] gap-2 ${
-                passwordValidations.isLengthValid
-                  ? "text-[#30A46C]"
-                  : "text-[#D42620]"
-              }`}
-            >
-              {renderValidationIcon(passwordValidations.isLengthValid)} Password
-              should be at least eight characters long
-            </div>
-          </div>
+            {showConfirmPassword ? (
+              <AiOutlineEyeInvisible className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+            ) : (
+              <AiOutlineEye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+            )}
+          </button>
         </div>
+        {confirmPasswordError && (
+          <p className="text-[#D7263D] text-xs sm:text-sm mt-1">
+            {confirmPasswordError}
+          </p>
+        )}
+      </div>
 
-        <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-[15px] font-medium text-[#60646C] mb-2"
-          >
-            Confirm Password
-          </label>
-          <div className="relative">
-            <NormalInputField
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              placeholder="Confirm your password"
-              border="0"
-              type={showConfirmPassword ? "text" : "password"}
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute inset-y-0 hover:cursor-pointer right-0 pr-3 flex items-center"
-            >
-              {showConfirmPassword ? (
-                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-              ) : (
-                <AiOutlineEye className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          </div>
-          {confirmPasswordError && (
-            <p className="text-[#D7263D] text-sm mt-1">
-              {confirmPasswordError}
-            </p>
-          )}
-        </div>
-
-        <div className="mt-6">
-          <InAppButton
-            backgroundColor={appColors.darkRoyalBlueForBtn}
-            width="100%"
-            disabledColor="#80BBFF"
-            disabled={buttonDisabled || loading}
-          >
-            { loading ? <CustomSpinner /> : <div>Save Password</div> }
-          </InAppButton>
-        </div>
-      </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={3000}
-        className="rounded-md relative z-1000 !w-80"
-      />
-    </div>
-  );
+      <div className="mt-4 sm:mt-6">
+        <InAppButton
+          backgroundColor={appColors.darkRoyalBlueForBtn}
+          width="100%"
+          disabledColor="#80BBFF"
+          disabled={buttonDisabled || isResetPasswordPending || loading}
+        >
+          { isResetPasswordPending ? <CustomSpinner /> : <div>Save Password</div> }
+        </InAppButton>
+      </div>
+    </form>
+    <Alerts
+      position="top-left"
+      direction="right"
+      timer={3000}
+      className="rounded-md relative z-1000 !w-80"
+    />
+  </div>
+);
 };
 
 export default ChangePasswordComponent;

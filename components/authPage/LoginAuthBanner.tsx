@@ -12,7 +12,7 @@ const LoginAuthBanner = () => {
           <div className="flex items-center">
             <div className="relative h-12 w-32 lg:h-[77px] lg:w-[273px]">
               <Image
-                src={"/general/zabbot-logo-white-new.svg"}
+                src={"/general/zabbot-logo-white.svg"}
                 alt="Zabbot Logo"
                 fill
                 className="object-contain"
@@ -23,18 +23,12 @@ const LoginAuthBanner = () => {
         </Link>
       </section>
 
-      <section
-        className="text-[40px]"
-        style={{ fontFamily: "Lexend" }}
-      >
+      <section className="text-[40px]" style={{ fontFamily: "Lexend" }}>
         <h1
           className={
             "leading-[50px] font-semibold animate__animated animate__fadeInUp"
           }
         >
-          
-
-
           <span className="block ">Welcome back!</span>
           <span className="block">Keep Living Yorùbá.</span>
         </h1>

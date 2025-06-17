@@ -4,11 +4,17 @@ import Image from "next/image";
 import WaitingListAuth from "@/components/authPage/WaitingListAuth";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import FoundersListBottomInformation from "@/components/waiting-list/BottomInfo";
-import FoundersMascotComponent from "@/components/waiting-list/MascotComponent";
+import InAppButton from "@/components/InAppButton";
+import FoundersListBottomInformation from "@/components/founders-circle/BottomInfo";
+import FoundersMascotComponent from "@/components/founders-circle/MascotComponent";
+import { appColors } from "@/constants/colors";
+import { CustomSpinner } from "@/components/CustomSpinner";
+import { useRouter } from "next/navigation";
 
 export default function WaitingListPage() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isSignupRedirectLoading, setIsSignupRedirectLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -37,7 +43,28 @@ export default function WaitingListPage() {
 
       {/* Full width blue top section */}
       <div className="w-full bg-[#A6DFFF]">
+        <div className="flex justify-end items-center p-4">
+          <div className="w-full max-w-[200px] flex items-center justify-center">
+            <InAppButton
+              disabled={false}
+              disabledColor={appColors.disabledButtonBlue}
+              backgroundColor={appColors.darkRoyalBlueForBtn}
+              width="100%"
+              onClick={() => {
+                setIsSignupRedirectLoading(true);
+                router.push("/signup");
+              }}
+            >
+              {isSignupRedirectLoading ? (
+                <CustomSpinner />
+              ) : (
+                <div>Beta Test</div>
+              )}
+            </InAppButton>
+          </div>
+        </div>
         {/* Content container with original padding and max-width */}
+
         <div className="w-full h-full relative m-0 p-0 max-w-screen-2xl mx-auto">
           <motion.div
             variants={container}
@@ -52,7 +79,7 @@ export default function WaitingListPage() {
                 <div className="relative xl:w-[340px] lg:w-[250px] md:w-[220px] w-[200px] h-[118px]">
                   <Image
                     src="/general/zabbot-logo-blue.svg"
-                    alt="Language Learning Logo"
+                    alt="Zabbot blue Logo"
                     fill
                     priority
                     className="object-contain"

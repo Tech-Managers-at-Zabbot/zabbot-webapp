@@ -11,7 +11,7 @@ const WaitingAuthBanner = () => {
             <div className="relative h-10 w-28 sm:h-12 sm:w-32 md:h-14 md:w-36 lg:h-[77px] lg:w-[273px]">
               <Image
                 src={"/general/zabbot-logo-white.svg"}
-                alt="Èdèdún Logo"
+                alt="Zabbot Logo"
                 fill
                 className="object-contain"
                 priority

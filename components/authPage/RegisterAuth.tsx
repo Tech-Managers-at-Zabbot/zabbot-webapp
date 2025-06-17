@@ -1,12 +1,32 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { z } from "zod";
 import NormalInputField from "../NormalInputField";
-// import PhoneInputCustom from "../PhoneNumberInput";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import InAppButton from "../InAppButton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { appColors } from "@/constants/colors";
+import { Alerts, useAlert } from "next-alert";
+import { CustomSpinner } from "../CustomSpinner";
+import { useRegisterUser } from "@/services/generalApi/authentication/mutation";
+// import Image from "next/image";
+
+// Validation schemas
+const emailSchema = z
+  .string()
+  .min(1, "Email is required")
+  .email("Please enter a valid email address");
+
+const nameSchema = z
+  .string()
+  .min(1, "This field is required")
+  .min(2, "Must be at least 2 characters");
+
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters");
 
 const RegisterAuth: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -14,68 +34,155 @@ const RegisterAuth: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { addAlert } = useAlert();
+  const { mutateAsync: registerUser, isPending: registerUserLoading } =
+    useRegisterUser();
+
+  // Tracking states for user interactions
+  const [hasStartedTypingConfirm, setHasStartedTypingConfirm] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [isLoginRedirect, setIsLoginRedirect] = useState(false);
 
   const [error, setError] = useState({
     firstNameError: false,
     lastNameError: false,
-    phoneError: false,
     emailError: false,
     passwordError: false,
-    genderError: false,
-    ageGroupError: false,
     confirmPasswordError: false,
   });
 
-  // Password validation states
-  const [passwordValidations, setPasswordValidations] = useState({
-    // hasAlphabet: false,
-    // hasCapitalLetter: false,
-    // hasNumber: false,
-    // hasSpecialChar: false,
-    isLengthValid: false,
+  const [errorMessages, setErrorMessages] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
-  // const [confirmPasswordValidations, setConfirmPasswordValidations] = useState({
-  //   // hasAlphabet: false,
-  //   // hasCapitalLetter: false,
-  //   // hasNumber: false,
-  //   // hasSpecialChar: false,
+  // Password validation states
+  // const [passwordValidations, setPasswordValidations] = useState({
   //   isLengthValid: false,
   // });
+
+  // Real-time validation and button state management
+  useEffect(() => {
+    // Validate all fields
+    const isFirstNameValid = firstName.trim().length >= 2;
+    const isLastNameValid = lastName.trim().length >= 2;
+    const isEmailValid = emailSchema.safeParse(email).success;
+    const isPasswordValid = passwordSchema.safeParse(password).success;
+    const doPasswordsMatch =
+      password === confirmPassword && confirmPassword.length > 0;
+
+    // Update button state
+    const allFieldsValid =
+      isFirstNameValid &&
+      isLastNameValid &&
+      isEmailValid &&
+      isPasswordValid &&
+      doPasswordsMatch &&
+      agreeToTerms;
+    setButtonDisabled(!allFieldsValid);
+
+    // Handle confirm password error display
+    if (hasStartedTypingConfirm && confirmPassword.length > 0) {
+      if (password !== confirmPassword) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          confirmPassword: "Passwords do not match",
+        }));
+        setError((prev) => ({ ...prev, confirmPasswordError: true }));
+      } else {
+        setErrorMessages((prev) => ({ ...prev, confirmPassword: "" }));
+        setError((prev) => ({ ...prev, confirmPasswordError: false }));
+      }
+    }
+  }, [
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    agreeToTerms,
+    hasStartedTypingConfirm,
+  ]);
+
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFirstName(value);
+
+    const validation = nameSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        firstName: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, firstNameError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, firstName: "" }));
+      setError((prev) => ({ ...prev, firstNameError: false }));
+    }
+  };
+
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLastName(value);
+
+    const validation = nameSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        lastName: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, lastNameError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, lastName: "" }));
+      setError((prev) => ({ ...prev, lastNameError: false }));
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+
+    const validation = emailSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        email: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, emailError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, email: "" }));
+      setError((prev) => ({ ...prev, emailError: false }));
+    }
+  };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
-    setError({ ...error, passwordError: false });
 
     // Validate password
-    setPasswordValidations({
-      // hasAlphabet: /[a-zA-Z]/.test(value),
-      // hasCapitalLetter: /[A-Z]/.test(value),
-      // hasNumber: /[0-9]/.test(value),
-      // hasSpecialChar: /[@%$!]/.test(value),
-      isLengthValid: value.length >= 8,
-    });
-  };
+    // setPasswordValidations({
+    //   isLengthValid: value.length >= 8,
+    // });
 
-  const validateForm = () => {
-    const newErrors = {
-      firstNameError: !firstName.trim(),
-      lastNameError: !lastName.trim(),
-      phoneError: false, // Since phone is commented out
-      emailError: !email.trim(),
-      passwordError: !password.trim() || password.length < 8,
-      genderError: false,
-      ageGroupError: false,
-      confirmPasswordError:
-        !confirmPassword.trim() || password !== confirmPassword,
-    };
-
-    setError(newErrors);
-    return !Object.values(newErrors).some((error) => error);
+    const validation = passwordSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        password: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, passwordError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, password: "" }));
+      setError((prev) => ({ ...prev, passwordError: false }));
+    }
   };
 
   const handleConfirmPasswordChange = (
@@ -83,28 +190,79 @@ const RegisterAuth: React.FC = () => {
   ) => {
     const value = e.target.value;
     setConfirmPassword(value);
-    setError({ ...error, confirmPasswordError: false });
 
-    // Validate confirm password length
-    // setConfirmPasswordValidations({
-    //   isLengthValid: value.length >= 8,
-    // });
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form is valid, proceed with registration");
+    // Mark that user has started typing in confirm password field
+    if (!hasStartedTypingConfirm) {
+      setHasStartedTypingConfirm(true);
     }
   };
 
-  // Helper function to render validation icon
-  const renderValidationIcon = (isValid: boolean) => {
-    return isValid ? (
-      <span style={{ color: appColors.primaryGreen }}>✓</span>
-    ) : (
-      <span style={{ color: appColors.error400 }}>X</span>
-    );
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    // setLoading(true)
+
+    // Final validation before submission
+    try {
+      nameSchema.parse(firstName);
+      nameSchema.parse(lastName);
+      emailSchema.parse(email);
+      passwordSchema.parse(password);
+
+      if (password !== confirmPassword) {
+        // setLoading(false)
+        addAlert("Error", "Passwords do not match", "error");
+      }
+
+      if (!agreeToTerms) {
+        addAlert(
+          "Error",
+          "Please agree to the Terms of Service and Privacy Policy",
+          "error"
+        );
+      }
+
+      // console.log("Form is valid, proceed with registration", {
+      //   firstName,
+      //   lastName,
+      //   email,
+      //   password,
+      // });
+
+      // Call the registerUser mutation
+      const userData = {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        confirmPassword: confirmPassword.trim(),
+      };
+
+      await registerUser(userData, {
+        onSuccess: (data) => {
+          console.log("Registration successful:", data);
+          addAlert(
+            "Success",
+            "Signup successful! An email has been sent to you for account verification",
+            "success"
+          );
+          router.push(`/otp?email=${encodeURIComponent(email)}`);
+        },
+        onError: (error: any) => {
+          console.error("Registration error:", error);
+          // setLoading(false); // Make sure to stop loading on error
+          addAlert(
+            "Error",
+            error?.response?.data?.message ||
+              "An error occurred during registration",
+            "error"
+          );
+        },
+      });
+    } catch (error: any) {
+      console.error("Validation error:", error);
+      // setLoading(false);
+      // addAlert("Error", error.message, "error");
+    }
   };
 
   return (
@@ -112,6 +270,8 @@ const RegisterAuth: React.FC = () => {
       className="w-full border-0 max-w-[35rem] mx-auto"
       style={{ fontFamily: "Inter" }}
     >
+      <div>
+      </div>
       <div className="mb-10 w-full flex flex-col gap-[8px]">
         <h1
           className="text-[27.65px] font-[600] leading-[31.8px]"
@@ -131,19 +291,17 @@ const RegisterAuth: React.FC = () => {
           <NormalInputField
             id="firstName"
             value={firstName}
-            onChange={(e: any) => {
-              setFirstName(e.target.value);
-              setError({ ...error, firstNameError: false });
-            }}
+            onChange={handleFirstNameChange}
             placeholder="Type your first name"
             type="text"
             color="#80838D"
             error={error.firstNameError}
             backgroundColor="#E3EFFC"
             border={"0"}
-            errorMessage="First name is required"
+            errorMessage={errorMessages.firstName || "First name is required"}
           />
         </div>
+
         <div>
           <label
             htmlFor="lastName"
@@ -154,19 +312,17 @@ const RegisterAuth: React.FC = () => {
           <NormalInputField
             id="lastName"
             value={lastName}
-            onChange={(e: any) => {
-              setLastName(e.target.value);
-              setError({ ...error, lastNameError: false });
-            }}
+            onChange={handleLastNameChange}
             placeholder="Type your last name"
             type="text"
             color="#80838D"
             error={error.lastNameError}
             backgroundColor="#E3EFFC"
             border={"0"}
-            errorMessage="Last name is required"
+            errorMessage={errorMessages.lastName || "Last name is required"}
           />
         </div>
+
         <div>
           <label
             htmlFor="email"
@@ -177,38 +333,17 @@ const RegisterAuth: React.FC = () => {
           <NormalInputField
             id="email"
             value={email}
-            onChange={(e: any) => {
-              setEmail(e.target.value);
-              setError({ ...error, emailError: false });
-            }}
+            onChange={handleEmailChange}
             placeholder="Type your email address"
             type="email"
             error={error.emailError}
             color="#80838D"
             backgroundColor="#E3EFFC"
             border={"0"}
-            errorMessage="Email is required"
+            errorMessage={errorMessages.email || "Email is required"}
           />
         </div>
-        {/* <div>
-          <label
-            htmlFor="phoneNumber"
-            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
-          >
-            Phone Number
-          </label>
-          <PhoneInputCustom
-            value={phone}
-            onChangePhoneNumber={(fullPhoneNumber: string) => {
-              setPhone(fullPhoneNumber);
-              setError({ ...error, phoneError: false });
-            }}
-            placeholder="Input your phone number"
-            initialCountryCode="US"
-            error={error.phoneError}
-            errorMessage="Phone Number is required"
-          />
-        </div> */}
+
         <div>
           <label
             htmlFor="password"
@@ -227,7 +362,7 @@ const RegisterAuth: React.FC = () => {
               color="#80838D"
               backgroundColor="#E3EFFC"
               border={"0"}
-              errorMessage="Password is required"
+              errorMessage={errorMessages.password || "Password is required"}
             />
             <button
               type="button"
@@ -242,48 +377,9 @@ const RegisterAuth: React.FC = () => {
               )}
             </button>
           </div>
+
           {/* Password validation checklist */}
-          <div className="mt-2 text-xs text-gray-600 font-[500] space-y-1">
-            {/* <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasAlphabet
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasAlphabet)} Password
-              should have at least one alphabet
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasCapitalLetter
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasCapitalLetter)}{" "}
-              Password should have at least one capital letter
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasNumber
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasNumber)} Password
-              should have at least one number
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasSpecialChar
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasSpecialChar)}{" "}
-              Password should have at least one @%$! character
-            </div> */}
+          {/* <div className="mt-2 text-xs text-gray-600 font-[500] space-y-1">
             <div
               className={`flex font-[500] leading-[21.33px] items-center ${
                 passwordValidations.isLengthValid
@@ -291,10 +387,10 @@ const RegisterAuth: React.FC = () => {
                   : `text-[${appColors.error400}]`
               } gap-2`}
             >
-              {renderValidationIcon(passwordValidations.isLengthValid)} Password
+              {renderValidationIcon(passwordValidations.isLengthValid)} 
               Password should be a minimum of eight (8) characters
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div>
@@ -316,16 +412,14 @@ const RegisterAuth: React.FC = () => {
               backgroundColor="#E3EFFC"
               border={"0"}
               errorMessage={
-                confirmPassword && password !== confirmPassword
-                  ? "Passwords do not match"
-                  : "Confirm password is required"
+                errorMessages.confirmPassword || "Confirm password is required"
               }
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 pointer-events-auto"
-              style={{ top: "1px", height: "56px" }} // Fixed height and top position
+              style={{ top: "1px", height: "56px" }}
             >
               {showConfirmPassword ? (
                 <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
@@ -344,35 +438,36 @@ const RegisterAuth: React.FC = () => {
             type="checkbox"
             id="sendUpdates"
             name="sendUpdates"
-            // checked={checkboxes.sendUpdates}
-            // onChange={handleCheckboxChange}
+            checked={agreeToTerms}
+            onChange={(e) => setAgreeToTerms(e.target.checked)}
             className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
           />
-          {/* terms-of-service */}
           <div className="block">
-          <label htmlFor="" className="block">
-            I agree to the{" "}
-            <Link
-            href="/terms-of-service"
-            style={{ textDecoration: "none"  }}
-          >
-            <span
-              className={`underline hover:cursor-pointer hover:text-[#0098DE]`}
-            >
-              Terms of Service and Privacy Policy
-            </span>
-          </Link>
-          </label>
+            <label htmlFor="sendUpdates" className="block hover:cursor-pointer">
+              I agree to the{" "}
+              <Link
+                href="/terms-of-service"
+                target="blank"
+                style={{ textDecoration: "none" }}
+              >
+                <span
+                  className={`underline hover:cursor-pointer hover:text-[#0098DE]`}
+                >
+                  Terms of Service and Privacy Policy
+                </span>
+              </Link>
+            </label>
           </div>
         </div>
+
         <InAppButton
-          disabled
+          disabled={buttonDisabled || registerUserLoading || isLoginRedirect}
           disabledColor={appColors.disabledButtonBlue}
           backgroundColor={appColors.darkRoyalBlueForBtn}
           width="100%"
           onClick={handleSubmit}
         >
-          <div>Continue</div>
+          {registerUserLoading ? <CustomSpinner /> : <div>Continue</div>}
         </InAppButton>
 
         <div
@@ -381,19 +476,40 @@ const RegisterAuth: React.FC = () => {
         >
           <div>Already have an account?</div>
           <Link
-            href="/login"
-            style={{ textDecoration: "none", color: appColors.normalBlue }}
+            // href="/login"
+            href={isLoginRedirect || registerUserLoading ? "#" : "/login"}
+            onClick={() => {
+              setIsLoginRedirect(true);
+            }}
+            // style={{ textDecoration: "none", color: appColors.normalBlue }}
+            style={{
+              textDecoration: "none",
+              color:
+                registerUserLoading || isLoginRedirect
+                  ? "#9CA3AF"
+                  : appColors.normalBlue,
+              pointerEvents:
+                registerUserLoading || isLoginRedirect ? "none" : "auto",
+            }}
           >
-            <span className="hover:cursor-pointer">Login</span>
+            <span
+              className={`font-[600] ${
+                registerUserLoading || isLoginRedirect
+                  ? "cursor-not-allowed"
+                  : "hover:cursor-pointer"
+              }`}
+            >
+              Login
+            </span>
           </Link>
         </div>
       </form>
-      {/* <Alerts
-        position="bottom-right"
+      <Alerts
+        position="top-left"
         direction="right"
-        timer={3000}
-        className="rounded-md relative z-50 !w-80"
-      /> */}
+        timer={5000}
+        className="rounded-md relative z-1000 !w-80"
+      />
     </div>
   );
 };

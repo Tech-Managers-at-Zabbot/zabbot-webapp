@@ -1,12 +1,11 @@
-
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import InAppButton from "./InAppButton";
-import { CustomSpinner } from "./CustomSpinner";
+import InAppButton from "../InAppButton";
+import { CustomSpinner } from "../CustomSpinner";
 import Image from "next/image";
 
-const SuccessComponent = () => {
+const FoundersCircleSuccessComponent = () => {
   const [loading, setLoading] = useState(false);
   return (
     <div
@@ -23,7 +22,7 @@ const SuccessComponent = () => {
           className="w-full h-auto"
         />
       </div>
-      
+
       <div className="bg-white flex flex-col gap-4 rounded-lg shadow-md p-6 md:p-8 max-w-lg w-full text-center mx-auto">
         {/* Title */}
         <p className="text-xl md:text-2xl lg:text-3xl text-[#09111D] font-medium">
@@ -32,8 +31,10 @@ const SuccessComponent = () => {
 
         <div className="mb-4 md:mb-8 text-[#8B9298] text-sm md:text-base lg:text-lg">
           You have joined our founders circle! <br />
-          Please share with others. Check your inbox for more information.<br/>
-          If you do not see our email in your inbox, please check the promotions folder of your mail.
+          Please share with others. Check your inbox for more information.
+          <br />
+          If you do not see our email in your inbox, please check the promotions
+          folder of your mail.
         </div>
 
         {/* Home Button */}
@@ -50,7 +51,7 @@ const SuccessComponent = () => {
           </InAppButton>
         </Link>
       </div>
-      
+
       <div className="text-[#8B9298] text-xs md:text-sm lg:text-base mt-6 text-center">
         Click here to follow and cheer us on!{" "}
         <span className="text-[#0D5EBA]">
@@ -68,4 +69,4 @@ const SuccessComponent = () => {
   );
 };
 
-export default SuccessComponent;
+export default FoundersCircleSuccessComponent;

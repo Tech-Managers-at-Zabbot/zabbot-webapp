@@ -165,7 +165,7 @@ const WaitingListAuthComponent: React.FC = () => {
             betaTest: false,
             contributeRecordings: false,
           })
-          return router.push('/success-page')
+          return router.push('/founders-circle/founders-success')
         },
         onError: (error) => {
           console.error("Error joining founders list", error);

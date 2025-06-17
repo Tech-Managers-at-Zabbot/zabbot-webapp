@@ -12,7 +12,7 @@ const AuthBanner = () => {
             <div className="relative h-12 w-32 lg:h-[77px] lg:w-[273px]">
               <Image
                 src={"/general/zabbot-logo-blue.svg"}
-                alt="Èdèdún Logo"
+                alt="Zabbot Logo"
                 fill
                 className="object-contain"
                 priority

@@ -1,23 +1,18 @@
-import SuccessComponent from "@/components/SuccessComponent";
+import SuccessComponent from "@/components/founders-circle/FoundersSuccessComponent";
 import Head from "next/head";
 
 const SuccessPage = () => {
-
-
   return (
     <div>
       <Head>
         <title>Zabbot - Success Page</title>
-        <meta
-          name="description"
-          content="Founders-Circle Successful Join"
-        />
+        <meta name="description" content="Founders-Circle Successful Join" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
-      {/* <LandingPageNavbar /> */}
+        {/* <LandingPageNavbar /> */}
         <section className="w-full">
-        <SuccessComponent />
+          <SuccessComponent />
         </section>
       </main>
     </div>
