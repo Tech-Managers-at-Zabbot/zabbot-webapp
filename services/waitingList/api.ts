@@ -1,11 +1,10 @@
 import axios from 'axios';
 import { waitingListSchema } from "@/schemas/waitinglist.schema";
 
-const API_BASE_URL = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1";
+const API_BASE_URL = "https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1";
 
 //LOCAL ==> 'http://localhost:3010/api/v1'
 //MAIN BRANCH ==> 'https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1';
-//DEMO BRANCH ==> 'https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1'
 
 export const joinFoundersList = async (formData: {
   name: string;
