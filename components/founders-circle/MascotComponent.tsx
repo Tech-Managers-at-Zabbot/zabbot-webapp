@@ -1,6 +1,6 @@
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, easeInOut } from "framer-motion";
 
 const FoundersMascotComponent = () => {
 
@@ -14,7 +14,7 @@ const FoundersMascotComponent = () => {
         transition: {
           duration: 4,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: easeInOut
         }
       };
 
