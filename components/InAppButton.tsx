@@ -16,46 +16,60 @@ export interface ButtonProps {
   color?: string;
   backgroundColor?: string;
   type?: any;
-  disabledColor?:string;
-  onClick?: (e:unknown) => void;
+  disabledColor?: string;
+  fontFamily?: string;
+  border?: string;
+  isShadowShow?: boolean;
+  onClick?: (e: unknown) => void;
 }
 
 const InAppButton: React.FC<ButtonProps> = ({
   title,
   borderRadius = "50px",
   children,
-  height = '58px',
+  height = "58px",
   paddingTop,
   paddingBottom,
   paddingLeft,
   paddingRight,
   width = "230px",
   disabled,
+  border,
   type,
-  color='white',
-  backgroundColor="#F9C10F",
-  disabledColor="#E0E1E6",
+  isShadowShow,
+  color = "white",
+  fontFamily = "Lexend",
+  backgroundColor = "#F9C10F",
+  disabledColor = "#E0E1E6",
   onClick,
 }) => {
   return (
     <button
-      className={`${!disabled ? 'hover:cursor-pointer' : ''} shadow-[0_4px_0_0_rgba(0,0,0,0.2)]
-      ${!disabled ? 'hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]' : ''}
-  ${!disabled ? 'hover:translate-y-0.5' : ''}
-  ${!disabled ? 'active:shadow-none' : ''}
-  ${!disabled ? 'active:translate-y-1' : ''}
+      className={`${!disabled ? "hover:cursor-pointer" : ""} ${
+        isShadowShow && "shadow-[0_4px_0_0_rgba(0,0,0,0.2)]"
+      }
+      ${
+        !disabled && isShadowShow
+          ? "hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]"
+          : ""
+      }
+  ${!disabled ? "hover:translate-y-0.5" : ""}
+  ${!disabled ? "active:shadow-none" : ""}
+  ${!disabled ? "active:translate-y-1" : ""}
   transition-all font-[700]`}
       onClick={onClick}
       style={{
         borderRadius,
         height,
+        border,
         paddingTop,
         paddingBottom,
         paddingLeft,
         paddingRight,
         width,
         color,
-        backgroundColor: !disabled ? backgroundColor : disabledColor
+        fontFamily,
+        backgroundColor: !disabled ? backgroundColor : disabledColor,
       }}
       disabled={disabled}
       type={type}

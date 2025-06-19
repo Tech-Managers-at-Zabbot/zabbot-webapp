@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { appColors } from "@/constants/colors";
 import { Alerts, useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
+import { GoogleIcon } from "@/constants/SvgPaths";
 import { useRegisterUser } from "@/services/generalApi/authentication/mutation";
 // import Image from "next/image";
 
@@ -28,6 +29,9 @@ const passwordSchema = z
   .string()
   .min(8, "Password must be at least 8 characters");
 
+  const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254;
+
 const RegisterAuth: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +41,10 @@ const RegisterAuth: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [
+    isGoogleLoading,
+    // setIsGoogleLoading
+  ] = useState(false);
   // const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
@@ -113,7 +121,7 @@ const RegisterAuth: React.FC = () => {
   ]);
 
   const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);
     setFirstName(value);
 
     const validation = nameSchema.safeParse(value);
@@ -130,7 +138,7 @@ const RegisterAuth: React.FC = () => {
   };
 
   const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);
     setLastName(value);
 
     const validation = nameSchema.safeParse(value);
@@ -147,7 +155,7 @@ const RegisterAuth: React.FC = () => {
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.slice(0, MAX_EMAIL_LENGTH);
     setEmail(value);
 
     const validation = emailSchema.safeParse(value);
@@ -164,7 +172,7 @@ const RegisterAuth: React.FC = () => {
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);;
     setPassword(value);
 
     // Validate password
@@ -232,7 +240,7 @@ const RegisterAuth: React.FC = () => {
       const userData = {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
-        email: email.trim(),
+        email: email.toLowerCase().trim(),
         password: password.trim(),
         confirmPassword: confirmPassword.trim(),
       };
@@ -241,7 +249,7 @@ const RegisterAuth: React.FC = () => {
         onSuccess: (data) => {
           console.log("Registration successful:", data);
           addAlert(
-            "Success",
+            "Success!",
             "Signup successful! An email has been sent to you for account verification",
             "success"
           );
@@ -266,21 +274,16 @@ const RegisterAuth: React.FC = () => {
   };
 
   return (
-    <div
-      className="w-full border-0 max-w-[35rem] mx-auto"
-      style={{ fontFamily: "Inter" }}
-    >
-      <div>
-      </div>
+    <div className="w-full border-0 mx-auto" style={{ fontFamily: "Lexend" }}>
       <div className="mb-10 w-full flex flex-col gap-[8px]">
         <h1
-          className="text-[27.65px] font-[600] leading-[31.8px]"
-          style={{ fontFamily: "Inter", color: appColors.black }}
+          className="text-[28px] font-[600] leading-[31.8px]"
+          style={{ color: appColors.black }}
         >
           Create your account
         </h1>
       </div>
-      <form className="space-y-4 flex flex-col">
+      <form className="mb-10 gap-3 flex flex-col">
         <div>
           <label
             htmlFor="firstName"
@@ -367,7 +370,7 @@ const RegisterAuth: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 pointer-events-auto"
+              className="absolute inset-y-0 right-0 pr-3 flex hover:cursor-pointer items-center text-sm leading-5 pointer-events-auto"
               style={{ top: "1px", height: "56px" }}
             >
               {showPassword ? (
@@ -418,7 +421,7 @@ const RegisterAuth: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 pointer-events-auto"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm hover:cursor-pointer leading-5 pointer-events-auto"
               style={{ top: "1px", height: "56px" }}
             >
               {showConfirmPassword ? (
@@ -431,7 +434,7 @@ const RegisterAuth: React.FC = () => {
         </div>
 
         <div
-          className="flex mb-8 gap-[20px] font-[500] text-[12px] leading-[145%] justify-center mt-4 items-center"
+          className="flex mb-8 gap-[20px] font-[500] text-[12px] leading-[145%] mt-4 items-center"
           style={{ fontFamily: "Lexend", color: appColors.darkRoyalBlueForBtn }}
         >
           <input
@@ -461,18 +464,58 @@ const RegisterAuth: React.FC = () => {
         </div>
 
         <InAppButton
-          disabled={buttonDisabled || registerUserLoading || isLoginRedirect}
+          disabled={
+            buttonDisabled ||
+            isGoogleLoading ||
+            registerUserLoading ||
+            isLoginRedirect
+          }
           disabledColor={appColors.disabledButtonBlue}
           backgroundColor={appColors.darkRoyalBlueForBtn}
           width="100%"
           onClick={handleSubmit}
         >
-          {registerUserLoading ? <CustomSpinner /> : <div>Continue</div>}
+          {registerUserLoading ? <CustomSpinner /> : <div>Agree & Join</div>}
+        </InAppButton>
+
+        <div
+          className="flex gap-[5px] justify-center items-center font-[500] text-[16px] leading-[145%]"
+          style={{ color: appColors.gray300, fontFamily: "Lexend" }}
+        >
+          <span className="w-[73px] border-1"></span> or{" "}
+          <span className="w-[73px] border-1"></span>
+        </div>
+
+        <InAppButton
+          disabled={isGoogleLoading || registerUserLoading || isLoginRedirect}
+          disabledColor={appColors.gray300}
+          borderRadius="50px"
+          height="58px"
+          backgroundColor={"transparent"}
+          width="100%"
+          color="#007AB2"
+          border="1px solid #84D8FF"
+          onClick={() => ""}
+          isShadowShow={false}
+        >
+          {isGoogleLoading ? (
+            <CustomSpinner />
+          ) : (
+            <div
+              className="flex justify-center font-[700] text-[14px] leading-[160%] items-center gap-4"
+              style={{ fontFamily: "Lexend" }}
+            >
+              <span>
+                <GoogleIcon />
+              </span>
+              <span>Continue with Google</span>
+            </div>
+          )}
         </InAppButton>
 
         <div
           className="text-[#645D5D] gap-[6px] flex justify-center items-center mt-6 font-[500] text-[16px] leading-[145%]"
-          style={{ fontFamily: "Lexend", color: appColors.darkRoyalBlueForBtn }}
+          style={{ fontFamily: "Lexend", color: "#162B6E" }}
         >
           <div>Already have an account?</div>
           <Link
@@ -499,7 +542,7 @@ const RegisterAuth: React.FC = () => {
                   : "hover:cursor-pointer"
               }`}
             >
-              Login
+              Sign In
             </span>
           </Link>
         </div>

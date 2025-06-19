@@ -46,7 +46,7 @@ export const resendUserOtp = async (formData: {
 export const loginUser = async (formData: {
     email: string,
     password: string,
-    stayLoggedIn?: boolean
+    stayLoggedIn: boolean
 }) => {
      const response = await axiosInstance.post("/users/auth/login", formData, {
         headers: {

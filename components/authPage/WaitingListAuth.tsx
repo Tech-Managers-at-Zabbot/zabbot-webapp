@@ -141,9 +141,9 @@ const WaitingListAuthComponent: React.FC = () => {
     }
     try {
       waitingListData({
-        name,
-        email,
-        country: useOtherCountry ? otherCountry : country,
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        country: useOtherCountry ? otherCountry.trim() : country,
         sendUpdates: checkboxes.sendUpdates,
         betaTest: checkboxes.betaTest,
         contributeSkills: checkboxes.contributeRecordings,

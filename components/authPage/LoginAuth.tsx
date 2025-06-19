@@ -11,11 +11,13 @@ import { z } from "zod";
 import { Alerts, useAlert } from "next-alert";
 import { useRouter } from "next/navigation";
 import { useLoginUser } from "@/services/generalApi/authentication/mutation";
+import { GoogleIcon } from "@/constants/SvgPaths";
 
 const LoginAuth: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const { addAlert } = useAlert();
   const router = useRouter();
   const [isResetLoading, setIsResetLoading] = useState(false);
@@ -26,6 +28,10 @@ const LoginAuth: React.FC = () => {
     emailError: false,
     passwordError: false,
   });
+  const [
+    isGoogleLoading,
+    // setIsGoogleLoading
+  ] = useState(false);
 
   useEffect(() => {
     const emailSchema = z.string().email();
@@ -47,7 +53,7 @@ const LoginAuth: React.FC = () => {
     setIscreateAccountLoading(true);
     try {
       loginUser(
-        { email, password },
+        { email: email.toLowerCase().trim(), password: password.trim(), stayLoggedIn },
         {
           onSuccess: () => {
             setError({
@@ -82,7 +88,10 @@ const LoginAuth: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-[60px] max-w-md mx-auto">
+    <div
+      className="w-full flex flex-col gap-[40px] mx-auto"
+      style={{ fontFamily: "Lexend" }}
+    >
       <div className="w-full flex flex-col gap-[8px]">
         <h1
           className="text-[#000000] text-[27.65px] font-[500] leading-[31.8px]"
@@ -153,7 +162,74 @@ const LoginAuth: React.FC = () => {
             </button>
           </div>
         </div>
-        <div className="mt-6">
+
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-0">
+          <div
+            className="flex gap-[10px] font-[500] text-[14px] leading-[145%] justify-center items-center order-1 lg:order-none"
+            style={{
+              fontFamily: "Lexend",
+              color: "#0089C8",
+            }}
+          >
+            <input
+              type="checkbox"
+              id="sendUpdates"
+              name="sendUpdates"
+              checked={stayLoggedIn}
+              onChange={(e) => setStayLoggedIn(e.target.checked)}
+              className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
+            />
+            <div className="block">
+              <label
+                htmlFor="sendUpdates"
+                className="block hover:cursor-pointer"
+              >
+                Remember me{" "}
+              </label>
+            </div>
+          </div>
+
+          <div
+            className="text-[#645D5D] justify-center lg:justify-end items-center flex gap-[10px] font-[500] text-[14px] leading-[145%] order-2 lg:order-none"
+            style={{ fontFamily: "Lexend" }}
+          >
+            <div className="text-[#0089C8]">Forgot your password?</div>{" "}
+            <Link
+              href={
+                isCreateAccountLoading || isResetLoading || isLoginLoading
+                  ? "#"
+                  : "/forgot-password"
+              }
+              onClick={() => {
+                setIsResetLoading(true);
+                setIscreateAccountLoading(true);
+              }}
+              style={{
+                textDecoration: "none",
+                color:
+                  isLoginLoading || isResetLoading || isResetLoading
+                    ? "#9CA3AF"
+                    : appColors.redPrimary500,
+                pointerEvents:
+                  isLoginLoading || isResetLoading || isResetLoading
+                    ? "none"
+                    : "auto",
+              }}
+            >
+              <span
+                className={`font-[500] ${
+                  isLoginLoading || isResetLoading || isResetLoading
+                    ? "cursor-not-allowed"
+                    : "hover:cursor-pointer"
+                }`}
+              >
+                Reset it here.
+              </span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="">
           <InAppButton
             disabled={
               isLoginLoading ||
@@ -169,49 +245,56 @@ const LoginAuth: React.FC = () => {
             {isLoginLoading ? (
               <CustomSpinner spinnerColor="#8B8D98" />
             ) : (
-              <div>Continue</div>
+              <div>Login</div>
+            )}
+          </InAppButton>
+        </div>
+        <div
+          className="flex gap-[5px] justify-center items-center font-[500] text-[16px] leading-[145%]"
+          style={{ color: appColors.gray300, fontFamily: "Lexend" }}
+        >
+          <span className="w-[73px] border-1"></span> or{" "}
+          <span className="w-[73px] border-1"></span>
+        </div>
+        <div>
+          <InAppButton
+            disabled={
+              isGoogleLoading ||
+              isLoginLoading ||
+              isResetLoading ||
+              isCreateAccountLoading
+            }
+            disabledColor={appColors.gray300}
+            borderRadius="50px"
+            height="58px"
+            backgroundColor={"transparent"}
+            width="100%"
+            color="#007AB2"
+            border="1px solid #84D8FF"
+            onClick={() => ""}
+            isShadowShow={false}
+          >
+            {isGoogleLoading ? (
+              <CustomSpinner />
+            ) : (
+              <div
+                className="flex justify-center font-[700] text-[14px] leading-[160%] items-center gap-4"
+                style={{ fontFamily: "Lexend" }}
+              >
+                <span>
+                  <GoogleIcon />
+                </span>
+                <span>Continue with Google</span>
+              </div>
             )}
           </InAppButton>
         </div>
       </form>
-      <div className="text-[#645D5D] justify-center items-center flex gap-[20px] font-[400] text-[14px] leading-[145%]">
-        <div>Forgot your password?</div>{" "}
-        <Link
-          href={
-            isCreateAccountLoading || isResetLoading || isLoginLoading
-              ? "#"
-              : "/forgot-password"
-          }
-          onClick={() => {
-            setIsResetLoading(true);
-            setIscreateAccountLoading(true);
-          }}
-          // style={{ textDecoration: "none", color: appColors.redPrimary500 }}
-          style={{
-            textDecoration: "none",
-            color:
-              isLoginLoading || isResetLoading || isResetLoading
-                ? "#9CA3AF"
-                : appColors.redPrimary500,
-            pointerEvents:
-              isLoginLoading || isResetLoading || isResetLoading
-                ? "none"
-                : "auto",
-          }}
-        >
-          <span
-            className={`font-[600] ${
-              isLoginLoading || isResetLoading || isResetLoading
-                ? "cursor-not-allowed"
-                : "hover:cursor-pointer"
-            }`}
-          >
-            Reset it here.
-          </span>
-        </Link>
-      </div>
 
-      <div className="text-[#645D5D] justify-center items-center flex gap-[20px] font-[400] text-[14px] leading-[145%]">
+      <div
+        className="text-[#645D5D] justify-center items-center flex gap-[20px] font-[400] text-[15px] leading-[100%]"
+        style={{ fontFamily: "Lexend" }}
+      >
         <div>New to Zabbot? Join Now</div>{" "}
         <Link
           href={
@@ -234,7 +317,7 @@ const LoginAuth: React.FC = () => {
           }}
         >
           <span
-            className={`font-[600] ${
+            className={`font-[400] ${
               isLoginLoading || isResetLoading || isResetLoading
                 ? "cursor-not-allowed"
                 : "hover:cursor-pointer"

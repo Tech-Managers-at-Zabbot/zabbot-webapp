@@ -213,7 +213,7 @@ const OtpComponent: React.FC = () => {
               {isVerifyLoading ? (
                 <CustomSpinner spinnerColor="#8B8D98" />
               ) : (
-                <div>Verify</div>
+                <div>Submit</div>
               )}
             </InAppButton>
           </div>

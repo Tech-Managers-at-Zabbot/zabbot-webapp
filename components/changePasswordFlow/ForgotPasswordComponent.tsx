@@ -12,11 +12,11 @@ import { useRouter } from "next/navigation";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRequestPasswordLink } from "@/services/generalApi/authentication/mutation";
 
-
 const emailSchema = z.object({
-  email: z.string()
+  email: z
+    .string()
     .min(1, "Email is required")
-    .email("Please enter a valid email address")
+    .email("Please enter a valid email address"),
 });
 
 const ForgotPassword: React.FC = () => {
@@ -24,9 +24,9 @@ const ForgotPassword: React.FC = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [emailError, setEmailError] = useState("");
   const { addAlert } = useAlert();
-  const router = useRouter()
-  const {mutate:requestPaswordLink, isPending: isRequestingPasswordLink} = useRequestPasswordLink()
-
+  const router = useRouter();
+  const { mutate: requestPaswordLink, isPending: isRequestingPasswordLink } =
+    useRequestPasswordLink();
 
   useEffect(() => {
     const validateEmail = () => {
@@ -57,36 +57,36 @@ const ForgotPassword: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       emailSchema.parse({ email });
 
       setEmailError("");
-      const newEmail = email.trim()
-      requestPaswordLink({email: newEmail}, {
-        onSuccess: () => {
-          addAlert(
-            "Success",
-            "A password reset link has been sent to your email",
-            "success"
-          );
-        return router.push('/login');
-        },
-        onError: (error: any) => {
-          addAlert(
-            "Error",
-            error?.response?.data?.message || "An error occurred, please try again",
-            "error"
-          );
+      
+      requestPaswordLink(
+        { email: email.toLowerCase().trim() },
+        {
+          onSuccess: () => {
+            addAlert(
+              "Success",
+              "A password reset link has been sent to your email",
+              "success"
+            );
+            return router.push("/login");
+          },
+          onError: (error: any) => {
+            addAlert(
+              "Error",
+              error?.response?.data?.message ||
+                "An error occurred, please try again",
+              "error"
+            );
+          },
         }
-      })      
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
-        addAlert(
-          "Error",
-          error.errors[0].message,
-          "error"
-        );
+        addAlert("Error", error.errors[0].message, "error");
       }
     }
   };
@@ -97,13 +97,21 @@ const ForgotPassword: React.FC = () => {
         <div className="hover:cursor-pointer" onClick={() => router.back()}>
           <IoChevronBackSharp size={24} color="#1C2024" />
         </div>
-        <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">Forgot Password</h1>
-        <div className="hover:cursor-pointer" onClick={() => router.push('/login')}>
+        <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">
+          Forgot Password
+        </h1>
+        <div
+          className="hover:cursor-pointer"
+          onClick={() => router.push("/login")}
+        >
           <IoCloseOutline size={24} color="#1C2024" />
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-10 mt-6 sm:mt-10">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 sm:space-y-10 mt-6 sm:mt-10"
+      >
         <div className="flex flex-col gap-2 sm:gap-[8px]">
           <label
             htmlFor="email"
@@ -128,13 +136,13 @@ const ForgotPassword: React.FC = () => {
 
         <div className="mt-4 sm:mt-6">
           <InAppButton
-                      disabledColor="#80BBFF"
-                      width="100%"
-                      disabled={buttonDisabled || isRequestingPasswordLink}
-                      backgroundColor={appColors.darkRoyalBlueForBtn}
-                    >
-                      { isRequestingPasswordLink ? <CustomSpinner /> : <div>Continue</div> }
-                    </InAppButton>
+            disabledColor="#80BBFF"
+            width="100%"
+            disabled={buttonDisabled || isRequestingPasswordLink}
+            backgroundColor={appColors.darkRoyalBlueForBtn}
+          >
+            {isRequestingPasswordLink ? <CustomSpinner /> : <div>Continue</div>}
+          </InAppButton>
         </div>
       </form>
       <Alerts

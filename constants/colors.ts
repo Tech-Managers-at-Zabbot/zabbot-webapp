@@ -14,4 +14,6 @@ export const appColors = {
     error400: "#D42620",
     officeBrown: "#645D5D",
     redPrimary500: "#EB5017",
+    languageToggleLightBlue: "#D9F3FF",
+    gray300: "#D0D5DD",
 }

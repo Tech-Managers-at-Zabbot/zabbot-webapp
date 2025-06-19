@@ -100,7 +100,7 @@ const ChangePasswordComponent: React.FC = () => {
     setLoading(false)
 
     resetPassword(
-      { newPassword, token: token || "", confirmNewPassword: confirmPassword },
+      { newPassword:newPassword.trim(), token: token || "", confirmNewPassword: confirmPassword.trim() },
       {
         onSuccess: () => {
             addAlert(

@@ -9,7 +9,7 @@ const AuthBanner = () => {
       <section className=" animate__animated animate__fadeIn animate__delay-1s">
         <Link href="/">
           <div className="flex items-center">
-            <div className="relative h-12 w-32 lg:h-[77px] lg:w-[273px]">
+            <div className="relative h-12 w-32 lg:h-[56px] lg:w-[205px]">
               <Image
                 src={"/general/zabbot-logo-blue.svg"}
                 alt="Zabbot Logo"
