@@ -33,7 +33,7 @@ const SuccessComponent = () => {
         </div>
 
         {/* Home Button */}
-        <Link href="/signup" passHref className="w-full mt-2">
+        <Link href="/login" passHref className="w-full mt-2">
           <InAppButton
             borderRadius="1192.64px"
             backgroundColor="#012657"

@@ -119,7 +119,7 @@ const LoginAuth: React.FC = () => {
             placeholder="Type your email address"
             type="email"
             error={error.emailError}
-            color="#80838D"
+            color="black"
             backgroundColor="#E3EFFC"
             border={"0"}
             errorMessage="Email is required"
@@ -143,7 +143,7 @@ const LoginAuth: React.FC = () => {
               placeholder="Type your password"
               type={showPassword ? "text" : "password"}
               error={error.passwordError}
-              color="#80838D"
+              color="black"
               backgroundColor="#E3EFFC"
               border={"0"}
               errorMessage="Password is required"

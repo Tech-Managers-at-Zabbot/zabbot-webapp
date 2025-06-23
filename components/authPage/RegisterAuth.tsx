@@ -297,7 +297,7 @@ const RegisterAuth: React.FC = () => {
             onChange={handleFirstNameChange}
             placeholder="Type your first name"
             type="text"
-            color="#80838D"
+            color="black"
             error={error.firstNameError}
             backgroundColor="#E3EFFC"
             border={"0"}
@@ -318,7 +318,7 @@ const RegisterAuth: React.FC = () => {
             onChange={handleLastNameChange}
             placeholder="Type your last name"
             type="text"
-            color="#80838D"
+            color="black"
             error={error.lastNameError}
             backgroundColor="#E3EFFC"
             border={"0"}
@@ -340,7 +340,7 @@ const RegisterAuth: React.FC = () => {
             placeholder="Type your email address"
             type="email"
             error={error.emailError}
-            color="#80838D"
+            color="black"
             backgroundColor="#E3EFFC"
             border={"0"}
             errorMessage={errorMessages.email || "Email is required"}
@@ -362,7 +362,7 @@ const RegisterAuth: React.FC = () => {
               placeholder="Create your password"
               type={showPassword ? "text" : "password"}
               error={error.passwordError}
-              color="#80838D"
+              color="black"
               backgroundColor="#E3EFFC"
               border={"0"}
               errorMessage={errorMessages.password || "Password is required"}
@@ -411,7 +411,7 @@ const RegisterAuth: React.FC = () => {
               placeholder="Confirm your password"
               type={showConfirmPassword ? "text" : "password"}
               error={error.confirmPasswordError}
-              color="#80838D"
+              color="black"
               backgroundColor="#E3EFFC"
               border={"0"}
               errorMessage={
@@ -550,7 +550,7 @@ const RegisterAuth: React.FC = () => {
       <Alerts
         position="top-left"
         direction="right"
-        timer={5000}
+        timer={10000}
         className="rounded-md relative z-1000 !w-80"
       />
     </div>

@@ -29,7 +29,7 @@ const LoginAuthBanner = () => {
             "leading-[50px] font-semibold animate__animated animate__fadeInUp"
           }
         >
-          <span className="block ">Welcome back!</span>
+          <span className="block ">Welcome!</span>
           <span className="block">Keep Living Yorùbá.</span>
         </h1>
         <p className="leading-[70px] font-[300] animate__animated animate__fadeInUp animate__delay-1s">
