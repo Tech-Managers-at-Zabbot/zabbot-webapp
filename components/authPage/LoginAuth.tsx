@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
@@ -10,8 +11,9 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { z } from "zod";
 import { Alerts, useAlert } from "next-alert";
 import { useRouter } from "next/navigation";
-import { useLoginUser } from "@/services/generalApi/authentication/mutation";
+import { useLoginUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
 import { GoogleIcon } from "@/constants/SvgPaths";
+import { useSearchParams } from 'next/navigation';
 
 const LoginAuth: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +22,7 @@ const LoginAuth: React.FC = () => {
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const { addAlert } = useAlert();
   const router = useRouter();
+  const { initiateGoogleLogin, isLoading: isGoogleAuthLoading } = useGoogleAuth();
   const [isResetLoading, setIsResetLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isCreateAccountLoading, setIscreateAccountLoading] = useState(false);
@@ -28,10 +31,41 @@ const LoginAuth: React.FC = () => {
     emailError: false,
     passwordError: false,
   });
-  const [
-    isGoogleLoading,
-    // setIsGoogleLoading
-  ] = useState(false);
+  const searchParams = useSearchParams();
+
+useEffect(() => {
+  const googleAuthError = searchParams.get("error");
+  if (googleAuthError) {
+    let errorMessage = "An unknown error occurred.";
+    
+    switch (googleAuthError) {
+      case "authentication_failed":
+        errorMessage = "Google authentication failed. Please try again.";
+        break;
+      case "unauthorized_for_testing":
+        errorMessage = "You are in the Founders Circle; however, you did not sign up to be a Beta Tester.  Changed your mind? That is GREAT! Please send an email to bola@zabbot.com and we will add you the Beta Test group.  Thank you!";
+        break;
+      case "failed_tester_check":
+        errorMessage = "Beta tester check failed Please try again.";
+        break;
+      case "signup_as_tester":
+        errorMessage = "User not found. Please sign up as a beta tester at https://zabbot.com/founders-circle";
+        break;
+      default:
+        errorMessage = "An unknown error occurred during authentication.";
+    }
+    
+    addAlert("Error", errorMessage, "error");
+    
+    // Clean up URL
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("error");
+    
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+    router.replace(newUrl);
+  }
+}, [searchParams, router]);
+
 
   useEffect(() => {
     const emailSchema = z.string().email();
@@ -231,7 +265,7 @@ const LoginAuth: React.FC = () => {
 
         <div className="">
           <InAppButton
-            disabled={
+            disabled={ isGoogleAuthLoading ||
               isLoginLoading ||
               isResetLoading ||
               isCreateAccountLoading ||
@@ -259,7 +293,7 @@ const LoginAuth: React.FC = () => {
         <div>
           <InAppButton
             disabled={
-              isGoogleLoading ||
+              isGoogleAuthLoading ||
               isLoginLoading ||
               isResetLoading ||
               isCreateAccountLoading
@@ -271,10 +305,10 @@ const LoginAuth: React.FC = () => {
             width="100%"
             color="#007AB2"
             border="1px solid #84D8FF"
-            onClick={() => ""}
+            onClick={initiateGoogleLogin}
             isShadowShow={false}
           >
-            {isGoogleLoading ? (
+            {isGoogleAuthLoading ? (
               <CustomSpinner />
             ) : (
               <div

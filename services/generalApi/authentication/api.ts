@@ -81,3 +81,30 @@ export const resetPassword = async (formData: {
     });
     return response.data;
 }
+
+
+// Replace the existing googleAuthentication function with this:
+export const initiateGoogleAuth = () => {
+  // Redirect to your backend's Google OAuth endpoint
+  window.location.href = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google"
+//   `http://localhost:3010/api/v1/users/auth/google`;
+};
+
+// Add this function to handle the callback and extract user data
+export const handleGoogleAuthCallback = () => {
+  // This will be called after Google redirects back to your app
+  // The user data should be available in the URL or you can make a request to get user info
+  const urlParams = new URLSearchParams(window.location.search);
+  const user = urlParams.get('user');
+  
+  if (user) {
+    try {
+      return JSON.parse(decodeURIComponent(user));
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      return null;
+    }
+  }
+  
+  return null;
+};

@@ -5,7 +5,15 @@ import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import Image from "next/image";
 
-const SuccessComponent = () => {
+interface SuccessProps {
+  message: string;
+  title: string;
+}
+
+const SuccessComponent:React.FC<SuccessProps> = ({
+  title = "Success!",
+  message = "Password has been updated.",
+}) => {
   const [loading, setLoading] = useState(false);
   return (
     <div
@@ -25,11 +33,11 @@ const SuccessComponent = () => {
       </div>
         {/* Title */}
         <p className="text-xl md:text-2xl lg:text-3xl leading-[145%] text-[#202124] font-[700]">
-          Success!
+          {title}
         </p>
 
         <div className="mb-4 md:mb-8 text-[#202124] text-sm md:text-base lg:text-[21.47px]">
-           Password has been updated. 
+           {message} 
         </div>
 
         {/* Home Button */}

@@ -3,7 +3,8 @@ import { useMutation,
   // useQueryClient 
 } from "@tanstack/react-query";
 // import { queryKeys } from './queryKeys';
-import { registerUser, verifyUserOtp, resendUserOtp, loginUser, requestPasswordResetLink, resetPassword } from './api';
+import { registerUser, verifyUserOtp, initiateGoogleAuth, resendUserOtp, loginUser, requestPasswordResetLink, resetPassword } from './api';
+import { useState } from "react";
 // import {toast} from 'react-toastify';
 
 
@@ -107,4 +108,19 @@ export function useResetPassword() {
     //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
+}
+
+
+export function useGoogleAuth() {
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const initiateGoogleLogin = () => {
+    setIsLoading(true);
+    initiateGoogleAuth(); // This will redirect the user
+  };
+
+  return {
+    initiateGoogleLogin,
+    isLoading
+  };
 }

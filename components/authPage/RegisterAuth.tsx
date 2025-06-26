@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
@@ -11,8 +12,10 @@ import { appColors } from "@/constants/colors";
 import { Alerts, useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { GoogleIcon } from "@/constants/SvgPaths";
-import { useRegisterUser } from "@/services/generalApi/authentication/mutation";
+import { useRegisterUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
 // import Image from "next/image";
+import { useSearchParams } from 'next/navigation';
+
 
 // Validation schemas
 const emailSchema = z
@@ -41,10 +44,8 @@ const RegisterAuth: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [
-    isGoogleLoading,
-    // setIsGoogleLoading
-  ] = useState(false);
+  const { initiateGoogleLogin, isLoading: isGoogleLoading } = useGoogleAuth();
+
   // const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
@@ -76,6 +77,39 @@ const RegisterAuth: React.FC = () => {
   // const [passwordValidations, setPasswordValidations] = useState({
   //   isLengthValid: false,
   // });
+  const searchParams = useSearchParams();
+useEffect(() => {
+  const googleAuthError = searchParams.get("error");
+  if (googleAuthError) {
+    let errorMessage = "An unknown error occurred.";
+    
+    switch (googleAuthError) {
+      case "authentication_failed":
+        errorMessage = "Google authentication failed. Please try again.";
+        break;
+      case "unauthorized_for_testing":
+        errorMessage = "You are in the Founders Circle; however, you did not sign up to be a Beta Tester.  Changed your mind? That is GREAT! Please send an email to bola@zabbot.com and we will add you the Beta Test group.  Thank you!";
+        break;
+      case "failed_tester_check":
+        errorMessage = "Beta tester check failed Please try again.";
+        break;
+      case "signup_as_tester":
+        errorMessage = "User not found. Please sign up as a beta tester at https://zabbot.com/founders-circle";
+        break;
+      default:
+        errorMessage = "An unknown error occurred during authentication.";
+    }
+    
+    addAlert("Error", errorMessage, "error");
+    
+    // Clean up URL
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("error");
+    
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+    router.replace(newUrl);
+  }
+}, [searchParams, router]);
 
   // Real-time validation and button state management
   useEffect(() => {
@@ -495,7 +529,7 @@ const RegisterAuth: React.FC = () => {
           width="100%"
           color="#007AB2"
           border="1px solid #84D8FF"
-          onClick={() => ""}
+          onClick={initiateGoogleLogin}
           isShadowShow={false}
         >
           {isGoogleLoading ? (
