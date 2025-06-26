@@ -2,7 +2,7 @@
 import AuthBanner from "@/components/authPage/RegisterBanner";
 import RegisterAuth from "@/components/authPage/RegisterAuth";
 import Head from "next/head";
-// import { useState } from "react";
+import { Suspense } from "react";
 // import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import Link from "next/link";
 import Image from "next/image";
@@ -78,7 +78,9 @@ const SignupPage = () => {
           {/* Spacer to account for fixed toggle on mobile */}
           <div className="pt-16 sm:pt-20 md:pt-8"></div>
           <div className="w-full px-6 sm:px-8 md:px-10 py-4 sm:py-6 md:py-10 flex justify-center items-center flex-1">
+            <Suspense fallback={<div>Loading...</div>}>
             <RegisterAuth />
+            </Suspense>
           </div>
         </section>
       </main>

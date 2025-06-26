@@ -3,7 +3,7 @@ import LoginAuth from "@/components/authPage/LoginAuth";
 import Head from "next/head";
 import LoginAuthBanner from "@/components/authPage/LoginAuthBanner";
 // import { useState } from "react";
-import React from "react";
+import React, { Suspense } from "react";
 // import { BsToggleOn, BsToggleOff } from "react-icons/bs";
 import Link from "next/link";
 import Image from "next/image";
@@ -99,7 +99,9 @@ const Login = () => {
           </div> */}
 
           <div className="w-full mt-40 px-4 sm:px-6 md:px-8 py-10 flex justify-center items-center">
+            <Suspense fallback={<div>Loading...</div>}>
             <LoginAuth />
+            </Suspense>
           </div>
         </section>
       </main>
