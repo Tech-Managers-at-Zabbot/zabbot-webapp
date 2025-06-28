@@ -36,3 +36,26 @@ export function maskEmail(email: string): string {
   
   return `${maskedUsername}@${domain}`;
 }
+
+
+
+export const getGoogleAuthErrorMessage = (error: string) => {
+  const errorMessages: Record<string, string> = {
+    'user_not_found_please_register': 'Account not found. Please register first.',
+    'user_already_exists': 'Account already exists. Please login instead.',
+    'please_register_first': 'Account not found. Please register first.',
+    'user_exists_please_login': 'Account already exists. Please login instead.',
+    'unauthorized_for_testing': 'You are in the Founders Circle; however, you did not sign up to be a Beta Tester.  Changed your mind? That is GREAT! Please send an email to bola@zabbot.com and we will add you the Beta Test group.  Thank you!',
+    'signup_as_tester': 'User not found. Please sign up as a beta tester at https://zabbot.com/founders-circle',
+    'failed_tester_check': 'Beta tester check failed Please try again.',
+    'account_inactive_or_blocked': 'Your account is inactive or blocked, please contact us on bola@zabbot.com',
+    'registration_failed': 'Registration failed. Please try again.',
+    'login_failed': 'Login failed. Please try again.',
+    'authentication_failed': 'Google authentication failed. Please try again.',
+    'invalid_user_data': 'Invalid user data received.',
+    'unknown_error': 'An unknown error occurred.',
+    'login_successful': 'Login successful.',
+  };
+  
+  return errorMessages[error] || 'An unexpected error occurred.';
+};

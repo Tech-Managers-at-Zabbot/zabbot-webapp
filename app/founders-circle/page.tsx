@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import WaitingListAuth from "@/components/authPage/WaitingListAuth";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, Suspense, useState } from "react";
 import InAppButton from "@/components/InAppButton";
 import FoundersListBottomInformation from "@/components/founders-circle/BottomInfo";
 import FoundersMascotComponent from "@/components/founders-circle/MascotComponent";
@@ -92,7 +92,9 @@ export default function WaitingListPage() {
                 {/* Form container - Only added z-50 here */}
                 <section className="w-full lg:w-[45%] flex justify-center order-2 lg:order-1 mt-8 lg:mt-0">
                   <div className="shadow-2xl xl:max-w-[500px] 2xl:max-w-[550px] max-w-[550px] rounded-[24px] px-6 lg:px-10 py-10 lg:py-[10px] 2xl:py-[10px] bg-white w-full lg:mt-30 lg:ml-10 xl:absolute 2xl:left-10 2xl:top-20 xl:top-20 relative z-50">
+                    <Suspense fallback={<div>Loading...</div>}>
                     <WaitingListAuth />
+                    </Suspense>
                   </div>
                 </section>
 

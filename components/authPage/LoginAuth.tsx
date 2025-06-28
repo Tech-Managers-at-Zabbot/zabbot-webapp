@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useLoginUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
 import { GoogleIcon } from "@/constants/SvgPaths";
 import { useSearchParams } from 'next/navigation';
+import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
 
 const LoginAuth: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const LoginAuth: React.FC = () => {
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const { addAlert } = useAlert();
   const router = useRouter();
-  const { initiateGoogleLogin, isLoading: isGoogleAuthLoading } = useGoogleAuth();
+  const { initiateGoogleSignIn, isLoading: isGoogleAuthLoading } = useGoogleAuth();
   const [isResetLoading, setIsResetLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isCreateAccountLoading, setIscreateAccountLoading] = useState(false);
@@ -36,28 +37,9 @@ const LoginAuth: React.FC = () => {
 useEffect(() => {
   const googleAuthError = searchParams.get("error");
   if (googleAuthError) {
-    let errorMessage = "An unknown error occurred.";
-    
-    switch (googleAuthError) {
-      case "authentication_failed":
-        errorMessage = "Google authentication failed. Please try again.";
-        break;
-      case "unauthorized_for_testing":
-        errorMessage = "You are in the Founders Circle; however, you did not sign up to be a Beta Tester.  Changed your mind? That is GREAT! Please send an email to bola@zabbot.com and we will add you the Beta Test group.  Thank you!";
-        break;
-      case "failed_tester_check":
-        errorMessage = "Beta tester check failed Please try again.";
-        break;
-      case "signup_as_tester":
-        errorMessage = "User not found. Please sign up as a beta tester at https://zabbot.com/founders-circle";
-        break;
-      default:
-        errorMessage = "An unknown error occurred during authentication.";
-    }
-    
+    const errorMessage = getGoogleAuthErrorMessage(googleAuthError);
     addAlert("Error", errorMessage, "error");
     
-    // Clean up URL
     const params = new URLSearchParams(searchParams.toString());
     params.delete("error");
     
@@ -305,7 +287,7 @@ useEffect(() => {
             width="100%"
             color="#007AB2"
             border="1px solid #84D8FF"
-            onClick={initiateGoogleLogin}
+            onClick={initiateGoogleSignIn}
             isShadowShow={false}
           >
             {isGoogleAuthLoading ? (

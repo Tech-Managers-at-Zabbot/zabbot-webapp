@@ -3,7 +3,7 @@ import { useMutation,
   // useQueryClient 
 } from "@tanstack/react-query";
 // import { queryKeys } from './queryKeys';
-import { registerUser, verifyUserOtp, initiateGoogleAuth, resendUserOtp, loginUser, requestPasswordResetLink, resetPassword } from './api';
+import { registerUser, verifyUserOtp, resendUserOtp, loginUser, requestPasswordResetLink, resetPassword, initiateGoogleRegister, initiateGoogleLogin } from './api';
 import { useState } from "react";
 // import {toast} from 'react-toastify';
 
@@ -114,13 +114,19 @@ export function useResetPassword() {
 export function useGoogleAuth() {
   const [isLoading, setIsLoading] = useState(false);
   
-  const initiateGoogleLogin = () => {
+  const initiateGoogleRegistration = () => {
     setIsLoading(true);
-    initiateGoogleAuth(); // This will redirect the user
+    initiateGoogleRegister();
+  };
+
+  const initiateGoogleSignIn = () => {
+    setIsLoading(true);
+    initiateGoogleLogin();
   };
 
   return {
-    initiateGoogleLogin,
+    initiateGoogleRegistration,
+    initiateGoogleSignIn,
     isLoading
   };
 }

@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NormalInputField from "../NormalInputField";
 import InAppButton from "../InAppButton";
 import NationalityInput from "../NatonalityInput";
@@ -10,6 +11,9 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
 import { useJoinFoundersList } from '../../services/waitingList/mutation';
 import { MessageIcon } from "@/constants/SvgPaths";
+import { useSearchParams } from 'next/navigation';
+import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
+
 
 
 const MAX_NAME_LENGTH = 100;
@@ -41,6 +45,23 @@ const WaitingListAuthComponent: React.FC = () => {
 
   const [checkboxError, setCheckboxError] = useState(false);
   const { mutate:waitingListData, isPending } = useJoinFoundersList()
+
+      const searchParams = useSearchParams();
+
+    useEffect(() => {
+      const googleAuthSuccess = searchParams.get("success");
+      console.log('success:', googleAuthSuccess)
+      if (googleAuthSuccess) {
+        const successMessage = getGoogleAuthErrorMessage(googleAuthSuccess);
+        addAlert("Success", successMessage, "success");
+        
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("success");
+        
+        const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+        router.replace(newUrl);
+      }
+    }, [searchParams, router]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.slice(0, MAX_NAME_LENGTH);

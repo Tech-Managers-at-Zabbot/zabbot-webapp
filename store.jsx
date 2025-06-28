@@ -1,98 +1,119 @@
-import Navbar from "@/components/general/Navbar";
-import OtpComponent from "@/components/OtpComponent";
-import Head from "next/head";
-import Image from "next/image";
-
-const Otp = () => {
-  return (
-    <div>
-      <Head>
-        <title>Zabbot - OTP Page</title>
-        <meta
-          name="description"
-          content="Signup to Zabbot Language Learning Platform"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
-      <main className="flex flex-col bg-[#E3EFFC] pb-30 min-h-screen relative">
-        <Navbar />
-        <section className="md:block w-full pt-10 md:pt-20 px-4 md:px-0">
-          <OtpComponent />
-        </section>
-        <section className="hidden md:block absolute bottom-0 right-10 lg:right-70 flex items-center justify-center animate__animated animate__fadeInUp animate__delay-1s">
-          <div className="relative flex items-center justify-center">
-            <Image
-              src="/general/grandpa-mascot.png"
-              alt="Zabbot Grand Ma Mascot Owl"
-              width={323}
-              height={600}
-              className="object-contain rounded-xl w-auto h-[400px] lg:h-[600px]"
-              priority
-            />
-          </div>
-        </section>
-      </main>
-    </div>
-  );
+export const initiateGoogleRegister = () => {
+  // Redirect to your backend's Google OAuth registration endpoint
+  window.location.href = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/register";
+  // For local development:
+  // window.location.href = "http://localhost:3010/api/v1/users/auth/google/register";
 };
 
-export default Otp;
+export const initiateGoogleLogin = () => {
+  // Redirect to your backend's Google OAuth login endpoint
+  window.location.href = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/login";
+  // For local development:
+  // window.location.href = "http://localhost:3010/api/v1/users/auth/google/login";
+};
 
-
-
-  return (
-    <div className="w-full max-w-[615px] border border-[#D0D0D0] bg-white rounded-2xl py-6 md:py-[60px] flex flex-col gap-4 md:gap-[24px] mx-auto px-4 sm:px-6 md:px-[60px]">
-      <div className="flex items-center justify-between">
-        <div className="hover:cursor-pointer" onClick={() => router.back()}>
-          <IoChevronBackSharp size={24} md:size={28} color="#1C2024" />
-        </div>
-        <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">Forgot Password</h1>
-        <div className="hover:cursor-pointer" onClick={() => router.push('/login')}>
-          <IoCloseOutline size={24} md:size={28} color="#1C2024" />
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-10 mt-6 sm:mt-10">
-        <div className="flex flex-col gap-2 sm:gap-[8px]">
-          <label
-            htmlFor="email"
-            className="block text-sm sm:text-[15px] leading-[20px] font-medium text-[#60646C] mb-1 sm:mb-2"
-          >
-            Email address
-          </label>
-          <div className="relative">
-            <NormalInputField
-              id="email"
-              value={email}
-              onChange={handleEmailChange}
-              placeholder="Type your email address"
-              type="email"
-              border="0"
-            />
-          </div>
-          {emailError && (
-            <p className="text-red-500 text-xs sm:text-sm mt-1">{emailError}</p>
-          )}
-        </div>
-
-        <div className="mt-4 sm:mt-6">
-          <InAppButton
-                      disabledColor="#80BBFF"
-                      width="100%"
-                      disabled={buttonDisabled || isRequestingPasswordLink}
-                      backgroundColor={appColors.darkRoyalBlueForBtn}
-                    >
-                      { isRequestingPasswordLink ? <CustomSpinner /> : <div>Continue</div> }
-                    </InAppButton>
-        </div>
-      </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={3000}
-        className="rounded-md relative z-1000 !w-80"
-      />
-    </div>
-  );
-
+// Handle the callback and extract user data or check for errors
+export const handleGoogleAuthCallback = () => {
+  const urlParams = new URLSearchParams(window.location.search);
   
+  // Check for errors first
+  const error = urlParams.get('error');
+  if (error) {
+    return { 
+      success: false, 
+      error: error,
+      user: null 
+    };
+  }
+  
+  // Check for success indicators
+  const registration = urlParams.get('registration');
+  const login = urlParams.get('login');
+  
+  if (registration === 'success') {
+    return { 
+      success: true, 
+      type: 'registration',
+      error: null,
+      user: null // User data will be in cookies/tokens
+    };
+  }
+  
+  if (login === 'success') {
+    return { 
+      success: true, 
+      type: 'login',
+      error: null,
+      user: null // User data will be in cookies/tokens
+    };
+  }
+  
+  // Fallback for old implementation with user data in URL
+  const user = urlParams.get('user');
+  if (user) {
+    try {
+      return {
+        success: true,
+        type: 'unknown',
+        error: null,
+        user: JSON.parse(decodeURIComponent(user))
+      };
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      return { 
+        success: false, 
+        error: 'invalid_user_data',
+        user: null 
+      };
+    }
+  }
+  
+  return { 
+    success: false, 
+    error: 'unknown_error',
+    user: null 
+  };
+};
+
+// Updated hook with separate functions
+export function useGoogleAuth() {
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const initiateGoogleRegistration = () => {
+    setIsLoading(true);
+    initiateGoogleRegister(); // This will redirect the user
+  };
+
+  const initiateGoogleSignIn = () => {
+    setIsLoading(true);
+    initiateGoogleLogin(); // This will redirect the user
+  };
+
+  return {
+    initiateGoogleRegistration,
+    initiateGoogleSignIn,
+    isLoading
+  };
+}
+
+
+
+export function useGoogleAuth() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const initiateGoogleRegistration = () => {
+    setIsLoading(true);
+    initiateGoogleRegister();
+  };
+
+  const initiateGoogleSignIn = () => {
+    setIsLoading(true);
+    initiateGoogleLogin();
+  };
+
+  return {
+    initiateGoogleRegistration,
+    initiateGoogleSignIn,
+    isLoading
+  };
+}
