@@ -16,6 +16,7 @@ import { useRegisterUser, useGoogleAuth } from "@/services/generalApi/authentica
 // import Image from "next/image";
 import { useSearchParams } from 'next/navigation';
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 
 // Validation schemas
@@ -37,6 +38,7 @@ const passwordSchema = z
 const MAX_EMAIL_LENGTH = 254;
 
 const RegisterAuth: React.FC = () => {
+  const { getPageText, isPageLoading:isLanguageLoading } = usePageLanguage('signup');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -130,7 +132,7 @@ useEffect(() => {
       if (password !== confirmPassword) {
         setErrorMessages((prev) => ({
           ...prev,
-          confirmPassword: "Passwords do not match",
+          confirmPassword: getPageText("password_mismatch"),
         }));
         setError((prev) => ({ ...prev, confirmPasswordError: true }));
       } else {
@@ -301,6 +303,10 @@ useEffect(() => {
     }
   };
 
+  if (isLanguageLoading) {
+  return <CustomSpinner spinnerColor="#012657" />
+}
+
   return (
     <div className="w-full border-0 mx-auto" style={{ fontFamily: "Lexend" }}>
       <div className="mb-10 w-full flex flex-col gap-[8px]">
@@ -308,7 +314,7 @@ useEffect(() => {
           className="text-[28px] font-[600] leading-[31.8px]"
           style={{ color: appColors.black }}
         >
-          Create your account
+          {getPageText("create_account")}
         </h1>
       </div>
       <form className="mb-10 gap-3 flex flex-col">
@@ -317,13 +323,14 @@ useEffect(() => {
             htmlFor="firstName"
             className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            First Name
+            {/* First Name */}
+            {getPageText("first_name")}
           </label>
           <NormalInputField
             id="firstName"
             value={firstName}
             onChange={handleFirstNameChange}
-            placeholder="Type your first name"
+            placeholder={getPageText("type_first_name")}
             type="text"
             color="black"
             error={error.firstNameError}
@@ -338,13 +345,14 @@ useEffect(() => {
             htmlFor="lastName"
             className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Last Name
+            {/* Last Name */}
+            {getPageText("last_name")}
           </label>
           <NormalInputField
             id="lastName"
             value={lastName}
             onChange={handleLastNameChange}
-            placeholder="Type your last name"
+            placeholder={getPageText("type_last_name")}
             type="text"
             color="black"
             error={error.lastNameError}
@@ -359,13 +367,14 @@ useEffect(() => {
             htmlFor="email"
             className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Email Address
+            {/* Email Address */}
+            {getPageText("email_address")}
           </label>
           <NormalInputField
             id="email"
             value={email}
             onChange={handleEmailChange}
-            placeholder="Type your email address"
+            placeholder={getPageText("type_email_address")}
             type="email"
             error={error.emailError}
             color="black"
@@ -380,14 +389,15 @@ useEffect(() => {
             htmlFor="password"
             className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Password
+            {/* Password */}
+            {getPageText("password")}
           </label>
           <div className="relative">
             <NormalInputField
               id="password"
               value={password}
               onChange={handlePasswordChange}
-              placeholder="Create your password"
+              placeholder={getPageText("create_password")}
               type={showPassword ? "text" : "password"}
               error={error.passwordError}
               color="black"
@@ -429,14 +439,15 @@ useEffect(() => {
             htmlFor="confirmPassword"
             className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Confirm Password
+            {/* Confirm Password */}
+            {getPageText("confirm_password")}
           </label>
           <div className="relative">
             <NormalInputField
               id="confirmPassword"
               value={confirmPassword}
               onChange={handleConfirmPasswordChange}
-              placeholder="Confirm your password"
+              placeholder={getPageText("confirm_your_password")}
               type={showConfirmPassword ? "text" : "password"}
               error={error.confirmPasswordError}
               color="black"
@@ -475,7 +486,8 @@ useEffect(() => {
           />
           <div className="block">
             <label htmlFor="sendUpdates" className="block hover:cursor-pointer">
-              I agree to the{" "}
+              {/* I agree to the */}
+              {getPageText("i_agree_to_the")}{" "}
               <Link
                 href="/terms-of-service"
                 target="blank"
@@ -484,7 +496,8 @@ useEffect(() => {
                 <span
                   className={`underline hover:cursor-pointer hover:text-[#0098DE]`}
                 >
-                  Terms of Service and Privacy Policy
+                  {/* Terms of Service and Privacy Policy */}
+                  {getPageText("terms_of_service_policy")}
                 </span>
               </Link>
             </label>
@@ -545,7 +558,10 @@ useEffect(() => {
           className="text-[#645D5D] gap-[6px] flex justify-center items-center mt-6 font-[500] text-[16px] leading-[145%]"
           style={{ fontFamily: "Lexend", color: "#162B6E" }}
         >
-          <div>Already have an account?</div>
+          <div>
+            {/* Already have an account? */}
+            {getPageText("already_have_account")}
+            </div>
           <Link
             // href="/login"
             href={isLoginRedirect || registerUserLoading ? "#" : "/login"}
@@ -570,7 +586,8 @@ useEffect(() => {
                   : "hover:cursor-pointer"
               }`}
             >
-              Sign In
+              {/* Sign In */}
+              {getPageText("sign_in")}
             </span>
           </Link>
         </div>

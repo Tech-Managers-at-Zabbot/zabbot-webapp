@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
@@ -13,8 +14,11 @@ import { useRouter } from "next/navigation";
 import { CustomSpinner } from "../CustomSpinner";
 import { useSearchParams } from "next/navigation";
 import { useResetPassword } from "@/services/generalApi/authentication/mutation";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const ChangePasswordComponent: React.FC = () => {
+    const { getPageText, isPageLoading: isLanguageLoading } =
+      usePageLanguage("passwordReset");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -38,7 +42,7 @@ const ChangePasswordComponent: React.FC = () => {
     // Only show password mismatch error if user has started typing confirm password
     if (hasStartedTypingConfirm && confirmPassword.length > 0) {
       if (newPassword !== confirmPassword) {
-        setConfirmPasswordError("Passwords do not match");
+        setConfirmPasswordError(getPageText("password_mismatch"));
       } else {
         setConfirmPasswordError("");
       }
@@ -87,7 +91,7 @@ const ChangePasswordComponent: React.FC = () => {
     setLoading(true)
 
     if (newPassword !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
+      setConfirmPasswordError(getPageText("password_mismatch"));
       setLoading(false)
       return;
     }
@@ -105,7 +109,7 @@ const ChangePasswordComponent: React.FC = () => {
         onSuccess: () => {
             addAlert(
             "Success",
-            "Password changed successfully",
+            getPageText("success_change"),
             "success"
           );
         return router.push('/success-page')
@@ -132,13 +136,20 @@ const ChangePasswordComponent: React.FC = () => {
     );
   };
 
+      if (isLanguageLoading) {
+      return <CustomSpinner spinnerColor="#012657" />
+    }
+
 return (
   <div className="w-full max-w-[615px] border border-[#D0D0D0] bg-white rounded-2xl py-6 md:py-[60px] flex flex-col gap-6 md:gap-[60px] mx-auto px-4 sm:px-6 md:px-[60px]">
     <div className="flex items-center justify-between">
       <div className="hover:cursor-pointer" onClick={() => router.back()}>
         <IoChevronBackSharp className="w-6 h-6 md:w-7 md:h-7" color="#1C2024" />
       </div>
-      <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">Change Password</h1>
+      <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">
+        {/* Change Password */}
+        {getPageText("change_password")}
+        </h1>
       <div className="hover:cursor-pointer" onClick={() => router.push('/login')}>
         <IoCloseOutline className="w-6 h-6 md:w-7 md:h-7" color="#1C2024" />
       </div>
@@ -150,14 +161,15 @@ return (
           htmlFor="newPassword"
           className="block text-sm sm:text-[15px] leading-[20px] font-medium text-[#60646C] mb-1 sm:mb-2"
         >
-          New Password
+          {/* New Password */}
+          {getPageText("new_password")}
         </label>
         <div className="relative">
           <NormalInputField
             id="newPassword"
             value={newPassword}
             onChange={handleNewPasswordChange}
-            placeholder="Input your password"
+            placeholder={getPageText("type_your_password")}
             type={showNewPassword ? "text" : "password"}
             border="0"
           />
@@ -183,8 +195,9 @@ return (
                 : "text-[#D42620]"
             }`}
           >
-            {renderValidationIcon(passwordValidations.isLengthValid)} Password
-            should be at least eight characters long
+            {renderValidationIcon(passwordValidations.isLengthValid)} 
+            {/* Password should be at least eight characters long */}
+            {getPageText("password_specs")}
           </div>
         </div>
       </div>
@@ -194,14 +207,15 @@ return (
           htmlFor="confirmPassword"
           className="block text-sm sm:text-[15px] font-medium text-[#60646C] mb-1 sm:mb-2"
         >
-          Confirm Password
+          {/* Confirm Password */}
+          {getPageText("confirm_password")}
         </label>
         <div className="relative">
           <NormalInputField
             id="confirmPassword"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
-            placeholder="Confirm your password"
+            placeholder={getPageText("confirm_password")}
             border="0"
             type={showConfirmPassword ? "text" : "password"}
           />
@@ -231,7 +245,11 @@ return (
           disabledColor="#80BBFF"
           disabled={buttonDisabled || isResetPasswordPending || loading}
         >
-          { isResetPasswordPending ? <CustomSpinner /> : <div>Save Password</div> }
+          { isResetPasswordPending ? <CustomSpinner /> : <div>
+            {/* Save Password */}
+            {getPageText("save_password")}
+            </div> 
+            }
         </InAppButton>
       </div>
     </form>

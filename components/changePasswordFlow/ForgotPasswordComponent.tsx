@@ -11,6 +11,8 @@ import { appColors } from "@/constants/colors";
 import { useRouter } from "next/navigation";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRequestPasswordLink } from "@/services/generalApi/authentication/mutation";
+import { usePageLanguage } from "@/contexts/LanguageContext";
+
 
 const emailSchema = z.object({
   email: z
@@ -20,6 +22,7 @@ const emailSchema = z.object({
 });
 
 const ForgotPassword: React.FC = () => {
+   const { getPageText, isPageLoading:isLanguageLoading } = usePageLanguage('passwordReset');
   const [email, setEmail] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [emailError, setEmailError] = useState("");
@@ -91,6 +94,10 @@ const ForgotPassword: React.FC = () => {
     }
   };
 
+    if (isLanguageLoading) {
+    return <CustomSpinner spinnerColor="#012657" />
+  }
+
   return (
     <div className="w-full max-w-[615px] border border-[#D0D0D0] bg-white rounded-2xl py-6 md:py-[60px] flex flex-col gap-4 md:gap-[24px] mx-auto px-4 sm:px-6 md:px-[60px]">
       <div className="flex items-center justify-between">
@@ -113,18 +120,19 @@ const ForgotPassword: React.FC = () => {
         className="space-y-6 sm:space-y-10 mt-6 sm:mt-10"
       >
         <div className="flex flex-col gap-2 sm:gap-[8px]">
-          <label
+          {/* <label
             htmlFor="email"
             className="block text-sm sm:text-[15px] leading-[20px] font-medium text-[#60646C] mb-1 sm:mb-2"
-          >
-            Email address
-          </label>
+          > */}
+            {/* Email address */}
+            {/* {getPageText("type_email")} */}
+          {/* </label> */}
           <div className="relative">
             <NormalInputField
               id="email"
               value={email}
               onChange={handleEmailChange}
-              placeholder="Type your email address"
+              placeholder={getPageText("type_email")}
               type="email"
               border="0"
             />
@@ -141,7 +149,11 @@ const ForgotPassword: React.FC = () => {
             disabled={buttonDisabled || isRequestingPasswordLink}
             backgroundColor={appColors.darkRoyalBlueForBtn}
           >
-            {isRequestingPasswordLink ? <CustomSpinner /> : <div>Continue</div>}
+            {isRequestingPasswordLink ? <CustomSpinner /> : <div>
+              {/* Continue */}
+              {getPageText("continue")}
+              </div>
+              }
           </InAppButton>
         </div>
       </form>

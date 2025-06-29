@@ -11,19 +11,26 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { z } from "zod";
 import { Alerts, useAlert } from "next-alert";
 import { useRouter } from "next/navigation";
-import { useLoginUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
+import {
+  useLoginUser,
+  useGoogleAuth,
+} from "@/services/generalApi/authentication/mutation";
 import { GoogleIcon } from "@/constants/SvgPaths";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const LoginAuth: React.FC = () => {
+  const { getPageText, isPageLoading: isLanguageLoading } =
+    usePageLanguage("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const { addAlert } = useAlert();
   const router = useRouter();
-  const { initiateGoogleSignIn, isLoading: isGoogleAuthLoading } = useGoogleAuth();
+  const { initiateGoogleSignIn, isLoading: isGoogleAuthLoading } =
+    useGoogleAuth();
   const [isResetLoading, setIsResetLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [isCreateAccountLoading, setIscreateAccountLoading] = useState(false);
@@ -34,20 +41,21 @@ const LoginAuth: React.FC = () => {
   });
   const searchParams = useSearchParams();
 
-useEffect(() => {
-  const googleAuthError = searchParams.get("error");
-  if (googleAuthError) {
-    const errorMessage = getGoogleAuthErrorMessage(googleAuthError);
-    addAlert("Error", errorMessage, "error");
-    
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("error");
-    
-    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
-    router.replace(newUrl);
-  }
-}, [searchParams, router]);
+  useEffect(() => {
+    const googleAuthError = searchParams.get("error");
+    if (googleAuthError) {
+      const errorMessage = getGoogleAuthErrorMessage(googleAuthError);
+      addAlert("Error", errorMessage, "error");
 
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("error");
+
+      const newUrl = `${window.location.pathname}${
+        params.toString() ? `?${params.toString()}` : ""
+      }`;
+      router.replace(newUrl);
+    }
+  }, [searchParams, router]);
 
   useEffect(() => {
     const emailSchema = z.string().email();
@@ -69,9 +77,18 @@ useEffect(() => {
     setIscreateAccountLoading(true);
     try {
       loginUser(
-        { email: email.toLowerCase().trim(), password: password.trim(), stayLoggedIn },
         {
-          onSuccess: () => {
+          email: email.toLowerCase().trim(),
+          password: password.trim(),
+          stayLoggedIn,
+        },
+        {
+          onSuccess: (data: Record<string, any>) => {
+            localStorage.setItem(
+              "userProfile",
+              JSON.stringify(data?.data?.user)
+            );
+            localStorage.setItem("token", data?.data?.token);
             setError({
               emailError: false,
               passwordError: false,
@@ -86,7 +103,18 @@ useEffect(() => {
           onError: (error: any) => {
             setIsResetLoading(false);
             setIscreateAccountLoading(false);
-            addAlert(
+
+            if (
+              error?.response?.data?.specialCodeMessage &&
+              error?.response?.data?.specialCodeMessage[0] ===
+                "UNVERIFIED_ACCOUNT"
+            ) {
+              router.push(
+                `/otp?email=${error?.response?.data?.specialCodeMessage[1]}`
+              );
+            }
+
+            return addAlert(
               "Error",
               error?.response?.data?.message || "Unable to Login",
               "error"
@@ -103,6 +131,14 @@ useEffect(() => {
     }
   };
 
+    if (isLanguageLoading) {
+      return(
+        <div className="min-h-[100vh] absolute top-0 flex justify-center items-center">
+          <CustomSpinner spinnerColor="#012657" />
+        </div>
+      )
+  }
+
   return (
     <div
       className="w-full flex flex-col gap-[40px] mx-auto"
@@ -113,7 +149,8 @@ useEffect(() => {
           className="text-[#000000] text-[27.65px] font-[500] leading-[31.8px]"
           style={{ fontFamily: "Lexend" }}
         >
-          Log in
+          {/* Log in */}
+          {getPageText("login")}
         </h1>
       </div>
       <form className="flex flex-col gap-[32px]">
@@ -123,7 +160,8 @@ useEffect(() => {
             htmlFor="email"
             className="block text-sm font-medium text-[#60646C]"
           >
-            Email Address
+            {/* Email Address */}
+            {getPageText("email_address")}
           </label>
           <NormalInputField
             id="email"
@@ -132,7 +170,7 @@ useEffect(() => {
               setEmail(e.target.value);
               setError({ ...error, emailError: false });
             }}
-            placeholder="Type your email address"
+            placeholder={getPageText("type_email")}
             type="email"
             error={error.emailError}
             color="black"
@@ -146,7 +184,8 @@ useEffect(() => {
             htmlFor="password"
             className="block text-sm font-medium text-[#60646C]"
           >
-            Password
+            {/* Password */}
+            {getPageText("password")}
           </label>
           <div className="relative">
             <NormalInputField
@@ -156,7 +195,7 @@ useEffect(() => {
                 setPassword(e.target.value);
                 setError({ ...error, passwordError: false });
               }}
-              placeholder="Type your password"
+              placeholder={getPageText("type_password")}
               type={showPassword ? "text" : "password"}
               error={error.passwordError}
               color="black"
@@ -209,7 +248,10 @@ useEffect(() => {
             className="text-[#645D5D] justify-center lg:justify-end items-center flex gap-[10px] font-[500] text-[14px] leading-[145%] order-2 lg:order-none"
             style={{ fontFamily: "Lexend" }}
           >
-            <div className="text-[#0089C8]">Forgot your password?</div>{" "}
+            <div className="text-[#0089C8]">
+              {/* Forgot your password? */}
+              {getPageText("forgot_password")}
+              </div>{" "}
             <Link
               href={
                 isCreateAccountLoading || isResetLoading || isLoginLoading
@@ -239,7 +281,8 @@ useEffect(() => {
                     : "hover:cursor-pointer"
                 }`}
               >
-                Reset it here.
+                {/* Reset it here. */}
+                {getPageText("reset_here")}
               </span>
             </Link>
           </div>
@@ -247,7 +290,8 @@ useEffect(() => {
 
         <div className="">
           <InAppButton
-            disabled={ isGoogleAuthLoading ||
+            disabled={
+              isGoogleAuthLoading ||
               isLoginLoading ||
               isResetLoading ||
               isCreateAccountLoading ||
@@ -261,7 +305,10 @@ useEffect(() => {
             {isLoginLoading ? (
               <CustomSpinner spinnerColor="#8B8D98" />
             ) : (
-              <div>Login</div>
+              <div>
+                {/* Login */}
+                {getPageText("login")}
+                </div>
             )}
           </InAppButton>
         </div>
@@ -311,7 +358,10 @@ useEffect(() => {
         className="text-[#645D5D] justify-center items-center flex gap-[20px] font-[400] text-[15px] leading-[100%]"
         style={{ fontFamily: "Lexend" }}
       >
-        <div>New to Zabbot? Join Now</div>{" "}
+        <div>
+          {/* New to Zabbot? Join Now */}
+          {getPageText("new_to_zabbot_join_now")}
+          </div>{" "}
         <Link
           href={
             isLoginLoading || isResetLoading || isResetLoading ? "#" : "/signup"
@@ -339,7 +389,8 @@ useEffect(() => {
                 : "hover:cursor-pointer"
             }`}
           >
-            Create Account
+            {/* Create Account */}
+            {getPageText("create_account")}
           </span>
         </Link>
       </div>

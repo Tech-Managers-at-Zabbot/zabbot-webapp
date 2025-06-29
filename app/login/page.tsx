@@ -54,7 +54,7 @@ const Login = () => {
           ) : (
             <BsToggleOff fill="#162B6E" size={28} />
           )} */}
-          <LanguageToggle />
+          <LanguageToggle variant={"toggle"} />
           {/* {isToggleHovered && (
             <div
               className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-[#101928] text-white p-2 rounded-md font-[400] text-xs leading-[145%] whitespace-nowrap z-50 shadow-lg"
@@ -66,7 +66,6 @@ const Login = () => {
           )} */}
         </div>
       </div>
-
         <section className="hidden md:block md:w-1/2 lg:w-1/2">
           <LoginAuthBanner />
         </section>

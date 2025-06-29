@@ -1,0 +1,9 @@
+{
+    "verify_account":"Verify Your Account",
+    "verification_has_been_sent":"A verification code has been sent to ",
+    "resend_code_in": "Resend code in",
+    "seconds":"seconds",
+    "sign_in":"Sign In",
+    "code_provided_incorrect":"Code you provided is not correct",
+    "code_limit_exceeded":"You have exceeded the code limit.  Please try again in 20 minutes"
+}

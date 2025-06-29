@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { appColors } from "@/constants/colors";
 import LanguageToggle from "../languageToggle/LanguageToggle";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -12,7 +13,8 @@ const Navbar = () => {
 >
   <div className="flex items-center w-auto justify-center">
     <div className="flex items-center">
-      <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[48.85px] lg:w-[200px]">
+      <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[48.85px] hover:cursor-pointer lg:w-[200px]">
+        <Link href={"/signup"}>
         <Image
           src="/general/zabbot-logo-white.svg"
           alt="Zabbot Logo"
@@ -20,11 +22,12 @@ const Navbar = () => {
           className="object-contain"
           priority
         />
+        </Link>
       </div>
     </div>
   </div>
   <div className="hover:cursor-pointer rounded-lg border relative transition-all duration-200">
-    <LanguageToggle />
+    <LanguageToggle variant="toggle"/>
   </div>
 </nav>
   );

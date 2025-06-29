@@ -6,6 +6,7 @@ import InAppButton from "@/components/InAppButton";
 import { useSearchParams } from "next/navigation";
 import { maskEmail } from "@/utilities/utilities";
 import { useRouter } from "next/navigation";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 import {
   useVerifyUserEmail,
   useResendVerificationOtp,
@@ -15,6 +16,8 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { Alerts, useAlert } from "next-alert";
 
 const OtpComponent: React.FC = () => {
+   const { getPageText, isPageLoading: isLanguageLoading } =
+      usePageLanguage("otp");
   const [code, setCode] = useState(["", "", "", ""]);
   const [countdown, setCountdown] = useState(12);
   const [canResend, setCanResend] = useState(false);
@@ -151,16 +154,22 @@ const OtpComponent: React.FC = () => {
     setCode(["", "", "", ""]);
   };
 
+    if (isLanguageLoading) {
+    return <CustomSpinner spinnerColor="#012657" />
+  }
+
   return (
     <div className="w-full bg-white rounded-[16px] gap-[20px] md:gap-[40px] justify-center flex flex-col py-[24px] md:py-[32px] px-[16px] md:px-[8px] max-w-[615px] mx-auto border-1 border-[#D0D0D0]">
-      <div className="text-left mb-4 md:mb-6 pl-4 md:pl-30">
+      <div className="text-left mb-4 md:mb-6 flex flex-col items-center justify-center">
         <h2 className="text-[24px] md:text-[32px] leading-[28px] md:leading-[32px] text-[Black] font-semibold mb-2">
-          Verify Your Account
+          {/* Verify Your Account */}
+          {getPageText("verify_account")}
         </h2>
-        <p className="text-gray-600 font-[600] text-[16px] md:text-[21px] leading-[24px] md:leading-[32px]">
-          A verification code has been sent to{" "}
+        <div className="text-gray-600 flex flex-col font-[600] text-[16px] md:text-[21px] leading-[24px] md:leading-[32px]">
+          {/* A verification code has been sent to */}
+          {getPageText("verification_has_been_sent")}{" "}
           <span className="font-medium">{userEmail}</span>
-        </p>
+        </div>
       </div>
 
       <form
@@ -198,7 +207,12 @@ const OtpComponent: React.FC = () => {
               Resend Code
             </button>
           ) : (
-            <p className="text-gray-500">Resend Code in {countdown} seconds</p>
+            <p className="text-gray-500">
+              {/* Resend Code in  */} 
+              {getPageText("resend_code_in")}{" "}
+              {countdown}{" "} 
+              {getPageText("seconds")}
+            </p>
           )}
         </div>
 

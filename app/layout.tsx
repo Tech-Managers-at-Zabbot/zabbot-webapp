@@ -4,6 +4,7 @@ import "./globals.css";
 import 'animate.css';
 import { Providers } from '../components/Providers';
 import { Inter, Lexend } from 'next/font/google'
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 
 const geistSans = Geist({
@@ -45,7 +46,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lexend.variable} antialiased`}>
         <Providers>
+          <LanguageProvider>
           {children}
+          </LanguageProvider>
         </Providers>
       </body>
     </html>
