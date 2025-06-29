@@ -1,19 +1,17 @@
 "use client";
-/* eslint-disable react-hooks/exhaustive-deps */
 import Navbar from "@/components/general/Navbar";
 import SuccessComponent from "@/components/general/SuccessComponent";
 import Head from "next/head";
 import React, { useEffect, Suspense } from "react";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from "next/navigation";
 
-const GoogleAuthSuccessPage = () => {
+function AuthHandler() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-    useEffect(() => {
+  useEffect(() => {
     const token = searchParams.get('token');
     const userData = searchParams.get('user');
-    // const authType = searchParams.get('authType');
 
     if (token && userData) {
       try {
@@ -21,21 +19,25 @@ const GoogleAuthSuccessPage = () => {
         localStorage.setItem('userProfile', decodeURIComponent(userData));
       } catch (error) {
         console.error('Error processing Google auth data:', error);
-        // router.push('/login?error=auth_processing_failed');
       }
-    } else {
-      // router.push('/login?error=missing_auth_data');
     }
   }, [searchParams]);
 
-    const router = useRouter();
+  useEffect(() => {
+    setTimeout(() => {
+      router.push(`/founders-circle`);
+    }, 2000);
+  }, []);
 
-    useEffect(()=> {
-        setTimeout(()=> {
-            router.push(`/founders-circle`);
-        },2000)
-    },[])
+  return (
+    <SuccessComponent
+      message={"Authentication Successful, Redirecting to Dashboard..."}
+      title={"Success!"}
+    />
+  );
+}
 
+const GoogleAuthSuccessPage = () => {
   return (
     <div>
       <Head>
@@ -50,7 +52,7 @@ const GoogleAuthSuccessPage = () => {
         <Navbar />
         <section className="w-full">
           <Suspense fallback={<div>Loading...</div>}>
-          <SuccessComponent message={"Authentication Successful, Redirecting to Dashboard..."} title={"Success!"} />
+            <AuthHandler />
           </Suspense>
         </section>
       </main>
