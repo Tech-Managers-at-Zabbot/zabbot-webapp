@@ -16,7 +16,7 @@ const ChangePassword = () => {
       </Head>
       <main className="flex flex-col bg-[#E3EFFC] min-h-screen relative">
         <Navbar />
-        <section className="w-full pt-20 flex justify-center items-center">
+        <section className="w-full max-w-screen-2xl pt-20 flex justify-center items-center">
           <ForgotPassword />
         </section>
       </main>

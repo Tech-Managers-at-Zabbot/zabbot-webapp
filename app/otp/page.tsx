@@ -17,12 +17,12 @@ const Otp = () => {
       </Head>
       <main className="flex flex-col bg-[#E3EFFC] pb-30 min-h-screen relative">
         <Navbar />
-        <section className="md:block w-full pt-20 relative">
+        <section className="md:block max-w-screen-2xl w-full pt-20 relative">
           <Suspense fallback={<div>Loading...</div>}>
             <OtpComponent />
           </Suspense>
         </section>
-        <section className="hidden sm:block absolute bottom-0 xl:right-70 lg:right-20 md:right-10 sm:right-5 flex items-center justify-center animate__animated animate__fadeInUp animate__delay-1s">
+        <section className="hidden max-w-screen-2xl sm:block absolute bottom-0 xl:right-70 lg:right-20 md:right-10 sm:right-5 flex items-center justify-center animate__animated animate__fadeInUp animate__delay-1s">
           <div className="relative flex items-center justify-center">
             <Image
               src="/general/grandpa-mascot.png"

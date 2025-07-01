@@ -16,7 +16,7 @@ const ChangePassword = () => {
       </Head>
       <main className="flex flex-col bg-[#E3EFFC] min-h-screen relative">
         <Navbar />
-        <section className="w-full pt-20">
+        <section className="w-full max-w-screen-2xl pt-20">
           <Suspense fallback={<div>Loading...</div>}>
           <ChangePasswordComponent />
           </Suspense>

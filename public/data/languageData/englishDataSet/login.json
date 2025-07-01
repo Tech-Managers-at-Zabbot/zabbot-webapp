@@ -14,5 +14,8 @@
     "new_to_zabbot_join_now":"New to Zabbot? Join Now",
     "create_account":"Create Account",
     "please_provide_valid_email":"Please provide a valid email address",
-    "incorrect_password":"Password is incorrect"
+    "incorrect_password":"Password is incorrect",
+    "continue_google": "Continue with Google",
+    "remember_me":"Remember Me",
+    "or":"Or"
 }

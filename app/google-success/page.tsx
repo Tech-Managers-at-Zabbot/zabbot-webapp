@@ -5,8 +5,12 @@ import SuccessComponent from "@/components/general/SuccessComponent";
 import Head from "next/head";
 import React, { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePageLanguage } from "@/contexts/LanguageContext";
+import { CustomSpinner } from "@/components/CustomSpinner";
 
 function AuthHandler() {
+    const { getPageText, isPageLoading: isLanguageLoading } =
+      usePageLanguage("googleSuccess");
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -30,10 +34,19 @@ function AuthHandler() {
     }, 2000);
   }, []);
 
+   if (isLanguageLoading) {
+    return (
+      <div className="flex min-h-[90vh] justify-center items-center">
+        <CustomSpinner spinnerColor="#012657" />
+      </div>
+  )
+  }
+
   return (
     <SuccessComponent
-      message={"Authentication Successful, Redirecting to Dashboard..."}
-      title={"Success!"}
+      message={getPageText("auth_success")}
+      title={getPageText("success")}
+      buttonText = {getPageText("continue")}
     />
   );
 }
@@ -51,7 +64,7 @@ const GoogleAuthSuccessPage = () => {
       </Head>
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
         <Navbar />
-        <section className="w-full">
+        <section className="w-full max-w-screen-2xl">
           <Suspense fallback={<div>Loading...</div>}>
             <AuthHandler />
           </Suspense>

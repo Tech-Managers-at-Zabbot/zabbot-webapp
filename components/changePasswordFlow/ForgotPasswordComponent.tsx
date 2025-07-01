@@ -105,7 +105,8 @@ const ForgotPassword: React.FC = () => {
           <IoChevronBackSharp size={24} color="#1C2024" />
         </div>
         <h1 className="text-xl sm:text-2xl text-[#1C2024] font-bold">
-          Forgot Password
+          {/* Forgot Password */}
+          {getPageText("forgot_password")}
         </h1>
         <div
           className="hover:cursor-pointer"

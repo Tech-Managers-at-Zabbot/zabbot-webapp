@@ -20,5 +20,8 @@
     "sign_in":"Bẹ̀rẹ̀ Ìwọlé",
     "password_specs":"Ọrọ̀-igbaniwọlé rẹ lati ma kèrè ju ohun kikọ mẹjọ (8) ",
     "password_mismatch": "Awọn ọrọ igbaniwọle ko baramu",
-    "invalid_email":"Imeeli yi ko dara"
+    "invalid_email":"Imeeli yi ko dara",
+    "agree_join": "Gba, lati darapọ̀ mọ́ wa",
+    "continue_google": "Tẹ̀síwájú pẹlu Google",
+    "or":"Tabi"
 }

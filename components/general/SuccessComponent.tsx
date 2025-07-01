@@ -8,11 +8,13 @@ import Image from "next/image";
 interface SuccessProps {
   message: string;
   title: string;
+  buttonText?:string;
 }
 
 const SuccessComponent:React.FC<SuccessProps> = ({
   title = "Success!",
   message = "Password has been updated.",
+  buttonText = "Continue"
 }) => {
   const [loading, setLoading] = useState(false);
   return (
@@ -51,7 +53,7 @@ const SuccessComponent:React.FC<SuccessProps> = ({
             width="100%"
             onClick={() => setLoading(true)}
           >
-            {loading ? <CustomSpinner /> : "Continue"}
+            {loading ? <CustomSpinner /> : buttonText}
           </InAppButton>
         </Link>
       </div>

@@ -516,14 +516,18 @@ useEffect(() => {
           width="100%"
           onClick={handleSubmit}
         >
-          {registerUserLoading ? <CustomSpinner /> : <div>Agree & Join</div>}
+          {registerUserLoading ? <CustomSpinner /> : <div>
+            {/* Agree & Join */}
+            {getPageText("agree_join")}
+            </div>
+            }
         </InAppButton>
 
         <div
           className="flex gap-[5px] justify-center items-center font-[500] text-[16px] leading-[145%]"
           style={{ color: appColors.gray300, fontFamily: "Lexend" }}
         >
-          <span className="w-[73px] border-1"></span> or{" "}
+          <span className="w-[73px] border-1"></span>{getPageText("or")}{" "}
           <span className="w-[73px] border-1"></span>
         </div>
 
@@ -549,7 +553,10 @@ useEffect(() => {
               <span>
                 <GoogleIcon />
               </span>
-              <span>Continue with Google</span>
+              <span>
+                {/* Continue with Google */}
+                {getPageText("continue_google")}
+                </span>
             </div>
           )}
         </InAppButton>

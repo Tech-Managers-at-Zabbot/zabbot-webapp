@@ -239,7 +239,8 @@ const LoginAuth: React.FC = () => {
                 htmlFor="sendUpdates"
                 className="block hover:cursor-pointer"
               >
-                Remember me{" "}
+                {/* Remember me */}
+                {getPageText("remember_me")}{" "}
               </label>
             </div>
           </div>
@@ -316,7 +317,7 @@ const LoginAuth: React.FC = () => {
           className="flex gap-[5px] justify-center items-center font-[500] text-[16px] leading-[145%]"
           style={{ color: appColors.gray300, fontFamily: "Lexend" }}
         >
-          <span className="w-[73px] border-1"></span> or{" "}
+          <span className="w-[73px] border-1"></span>{getPageText("or")}{" "}
           <span className="w-[73px] border-1"></span>
         </div>
         <div>
@@ -347,7 +348,10 @@ const LoginAuth: React.FC = () => {
                 <span>
                   <GoogleIcon />
                 </span>
-                <span>Continue with Google</span>
+                <span>
+                  {/* Continue with Google */}
+                  {getPageText("continue_google")}
+                  </span>
               </div>
             )}
           </InAppButton>

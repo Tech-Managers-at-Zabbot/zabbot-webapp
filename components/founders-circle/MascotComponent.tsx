@@ -1,8 +1,14 @@
-
+import React, { useState } from 'react';
 import Image from "next/image";
 import { motion, easeInOut } from "framer-motion";
+import InAppButton from "../InAppButton";
+import { appColors } from "@/constants/colors";
+import { useRouter } from "next/navigation";
+import { CustomSpinner } from "@/components/CustomSpinner";
 
 const FoundersMascotComponent = () => {
+    const [isSignupRedirectLoading, setIsSignupRedirectLoading] = useState(false);
+    const router = useRouter();
 
     const item = {
         hidden: { opacity: 0, y: 20 },
@@ -54,6 +60,26 @@ const FoundersMascotComponent = () => {
                 <div className="font-[700] text-[30px] md:text-[57.86px] xl:text-[57.86px] lg:text-[40px] leading-[100%] text-[#162B6E]">Practice & Learn <br /> Yorùbá with Ease!</div>
                 <div className="text-[#000000] font-[400] md:text-[29px] lg:text-[22px] xl:text-[29px] text-[20px] leading-[100%]">We want you in our founders circle. </div>
                   </section>
+                     <div className="lg:hidden mt-10 mb-10 w-full flex justify-center order-1">
+                <div className="w-full max-w-[200px] flex items-center justify-center">
+                  <InAppButton
+                    disabled={false}
+                    disabledColor={appColors.disabledButtonBlue}
+                    backgroundColor={appColors.darkRoyalBlueForBtn}
+                    width="100%"
+                    onClick={() => {
+                      setIsSignupRedirectLoading(true);
+                      router.push("/signup");
+                    }}
+                  >
+                    {isSignupRedirectLoading ? (
+                      <CustomSpinner />
+                    ) : (
+                      <div>Beta Test</div>
+                    )}
+                  </InAppButton>
+                </div>
+              </div>
                  <motion.div 
                 animate={floatAnimation}
                 className="relative mt-6"
