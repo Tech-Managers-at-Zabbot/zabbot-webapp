@@ -31,7 +31,7 @@ function AuthHandler() {
   useEffect(() => {
     setTimeout(() => {
       router.push(`/founders-circle`);
-    }, 2000);
+    }, 10000);
   }, []);
 
    if (isLanguageLoading) {

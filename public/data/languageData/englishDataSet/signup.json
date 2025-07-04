@@ -29,5 +29,9 @@
     "forgot_password": "Forgot Password",
     "password_resent_sent": "A password reset link has been sent to your email",
     "success_password_updated": "Success! Password has been updated",
-    "or":"Or"
+    "or":"Or",
+    "email_required":"Email is required",
+    "valid_email":"Please enter a valid email address",
+    "required_field":"This field is required",
+    "name_schema":"Must be at least 2 characters"
 }

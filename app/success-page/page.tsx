@@ -1,8 +1,15 @@
+"use client";
+import { CustomSpinner } from "@/components/CustomSpinner";
 import Navbar from "@/components/general/Navbar";
 import SuccessComponent from "@/components/general/SuccessComponent";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 import Head from "next/head";
 
 const SuccessPage = () => {
+  const { getPageText, isPageLoading: isLanguageLoading } = usePageLanguage(
+    "passwordChangeSuccess"
+  );
+
   return (
     <div>
       <Head>
@@ -15,11 +22,19 @@ const SuccessPage = () => {
       </Head>
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
         <Navbar />
+
         <section className="w-full">
-          <SuccessComponent
-            message={"Password has been updated."}
-            title={"Success!"}
-          />
+          {isLanguageLoading ? (
+            <section className="min-h-[80vh] flex justify-center items-center">
+              <CustomSpinner spinnerColor="#012657" />
+              </section>
+          ) : (
+            <SuccessComponent
+              message={getPageText("password_update_success")}
+              title={getPageText("success")}
+              buttonText={getPageText("continue")}
+            />
+          )}
         </section>
       </main>
     </div>

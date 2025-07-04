@@ -14,15 +14,17 @@ import { useRequestPasswordLink } from "@/services/generalApi/authentication/mut
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
 
-const emailSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-});
 
 const ForgotPassword: React.FC = () => {
-   const { getPageText, isPageLoading:isLanguageLoading } = usePageLanguage('passwordReset');
+  const { getPageText, isPageLoading:isLanguageLoading } = usePageLanguage('passwordReset');
+
+  const emailSchema = z.object({
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email(getPageText("email_spec")),
+  });
+  
   const [email, setEmail] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [emailError, setEmailError] = useState("");
@@ -139,7 +141,7 @@ const ForgotPassword: React.FC = () => {
             />
           </div>
           {emailError && (
-            <p className="text-red-500 text-xs sm:text-sm mt-1">{emailError}</p>
+            <p className="text-red-500 text-xs sm:text-sm mt-1">{getPageText("email_spec")}</p>
           )}
         </div>
 

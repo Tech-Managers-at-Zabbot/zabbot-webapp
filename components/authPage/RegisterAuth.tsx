@@ -19,21 +19,6 @@ import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
 
-// Validation schemas
-const emailSchema = z
-  .string()
-  .min(1, "Email is required")
-  .email("Please enter a valid email address");
-
-const nameSchema = z
-  .string()
-  .min(1, "This field is required")
-  .min(2, "Must be at least 2 characters");
-
-const passwordSchema = z
-  .string()
-  .min(8, "Password must be at least 8 characters");
-
   const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 254;
 
@@ -50,6 +35,23 @@ const RegisterAuth: React.FC = () => {
   const { addAlert } = useAlert();
  const { initiateGoogleRegistration, isLoading: isGoogleLoading } = useGoogleAuth();
   // const [loading, setLoading] = useState(false);
+
+
+  // Validation schemas
+const emailSchema = z
+  .string()
+  .min(1, getPageText("email_required"))
+  .email(getPageText("valid_email"));
+
+const nameSchema = z
+  .string()
+  .min(1, getPageText("required_field"))
+  .min(2, getPageText("name_schema"));
+
+const passwordSchema = z
+  .string()
+  .min(8, getPageText("password_specs"));
+
 
   const handleGoogleRegistration = async (e:any) => {
     e.preventDefault()
@@ -403,7 +405,7 @@ useEffect(() => {
               color="black"
               backgroundColor="#E3EFFC"
               border={"0"}
-              errorMessage={errorMessages.password || "Password is required"}
+              errorMessage={errorMessages.password ? getPageText("password_specs") : getPageText("password_specs")}
             />
             <button
               type="button"
@@ -454,7 +456,7 @@ useEffect(() => {
               backgroundColor="#E3EFFC"
               border={"0"}
               errorMessage={
-                errorMessages.confirmPassword || "Confirm password is required"
+                errorMessages.confirmPassword ? getPageText("password_mismatch") : getPageText("password_mismatch")
               }
             />
             <button
