@@ -1,4 +1,5 @@
 import { MetricData } from "@/components/dashboard/DashboardMetricCard";
+import { LessonProps } from "@/components/dashboard/UserLessonProgressComponent";
 
 export const metricsData: MetricData[] = [
     {
@@ -56,3 +57,61 @@ export const metricsData: MetricData[] = [
       ]
     }
   ];
+
+
+export const lessonProgressData:LessonProps[] = [
+    {
+        courseImage: "/userDashboard/say-hello.svg",
+        courseTitle: "Say Hello",
+        courseSummary: "Let's learn how to say HELLO depending on the time of day.",
+        courseDuration: 20,
+        courseTotalLessons: 28,
+        userProgress: 20,
+        courseUserLevel: ""
+    },
+     {
+        courseImage: "/userDashboard/yoruba-alphabet.svg",
+        courseTitle: "Yorùbá alphabet",
+        courseSummary: "Learning the alphabet sounds is the first step to speaking Yoruba clearly and confidently.",
+        courseDuration: 35,
+        courseTotalLessons: 50,
+        userProgress: 60,
+        courseUserLevel: ""
+    },
+     {
+        courseImage: "/userDashboard/calendar.svg",
+        courseTitle: "21 Day Challenge",
+        courseSummary: "Discover Yorùbá sounds, stories, and traditions in 21 days",
+        courseDuration: 50,
+        courseTotalLessons: 40,
+        userProgress: 10,
+        courseUserLevel: ""
+    },
+     {
+        courseImage: "/userDashboard/hopscotch.svg",
+        courseTitle: "Numbers, Time & Daily Life",
+        courseSummary: "Counting, Days of the Week, Telling Time, Talking about routines, Songs & Rhymes.",
+        courseDuration: 30,
+        courseTotalLessons: 35,
+        userProgress: 50,
+        courseUserLevel: ""
+    },
+     {
+        courseImage: "/userDashboard/children.png",
+        courseTitle: "Akede Oro Geesi",
+        courseSummary: "Learn common Yoruba greetings used in daily conversations",
+        courseDuration: 60,
+        courseTotalLessons: 10,
+        userProgress: 80,
+        courseUserLevel: ""
+    },
+     {
+        courseImage: "/userDashboard/chair.svg",
+        courseTitle: "Owe Ilu Yoruba",
+        courseSummary: "Akojopo Konsonati",
+        courseDuration: 20,
+        courseTotalLessons: 28,
+        userProgress: 36,
+        courseUserLevel: ""
+    }
+]

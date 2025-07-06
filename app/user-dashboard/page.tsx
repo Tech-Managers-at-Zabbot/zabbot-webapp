@@ -8,6 +8,7 @@ import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
+import ProgressSection from "@/components/dashboard/ProgressSection";
 
 const Dashboard = () => {
   const handleClosePremiumTag = () => setGoPremium(false);
@@ -88,6 +89,10 @@ const Dashboard = () => {
           {metricsData.map((metric, index) => (
             <DashboardMetricCard key={index} data={metric} />
           ))}
+        </section>
+
+        <section className="mt-6">
+            <ProgressSection />
         </section>
       </div>
 
