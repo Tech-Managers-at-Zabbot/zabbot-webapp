@@ -23,6 +23,12 @@ const AchievementsCard = () => {
     { name: "Culture Keeper", isCompleted: false },
     { name: "Language Master", isCompleted: true },
     { name: "History Hero", isCompleted: true },
+     { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
+    { name: "History Hero", isCompleted: true },
+    { name: "Tonal Hero", isCompleted: false },
+    { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
     // Additional entries (deduplicated to avoid repetition)
   ];
 
@@ -60,10 +66,13 @@ const AchievementsCard = () => {
   }, []);
 
   return (
-    <div
-      className="relative flex bg-white items-center p-6 rounded-lg gap-10 w-full overflow-hidden"
-      style={{ fontFamily: "Lexend" }}
-    >
+<div
+  className="relative flex bg-white items-center p-6 rounded-lg gap-10 w-full overflow-hidden"
+  style={{ 
+    fontFamily: "Lexend",
+    boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)"
+  }}
+>
       {/* Left Section */}
       <section className="min-w-[100px] flex-shrink-0">
         <div className="flex flex-col gap-[14px]">
@@ -79,12 +88,12 @@ const AchievementsCard = () => {
 
       {/* Scroll Arrows */}
       {showLeftArrow && (
-        <div className="absolute left-45 top-1/2">
+        <div className="absolute z-50 left-45 top-1/2">
           <ScrollArrow direction="left" onClick={() => handleScroll("left")} />
         </div>
       )}
       {showRightArrow && (
-        <div className="absolute top-1/2 right-2">
+        <div className="absolute z-50 top-1/2 right-2">
           <ScrollArrow
             direction="right"
             onClick={() => handleScroll("right")}
@@ -99,7 +108,7 @@ const AchievementsCard = () => {
             key={index}
             className="flex flex-shrink-0 flex-col justify-center items-center gap-[10px] p-4 rounded-lg"
           >
-            <div className="flex-shrink-0 flex justify-center items-center rounded-full w-[51.94px] h-[51.94px]"
+            <div className="flex-shrink-0 z-10 flex justify-center items-center rounded-full w-[51.94px] h-[51.94px]"
             style={{backgroundColor: item.isCompleted ? "#24A5EE" : "#E4E4E4"}}
             >
               <div className="relative w-[24px] h-[24px]">
