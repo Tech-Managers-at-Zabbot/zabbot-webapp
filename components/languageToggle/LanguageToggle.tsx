@@ -10,12 +10,22 @@ interface LanguageToggleProps {
   maxDisplayLanguages?: number;
   showFlags?: boolean;
   className?: string;
+  backgroundColor?: string;
+  borderColor?:string;
+  color?:string;
+  isActiveColor?:string;
+  isActiveBackgroundColor?:string;
 }
 
 const LanguageToggle: React.FC<LanguageToggleProps> = ({
   variant = 'dropdown',
   // maxDisplayLanguages = 2,
   showFlags = false,
+  backgroundColor=appColors.languageToggleLightBlue,
+  isActiveBackgroundColor=appColors.darkRoyalBlueForBtn,
+// borderColor,
+color=appColors.darkRoyalBlueForBtn,
+isActiveColor=appColors.white,
   className = ""
 }) => {
   const { currentLanguage, setLanguage, availableLanguages, isLoading } = useLanguage();
@@ -63,11 +73,11 @@ const LanguageToggle: React.FC<LanguageToggleProps> = ({
               }`}
               style={{
                 backgroundColor: isActive 
-                  ? appColors.darkRoyalBlueForBtn 
-                  : appColors.languageToggleLightBlue,
+                  ? isActiveBackgroundColor
+                  : backgroundColor,
                 color: isActive 
-                  ? appColors.white 
-                  : appColors.darkRoyalBlueForBtn,
+                  ? isActiveColor
+                  : color,
               }}
               onClick={() => !isLoading && handleLanguageChange(language)}
             >
@@ -117,7 +127,7 @@ const LanguageToggle: React.FC<LanguageToggleProps> = ({
 
       {isDropdownOpen && (
         <div
-          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50 py-1"
+          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-1"
           style={{
             borderColor: appColors.darkRoyalBlueForBtn,
             fontFamily: "Lexend"
@@ -134,9 +144,13 @@ const LanguageToggle: React.FC<LanguageToggleProps> = ({
                   isActive ? 'font-semibold' : ''
                 }`}
                 style={{
-                  color: isActive ? appColors.darkRoyalBlueForBtn : appColors.gray300,
-                  backgroundColor: isActive ? appColors.languageToggleLightBlue : 'transparent'
-                }}
+                backgroundColor: isActive 
+                  ? isActiveBackgroundColor
+                  : backgroundColor,
+                color: isActive 
+                  ? isActiveColor
+                  : color,
+              }}
                 onClick={() => handleLanguageChange(language)}
               >
                 <span className="text-base">
