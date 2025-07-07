@@ -1,39 +1,32 @@
 import React from "react";
 import UserLessonDataComponent, {
-  LessonProgressCard,
+  CoursesCard,
   LessonProps,
 } from "./UserLessonDataComponent";
 import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
-import { DailyGoals, WordForTheDay } from "./UserGoals";
 
-const ProgressSection = () => {
+const PopularCourses = () => {
   return (
-    <div className="flex gap-[30px]">
+    <div className="flex gap-[30px] overflow-x-scroll">
       <section>
         <UserLessonDataComponent
           title={"Journey into Yorùbá language & life."}
           subtitle={"You're 4 lessons away from the finish line!"}
-          maxWidth="900px"
+          maxWidth=""
         >
           <section className="flex gap-[15px]">
             {lessonProgressData.map(
               (lessonProgressData: LessonProps, index: number) => (
                 <div key={index}>
-                  <LessonProgressCard {...lessonProgressData} />
+                  <CoursesCard {...lessonProgressData} />
                 </div>
               )
             )}
           </section>
         </UserLessonDataComponent>
       </section>
-      <section>
-        <DailyGoals />
-      </section>
-      <section>
-        <WordForTheDay />
-      </section>
     </div>
   );
 };
 
-export default ProgressSection;
+export default PopularCourses;

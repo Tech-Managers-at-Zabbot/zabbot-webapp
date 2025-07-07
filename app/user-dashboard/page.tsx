@@ -9,6 +9,8 @@ import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import ProgressSection from "@/components/dashboard/ProgressSection";
+import PopularCourses from "@/components/dashboard/PopularCourses";
+import Advert from "@/components/dashboard/Advert";
 
 const Dashboard = () => {
   const handleClosePremiumTag = () => setGoPremium(false);
@@ -25,7 +27,7 @@ const Dashboard = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div
-        className="min-h-screen bg-[#dff9fb] px-[100px] pt-6"
+        className="min-h-screen py-0 my-0 pt-6 pb-50 bg-[#dff9fb] px-[100px]"
         style={{ fontFamily: "Lexend" }}
       >
         <header className="relative">
@@ -94,11 +96,20 @@ const Dashboard = () => {
         <section className="mt-6">
             <ProgressSection />
         </section>
-      </div>
 
-      <section>
+        <section className="mt-6">
+            <PopularCourses />
+        </section>
+
+        <section className="mt-6">
+            <Advert />
+        </section>
+
+      </div>
+      <section className="">
         <UserDashboardFooter />
       </section>
+
     </div>
   );
 };

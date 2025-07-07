@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           className={`flex-1`}
         >
           <UserDashboardNav />
-          <main className="" style={{ flex: 1 }}>{children}</main>
+          <main style={{ flex: 1 }}>{children}</main>
         </div>
       </div>
     // {/* </AuthGuard> */}
