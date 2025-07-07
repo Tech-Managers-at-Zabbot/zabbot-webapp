@@ -3,8 +3,8 @@ import { LessonProps } from "@/components/dashboard/UserLessonDataComponent";
 
 export const metricsData: MetricData[] = [
   {
-    title: 'Total Hours',
-    value: '2,420 hrs',
+    title: 'Total Hours for all Learners',
+    value: '2,420 hours',
     change: 40,
     changeLabel: 'vs last month',
     graphData: [
@@ -21,7 +21,7 @@ export const metricsData: MetricData[] = [
     ]
   },
   {
-    title: 'Completed Courses',
+    title: 'Your Completed Courses',
     value: '160',
     change: 40,
     changeLabel: 'vs last month',
