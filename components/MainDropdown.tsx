@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 import { appColors } from "@/constants/colors";
@@ -28,7 +29,10 @@ const MainDropdown: React.FC<MainDropdownProps> = ({
   color="white"
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [
+    selectedOption, 
+    setSelectedOption
+  ] = useState<string | null>(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
