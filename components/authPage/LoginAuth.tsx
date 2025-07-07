@@ -98,7 +98,7 @@ const LoginAuth: React.FC = () => {
               "Login Successful, welcome to Zabbot",
               "success"
             );
-            router.push("/");
+            router.push("/user-dashboard");
           },
           onError: (error: any) => {
             setIsResetLoading(false);

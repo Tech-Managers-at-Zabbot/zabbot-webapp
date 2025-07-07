@@ -30,7 +30,7 @@ function AuthHandler() {
 
   useEffect(() => {
     setTimeout(() => {
-      router.push(`/founders-circle`);
+      router.push(`/user-dashboard`);
     }, 10000);
   }, []);
 
