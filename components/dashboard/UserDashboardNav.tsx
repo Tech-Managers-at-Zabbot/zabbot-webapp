@@ -104,7 +104,7 @@ const UserDashboardNavbar = () => {
       </section>
 
       <section>
-        <LanguageToggle />
+        <LanguageToggle backgroundColor="#162B6E" color="#FFFFFF" borderColor="#D9F3FF"dropDownBgColor="#24a6ee" />
       </section>
     </nav>
   );

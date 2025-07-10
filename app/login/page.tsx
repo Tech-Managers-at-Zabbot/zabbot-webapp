@@ -38,7 +38,7 @@ const Login = () => {
         <div
           className="hover:cursor-pointer relative transition-all duration-200"
         >
-          <LanguageToggle variant={"toggle"} />
+          <LanguageToggle variant={"dropdown"} backgroundColor="#162B6E" color="#FFFFFF" borderColor="#D9F3FF"dropDownBgColor="#24a6ee"/>
         </div>
       </div>
         <section className="hidden max-w-screen-2xl md:block md:w-1/2 lg:w-1/2">

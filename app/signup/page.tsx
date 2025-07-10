@@ -34,7 +34,7 @@ const SignupPage = () => {
           </Link>
         </div>
         <div className="hover:cursor-pointer relative transition-all duration-200">
-          <LanguageToggle variant={"toggle"} />
+          <LanguageToggle variant={"dropdown"} backgroundColor="#162B6E" color="#FFFFFF" borderColor="#D9F3FF"dropDownBgColor="#24a6ee"/>
         </div>
       </div>
 

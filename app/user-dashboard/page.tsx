@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import Image from "next/image";
 import Head from "next/head";
@@ -15,6 +16,24 @@ import Advert from "@/components/dashboard/Advert";
 const Dashboard = () => {
   const handleClosePremiumTag = () => setGoPremium(false);
 
+  const [timeSunMoonLink, setTimeSunMoonLink] = useState("")
+
+useEffect(() => {
+  const currentTime = new Date()
+  const hours = currentTime.getHours()
+  
+  if (hours >= 6 && hours < 12) {
+    // Morning: 6 AM to 12 PM
+    setTimeSunMoonLink("/userDashboard/morning-sun.png")
+  } else if (hours >= 12 && hours < 18) {
+    // Afternoon: 12 PM to 6 PM
+    setTimeSunMoonLink("/userDashboard/afternoon-sun.png")
+  } else {
+    // Night: 6 PM to 6 AM
+    setTimeSunMoonLink("/userDashboard/moon.png")
+  }
+}, [])
+
   const [goPremium, setGoPremium] = useState(true);
   return (
     <div>
@@ -27,7 +46,7 @@ const Dashboard = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div
-        className="min-h-screen py-0 my-0 pt-6 pb-50 bg-[#dff9fb] px-[100px]"
+        className="min-h-screen py-0 my-0 pt-6 relative pb-50 bg-[#dff9fb] px-[100px]"
         style={{ fontFamily: "Lexend" }}
       >
         <header className="relative">
@@ -72,6 +91,10 @@ const Dashboard = () => {
             </div>
           </div>
         </header>
+
+        <section className="absolute top-20 right-30">
+          <img src={`${timeSunMoonLink}`} alt="image of the sun/moon" />
+        </section>
 
         <section className="mt-6">
           <AchievementsCard />

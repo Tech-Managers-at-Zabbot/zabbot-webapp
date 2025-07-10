@@ -15,15 +15,17 @@ interface LanguageToggleProps {
   color?:string;
   isActiveColor?:string;
   isActiveBackgroundColor?:string;
+  dropDownBgColor?:string;
 }
 
 const LanguageToggle: React.FC<LanguageToggleProps> = ({
   variant = 'dropdown',
   // maxDisplayLanguages = 2,
   showFlags = false,
+  dropDownBgColor,
   backgroundColor=appColors.languageToggleLightBlue,
   isActiveBackgroundColor=appColors.darkRoyalBlueForBtn,
-// borderColor,
+borderColor=appColors.darkRoyalBlueForBtn,
 color=appColors.darkRoyalBlueForBtn,
 isActiveColor=appColors.white,
   className = ""
@@ -99,13 +101,13 @@ isActiveColor=appColors.white,
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       <button
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 ease-in-out ${
+        className={`flex hover:cursor-pointer items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 ease-in-out ${
           isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
         }`}
         style={{
-          backgroundColor: appColors.languageToggleLightBlue,
-          color: appColors.darkRoyalBlueForBtn,
-          borderColor: appColors.darkRoyalBlueForBtn,
+          backgroundColor,
+          color,
+          borderColor,
           fontFamily: "Lexend"
         }}
         onClick={() => !isLoading && setIsDropdownOpen(!isDropdownOpen)}
@@ -115,22 +117,24 @@ isActiveColor=appColors.white,
           {showFlags ? SUPPORTED_LANGUAGES[currentLanguage].flag : <BsGlobe />}
         </div>
         <span className="text-xs sm:text-sm font-medium">
-          <span className="block sm:hidden">{SUPPORTED_LANGUAGES[currentLanguage].shortName}</span>
-          <span className="hidden sm:block">{SUPPORTED_LANGUAGES[currentLanguage].name}</span>
+          <span className="">{SUPPORTED_LANGUAGES[currentLanguage].shortName}</span>
+          {/* <span className="hidden sm:block">{SUPPORTED_LANGUAGES[currentLanguage].name}</span> */}
         </span>
         <BsChevronDown 
           className={`text-xs transition-transform duration-200 ${
             isDropdownOpen ? 'rotate-180' : ''
           }`} 
+          color="#F6F6F6"
         />
       </button>
 
       {isDropdownOpen && (
         <div
-          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 py-1"
+          className="absolute top-[80%] left-0 mt-2 rounded-lg shadow-lg z-50 py-1"
           style={{
             borderColor: appColors.darkRoyalBlueForBtn,
-            fontFamily: "Lexend"
+            fontFamily: "Lexend",
+            backgroundColor: dropDownBgColor,
           }}
         >
           {availableLanguages.map((language) => {
@@ -140,13 +144,10 @@ isActiveColor=appColors.white,
             return (
               <button
                 key={language}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-200 flex items-center gap-3 ${
+                className={`w-full text-left px-4 py-2 text-sm hover:cursor-pointer transition-colors duration-200 flex items-center gap-3 ${
                   isActive ? 'font-semibold' : ''
                 }`}
                 style={{
-                backgroundColor: isActive 
-                  ? isActiveBackgroundColor
-                  : backgroundColor,
                 color: isActive 
                   ? isActiveColor
                   : color,
@@ -156,7 +157,7 @@ isActiveColor=appColors.white,
                 <span className="text-base">
                   {showFlags ? languageInfo.flag : <BsGlobe />}
                 </span>
-                <span>{languageInfo.name}</span>
+                <span>{languageInfo.shortName}</span>
                 {isActive && (
                   <span className="ml-auto text-xs">✓</span>
                 )}

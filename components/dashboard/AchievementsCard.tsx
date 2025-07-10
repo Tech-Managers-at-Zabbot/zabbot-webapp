@@ -5,6 +5,8 @@ import Image from "next/image";
 import { ScrollArrow } from "../ScrollArrow";
 
 const AchievementsCard = () => {
+
+
   const achievements = [
     { name: "7-Day Streak", isCompleted: true },
     { name: "14-Day Streak", isCompleted: true },
