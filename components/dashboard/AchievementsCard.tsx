@@ -29,7 +29,6 @@ const AchievementsCard = () => {
     { name: "Tonal Hero", isCompleted: false },
     { name: "Culture Keeper", isCompleted: false },
     { name: "Language Master", isCompleted: true },
-    // Additional entries (deduplicated to avoid repetition)
   ];
 
   const scrollRef: any = useRef(null);
