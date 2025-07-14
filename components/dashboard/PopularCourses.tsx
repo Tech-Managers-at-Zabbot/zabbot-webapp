@@ -7,14 +7,14 @@ import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 
 const PopularCourses = () => {
   return (
-    <div className="flex gap-[30px] overflow-x-scroll">
+    <div className="flex gap-[30px]">
       <section>
         <UserLessonDataComponent
-          title={"Journey into Yorùbá language & life."}
-          subtitle={"You're 4 lessons away from the finish line!"}
-          maxWidth=""
+          title={"Popular Courses"}
+          subtitle={"Top Yorùbá courses learners love!"}
+          maxWidth="1510px"
         >
-          <section className="flex gap-[15px]">
+          <section className="flex gap-[15px] min-w-max">
             {lessonProgressData.map(
               (lessonProgressData: LessonProps, index: number) => (
                 <div key={index}>

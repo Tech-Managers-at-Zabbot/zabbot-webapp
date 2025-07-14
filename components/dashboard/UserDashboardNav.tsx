@@ -63,7 +63,7 @@ const UserDashboardNavbar = () => {
 
   return (
     <nav
-      className="bg-[#162B6E] z-50 flex justify-between items-center font-[700] text-sm leading-[100%] px-[100px] py-[16px]"
+      className="bg-[#162B6E] z-50 flex justify-between items-center font-[700] text-sm leading-[100%] px-[5%] py-[16px]"
       style={{ fontFamily: "Lexend" }}
     >
       <section className="flex gap-[60px]">

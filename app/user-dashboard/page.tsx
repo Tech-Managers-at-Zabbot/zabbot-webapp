@@ -46,7 +46,7 @@ useEffect(() => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div
-        className="min-h-screen py-0 my-0 pt-6 relative pb-50 bg-[#dff9fb] px-[100px]"
+        className="min-h-screen py-0 my-0 pt-6 relative pb-50 bg-[#dff9fb] px-[5%]"
         style={{ fontFamily: "Lexend" }}
       >
         <header className="relative">

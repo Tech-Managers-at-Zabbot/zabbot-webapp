@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { LinearProgress } from "@mui/material";
 import { TfiArrowCircleLeft } from "react-icons/tfi";
@@ -14,7 +14,9 @@ export interface LessonProps {
   courseUserLevel: string;
 }
 
-export const LessonProgressCard: React.FC<LessonProps> = (data: LessonProps) => {
+export const LessonProgressCard: React.FC<LessonProps> = (
+  data: LessonProps
+) => {
   return (
     <div
       className="bg-white flex relative gap-[10px] w-[400px] h-[188px] rounded-sm border"
@@ -85,7 +87,6 @@ export const LessonProgressCard: React.FC<LessonProps> = (data: LessonProps) => 
   );
 };
 
-
 export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
   return (
     <div
@@ -94,13 +95,13 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
     >
       <section className="w-1/2">
         <div className="flex-shrink-0">
-          <div className="relative w-[278px] h-[150px]">
+          <div className="relative w-[276px] h-[150px]">
             <Image
               src={`${data.courseImage}`}
               alt="An image of a boy prostrating before an elderly woman in greeting"
               fill
               priority
-              className="object-cover rounded-t-sm"
+              className="object-cover object-top rounded-t-sm"
             />
           </div>
         </div>
@@ -121,11 +122,19 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
       </section>
 
       <section className="flex px-[10px] font-[400] text-[12px] leading-[100%]">
-      <div className={`px-[12px] py-[8px] border rounded-md`}
-      style={{color: data.courseUserLevel === "Foundation" ? "#D3AF37" : data.courseUserLevel === "Builder" ? "#CF0A5C" : "#169A9C" }}
-      >
-        {data.courseUserLevel}
-      </div>
+        <div
+          className={`px-[12px] py-[8px] border rounded-md`}
+          style={{
+            color:
+              data.courseUserLevel === "Foundation"
+                ? "#D3AF37"
+                : data.courseUserLevel === "Builder"
+                ? "#CF0A5C"
+                : "#169A9C",
+          }}
+        >
+          {data.courseUserLevel}
+        </div>
       </section>
 
       <section className="flex flex-col gap-[16px] justify-between p-[10px]">
@@ -149,36 +158,105 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
   );
 };
 
-
 interface UserLessonDataComponentProps {
   title: string;
   subtitle: string;
   children: React.ReactNode;
-  gap?:string;
-  padding?:string;
+  gap?: string;
+  padding?: string;
   totalItems?: number;
   visibleItems?: number;
-  maxWidth?:string
+  maxWidth?: string;
 }
 
-const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({ title, subtitle, children, gap="24px", padding="24px", maxWidth="761px" }) => {
+const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
+  title,
+  subtitle,
+  children,
+  gap = "24px",
+  padding = "24px",
+  maxWidth = "761px",
+}) => {
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isScrolling, setIsScrolling] = useState<'left' | 'right' | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startScrolling = (direction: 'left' | 'right') => {
+    setIsScrolling(direction);
+  };
+
+  const stopScrolling = () => {
+    setIsScrolling(null);
+  };
+
+  useEffect(() => {
+    if (isScrolling && scrollRef.current) {
+      const scrollDistance = isScrolling === 'left' ? -50 : 50;
+      
+      intervalRef.current = setInterval(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollBy({
+            left: scrollDistance,
+            behavior: 'auto'
+          });
+        }
+      }, 16); // ~60fps for smooth scrolling
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+        return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isScrolling]);
+
   return (
-    <div className={`flex flex-col gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white overflow-x-auto`}
-    style={{fontFamily: "Lexend", maxWidth, padding}}
+    <div
+      className={`flex flex-col gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white`}
+      style={{
+         fontFamily: "Lexend", 
+        maxWidth, 
+        padding,
+      }}
     >
-        <section className="flex justify-between">
-            <div>
-                <h3 className="font-semibold text-[24px] leading-[100%] text-[#162B6E]">{title}</h3>
-                <span className="font-semibold text-[15px] leading-[100%] text-[#207EC5]">{subtitle}</span>
-            </div>
-            <div className="flex gap-[16px]">
-                <TfiArrowCircleLeft size={40} color={"#737477"} className="hover:cursor-pointer"/>
-                <TfiArrowCircleRight size={40} color={"#737477"} className="hover:cursor-pointer" />
-            </div>
-        </section>
-        <section className="">
-          {children}
-        </section>
+      <section className="flex justify-between">
+        <div>
+          <h3 className="font-semibold text-[24px] leading-[100%] text-[#162B6E]">
+            {title}
+          </h3>
+          <span className="font-semibold text-[15px] leading-[100%] text-[#207EC5]">
+            {subtitle}
+          </span>
+        </div>
+        <div className="flex gap-[16px]">
+         <TfiArrowCircleLeft
+    size={40}
+    color={"#737477"}
+    className="hover:cursor-pointer select-none"
+    onMouseDown={() => startScrolling('left')}
+    onMouseUp={stopScrolling}
+    onMouseLeave={stopScrolling}
+    onTouchStart={() => startScrolling('left')}
+    onTouchEnd={stopScrolling}
+  />
+  <TfiArrowCircleRight
+    size={40}
+    color={"#737477"}
+    className="hover:cursor-pointer select-none"
+    onMouseDown={() => startScrolling('right')}
+    onMouseUp={stopScrolling}
+    onMouseLeave={stopScrolling}
+    onTouchStart={() => startScrolling('right')}
+    onTouchEnd={stopScrolling}
+  />
+        </div>
+      </section>
+      <section className="overflow-x-auto" ref={scrollRef}>{children}</section>
     </div>
   );
 };
