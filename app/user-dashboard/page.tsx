@@ -1,42 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
-import { HiMenuAlt3 } from "react-icons/hi";
 import Image from "next/image";
 import Head from "next/head";
 import AchievementsCard from "@/components/dashboard/AchievementsCard";
 import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
-import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
+// import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import ProgressSection from "@/components/dashboard/ProgressSection";
 import PopularCourses from "@/components/dashboard/PopularCourses";
 import Advert from "@/components/dashboard/Advert";
+import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 
 const Dashboard = () => {
   const handleClosePremiumTag = () => setGoPremium(false);
 
-  const [timeSunMoonLink, setTimeSunMoonLink] = useState("")
+  const [greeting, setGreeting] = useState("");
 
-useEffect(() => {
-  const currentTime = new Date()
-  const hours = currentTime.getHours()
-  
-  if (hours >= 6 && hours < 12) {
-    // Morning: 6 AM to 12 PM
-    setTimeSunMoonLink("/userDashboard/morning-sun.png")
-  } else if (hours >= 12 && hours < 18) {
-    // Afternoon: 12 PM to 6 PM
-    setTimeSunMoonLink("/userDashboard/afternoon-sun.png")
-  } else {
-    // Night: 6 PM to 6 AM
-    setTimeSunMoonLink("/userDashboard/moon.png")
-  }
-}, [])
+  useEffect(() => {
+    const currentTime = new Date();
+    const hours = currentTime.getHours();
+
+    if (hours >= 6 && hours < 12) {
+      // Morning: 6 AM to 12 PM
+      setGreeting("Káàrọ̀");
+    } else if (hours >= 12 && hours < 18) {
+      // Afternoon: 12 PM to 6 PM
+      setGreeting("Káàsán");
+    } else {
+      // Night: 6 PM to 6 AM
+      setGreeting("Káalẹ́");
+    }
+  }, []);
 
   const [goPremium, setGoPremium] = useState(true);
+
   return (
-    <div>
+    <div className="min-h-screen">
       <Head>
         <title>User Dashboard</title>
         <meta
@@ -46,11 +47,12 @@ useEffect(() => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div
-        className="min-h-screen py-0 my-0 pt-6 relative pb-50 bg-[#dff9fb] px-[5%]"
+        className="min-h-screen py-0 my-0 pt-6 relative pb-50 bg-[#dff9fb] px-[5%] overflow-x-hidden"
         style={{ fontFamily: "Lexend" }}
       >
+        <div className="max-w-screen-2xl mx-auto">
         <header className="relative">
-          <div className="absolute inset-0 bg-[url('/userDashboard/clouds.svg')] bg-cover bg-center"></div>
+          <div className="absolute min-h-20 inset-0 bg-[url('/userDashboard/clouds.svg')] bg-cover bg-center"></div>
           <div className="flex relative z-10 mt-10 justify-between">
             <div className="flex-shrink-0">
               <div className="relative w-[156px] h-[46.91px]">
@@ -76,25 +78,21 @@ useEffect(() => {
             </div>
 
             {/* Right - Text and Menu */}
-            <div className="flex gap-20 flex-shrink-0">
+            <div className="flex relative gap-20 flex-shrink-0">
               <div className="flex flex-col gap-[8px] text-right">
                 <span className="font-bold text-[35.53px] leading-[100%] text-[#202124]">
-                  Káàrọ̀ Iniobong
+                  {greeting} Iniobong
                 </span>
                 <span className="text-[#333333] font-[400] text-[13px] leading-[145%]">
                   Learn Yorùbá. Speak Proudly. Belong Deeply.
                 </span>
               </div>
-              <div className="flex pt-2">
-                <HiMenuAlt3 color="#737477" size={24} />
+              <div>
+                <SettingsBreadcrumb />
               </div>
             </div>
           </div>
         </header>
-
-        <section className="absolute top-20 right-30">
-          <img src={`${timeSunMoonLink}`} alt="image of the sun/moon" />
-        </section>
 
         <section className="mt-6">
           <AchievementsCard />
@@ -117,22 +115,21 @@ useEffect(() => {
         </section>
 
         <section className="mt-6">
-            <ProgressSection />
+          <ProgressSection />
         </section>
 
         <section className="mt-6">
-            <PopularCourses />
+          <PopularCourses />
         </section>
 
         <section className="mt-6">
-            <Advert />
+          <Advert />
         </section>
-
+        </div>
       </div>
-      <section className="">
+      {/* <section className="">
         <UserDashboardFooter />
-      </section>
-
+      </section> */}
     </div>
   );
 };

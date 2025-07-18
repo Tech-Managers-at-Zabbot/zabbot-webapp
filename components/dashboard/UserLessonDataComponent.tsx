@@ -19,26 +19,24 @@ export const LessonProgressCard: React.FC<LessonProps> = (
 ) => {
   return (
     <div
-      className="bg-white flex relative gap-[10px] w-[400px] h-[188px] rounded-sm border"
+      className="bg-white flex relative gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0"
       style={{ fontFamily: "Lexend" }}
     >
-      <section className="w-1/2">
-        <div className="flex-shrink-0">
-          <div className="relative w-[194px] h-[188px]">
-            <Image
-              src={`${data.courseImage}`}
-              alt="An image of a boy prostrating before an elderly woman in greeting"
-              fill
-              priority
-              className="object-cover rounded-l-sm"
-            />
-          </div>
+      <section className="w-1/2 flex-shrink-0">
+        <div className="relative w-[170px] sm:w-[194px] h-[188px]">
+          <Image
+            src={`${data.courseImage}`}
+            alt="An image of a boy prostrating before an elderly woman in greeting"
+            fill
+            priority
+            className="object-cover rounded-l-sm"
+          />
         </div>
       </section>
 
       <section className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <div className="flex-shrink-0">
-          <div className="relative w-[48px] h-[48px]">
+          <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
             <Image
               src="/userDashboard/hand-click-element.svg"
               alt="A hand clicking the card"
@@ -50,18 +48,18 @@ export const LessonProgressCard: React.FC<LessonProps> = (
         </div>
       </section>
 
-      <section className="flex flex-col justify-between p-[10px] w-1/2 pr-4">
+      <section className="flex flex-col justify-between p-[10px] w-1/2 pr-4 min-w-0">
         <div className="flex flex-col gap-[8px]">
-          <h3 className="font-medium text-[18px] leading-[100%] text-[#000000]">
+          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000] line-clamp-2">
             {data.courseTitle}
           </h3>
-          <div className="font-light text-[#666666] text-[12px] leading-[100%]">
+          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%] line-clamp-3">
             {data.courseSummary}
           </div>
         </div>
 
         <div className="flex flex-col gap-[4px]">
-          <div className="font-medium text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
+          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
             <span>{data.courseDuration} min</span>
             <span>{data.courseTotalLessons} lessons</span>
           </div>
@@ -90,26 +88,24 @@ export const LessonProgressCard: React.FC<LessonProps> = (
 export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
   return (
     <div
-      className="bg-white flex flex-col relative gap-[20px] w-[278px] h-[325px] rounded-sm border"
+      className="bg-white flex flex-col relative gap-[20px] w-[250px] sm:w-[278px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0"
       style={{ fontFamily: "Lexend" }}
     >
-      <section className="w-1/2">
-        <div className="flex-shrink-0">
-          <div className="relative w-[276px] h-[150px]">
-            <Image
-              src={`${data.courseImage}`}
-              alt="An image of a boy prostrating before an elderly woman in greeting"
-              fill
-              priority
-              className="object-cover object-top rounded-t-sm"
-            />
-          </div>
+      <section className="w-full">
+        <div className="relative w-full h-[150px]">
+          <Image
+            src={`${data.courseImage}`}
+            alt="An image of a boy prostrating before an elderly woman in greeting"
+            fill
+            priority
+            className="object-cover object-top rounded-t-sm"
+          />
         </div>
       </section>
 
       <section className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2">
         <div className="flex-shrink-0">
-          <div className="relative w-[68px] h-[68px]">
+          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
             <Image
               src="/userDashboard/hand-click-element.svg"
               alt="A hand clicking the card"
@@ -121,7 +117,7 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
         </div>
       </section>
 
-      <section className="flex px-[10px] font-[400] text-[12px] leading-[100%]">
+      <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
         <div
           className={`px-[12px] py-[8px] border rounded-md`}
           style={{
@@ -137,18 +133,18 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
         </div>
       </section>
 
-      <section className="flex flex-col gap-[16px] justify-between p-[10px]">
+      <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
-          <h3 className="font-medium text-[18px] leading-[100%] text-[#000000]">
+          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000] line-clamp-2">
             {data.courseTitle}
           </h3>
-          <div className="font-light text-[#666666] text-[12px] leading-[100%]">
+          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%] line-clamp-3">
             {data.courseSummary}
           </div>
         </div>
 
         <div className="flex flex-col gap-[4px]">
-          <div className="font-medium text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
+          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
             <span>{data.courseDuration} min</span>
             <span>{data.courseTotalLessons} lessons</span>
           </div>
@@ -175,11 +171,12 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
   children,
   gap = "24px",
   padding = "24px",
-  maxWidth = "761px",
+  maxWidth = "100%",
 }) => {
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState<'left' | 'right' | null>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startScrolling = (direction: 'left' | 'right') => {
@@ -189,6 +186,30 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
   const stopScrolling = () => {
     setIsScrolling(null);
   };
+
+  const updateArrowVisibility = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft + clientWidth < scrollWidth - 5);
+    }
+  };
+
+  useEffect(() => {
+    updateArrowVisibility();
+    const ref = scrollRef.current;
+    if (ref) {
+      ref.addEventListener("scroll", updateArrowVisibility);
+      // Check on resize
+      const resizeObserver = new ResizeObserver(updateArrowVisibility);
+      resizeObserver.observe(ref);
+      
+      return () => {
+        ref.removeEventListener("scroll", updateArrowVisibility);
+        resizeObserver.disconnect();
+      };
+    }
+  }, []);
 
   useEffect(() => {
     if (isScrolling && scrollRef.current) {
@@ -208,7 +229,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
         intervalRef.current = null;
       }
     }
-        return () => {
+    return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -217,46 +238,56 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
 
   return (
     <div
-      className={`flex flex-col gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white`}
+      className={`flex flex-col gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full`}
       style={{
-         fontFamily: "Lexend", 
+        fontFamily: "Lexend", 
         maxWidth, 
         padding,
       }}
     >
-      <section className="flex justify-between">
-        <div>
-          <h3 className="font-semibold text-[24px] leading-[100%] text-[#162B6E]">
+      <section className="flex justify-between items-start flex-wrap gap-4">
+        <div className="min-w-0 flex-1 flex flex-col gap-2">
+          <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
             {title}
           </h3>
-          <span className="font-semibold text-[15px] leading-[100%] text-[#207EC5]">
+          <span className="font-semibold text-[13px] sm:text-[15px] leading-[100%] text-[#207EC5]">
             {subtitle}
           </span>
         </div>
-        <div className="flex gap-[16px]">
-         <TfiArrowCircleLeft
-    size={40}
-    color={"#737477"}
-    className="hover:cursor-pointer select-none"
-    onMouseDown={() => startScrolling('left')}
-    onMouseUp={stopScrolling}
-    onMouseLeave={stopScrolling}
-    onTouchStart={() => startScrolling('left')}
-    onTouchEnd={stopScrolling}
-  />
-  <TfiArrowCircleRight
-    size={40}
-    color={"#737477"}
-    className="hover:cursor-pointer select-none"
-    onMouseDown={() => startScrolling('right')}
-    onMouseUp={stopScrolling}
-    onMouseLeave={stopScrolling}
-    onTouchStart={() => startScrolling('right')}
-    onTouchEnd={stopScrolling}
-  />
+        <div className="flex gap-[16px] flex-shrink-0">
+          <TfiArrowCircleLeft
+            size={32}
+            color={showLeftArrow ? "#737477" : "#cccccc"}
+            className={`select-none ${showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"}`}
+            onMouseDown={showLeftArrow ? () => startScrolling('left') : undefined}
+            onMouseUp={stopScrolling}
+            onMouseLeave={stopScrolling}
+            onTouchStart={showLeftArrow ? () => startScrolling('left') : undefined}
+            onTouchEnd={stopScrolling}
+          />
+          <TfiArrowCircleRight
+            size={32}
+            color={showRightArrow ? "#737477" : "#cccccc"}
+            className={`select-none ${showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"}`}
+            onMouseDown={showRightArrow ? () => startScrolling('right') : undefined}
+            onMouseUp={stopScrolling}
+            onMouseLeave={stopScrolling}
+            onTouchStart={showRightArrow ? () => startScrolling('right') : undefined}
+            onTouchEnd={stopScrolling}
+          />
         </div>
       </section>
-      <section className="overflow-x-auto" ref={scrollRef}>{children}</section>
+      <section 
+        className="overflow-x-auto scrollbar-hide" 
+        ref={scrollRef}
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
+        {children}
+      </section>
     </div>
   );
 };

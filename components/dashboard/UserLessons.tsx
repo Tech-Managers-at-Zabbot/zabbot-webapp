@@ -4,12 +4,11 @@ import UserLessonDataComponent, {
   LessonProps,
 } from "./UserLessonDataComponent";
 import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
-import { DailyGoals, WordForTheDay } from "./UserGoals";
 
-const ProgressSection = () => {
+const UserLessons = () => {
   return (
-    <div className="flex flex-col xl:flex-row gap-[30px] w-full">
-      <section className="flex-1 xl:max-w-[56.5%] w-full">
+    <div className="relative flex z-1 flex-col xl:flex-row gap-[30px] w-full">
+      <section className="flex-1 w-full">
         <UserLessonDataComponent
           title={"Journey into Yorùbá language & life."}
           subtitle={"You're 4 lessons away from the finish line!"}
@@ -26,19 +25,8 @@ const ProgressSection = () => {
           </section>
         </UserLessonDataComponent>
       </section>
-      
-      <section className="flex-shrink-0 xl:w-auto w-full">
-        <div className="flex flex-col sm:flex-row gap-[30px] xl:flex-row w-full">
-          <div className="flex-1 xl:flex-none xl:w-[300px]">
-            <DailyGoals />
-          </div>
-          <div className="flex-1 xl:flex-none xl:w-[300px]">
-            <WordForTheDay />
-          </div>
-        </div>
-      </section>
     </div>
   );
 };
 
-export default ProgressSection;
+export default UserLessons;

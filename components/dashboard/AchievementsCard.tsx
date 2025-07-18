@@ -92,7 +92,7 @@ const AchievementsCard = () => {
 
   return (
     <div
-      className="relative flex bg-white items-center p-6 rounded-lg gap-10 w-full overflow-hidden"
+      className="relative flex z-1 bg-white items-center p-6 rounded-lg gap-10 w-full overflow-hidden"
       style={{
         fontFamily: "Lexend",
         boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)",
@@ -113,7 +113,7 @@ const AchievementsCard = () => {
 
       {/* Scroll Arrows */}
       {showLeftArrow && (
-        <div className="absolute z-50 left-45 top-1/2">
+        <div className="absolute z-1 left-45 top-1/2">
           <ScrollArrow
             direction="left"
             onMouseDown={() => startScrolling("left")}
@@ -125,7 +125,7 @@ const AchievementsCard = () => {
         </div>
       )}
       {showRightArrow && (
-        <div className="absolute z-50 top-1/2 right-2">
+        <div className="absolute z-1 top-1/2 right-2">
           <ScrollArrow
             direction="right"
             // onClick={() => handleScroll("right")}
@@ -146,7 +146,7 @@ const AchievementsCard = () => {
             className="flex flex-shrink-0 flex-col justify-center items-center gap-[10px] p-4 rounded-lg"
           >
             <div
-              className="flex-shrink-0 z-10 flex justify-center items-center rounded-full w-[51.94px] h-[51.94px]"
+              className="flex-shrink-0 flex justify-center items-center rounded-full w-[51.94px] h-[51.94px]"
               style={{
                 backgroundColor: item.isCompleted ? "#24A5EE" : "#E4E4E4",
               }}
