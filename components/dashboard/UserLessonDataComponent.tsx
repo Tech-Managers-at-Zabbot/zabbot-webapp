@@ -1,8 +1,10 @@
+"use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { LinearProgress } from "@mui/material";
 import { TfiArrowCircleLeft } from "react-icons/tfi";
 import { TfiArrowCircleRight } from "react-icons/tfi";
+import { useRouter } from "next/navigation";
 
 export interface LessonProps {
   courseImage: string;
@@ -17,6 +19,9 @@ export interface LessonProps {
 export const LessonProgressCard: React.FC<LessonProps> = (
   data: LessonProps
 ) => {
+
+  const router = useRouter();
+
   return (
     <div
       className="bg-white flex relative gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0"
@@ -34,7 +39,9 @@ export const LessonProgressCard: React.FC<LessonProps> = (
         </div>
       </section>
 
-      <section className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <section className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      onClick={() => router.push("/lessons")}
+      >
         <div className="flex-shrink-0">
           <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
             <Image
@@ -86,6 +93,9 @@ export const LessonProgressCard: React.FC<LessonProps> = (
 };
 
 export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
+
+  const router = useRouter();
+  
   return (
     <div
       className="bg-white flex flex-col relative gap-[20px] w-[250px] sm:w-[278px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0"
@@ -103,7 +113,9 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
         </div>
       </section>
 
-      <section className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2">
+      <section className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
+      onClick={() => router.push("/lessons")}
+      >
         <div className="flex-shrink-0">
           <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
             <Image

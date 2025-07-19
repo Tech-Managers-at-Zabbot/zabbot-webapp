@@ -1,10 +1,18 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @next/next/no-img-element */
-import React from 'react';
+"use client";
+import LessonOneIntro from '@/components/lessons/LessonOneIntro';
+import LessonOneIntroTwo from '@/components/lessons/LessonOneIntro2';
+import LessonOneReady from '@/components/lessons/LessonOneReady';
+import React, { useState } from 'react';
 
 
+const LessonData = () => {
 
-const lessonData = () => {
+  const [step, setStep] = useState(1)
+
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
+  
   return (
     <div
       className="bg-[#fef7d0] min-h-screen w-full"
@@ -13,6 +21,18 @@ const lessonData = () => {
         <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-contain bg-center min-h-[100px]">
         </header>
         <section>
+
+          {step === 1 && (
+            < LessonOneIntro onClick={handleNextStep} />
+          )}
+
+          {step === 2 && (
+            <LessonOneIntroTwo onClick={handleNextStep} />
+          )}
+
+          {step === 3 && (
+            <LessonOneReady onClick={handleNextStep} />
+          )}
             
         </section>
        <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-contain bg-center min-h-[100px]">
@@ -22,4 +42,4 @@ const lessonData = () => {
 }
 
 
-export default lessonData;
+export default LessonData;

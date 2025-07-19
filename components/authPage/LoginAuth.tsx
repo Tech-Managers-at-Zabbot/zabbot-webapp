@@ -299,7 +299,7 @@ const LoginAuth: React.FC = () => {
               buttonDisabled
             }
             disabledColor={appColors.disabledButtonBlue}
-            backgroundColor={appColors.darkRoyalBlueForBtn}
+            background={appColors.darkRoyalBlueForBtn}
             width="100%"
             onClick={(e: any) => handleLogin(e)}
           >

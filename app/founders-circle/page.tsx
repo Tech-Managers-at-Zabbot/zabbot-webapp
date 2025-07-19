@@ -63,6 +63,7 @@ export default function WaitingListPage() {
                 disabled={false}
                 disabledColor={appColors.disabledButtonBlue}
                 backgroundColor={appColors.darkRoyalBlueForBtn}
+                background="#012657"
                 width="100%"
                 onClick={() => {
                   setIsSignupRedirectLoading(true);

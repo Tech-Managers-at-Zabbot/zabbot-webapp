@@ -1,11 +1,21 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import InAppButton from "@/components/InAppButton";
 import LanguageToggle from "@/components/languageToggle/LanguageToggle";
 import { FaArrowRight } from "react-icons/fa6";
 import { Clock, Volume2, CheckCircle, Headphones } from 'lucide-react';
+import { useRouter } from "next/navigation";
+import { CustomSpinner } from "@/components/CustomSpinner";
 
 const LessonDescriptionComponent = () => {
+
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+  const [startLoading, setStartLoading] = useState(false);
+
+  const router = useRouter();
+
   return (
     <div
       className="bg-[#fef7d0] min-h-screen w-full"
@@ -74,8 +84,14 @@ const LessonDescriptionComponent = () => {
                 background="transparent"
                 width="303px"
                 height="74px"
+                onClick={() => { setDashboardLoading(true); router.push("/user-dashboard") }}
+                disabled={startLoading || dashboardLoading}
               >
-                <div className="text-[#F86F1A]">Back to Dashboard</div>
+                {dashboardLoading ? (
+                  <CustomSpinner spinnerColor="#F86F1A"/>
+                ) : (
+                  <div className="text-[#F86F1A]">Back to Dashboard</div>
+                )}
               </InAppButton>
             </div>
             <div>
@@ -84,10 +100,16 @@ const LessonDescriptionComponent = () => {
                 background="linear-gradient(to right, #EF4642, #F87118)"
                 width="303px"
                 height="74px"
+                onClick={() => { setStartLoading(true); router.push("/lessons/lessonData") }}
+                disabled={startLoading || dashboardLoading}
               >
+                 {startLoading ? (
+                  <CustomSpinner spinnerColor="#F86F1A"/>
+                ) : (
                 <div className="flex items-center gap-2 justify-center">
                   Start Now <FaArrowRight color="#EBEBEB" />
                 </div>
+                )}
               </InAppButton>
             </div>
           </div>
@@ -100,6 +122,8 @@ const LessonDescriptionComponent = () => {
       background="linear-gradient(to right, #EF4642, #F87118)"
       width="200px"
       height="60px"
+      onClick={() => { setStartLoading(true); router.push("/lessons/lessonData") }}
+      disabled={startLoading || dashboardLoading}
     >
       <div className="flex items-center gap-2 justify-center text-white font-medium">
         SAY HELLO <FaArrowRight color="#FFFFFF" />

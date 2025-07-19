@@ -42,7 +42,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   fontFamily = "Lexend",
   backgroundColor = "#F9C10F",
   disabledColor = "#E0E1E6",
-  background = "#F9C10F",
+  background = "",
   onClick,
 }) => {
   return (
