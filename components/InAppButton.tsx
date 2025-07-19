@@ -21,6 +21,7 @@ export interface ButtonProps {
   border?: string;
   isShadowShow?: boolean;
   onClick?: (e: unknown) => void;
+  background?: string;
 }
 
 const InAppButton: React.FC<ButtonProps> = ({
@@ -41,6 +42,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   fontFamily = "Lexend",
   backgroundColor = "#F9C10F",
   disabledColor = "#E0E1E6",
+  background = "#F9C10F",
   onClick,
 }) => {
   return (
@@ -70,6 +72,7 @@ const InAppButton: React.FC<ButtonProps> = ({
         color,
         fontFamily,
         backgroundColor: !disabled ? backgroundColor : disabledColor,
+        background: !disabled ? background : disabledColor
       }}
       disabled={disabled}
       type={type}

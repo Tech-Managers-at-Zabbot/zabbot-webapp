@@ -7,7 +7,8 @@ import React, { useEffect, useState } from "react";
 
 const Layout = ({ children, showLogo = false }: { children: React.ReactNode, showLogo?: boolean }) => {
   const [timeSunMoonLink, setTimeSunMoonLink] = useState(
-    "/userDashboard/morning-sun.png"
+    // "/userDashboard/morning-sun.png" 
+    ""
   );
 
   useEffect(() => {
