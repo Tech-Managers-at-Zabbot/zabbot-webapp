@@ -75,63 +75,76 @@ const AllCourses = () => {
 
   return (
     <div
-      className="border shadow-sm border-[#EAECF0] gap-10 flex flex-col rounded-lg bg-white w-full"
-      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "24px" }}
+      className="border shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
+      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px" }}
     >
-      <header className="flex justify-between items-center flex-wrap">
-        <section className="min-w-0 flex-1 flex flex-col gap-2">
-          <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
+      {/* Header Section - Made fully responsive */}
+      <header className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
+        <section className="min-w-0 flex-1">
+          <h3 className="font-semibold text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]">
             Courses
           </h3>
-          <span className="font-semibold text-[13px] sm:text-[15px] leading-[100%] text-[#207EC5]">
+          <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1">
             Yorùbá courses learners love!
           </span>
         </section>
 
-        <section className="flex items-center gap-10 flex-shrink-0">
-          <div>
+        {/* Controls Section - Responsive layout */}
+        <section className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:gap-6 flex-shrink-0">
+          {/* Search Bar */}
+          <div className="w-full sm:w-auto sm:min-w-[200px]">
             <SearchBar icon={<IoSearchOutline size={20} />} />
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[#8E8E8E] font-medium text-[14px]leading-[100%]">
-              Add Filter
-            </span>
-            <span>
-              <MdOutlineFilterList
-                className="hover:cursor-pointer"
-                size={24}
-                color={"#000000"}
-              />
-            </span>
-          </div>
-          <div className="flex-shrink-0 items-center flex gap-2">
-            <span className="text-[#8E8E8E] font-medium text-[14px]leading-[100%]">
-              Sort by
-            </span>
-            <MainDropdown
-              options={dropdownOptions}
-              placeholder="Alphabetical"
-              color="#3E3E3E"
-              padding="8px 12px"
-              backgroundColor="#DCDEDD"
-              textHoverColor=""
-              fontWeight="500"
-              dropDownBackgroundColor="#8E8E8E"
-              isSetDropdown={true}
-              dropdownMaxWidth="200px"
-              dropdownMinWidth=""
-            />
+          
+          {/* Filter and Sort Controls */}
+          <div className="flex items-center justify-between sm:justify-start gap-4 lg:gap-6">
+            {/* Add Filter */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
+                Add Filter
+              </span>
+              <span>
+                <MdOutlineFilterList
+                  className="hover:cursor-pointer"
+                  size={20}
+                  color={"#000000"}
+                />
+              </span>
+            </div>
+            
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
+                Sort by
+              </span>
+              <div className="min-w-0">
+                <MainDropdown
+                  options={dropdownOptions}
+                  placeholder="Alphabetical"
+                  color="#3E3E3E"
+                  padding="6px 8px"
+                  backgroundColor="#DCDEDD"
+                  textHoverColor=""
+                  fontWeight="500"
+                  dropDownBackgroundColor="#8E8E8E"
+                  isSetDropdown={true}
+                  dropdownMaxWidth="180px"
+                  dropdownMinWidth="120px"
+                />
+              </div>
+            </div>
           </div>
         </section>
       </header>
 
-      <section>
-        <div className="mt-6 flex flex-wrap gap-4">
+      {/* Filter Tags Section - Responsive */}
+      <section className="w-full overflow-hidden">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {filterMenu.map((item, index) => (
             <div
               key={index}
               onClick={() => handleFilterClick(item.name)}
-              className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition-colors ${
+              className={`flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer transition-colors text-[12px] sm:text-[14px] whitespace-nowrap ${
                 selectedFilters.includes(item.name)
                   ? "bg-[#CF0A5C] text-white border-[#CF0A5C]"
                   : "border-[#F2F2F2] hover:bg-[#DCDEDD] bg-[#F2F2F2] text-[#8F8F8F]"
@@ -143,25 +156,31 @@ const AllCourses = () => {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-[15px]">
-        {currentPageData.map(
-          (lessonProgressData: LessonProps, index: number) => (
-            <div key={index} className="min-w-0">
-              <CoursesCard {...lessonProgressData} />
-            </div>
-          )
-        )}
+      {/* Courses Grid Section - Fully responsive grid */}
+      <section className="w-full min-w-0">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
+          {currentPageData.map(
+            (lessonProgressData: LessonProps, index: number) => (
+              <div key={index} className="min-w-0 w-full flex justify-center">
+                <div className="w-full max-w-[278px]">
+                  <CoursesCard {...lessonProgressData} />
+                </div>
+              </div>
+            )
+          )}
+        </div>
       </section>
 
       {/* Divider */}
-      <div className="border-t border-[#EAECF0]"></div>
+      <div className="border-t border-[#EAECF0] w-full"></div>
 
-      <section className="">
+      {/* Pagination Section */}
+      <section className="w-full overflow-x-auto">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
-          maxVisiblePages={5}
+          maxVisiblePages={3} // Reduced for mobile
         />
       </section>
     </div>

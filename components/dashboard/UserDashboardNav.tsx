@@ -167,7 +167,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
 
   return (
     <nav
-      className="z-50 flex justify-between items-center font-[700] text-sm leading-[100%] px-[5%] py-[16px] relative"
+      className="z-50 flex justify-between items-center font-[700] text-xs lg:text-xs xl:text-sm leading-[100%] px-[5%] py-[16px] relative"
       style={{ fontFamily: "Lexend", backgroundColor: backgroundColor }}
     >
       {/* Desktop Navigation */}
@@ -191,7 +191,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
             <nav
               className={`flex hover:cursor-pointer hover:text-[${
                 pathname === item.route ? "#162B6E" : "#FFE933"
-              }] rounded-4xl px-[16px] py-0 text-[${
+              }] rounded-4xl px-[16px] text-[${
                 pathname === item.route ? "#162B6E" : "white"
               }] justify-center items-center`}
               key={index}

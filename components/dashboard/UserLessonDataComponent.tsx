@@ -93,12 +93,11 @@ export const LessonProgressCard: React.FC<LessonProps> = (
 };
 
 export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
-
   const router = useRouter();
   
   return (
     <div
-      className="bg-white flex flex-col relative gap-[20px] w-[250px] sm:w-[278px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0"
+      className="bg-white flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
       style={{ fontFamily: "Lexend" }}
     >
       <section className="w-full">
@@ -147,11 +146,11 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
 
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
-          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000] line-clamp-2">
-            {data.courseTitle}
+          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000]">
+            {data.courseTitle.length > 15 ? data.courseTitle.slice(0, 15) + "..." : data.courseTitle}
           </h3>
-          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%] line-clamp-3">
-            {data.courseSummary}
+          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
+            {data.courseSummary.length > 50 ? data.courseSummary.slice(0, 50) + "..." : data.courseSummary}
           </div>
         </div>
 

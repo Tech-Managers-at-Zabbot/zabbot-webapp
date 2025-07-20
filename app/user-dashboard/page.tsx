@@ -80,6 +80,10 @@ const Dashboard = () => {
         className="min-h-screen py-0 my-0 pt-6 relative pb-50 px-[5%] overflow-x-hidden"
         style={{ fontFamily: "Lexend", background: backgroundColor }}
       >
+         <div
+              className="absolute bg-cover inset-0 top-0 h-40 bg-center"
+              style={{ backgroundImage: `url(${cloudsUrl})` }}
+            ></div>
         <div className="max-w-screen-2xl mx-auto">
           <section className="relative flex justify-between items-center mb-6">
              {/* <div
@@ -125,10 +129,10 @@ const Dashboard = () => {
 
           </section>
           <section className="relative">
-            <div
+            {/* <div
               className="absolute min-h-20 inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${cloudsUrl})` }}
-            ></div>
+            ></div> */}
             <div className="flex relative z-10 mt-4 sm:mt-6 md:mt-10 justify-between items-start">
 
               {/* Parrot - Hidden on small screens, shown on medium+ */}

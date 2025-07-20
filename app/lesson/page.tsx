@@ -20,173 +20,175 @@ const LessonDescriptionComponent = () => {
 
   return (
     <div
-      className="bg-[#fef7d0] min-h-screen w-full"
+      className="bg-[#fef7d0] w-full relative"
       style={{ fontFamily: "Lexend" }}
     >
-      <section className="flex px-[5%] justify-end mt-10 items-center">
+      {/* Language Toggle */}
+      <section className="flex px-[3%] md:px-[5%] justify-end pt-6 md:pt-10 items-center">
         <LanguageToggle backgroundColor="#162B6E" color="#FFFFFF" dropDownBgColor="#162B6E"/>
       </section>
 
-      <section className="px-[5%] mt-10 flex justify-between items-center">
-        {/* left side */}
-        <div >
-          <div className="text-[#B6822E] font-medium text-[20px] leading-[43px] bg-[#FBF1E1] p-[10px] max-w-[380px] rounded-2xl">
+      {/* Main Content */}
+      <section className="px-[3%] md:px-[5%] mt-6 md:mt-10 flex flex-col lg:flex-row justify-between items-center gap-8 lg:gap-4 pb-24 md:pb-32">
+        
+        {/* Left Side - Text Content */}
+        <div className="w-full lg:w-1/2 order-2 lg:order-1">
+          {/* Badge */}
+          <div className="text-[#B6822E] font-medium text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] bg-[#FBF1E1] p-3 md:p-[10px] max-w-full md:max-w-[380px] rounded-2xl text-center md:text-left">
             Your First Step Into Yoruba Culture
           </div>
-          <div className="text-[#242424] font-bold text-[60px] leading-[71px]">
+
+          {/* Main Heading */}
+          <div className="text-[#242424] font-bold text-[32px] sm:text-[40px] md:text-[48px] lg:text-[60px] leading-[1.2] mt-4 md:mt-6 text-center md:text-left">
             <h4>
-              Learn <span className="text-[#F76C1D]">Yorùbá</span>
+              Learn <span className="text-[#F76C1D]">Yorùbá</span>
             </h4>
             <h4>with Confidence</h4>
           </div>
-          <div className="text-[#667185] font-medium text-[20px] leading-[43px]">
+
+          {/* Description */}
+          <div className="text-[#667185] font-medium text-[16px] md:text-[18px] lg:text-[20px] leading-[1.6] mt-4 md:mt-6 text-center md:text-left">
             Ready to begin your Yoruba adventure? Each lesson is carefully
             crafted to build your skills progressively, from basic greetings to
             meaningful conversations.
           </div>
 
-          <div className="flex gap-2 text-[#333333]">
-            <div className="bg-[#FFFFFF] max-w-[284px] flex items-center gap-3 p-4 rounded-xl">
-              <div>
-                {/* <svg width="43" height="43" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" fill="#FBF1E1" />
-                  <polygon points="10,8 16,12 10,16" fill="#BB910B" />
-                </svg> */}
-                <div className="w-10 h-10 bg-[#FBF1E1] rounded-full flex items-center justify-center">
-                <LuAudioWaveform size={30}/>
-                </div>
+          {/* Feature Cards */}
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 text-[#333333] mt-6 md:mt-8">
+            {/* Native Audio Card */}
+            <div className="bg-[#FFFFFF] w-full sm:max-w-[284px] flex items-center gap-3 p-4 rounded-xl shadow-sm">
+              <div className="w-10 h-10 bg-[#FBF1E1] rounded-full flex items-center justify-center flex-shrink-0">
+                <LuAudioWaveform size={24} className="text-[#BB910B]"/>
               </div>
-              <div className="flex flex-col">
-                <span className="font-medium text-[20px]">Native Audio</span>
-                <span className="font-[400] text-[16px]">
+              <div className="flex flex-col min-w-0">
+                <span className="font-medium text-[18px] md:text-[20px] truncate">Native Audio</span>
+                <span className="font-[400] text-[14px] md:text-[16px] text-[#667185]">
                   Authentic pronunciation
                 </span>
               </div>
             </div>
-            <div className="bg-[#FFFFFF] max-w-[284px] flex items-center gap-3 p-4 rounded-xl">
-              <div>
-                {/* <svg width="43" height="43" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" fill="#E3EFFC" />
-                  <polygon points="10,8 16,12 10,16" fill="#007AB2" />
-                </svg> */}
-                 <div className="w-10 h-10 bg-[#E3EFFC] rounded-full flex items-center justify-center">
-                {/* <LuAudioWaveform size={30}/> */}
+
+            {/* Cultural Context Card */}
+            <div className="bg-[#FFFFFF] w-full sm:max-w-[284px] flex items-center gap-3 p-4 rounded-xl shadow-sm">
+              <div className="w-10 h-10 bg-[#E3EFFC] rounded-full flex items-center justify-center flex-shrink-0">
                 <TalkingDrumIcon />
-                </div>
               </div>
-              <div className="flex flex-col">
-                <span className="font-medium text-[20px]">
+              <div className="flex flex-col min-w-0">
+                <span className="font-medium text-[18px] md:text-[20px] truncate">
                   Cultural Context
                 </span>
-                <span className="font-[400] text-[16px]">
+                <span className="font-[400] text-[14px] md:text-[16px] text-[#667185]">
                   Language meets culture
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-2 mt-6">
-            <div>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-6 md:mt-8">
+            <div className="w-full ">
               <InAppButton
                 borderRadius="6px"
                 border="1px solid #F76E1B"
                 background="transparent"
-                width="303px"
-                height="74px"
+                width="100%"
+                height="64px"
                 onClick={() => { setDashboardLoading(true); router.push("/user-dashboard") }}
                 disabled={startLoading || dashboardLoading}
               >
                 {dashboardLoading ? (
                   <CustomSpinner spinnerColor="#F86F1A"/>
                 ) : (
-                  <div className="text-[#F86F1A]">Back to Dashboard</div>
+                  <div className="text-[#F86F1A] font-medium text-[16px] md:text-[18px]">Back to Dashboard</div>
                 )}
               </InAppButton>
             </div>
-            <div>
+            <div className="w-full ">
               <InAppButton
                 borderRadius="6px"
                 background="linear-gradient(to right, #EF4642, #F87118)"
-                width="303px"
-                height="74px"
+                width="100%"
+                height="64px"
                 onClick={() => { setStartLoading(true); router.push("/lesson/lessonData") }}
                 disabled={startLoading || dashboardLoading}
               >
                  {startLoading ? (
-                  <CustomSpinner spinnerColor="#F86F1A"/>
+                  <CustomSpinner spinnerColor="#FFFFFF"/>
                 ) : (
-                <div className="flex items-center gap-2 justify-center">
-                  Start Now <FaArrowRight color="#EBEBEB" />
+                <div className="flex items-center gap-2 justify-center font-medium text-[16px] md:text-[18px]">
+                  Start Now <FaArrowRight color="#EBEBEB" size={16} />
                 </div>
                 )}
               </InAppButton>
             </div>
           </div>
         </div>
-       {/* right side */}
-<div className="flex relative p-20 flex-col min-w-1/2 items-center">
-      <div className="mb-8 absolute top-10 rotate-4 z-10 flex justify-center items-center">
-    <InAppButton
-      borderRadius="6px"
-      background="linear-gradient(to right, #EF4642, #F87118)"
-      disabledColor="linear-gradient(to right, #EF4642, #F87118)"
-      width="200px"
-      height="60px"
-      disabled={true}
-    >
-      <div className="flex items-center gap-2 justify-center text-white font-medium">
-        SAY HELLO
-      </div>
-    </InAppButton>
-  </div>
-
-  {/* Tilted Lesson Card */}
-  <div 
-    className="bg-white rounded-2xl w-[70%] p-6 shadow-lg transform rotate-3"
-    style={{ transformOrigin: "center" }}
-  >
-    {/* Card Header with SAY HELLO button */}
-
-    {/* Image Container */}
-    <div className="relative mb-4 rounded-xl overflow-hidden">
-      <img 
-        src="/userDashboard/say-hello.svg" 
-        alt="Yoruba Culture" 
-        className="w-full h-[300px] object-fit object-top rounded-lg"
-      />
-    </div>
-
-    {/* Card Content */}
-    <div className="space-y-3">
-      <h3 className="text-[#333333] font-bold text-[24px]">Say Hello</h3>
-      <p className="text-[#666666] text-[14px]">
-        Let's learn how to say HELLO depending on the time of day
-      </p>
-      
-      {/* Duration and Stats */}
-      <div className="flex items-center justify-between">
-        <span className="text-[#999999] text-[12px]">10-15 minutes</span>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-4 bg-orange-400 rounded-full flex items-center justify-center">
-              <span className="text-white text-[10px] font-bold">⚡</span>
-            </div>
-            <span className="text-[#333333] text-[12px] font-medium">7</span>
+       
+        {/* Right Side - Lesson Card */}
+        <div className="w-full lg:w-1/2 order-1 lg:order-2 flex justify-center items-center relative p-4 md:p-8 lg:p-20">
+          {/* SAY HELLO Button - Floating */}
+          <div className="absolute top-2 md:top-8 lg:top-24 left-1/2 transform -translate-x-1/2 rotate-2 md:rotate-4 z-10">
+            <InAppButton
+              borderRadius="6px"
+              background="linear-gradient(to right, #EF4642, #F87118)"
+              disabledColor="linear-gradient(to right, #EF4642, #F87118)"
+              width="160px"
+              height="48px"
+              disabled={true}
+            >
+              <div className="flex items-center gap-2 justify-center text-white font-medium text-[14px] md:text-[16px]">
+                SAY HELLO
+              </div>
+            </InAppButton>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-4 bg-red-400 rounded-full flex items-center justify-center">
-              <span className="text-white text-[10px]">❤</span>
+
+          {/* Tilted Lesson Card */}
+          <div 
+            className="bg-white rounded-2xl w-full max-w-[400px] md:max-w-[500px] lg:w-[70%] p-4 md:p-6 shadow-lg transform rotate-1 md:rotate-2 lg:rotate-3 mt-8 md:mt-12"
+            style={{ transformOrigin: "center" }}
+          >
+            {/* Image Container */}
+            <div className="relative mb-4 rounded-xl overflow-hidden">
+              <img 
+                src="/userDashboard/say-hello.svg" 
+                alt="Yoruba Culture" 
+                className="w-full h-[200px] md:h-[250px] lg:h-[300px] object-cover object-top rounded-lg"
+              />
             </div>
-            <span className="text-[#333333] text-[12px] font-medium">5</span>
+
+            {/* Card Content */}
+            <div className="space-y-3">
+              <h3 className="text-[#333333] font-bold text-[20px] md:text-[22px] lg:text-[24px]">Say Hello</h3>
+              <p className="text-[#666666] text-[13px] md:text-[14px] leading-relaxed">
+                Let's learn how to say HELLO depending on the time of day
+              </p>
+              
+              {/* Duration and Stats */}
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-[#999999] text-[11px] md:text-[12px] font-medium">10-15 minutes</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    <div className="w-4 h-4 bg-orange-400 rounded-full flex items-center justify-center">
+                      <span className="text-white text-[10px] font-bold">⚡</span>
+                    </div>
+                    <span className="text-[#333333] text-[11px] md:text-[12px] font-medium">7</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-4 h-4 bg-red-400 rounded-full flex items-center justify-center">
+                      <span className="text-white text-[10px]">❤</span>
+                    </div>
+                    <span className="text-[#333333] text-[11px] md:text-[12px] font-medium">5</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
       </section>
-       <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-contain bg-center min-h-[100px]">
-       </footer>
+
+      {/* Footer */}
+      <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[80px] md:min-h-[100px]">
+      </footer>
     </div>
   );
 };

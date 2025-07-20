@@ -13,18 +13,18 @@ const LessonData = () => {
 
   return (
     <div
-      className="bg-[#fef7d0] min-h-screen w-full"
+      className="bg-[#fef7d0] relative min-h-screen w-full"
       style={{ fontFamily: "Lexend" }}
     >
-      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-contain bg-center min-h-[100px]"></header>
-      <section>
+      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-center bg-no-repeat min-h-[250px]"></header>
+      <section className="flex flex-col py-2">
         {step === 1 && <LessonOneIntro onClick={handleNextStep} />}
 
         {step === 2 && <LessonOneIntroTwo onClick={handleNextStep} />}
 
         {step === 3 && <LessonOneReady onClick={handleNextStep} />}
       </section>
-      <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-contain bg-center min-h-[100px]"></footer>
+      <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[100px]"></footer>
     </div>
   );
 };
