@@ -8,11 +8,11 @@ import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 const PopularCourses = () => {
   return (
     <div className="flex gap-[30px]">
-      <section>
+      <section className="flex-1 xl:max-w-[100%] w-full">
         <UserLessonDataComponent
           title={"Popular Courses"}
           subtitle={"Top Yorùbá courses learners love!"}
-          maxWidth="1510px"
+          maxWidth="100%"
         >
           <section className="flex gap-[15px] min-w-max">
             {lessonProgressData.map(

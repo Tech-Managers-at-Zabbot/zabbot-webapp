@@ -40,7 +40,7 @@ export const LessonProgressCard: React.FC<LessonProps> = (
       </section>
 
       <section className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-      onClick={() => router.push("/lessons")}
+      onClick={() => router.push("/lesson")}
       >
         <div className="flex-shrink-0">
           <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
@@ -114,7 +114,7 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
       </section>
 
       <section className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
-      onClick={() => router.push("/lessons")}
+      onClick={() => router.push("/lesson")}
       >
         <div className="flex-shrink-0">
           <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">

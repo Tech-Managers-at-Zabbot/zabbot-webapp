@@ -6,23 +6,23 @@ import { HiOutlineSpeakerWave } from "react-icons/hi2";
 const DailyGoals = () => {
   return (
     <div
-      className="bg-white w-full max-w-[250px] xl:max-w-none xl:w-full justify-between shadow-md flex rounded-lg border border-[#EAECF0] flex-col h-full p-[24px]"
+      className="bg-white justify-between shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
       style={{ fontFamily: "Lexend" }}
     >
       <section>
-        <h1 className="font-semibold text-[24px] leading-[100%] text-[#162B6E]">
+        <h1 className="font-semibold text-[18px] sm:text-[20px] md:text-[24px] leading-[100%] text-[#162B6E]">
           Daily Goal
         </h1>
-        <span className="font-semibold text-[15px] leading-[100%] text-[#207EC5]">
+        <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
           Keep building your Yorùbá fluency - let's complete today's journey!
         </span>
       </section>
-      <section className="flex h-full justify-center items-center">
+      <section className="flex h-full justify-center items-center my-2 sm:my-4">
         <Box position="relative" display="inline-flex">
           <CircularProgress
             variant="determinate"
             value={100}
-            size={144}
+            size={120}
             thickness={5}
             sx={{
               color: "#F2F4F7", // Background track color
@@ -31,7 +31,7 @@ const DailyGoals = () => {
           <CircularProgress
             variant="determinate"
             value={60}
-            size={144}
+            size={120}
             thickness={5}
             sx={{
               color: "#CDA674", // Progress bar color
@@ -70,23 +70,23 @@ const DailyGoals = () => {
 const WordForTheDay = () => {
   return (
     <div
-      className="bg-white w-full max-w-[250px] xl:max-w-none xl:w-full text-center justify-between items-center shadow-md flex rounded-lg border border-[#EAECF0] flex-col h-full p-[24px]"
+      className="bg-white justify-between items-center shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
       style={{ fontFamily: "Lexend" }}
     >
-      <div className="font-semibold text-[23px] leading-[100%] text-[#162B6E]">
+      <div className="font-semibold text-[18px] sm:text-[20px] md:text-[23px] leading-[100%] text-[#162B6E]">
         Today's Word
       </div>
-      <div className="font-bold text-[#000000CC] text-[36px] leading-[100%]">
+      <div className="font-bold text-[#000000CC] text-[28px] sm:text-[32px] md:text-[36px] leading-[100%] my-2 sm:my-4">
         àlàáfíà
       </div>
-      <div className="flex flex-col gap-[24px]">
-        <h3 className="font-[400] text-[16px] leading-[100%] text-[#666666]">
+      <div className="flex flex-col gap-[12px] sm:gap-[16px] md:gap-[20px] w-full">
+        <h3 className="font-[400] text-[14px] sm:text-[15px] md:text-[16px] leading-[120%] text-[#666666]">
           Mastering alphabet sounds builds your Yorùbá fluency and tone
           precision.
         </h3>
         <div className="flex hover:cursor-pointer justify-center items-center">
-          <div className="rounded-full p-[10px] border-[#CDA674] border">
-            <HiOutlineSpeakerWave size={40} color="#CDA674" />
+          <div className="rounded-full p-[8px] sm:p-[10px] border-[#CDA674] border">
+            <HiOutlineSpeakerWave size={32} color="#CDA674" />
           </div>
         </div>
       </div>

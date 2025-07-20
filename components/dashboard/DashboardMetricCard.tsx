@@ -1,6 +1,6 @@
 import React from 'react';
 import { MiniGraph } from './MiniGraph';
-import { SlOptionsVertical } from "react-icons/sl";
+// import { SlOptionsVertical } from "react-icons/sl";
 
 export interface GraphDataPoint {
   x: number;
@@ -22,14 +22,14 @@ interface DashboardMetricCardProps {
 
 export const DashboardMetricCard: React.FC<DashboardMetricCardProps> = ({ data }) => {
   return (
-    <div className="bg-white border border-gray-200 flex flex-col gap-[24px] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+    <div className="bg-white w-full border border-gray-200 flex flex-col gap-[24px] rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
     style={{fontFamily: "Lexend"}}
     >
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-start items-start mb-4">
         <h3 className="text-2xl leading-[100%] font-semibold text-[#162B6E]">{data.title}</h3>
-        <div className="text-gray-400">
+        {/* <div className="text-gray-400">
          <SlOptionsVertical size={20}/>
-        </div>
+        </div> */}
       </div>
       
       <div className='flex justify-between'>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { HiMenuAlt3 } from "react-icons/hi";
 
-const SettingsBreadcrumb = () => {
+const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
     const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
   const dropdownOptions = [
     {
@@ -27,34 +27,31 @@ const SettingsBreadcrumb = () => {
     },
   ];
   return (
-    <div
-      className="flex p-0 z-20"
-      // style={{ position: "relative", zIndex: 1000 }}
-    >
+    <div className="flex p-0 z-20 relative">
       <HiMenuAlt3
-        color="#737477"
+        color={isDark ? "#FFFAEB" : "#737477"}
         className="hover:cursor-pointer"
-        size={35}
+        size={window.innerWidth < 640 ? 25 : window.innerWidth < 768 ? 30 : 35}
         onClick={() => setIsBreadcrumbOpen(!isBreadcrumbOpen)}
       />
       {isBreadcrumbOpen && (
         <div
-          className="absolute right-0 mt-6 bg-white shadow-lg rounded-l-[18px] rounded-br-[18px] rounded-tr-lg"
+          className="absolute right-0 top-8 sm:top-10 md:top-12 bg-white shadow-lg rounded-l-[18px] rounded-br-[18px] rounded-tr-lg min-w-[160px] sm:min-w-[180px]"
           style={{ zIndex: 1000, fontFamily: "Lexend" }}
         >
-          <ul className="p-2 flex flex-col gap-2">
+          <ul className="p-2 flex flex-col gap-1 sm:gap-2">
             {dropdownOptions.map((option, index) => (
               <li
                 key={index}
-                className="flex items-center gap-2 font-medium leading-[145%] p-2 hover:bg-gray-100 cursor-pointer"
+                className="flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 hover:bg-gray-100 cursor-pointer rounded"
               >
                 <Image
                   src={option.icon}
                   alt={option.name}
-                  width={25}
-                  height={25}
+                  width={window.innerWidth < 640 ? 20 : 25}
+                  height={window.innerWidth < 640 ? 20 : 25}
                 />
-                <span className="text-[16px] font-medium text-[#4C4F55] leading-[145%]">
+                <span className="text-[14px] sm:text-[16px] font-medium text-[#4C4F55] leading-[145%]">
                   {option.name}
                 </span>
               </li>

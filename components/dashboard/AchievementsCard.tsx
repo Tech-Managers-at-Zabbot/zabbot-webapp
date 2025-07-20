@@ -3,32 +3,69 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { ScrollArrow } from "../ScrollArrow";
+// import { PiFootprints } from "react-icons/pi";
+// import { ImFire } from "react-icons/im";
+// import { ImCalendar } from "react-icons/im";
+// import { LiaFlagCheckeredSolid } from "react-icons/lia";
+// import { PiMegaphoneBold } from "react-icons/pi";
+// import { IoMusicalNotes } from "react-icons/io5";
+// import { GiBookmarklet } from "react-icons/gi";
+// import { GiBrain } from "react-icons/gi";
+// import { MdOutlineElectricBolt } from "react-icons/md";
+// import { GiBroadsword } from "react-icons/gi";
+// import { GiMicrophone } from "react-icons/gi";
 
 const AchievementsCard = () => {
-  const achievements = [
-    { name: "7-Day Streak", isCompleted: true },
-    { name: "14-Day Streak", isCompleted: true },
-    { name: "30-Day Streak", isCompleted: false },
-    { name: "Vocab Master", isCompleted: false },
-    { name: "Grammar Pro", isCompleted: false },
-    { name: "Tonal Hero", isCompleted: false },
-    { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
-    { name: "Tonal Hero", isCompleted: false },
-    { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
-    { name: "Tonal Hero", isCompleted: false },
-    { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
-    { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
-    { name: "Tonal Hero", isCompleted: false },
-    { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
+  // const achievements = [
+  //   { name: "First Steps", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "7-Day Streak", isCompleted: true, icon: <ImFire /> },
+  //   { name: "14-Day Streak", isCompleted: true, icon: <ImCalendar /> },
+  //   { name: "30-Day Streak", isCompleted: false, icon: <LiaFlagCheckeredSolid /> },
+  //   { name: "Social Scholar", isCompleted: false, icon: <PiMegaphoneBold /> },
+  //   { name: "Tone Tamer", isCompleted: false, icon: <IoMusicalNotes /> },
+  //   { name: "Vocab Master", isCompleted: true, icon: <GiBookmarklet /> },
+  //   { name: "Grammar Pro", isCompleted: false, icon: <GiBrain /> },
+  //   { name: "Daily Spark", isCompleted: true, icon: <MdOutlineElectricBolt /> },
+  //   { name: "Word Warrior", isCompleted: true, icon: <GiBroadsword /> },
+  //   { name: "Tone Boss", isCompleted: false, icon: <GiMicrophone /> },
+  //   { name: "Culture Keeper", isCompleted: true, icon: "🪘" },
+  //   { name: "Chatterbox", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "Audio Ace", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "Story Seeker", isCompleted: false, icon: <PiFootprints /> },
+  //   { name: "Phrase Crafter", isCompleted: false, icon: <PiFootprints /> },
+  //   { name: "Sound Sensei", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "Flashcard Fan", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "Quiz King/Queen", isCompleted: false, icon: <PiFootprints /> },
+  //   { name: "Consistency Champ", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "Voice Verified", isCompleted: true, icon: <PiFootprints /> },
+  //   { name: "Language Guardian", isCompleted: false, icon: <PiFootprints /> },
+  //   { name: "Zabbot Star", isCompleted: false, icon: <PiFootprints /> },
+  // ];
+
+    const achievements = [
+    { name: "First Steps", isCompleted: true, icon: "👣" },
+    { name: "7-Day Streak", isCompleted: true, icon: "🔥" },
+    { name: "14-Day Streak", isCompleted: true, icon: "📆" },
+    { name: "30-Day Streak", isCompleted: false, icon: "🏁" },
+    { name: "Social Scholar", isCompleted: false, icon: "📣" },
+    { name: "Tone Tamer", isCompleted: false, icon: "🎵" },
+    { name: "Vocab Master", isCompleted: true, icon: "📖"},
+    { name: "Grammar Pro", isCompleted: false, icon: "🧠" },
+    { name: "Daily Spark", isCompleted: true, icon: "⚡" },
+    { name: "Word Warrior", isCompleted: true, icon: "🗡️" },
+    { name: "Tone Boss", isCompleted: false, icon: "🎤" },
+    { name: "Culture Keeper", isCompleted: true, icon: "🪘" },
+    { name: "Chatterbox", isCompleted: true, icon: "💬" },
+    { name: "Audio Ace", isCompleted: true, icon: "🎧" },
+    { name: "Story Seeker", isCompleted: false, icon: "📚" },
+    { name: "Phrase Crafter", isCompleted: false, icon: "✍️" },
+    { name: "Sound Sensei", isCompleted: true, icon: "🧘" },
+    { name: "Flashcard Fan", isCompleted: true, icon: "🃏" },
+    { name: "Quiz King/Queen", isCompleted: false, icon: "👑" },
+    { name: "Consistency Champ", isCompleted: true, icon: "⏰" },
+    { name: "Voice Verified", isCompleted: true, icon: "🗣️" },
+    { name: "Language Guardian", isCompleted: false, icon: "🤝" },
+    { name: "Zabbot Star", isCompleted: false, icon: "🌟" },
   ];
 
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -151,6 +188,11 @@ const AchievementsCard = () => {
                 backgroundColor: item.isCompleted ? "#24A5EE" : "#E4E4E4",
               }}
             >
+              {item.icon ? (
+                <div className="text-white text-[24px]">
+                  {item.icon}
+                </div>
+              ) : (
               <div className="relative w-[24px] h-[24px]">
                 <Image
                   src="/userDashboard/dashboard-streak-badge.svg"
@@ -160,6 +202,7 @@ const AchievementsCard = () => {
                   className="object-contain"
                 />
               </div>
+              )}
             </div>
             <div
               className="text-[14px] text-[#333333] font-[400] leading-[145%] whitespace-nowrap text-center"

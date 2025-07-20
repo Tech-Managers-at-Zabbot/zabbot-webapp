@@ -8,6 +8,8 @@ import { FaArrowRight } from "react-icons/fa6";
 import { Clock, Volume2, CheckCircle, Headphones } from 'lucide-react';
 import { useRouter } from "next/navigation";
 import { CustomSpinner } from "@/components/CustomSpinner";
+import { LuAudioWaveform } from "react-icons/lu";
+import { TalkingDrumIcon } from "@/constants/SvgPaths";
 
 const LessonDescriptionComponent = () => {
 
@@ -46,10 +48,13 @@ const LessonDescriptionComponent = () => {
           <div className="flex gap-2 text-[#333333]">
             <div className="bg-[#FFFFFF] max-w-[284px] flex items-center gap-3 p-4 rounded-xl">
               <div>
-                <svg width="43" height="43" viewBox="0 0 24 24" fill="none">
+                {/* <svg width="43" height="43" viewBox="0 0 24 24" fill="none">
                   <circle cx="12" cy="12" r="10" fill="#FBF1E1" />
                   <polygon points="10,8 16,12 10,16" fill="#BB910B" />
-                </svg>
+                </svg> */}
+                <div className="w-10 h-10 bg-[#FBF1E1] rounded-full flex items-center justify-center">
+                <LuAudioWaveform size={30}/>
+                </div>
               </div>
               <div className="flex flex-col">
                 <span className="font-medium text-[20px]">Native Audio</span>
@@ -60,10 +65,14 @@ const LessonDescriptionComponent = () => {
             </div>
             <div className="bg-[#FFFFFF] max-w-[284px] flex items-center gap-3 p-4 rounded-xl">
               <div>
-                <svg width="43" height="43" viewBox="0 0 24 24" fill="none">
+                {/* <svg width="43" height="43" viewBox="0 0 24 24" fill="none">
                   <circle cx="12" cy="12" r="10" fill="#E3EFFC" />
                   <polygon points="10,8 16,12 10,16" fill="#007AB2" />
-                </svg>
+                </svg> */}
+                 <div className="w-10 h-10 bg-[#E3EFFC] rounded-full flex items-center justify-center">
+                {/* <LuAudioWaveform size={30}/> */}
+                <TalkingDrumIcon />
+                </div>
               </div>
               <div className="flex flex-col">
                 <span className="font-medium text-[20px]">
@@ -100,7 +109,7 @@ const LessonDescriptionComponent = () => {
                 background="linear-gradient(to right, #EF4642, #F87118)"
                 width="303px"
                 height="74px"
-                onClick={() => { setStartLoading(true); router.push("/lessons/lessonData") }}
+                onClick={() => { setStartLoading(true); router.push("/lesson/lessonData") }}
                 disabled={startLoading || dashboardLoading}
               >
                  {startLoading ? (
@@ -120,13 +129,13 @@ const LessonDescriptionComponent = () => {
     <InAppButton
       borderRadius="6px"
       background="linear-gradient(to right, #EF4642, #F87118)"
+      disabledColor="linear-gradient(to right, #EF4642, #F87118)"
       width="200px"
       height="60px"
-      onClick={() => { setStartLoading(true); router.push("/lessons/lessonData") }}
-      disabled={startLoading || dashboardLoading}
+      disabled={true}
     >
       <div className="flex items-center gap-2 justify-center text-white font-medium">
-        SAY HELLO <FaArrowRight color="#FFFFFF" />
+        SAY HELLO
       </div>
     </InAppButton>
   </div>
@@ -143,7 +152,7 @@ const LessonDescriptionComponent = () => {
       <img 
         src="/userDashboard/say-hello.svg" 
         alt="Yoruba Culture" 
-        className="w-full h-[300px] object-fit rounded-lg"
+        className="w-full h-[300px] object-fit object-top rounded-lg"
       />
     </div>
 

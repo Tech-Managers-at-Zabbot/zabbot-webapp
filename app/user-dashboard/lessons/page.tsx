@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import UserLessons from "@/components/dashboard/UserLessons";
@@ -7,6 +8,40 @@ import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import AllCourses from "@/components/dashboard/Lessons/AllCourses";
 
 const Lessons = () => {
+  
+    const [
+      greeting, 
+      setGreeting
+    ] = useState("Kàbọ̀");
+  
+    const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
+  
+    const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/clouds.svg");
+  
+    const [isDark, setIsDark] = useState(false);
+  
+    const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
+  
+    useEffect(() => {
+      const currentTime = new Date();
+      const hours = currentTime.getHours();
+  
+      if (hours >= 6 && hours < 12) {
+        // Morning: 6 AM to 12 PM
+        setGreeting("Káàrọ̀");
+      } else if (hours >= 12 && hours < 18) {
+        // Afternoon: 12 PM to 6 PM
+        setGreeting("Káàsán");
+      } else {
+        // Night: 6 PM to 6 AM
+        setGreeting("Káalẹ́");
+        setBackgroundColor("#012657");
+        setCloudsUrl("/userDashboard/dark-clouds.svg");
+        setIsDark(true);
+        setLogoUrl("/general/zabbot-logo-white.svg");
+      }
+    }, []);
+    
   return (
     <div className="">
       <Head>
@@ -18,12 +53,12 @@ const Lessons = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div
-        className="min-h-screen relative pb-50 bg-[#dff9fb]  px-[5%] overflow-x-hidden"
-        style={{ fontFamily: "Lexend", color: "#162B6E" }}
+        className="min-h-screen relative pb-50 px-[5%] overflow-x-hidden"
+        style={{ fontFamily: "Lexend", color: "#162B6E", background: backgroundColor }}
       >
         <div className="max-w-screen-2xl">
           <div className="w-full">
-            <div className="flex absolute top-0 right-[5%] items-center z-10 gap-15 flex-shrink-0">
+            <div className="flex absolute top-0 right-[5%] items-center z-10 gap-20 flex-shrink-0">
               <div className="w-[70px] mt-1 flex">
                 <div className="h-[80px]">
                   <Image
@@ -37,12 +72,14 @@ const Lessons = () => {
                 </div>
               </div>
               <div className="">
-                <SettingsBreadcrumb />
+                <SettingsBreadcrumb isDark={isDark} />
               </div>
             </div>
           </div>
           <header className="relative">
-            <div className="absolute min-h-20 inset-0 bg-[url('/userDashboard/clouds.svg')] bg-cover bg-center"></div>
+            <div className="absolute min-h-20 inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${cloudsUrl})` }}
+            ></div>
             <div className="flex relative z-10 mt-10 justify-between text-[24px] font-semibold leading-[100%] text-[#162B6E]">
               <div className="flex-shrink-0">
                 {/* <div className="relative w-[156px] h-[46.91px]">
@@ -54,7 +91,7 @@ const Lessons = () => {
                     className="object-contain"
                   />
                 </div> */}
-                <span>Welcome! Start Learning </span>
+                <span style={{color: isDark ? "#D0F7F6" : "#202124"}}>Welcome! Start Learning </span>
               </div>
             </div>
           </header>

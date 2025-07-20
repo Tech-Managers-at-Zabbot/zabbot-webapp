@@ -56,7 +56,6 @@ const MainDropdown: React.FC<MainDropdownProps> = ({
     setIsOpen(false);
   };
 
-  // Display text: if isSetDropdown is true and an option is selected, show the selected option, otherwise show placeholder
   const displayText = isSetDropdown && selectedOption ? selectedOption : placeholder;
 
   return (
@@ -81,11 +80,14 @@ const MainDropdown: React.FC<MainDropdownProps> = ({
           {icon && <span className="">{icon}</span>}
           <span className={mobile ? "text-sm" : ""}>{displayText}</span>
         </div>
+
+        <div className="px-2 flex justify-center items-center">
         {isOpen ? (
-          <FaAngleUp className="ml-2" />
+          <FaAngleUp className="" />
         ) : (
-          <FaAngleDown className="ml-2" />
+          <FaAngleDown className="" />
         )}
+        </div>
       </button>
       {isOpen && (
         <div

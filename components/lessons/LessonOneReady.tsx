@@ -18,22 +18,22 @@ const LessonOneReady = ({ onClick }: { onClick: () => void }) => {
       style={{ fontFamily: "Lexend" }}
       className="bg-[#fef7d0] min-h-screen w-full flex flex-col items-center justify-center gap-16"
     >
-      <div className="flex items-center justify-center w-full">
-        {/* <img
-          src="/general/zabbot-mascot-left.svg"
+      <div className="flex items-center justify-between w-full">
+        <img
+          src="/general/confetti.png"
           alt="Lesson One Intro"
-          className="w-[400px] h-[400px] object-contain"
-        /> */}
+          className="w-[200px] h-[400px] object-contain"
+        />
         <img
           src="/general/grandma-adorned-owl.png"
           alt="Lesson One Intro"
           className="w-[280px] h-[289px] object-contain"
         />
-        {/* <img
-          src="/general/confertti1.png"
+        <img
+          src="/general/confetti.png"
           alt="Lesson One Intro"
-          className="w-[400px] h-[400px] object-contain"
-        /> */}
+          className="w-[200px] h-[400px] object-contain"
+        />
       </div>
 
       <div className="text-center font-[400] text-[24px] leading-[145%] text-[#777980]">

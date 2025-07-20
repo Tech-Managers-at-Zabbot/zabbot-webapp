@@ -8,8 +8,8 @@ import { DailyGoals, WordForTheDay } from "./UserGoals";
 
 const ProgressSection = () => {
   return (
-    <div className="flex flex-col xl:flex-row gap-[30px] w-full">
-      <section className="flex-1 xl:max-w-[56.5%] w-full">
+    <div className="flex flex-col xl:flex-row gap-[20px] w-full">
+      <section className="flex-1 xl:w-[58%] w-full">
         <UserLessonDataComponent
           title={"Journey into Yorùbá language & life."}
           subtitle={"You're 4 lessons away from the finish line!"}
@@ -27,12 +27,12 @@ const ProgressSection = () => {
         </UserLessonDataComponent>
       </section>
       
-      <section className="flex-shrink-0 xl:w-auto w-full">
-        <div className="flex flex-col sm:flex-row gap-[30px] xl:flex-row w-full">
-          <div className="flex-1 xl:flex-none xl:w-[300px]">
+      <section className="flex-shrink-0 xl:w-[40%] w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+          <div className="h-full">
             <DailyGoals />
           </div>
-          <div className="flex-1 xl:flex-none xl:w-[300px]">
+          <div className="h-full">
             <WordForTheDay />
           </div>
         </div>

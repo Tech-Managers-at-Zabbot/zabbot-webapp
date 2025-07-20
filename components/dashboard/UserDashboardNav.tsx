@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import MainDropdown from "../MainDropdown";
 import LanguageToggle from "../languageToggle/LanguageToggle";
 
-const UserDashboardNavbar = ({showLogo=false}) => {
+const UserDashboardNavbar = ({ showLogo = false }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -43,6 +43,63 @@ const UserDashboardNavbar = ({showLogo=false}) => {
     },
   ];
 
+  const userMobileDashboardDetails = [
+    {
+      name: "Home",
+      route: "/user-dashboard",
+      iconPath: "/userDashboard/isHomeInactive.svg",
+      isActiveIconPath: "/userDashboard/isHomeActive.svg",
+    },
+    {
+      name: "Lessons",
+      route: "/user-dashboard/lessons",
+      iconPath: "/userDashboard/isLessons.svg",
+      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+    },
+    {
+      name: "Achievements",
+      route: "#",
+      iconPath: "/userDashboard/isAchievements.svg",
+      isActiveIconPath: "#",
+    },
+    {
+      name: "Marketplace",
+      route: "#",
+      iconPath: "/userDashboard/isMarketplace.svg",
+      isActiveIconPath: "#",
+    },
+    {
+      name: "Billing",
+      route: "#",
+      iconPath: "/userDashboard/isBilling.svg",
+      isActiveIconPath: "#",
+    },
+    {
+      name: "Settings",
+      route: "#",
+      iconPath: "/userDashboard/settings.svg",
+      isActiveIconPath: "#",
+    },
+    {
+      name: "Profile",
+      route: "#",
+      iconPath: "/userDashboard/profile.svg",
+      isActiveIconPath: "#",
+    },
+    {
+      name: "Notifications",
+      route: "#",
+      iconPath: "/userDashboard/notifications.svg",
+      isActiveIconPath: "#",
+    },
+    {
+      name: "Logout",
+      route: "#",
+      iconPath: "/userDashboard/logout.svg",
+      isActiveIconPath: "#",
+    },
+  ];
+
   const dropdownOptions = [
     {
       name: "Chat with Ọ̀rẹ́",
@@ -61,40 +118,75 @@ const UserDashboardNavbar = ({showLogo=false}) => {
     },
   ];
 
-  const getCurrentPageName = () => {
-    const currentItem = userDashboardDetails.find(
-      (item) => item.route === pathname
-    );
-    return currentItem ? currentItem.name : "Menu";
-  };
+  // const getCurrentPageName = () => {
+  //   const currentItem = userDashboardDetails.find(
+  //     (item) => item.route === pathname
+  //   );
+  //   return currentItem ? currentItem.name : "Menu";
+  // };
 
   const handleMenuItemClick = (route: string) => {
     router.push(route);
     setIsMobileMenuOpen(false);
   };
 
+  const [backgroundColor, setBackgroundColor] = useState("#162B6E");
+
+  useEffect(() => {
+    const currentTime = new Date();
+    const hours = currentTime.getHours();
+
+    // if (hours >= 6 && hours < 12) {
+    //   // Morning: 6 AM to 12 PM
+    //   setGreeting("Káàrọ̀");
+    // } else if (hours >= 12 && hours < 18) {
+    //   // Afternoon: 12 PM to 6 PM
+    //   setGreeting("Káàsán");
+    // } else {
+    //   // Night: 6 PM to 6 AM
+    //   setGreeting("Káalẹ́");
+
+    if (hours >= 18 || hours < 6) {
+      // Night: 6 PM to 6 AM
+      setBackgroundColor("#012657");
+    }
+  }, []);
+
+  useEffect(() => {
+  if (isMobileMenuOpen) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [isMobileMenuOpen]);
+
+
   return (
     <nav
-      className="bg-[#162B6E] z-50 flex justify-between items-center font-[700] text-sm leading-[100%] px-[5%] py-[16px] relative"
-      style={{ fontFamily: "Lexend" }}
+      className="z-50 flex justify-between items-center font-[700] text-sm leading-[100%] px-[5%] py-[16px] relative"
+      style={{ fontFamily: "Lexend", backgroundColor: backgroundColor }}
     >
       {/* Desktop Navigation */}
-      <section className="hidden lg:flex gap-[60px]">
+      <section className="hidden lg:flex gap-[20px] xl:gap-[60px]">
         {showLogo && (
-        <div className="flex-shrink-0">
-          <div className="relative w-[156px] h-[46.91px]">
-            <Image
-              src="/general/zabbot-logo-white.svg"
-              alt="Zabbot blue Logo"
-              fill
-              priority
-              className="object-contain"
-            />
+          <div className="flex-shrink-0">
+            <div className="relative w-[156px] h-[46.91px]">
+              <Image
+                src="/general/zabbot-logo-white.svg"
+                alt="Zabbot blue Logo"
+                fill
+                priority
+                className="object-contain"
+              />
+            </div>
           </div>
-        </div>
         )}
 
-        <div className="flex gap-[60px]">
+        <div className="flex gap-x-[32px] gap-y-[16px] xl:gap-x-[40px] xl:gap-y-0">
           {userDashboardDetails.map((item, index) => (
             <nav
               className={`flex hover:cursor-pointer hover:text-[${
@@ -156,8 +248,8 @@ const UserDashboardNavbar = ({showLogo=false}) => {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-            <span>{getCurrentPageName()}</span>
-            <svg
+            {/* <span>{getCurrentPageName()}</span> */}
+            {/* <svg
               className={`w-4 h-4 transition-transform ${
                 isMobileMenuOpen ? "rotate-180" : ""
               }`}
@@ -171,21 +263,21 @@ const UserDashboardNavbar = ({showLogo=false}) => {
                 strokeWidth={2}
                 d="M19 9l-7 7-7-7"
               />
-            </svg>
+            </svg> */}
           </button>
 
           {/* Mobile Dropdown Menu */}
           {isMobileMenuOpen && (
-            <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border z-50">
+            <div className="absolute top-full left-0 mt-2 w-64 max-h-[80vh] overflow-y-auto bg-[#162B6E] rounded-lg shadow-lg border z-50">
               <div className="py-2">
-                {userDashboardDetails.map((item, index) => (
+                {userMobileDashboardDetails.map((item, index) => (
                   <button
                     key={index}
                     onClick={() => handleMenuItemClick(item.route)}
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 transition-colors ${
                       pathname === item.route
                         ? "bg-[#FFE933] text-[#162B6E]"
-                        : "text-gray-700"
+                        : "text-[#FFFFFF]"
                     }`}
                   >
                     <Image
@@ -204,7 +296,7 @@ const UserDashboardNavbar = ({showLogo=false}) => {
 
                 {/* Premium Section in Mobile */}
                 <div className="border-t border-gray-200 mt-2 pt-2">
-                  <div className="px-4 py-2 text-xs text-gray-500 uppercase tracking-wide">
+                  <div className="px-4 py-2 text-xs text-gray-300 uppercase tracking-wide">
                     Premium Features
                   </div>
                   {dropdownOptions.map((option, index) => (
@@ -214,7 +306,7 @@ const UserDashboardNavbar = ({showLogo=false}) => {
                         // Handle premium option click
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 transition-colors text-gray-700"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 transition-colors text-[#FFFFFF]"
                     >
                       <Image
                         src={option.icon}
@@ -233,7 +325,7 @@ const UserDashboardNavbar = ({showLogo=false}) => {
       </section>
 
       {/* Language Toggle - Always visible */}
-      <section className="flex items-center">
+      <section className="flex items-end">
         <LanguageToggle
           backgroundColor="#162B6E"
           color="#FFFFFF"
@@ -245,7 +337,7 @@ const UserDashboardNavbar = ({showLogo=false}) => {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-25 z-40"
+          className="lg:hidden fixed inset-0 bg-black/50 bg-opacity-50 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

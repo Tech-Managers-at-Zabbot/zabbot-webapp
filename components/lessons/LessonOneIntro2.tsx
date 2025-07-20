@@ -17,27 +17,25 @@ const LessonOneIntroTwo = ({ onClick }: { onClick: () => void }) => {
   return (
     <div
       style={{ fontFamily: "Lexend" }}
-      className="bg-[#fef7d0] min-h-screen w-full flex flex-col items-center justify-center gap-10"
+      className="min-h-screen relative w-full flex flex-col items-center justify-center gap-10"
     >
       <div>
         <img
           src="/userDashboard/say-hello.svg"
           alt="Lesson One Intro"
-          className="w-[450px] h-[400px] object-cover rounded-lg"
+          className="w-[450px] h-[300px] mt-10 object-cover object-top rounded-lg"
         />
       </div>
 
-      <div className="relative">
-        <div className="absolute top-10 right-10">
-          <img
-            src="/general/grand-ma-owl.png"
-            alt="Zabbot Grand Ma Mascot Owl"
-            className="w-[152px] h-[162px] object-cover rounded-lg"
-          />
-        </div>
-      </div>
+        <div className="absolute inset top-90 flex items-center justify-center pointer-events-none">
+  <img
+    src="/general/grand-ma-owl.png"
+    alt="Zabbot Grand Ma Mascot Owl"
+    className="w-[152px] h-[162px] object-cover rounded-lg"
+  />
+</div>
 
-      <div className="text-center flex flex-col items-center gap-7">
+      <div className="text-center mt-20 flex flex-col items-center gap-7">
         <div className="font-bold text-[60px] leading-[47px] text-[#F15B29]">
           SAY HELLO
         </div>

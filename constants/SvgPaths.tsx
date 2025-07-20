@@ -71,3 +71,121 @@ export const GoogleIcon = () => (
     />
   </svg>
 );
+
+export const TalkingDrumIcon = () => (
+<svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg" transform="rotate(45)" width="100%" height="100%">
+  <defs>
+    {/* <!-- Gradients for depth and shading --> */}
+    <radialGradient id="drumBodyGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#8B4513"/>
+      <stop offset="50%" stop-color="#654321"/>
+      <stop offset="100%" stop-color="#4A2C17"/>
+    </radialGradient>
+    
+    <radialGradient id="drumHeadGradient" cx="0.3" cy="0.3">
+      <stop offset="0%" stop-color="#F4E4BC"/>
+      <stop offset="70%" stop-color="#D2B48C"/>
+      <stop offset="100%" stop-color="#A0845C"/>
+    </radialGradient>
+    
+    <linearGradient id="ropeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B7355"/>
+      <stop offset="50%" stop-color="#6B5B47"/>
+      <stop offset="100%" stop-color="#4A3728"/>
+    </linearGradient>
+    
+    {/* <!-- Pattern for traditional decorations --> */}
+    <pattern id="tribalPattern" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="#654321"/>
+      <circle cx="10" cy="10" r="3" fill="#8B4513"/>
+      <path d="M5,5 L15,15 M15,5 L5,15" stroke="#4A2C17" stroke-width="1"/>
+    </pattern>
+  </defs>
+  
+  {/* <!-- Shadow --> */}
+  <ellipse cx="200" cy="580" rx="80" ry="15" fill="#000" opacity="0.2"/>
+  
+  {/* <!-- Main drum body (hourglass shape) --> */}
+  <path d="M120 150 
+           Q120 120, 150 120
+           L250 120
+           Q280 120, 280 150
+           L280 200
+           Q280 280, 200 300
+           Q120 280, 120 200
+           Z" 
+        fill="url(#drumBodyGradient)" 
+        stroke="#4A2C17" 
+        stroke-width="2"/>
+  
+  <path d="M120 400
+           Q120 320, 200 300
+           Q280 320, 280 400
+           L280 450
+           Q280 480, 250 480
+           L150 480
+           Q120 480, 120 450
+           Z" 
+        fill="url(#drumBodyGradient)" 
+        stroke="#4A2C17" 
+        stroke-width="2"/>
+  
+  {/* <!-- Traditional carved patterns on drum body --> */}
+  <rect x="125" y="180" width="150" height="15" fill="url(#tribalPattern)" opacity="0.6"/>
+  <rect x="125" y="360" width="150" height="15" fill="url(#tribalPattern)" opacity="0.6"/>
+  
+  {/* <!-- Geometric patterns --> */}
+  <g stroke="#4A2C17" stroke-width="1.5" fill="none" opacity="0.7">
+    <path d="M140 220 L180 240 L220 220 L260 240"/>
+    <path d="M140 340 L180 320 L220 340 L260 320"/>
+    <circle cx="160" cy="250" r="8"/>
+    <circle cx="240" cy="250" r="8"/>
+    <circle cx="200" cy="270" r="6"/>
+  </g>
+  
+  {/* <!-- Top drum head --> */}
+  <ellipse cx="200" cy="120" rx="80" ry="25" fill="url(#drumHeadGradient)" stroke="#A0845C" stroke-width="2"/>
+  
+  {/* <!-- Bottom drum head --> */}
+  <ellipse cx="200" cy="480" rx="80" ry="25" fill="url(#drumHeadGradient)" stroke="#A0845C" stroke-width="2"/>
+  
+  {/* <!-- Tension ropes --> */}
+  <g fill="none" stroke="url(#ropeGradient)" stroke-width="6" stroke-linecap="round">
+    {/* <!-- Vertical tension ropes --> */}
+    <path d="M140 140 Q130 300, 140 460"/>
+    <path d="M170 135 Q160 300, 170 465"/>
+    <path d="M230 135 Q240 300, 230 465"/>
+    <path d="M260 140 Q270 300, 260 460"/>
+    
+    {/* <!-- Horizontal adjustment ropes --> */}
+    <path d="M130 200 Q200 180, 270 200"/>
+    <path d="M130 400 Q200 420, 270 400"/>
+  </g>
+  
+  {/* <!-- Rope knots and tensioning rings --> */}
+  <g fill="#4A3728">
+    <circle cx="140" cy="140" r="4"/>
+    <circle cx="170" cy="135" r="4"/>
+    <circle cx="230" cy="135" r="4"/>
+    <circle cx="260" cy="140" r="4"/>
+    <circle cx="140" cy="460" r="4"/>
+    <circle cx="170" cy="465" r="4"/>
+    <circle cx="230" cy="465" r="4"/>
+    <circle cx="260" cy="460" r="4"/>
+  </g>
+  
+  {/* <!-- Highlights on drum heads --> */}
+  <ellipse cx="180" cy="110" rx="30" ry="8" fill="#FFF" opacity="0.3"/>
+  <ellipse cx="180" cy="470" rx="30" ry="8" fill="#FFF" opacity="0.3"/>
+  
+  {/* <!-- Traditional beads or decorative elements --> */}
+  <g fill="#B8860B">
+    <circle cx="200" cy="200" r="3"/>
+    <circle cx="185" cy="210" r="2"/>
+    <circle cx="215" cy="210" r="2"/>
+    <circle cx="200" cy="400" r="3"/>
+    <circle cx="185" cy="390" r="2"/>
+    <circle cx="215" cy="390" r="2"/>
+  </g>
+</svg>
+);
