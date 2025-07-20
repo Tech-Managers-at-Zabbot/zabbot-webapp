@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HiMenuAlt3 } from "react-icons/hi";
 
 const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
     const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
+    const [iconSize, setIconSize] = useState(35);
+
+      useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) setIconSize(25);
+      else if (width < 768) setIconSize(30);
+      else setIconSize(35);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const dropdownOptions = [
     {
       name: "Settings",
@@ -31,7 +48,7 @@ const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
       <HiMenuAlt3
         color={isDark ? "#FFFAEB" : "#737477"}
         className="hover:cursor-pointer"
-        size={window.innerWidth < 640 ? 25 : window.innerWidth < 768 ? 30 : 35}
+        size={iconSize}
         onClick={() => setIsBreadcrumbOpen(!isBreadcrumbOpen)}
       />
       {isBreadcrumbOpen && (

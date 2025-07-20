@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { ScrollArrow } from "../ScrollArrow";
