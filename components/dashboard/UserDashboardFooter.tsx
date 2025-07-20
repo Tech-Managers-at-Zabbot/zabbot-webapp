@@ -21,7 +21,7 @@ const UserDashboardFooter = () => {
           />
         </div>
         <div>
-          <div className="flex justify-center items-center gap-4 mt-4">
+          <div className="flex justify-center items-center gap-2 mt-4">
             <a
               href="https://www.linkedin.com/company/zabbot"
               target="_blank"
@@ -31,7 +31,7 @@ const UserDashboardFooter = () => {
               <BsLinkedin color="#E3F5FF" size={42} />
             </a>
             <a
-              href="https://www.instagram.com/zabbotapp/"
+              href="https://www.instagram.com/zabbot_heritage?igsh=ZWlsejkwOGlvanhi"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white text-2xl"
@@ -43,7 +43,7 @@ const UserDashboardFooter = () => {
             </div>
 
             <a
-              href="https://zabbot.slack.com/"
+              href="https://zabbotllc.slack.com/join/shared_invite/zt-39zw6ba7k-EjhqsNxjdo8qF1K8Dddqug"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white text-2xl"

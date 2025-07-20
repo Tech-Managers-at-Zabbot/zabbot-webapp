@@ -42,7 +42,8 @@ const Layout = ({
   <div className="relative">
     <section
       className="
-        absolute top-[110px] 
+        absolute top-[80px] 
+        md:top-[100px]
         left-6       // default: small screens
         sm:left-6    // small screens
         md:left-auto md:right-16  // medium screens
