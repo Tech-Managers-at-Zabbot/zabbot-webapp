@@ -14,7 +14,7 @@ const Layout = ({
 }) => {
   const [timeSunMoonLink, setTimeSunMoonLink] = useState(
     // "/userDashboard/morning-sun.png"
-    ""
+    "#"
   );
 
   useEffect(() => {

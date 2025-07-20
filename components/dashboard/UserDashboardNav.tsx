@@ -1,14 +1,29 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import MainDropdown from "../MainDropdown";
 import LanguageToggle from "../languageToggle/LanguageToggle";
+import { Modal } from "../general/Modal";
+import InAppButton from "../InAppButton";
+import { CustomSpinner } from "../CustomSpinner";
+import { Alerts, useAlert } from "next-alert";
 
 const UserDashboardNavbar = ({ showLogo = false }) => {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+    const [logoutLoading, setLogoutLoading] = useState(false);
+    const router = useRouter();
+    const { addAlert } = useAlert();
+  
+    const handleLogout = () => {
+      setLogoutLoading(true);
+      addAlert("Success", "Logout successful", "success");
+      localStorage.removeItem("userProfile");
+      router.push("/login");
+    };
 
   const userDashboardDetails = [
     {
@@ -49,54 +64,72 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       route: "/user-dashboard",
       iconPath: "/userDashboard/isHomeInactive.svg",
       isActiveIconPath: "/userDashboard/isHomeActive.svg",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Lessons",
       route: "/user-dashboard/lessons",
       iconPath: "/userDashboard/isLessons.svg",
       isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Achievements",
       route: "#",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "#",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Marketplace",
       route: "#",
       iconPath: "/userDashboard/isMarketplace.svg",
       isActiveIconPath: "#",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Billing",
       route: "#",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "#",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Settings",
       route: "#",
       iconPath: "/userDashboard/settings.svg",
       isActiveIconPath: "#",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Profile",
       route: "#",
       iconPath: "/userDashboard/profile.svg",
       isActiveIconPath: "#",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Notifications",
       route: "#",
       iconPath: "/userDashboard/notifications.svg",
       isActiveIconPath: "#",
+      action: ()=> "",
+      useAction: false,
     },
     {
       name: "Logout",
       route: "#",
       iconPath: "/userDashboard/logout.svg",
       isActiveIconPath: "#",
+      action: ()=> setShowLogoutModal(true),
+      useAction: true,
     },
   ];
 
@@ -273,8 +306,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                 {userMobileDashboardDetails.map((item, index) => (
                   <button
                     key={index}
-                    onClick={() => handleMenuItemClick(item.route)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 transition-colors ${
+                    onClick={() => item.useAction ? item.action() : handleMenuItemClick(item.route)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${
                       pathname === item.route
                         ? "bg-[#FFE933] text-[#162B6E]"
                         : "text-[#FFFFFF]"
@@ -306,7 +339,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                         // Handle premium option click
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 transition-colors text-[#FFFFFF]"
+                      className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors text-[#FFFFFF]"
                     >
                       <Image
                         src={option.icon}
@@ -341,6 +374,45 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
+
+      {showLogoutModal && (
+        <Modal
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          title="Are you sure you want to logout?"
+          showCloseButton={false}
+        >
+          <div className="p-6 text-center">
+            <p className="text-lg leading-[30px] text-[#252525] font-[400] mb-6">
+              You're on a streak! Logging out now might break your momentum.
+              Ready to keep leveling up instead?
+            </p>
+            <div className="flex justify-center gap-4">
+              <InAppButton
+                background="#EBEBEB"
+                onClick={() => setShowLogoutModal(false)}
+                disabled={logoutLoading}
+              >
+                <div className="text-[#252424]">Cancel</div>
+              </InAppButton>
+              <InAppButton
+                background="#5A2E10"
+                color="#FFFFFF"
+                onClick={handleLogout}
+                disabled={logoutLoading}
+              >
+                {logoutLoading ? <CustomSpinner /> : "Logout"}
+              </InAppButton>
+            </div>
+          </div>
+        </Modal>
+      )}
+      <Alerts
+        position="top-left"
+        direction="right"
+        timer={5000}
+        className="rounded-md relative z-1000 !w-80"
+      />
     </nav>
   );
 };

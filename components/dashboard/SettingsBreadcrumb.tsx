@@ -1,13 +1,30 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { useRouter } from "next/navigation";
+import { Modal } from "../general/Modal";
+import InAppButton from "../InAppButton";
+import { CustomSpinner } from "../CustomSpinner";
+import { Alerts, useAlert } from "next-alert";
 
-const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
-    const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
-    const [iconSize, setIconSize] = useState(35);
+const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
+  const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
+  const [iconSize, setIconSize] = useState(35);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const router = useRouter();
+  const { addAlert } = useAlert();
 
-      useEffect(() => {
+  const handleLogout = () => {
+    setLogoutLoading(true);
+    addAlert("Success", "Logout successful", "success");
+    localStorage.removeItem("userProfile");
+    router.push("/login");
+  };
+
+  useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width < 640) setIconSize(25);
@@ -25,22 +42,22 @@ const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
     {
       name: "Settings",
       icon: "/userDashboard/settings.svg",
-      path: "",
+      action: () => "",
     },
     {
       name: "Profile",
       icon: "/userDashboard/profile.svg",
-      path: "",
+      action: () => "",
     },
     {
       name: "Notifications",
       icon: "/userDashboard/notifications.svg",
-      path: "",
+      action: () => "",
     },
     {
       name: "Logout",
       icon: "/userDashboard/logout.svg",
-      path: "",
+      action: () => setShowLogoutModal(true),
     },
   ];
   return (
@@ -61,6 +78,10 @@ const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
               <li
                 key={index}
                 className="flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 hover:bg-gray-100 cursor-pointer rounded"
+                onClick={() => {
+                  option.action();
+                  setIsBreadcrumbOpen(false);
+                }}
               >
                 <Image
                   src={option.icon}
@@ -76,6 +97,45 @@ const SettingsBreadcrumb = ({isDark}: {isDark: boolean}) => {
           </ul>
         </div>
       )}
+
+      {showLogoutModal && (
+        <Modal
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          title="Are you sure you want to logout?"
+          showCloseButton={false}
+        >
+          <div className="p-6 text-center">
+            <p className="text-lg leading-[30px] text-[#252525] font-[400] mb-6">
+              You're on a streak! Logging out now might break your momentum.
+              Ready to keep leveling up instead?
+            </p>
+            <div className="flex justify-center gap-4">
+              <InAppButton
+                background="#EBEBEB"
+                onClick={() => setShowLogoutModal(false)}
+                disabled={logoutLoading}
+              >
+                <div className="text-[#252424]">Cancel</div>
+              </InAppButton>
+              <InAppButton
+                background="#5A2E10"
+                color="#FFFFFF"
+                onClick={handleLogout}
+                disabled={logoutLoading}
+              >
+                {logoutLoading ? <CustomSpinner /> : "Logout"}
+              </InAppButton>
+            </div>
+          </div>
+        </Modal>
+      )}
+      <Alerts
+        position="top-left"
+        direction="right"
+        timer={5000}
+        className="rounded-md relative z-1000 !w-80"
+      />
     </div>
   );
 };
