@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from "react";
+import React, { useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { HiOutlineSpeakerWave } from "react-icons/hi2";
 
@@ -68,6 +68,18 @@ const DailyGoals = () => {
 };
 
 const WordForTheDay = () => {
+  const [fill, setFill] = useState("white");
+  const [color, setColor] = useState("#CDA674");
+
+  const handleMouseEnter = () => {
+    setFill("#CDA674");
+    setColor("white");
+  };
+
+  const handleMouseLeave = () => {
+    setFill("white");
+    setColor("#CDA674");
+  };
   return (
     <div
       className="bg-white justify-between items-center shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
@@ -85,8 +97,13 @@ const WordForTheDay = () => {
           precision.
         </h3>
         <div className="flex hover:cursor-pointer justify-center items-center">
-          <div className="rounded-full p-[8px] sm:p-[10px] border-[#CDA674] border">
-            <HiOutlineSpeakerWave size={32} color="#CDA674" />
+          <div
+            className="rounded-full p-[8px] sm:p-[10px] border-[#CDA674] border"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            style={{ background: fill }}
+          >
+            <HiOutlineSpeakerWave size={32} color={color} />
           </div>
         </div>
       </div>
