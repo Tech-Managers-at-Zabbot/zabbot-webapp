@@ -72,7 +72,7 @@ const InAppButton: React.FC<ButtonProps> = ({
         color,
         fontFamily,
         backgroundColor: !disabled ? backgroundColor : disabledColor,
-        background: !disabled ? background : disabledColor
+        background: !disabled ? background : disabledColor,
       }}
       disabled={disabled}
       type={type}
