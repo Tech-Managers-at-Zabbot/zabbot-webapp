@@ -12,7 +12,7 @@ const Lessons = () => {
 
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
 
-  const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/clouds.svg");
+  const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
 
   const [isDark, setIsDark] = useState(false);
 
@@ -81,7 +81,7 @@ const Lessons = () => {
             </div>
           </div>
           <header className="relative">
-            <div className="flex relative z-10 mt-10 justify-between text-[24px] font-semibold leading-[100%] text-[#162B6E]">
+            <div className="flex relative z-10 mt-6 justify-between text-[24px] font-semibold leading-[100%] text-[#162B6E]">
               <div className="flex-shrink-0">
                 {/* <div className="relative w-[156px] h-[46.91px]">
                   <Image
