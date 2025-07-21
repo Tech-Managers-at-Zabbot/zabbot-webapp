@@ -9,8 +9,10 @@ import { Modal } from "../general/Modal";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { Alerts, useAlert } from "next-alert";
+import { useLoading } from "@/contexts/LoadingProvider";
 
 const UserDashboardNavbar = ({ showLogo = false }) => {
+  const { setLoading } = useLoading();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -22,6 +24,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       setLogoutLoading(true);
       addAlert("Success", "Logout successful", "success");
       localStorage.removeItem("userProfile");
+      setLoading(true)
       router.push("/login");
     };
 
@@ -31,30 +34,45 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       route: "/user-dashboard",
       iconPath: "/userDashboard/isHomeInactive.svg",
       isActiveIconPath: "/userDashboard/isHomeActive.svg",
+      action: ()=> "",
+      useAction: false,
+      disabled: false
     },
     {
       name: "Lessons",
       route: "/user-dashboard/lessons",
       iconPath: "/userDashboard/isLessons.svg",
       isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      action: ()=> "",
+      useAction: false,
+      disabled: false
     },
     {
       name: "Achievements",
       route: "#",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "",
+      action: ()=> "",
+      useAction: false,
+      disabled: true
     },
     {
       name: "Marketplace",
       route: "#",
       iconPath: "/userDashboard/isMarketplace.svg",
       isActiveIconPath: "",
+      action: ()=> "",
+      useAction: false,
+      disabled: true
     },
     {
       name: "Billing",
       route: "#",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "",
+      action: ()=> "",
+      useAction: false,
+      disabled: true
     },
   ];
 
@@ -66,6 +84,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "/userDashboard/isHomeActive.svg",
       action: ()=> "",
       useAction: false,
+      disabled: false
     },
     {
       name: "Lessons",
@@ -74,6 +93,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "/userDashboard/isLessonsActive.svg",
       action: ()=> "",
       useAction: false,
+      disabled: false
     },
     {
       name: "Achievements",
@@ -82,6 +102,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> "",
       useAction: false,
+      disabled: true
     },
     {
       name: "Marketplace",
@@ -90,6 +111,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> "",
       useAction: false,
+      disabled: true
     },
     {
       name: "Billing",
@@ -98,6 +120,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> "",
       useAction: false,
+      disabled: true
     },
     {
       name: "Settings",
@@ -106,6 +129,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> "",
       useAction: false,
+      disabled: true
     },
     {
       name: "Profile",
@@ -114,6 +138,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> "",
       useAction: false,
+      disabled: true
     },
     {
       name: "Notifications",
@@ -122,6 +147,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> "",
       useAction: false,
+      disabled: true
     },
     {
       name: "Logout",
@@ -130,6 +156,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       isActiveIconPath: "#",
       action: ()=> setShowLogoutModal(true),
       useAction: true,
+      disabled: false
     },
   ];
 
@@ -159,6 +186,9 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   // };
 
   const handleMenuItemClick = (route: string) => {
+    if(route !== "#"){
+      setLoading(true);
+    }
     router.push(route);
     setIsMobileMenuOpen(false);
   };
@@ -228,7 +258,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                 pathname === item.route ? "#162B6E" : "white"
               }] justify-center items-center`}
               key={index}
-              onClick={() => router.push(`${item.route}`)}
+              onClick={() => item.useAction ? item.action() : handleMenuItemClick(item.route)}
               style={{
                 backgroundColor: pathname === item.route ? "#FFE933" : "",
               }}

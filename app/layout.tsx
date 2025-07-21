@@ -1,11 +1,12 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import 'animate.css';
-import { Providers } from '../components/Providers';
-import { Inter, Lexend } from 'next/font/google'
+import "animate.css";
+import { Providers } from "../components/Providers";
+import { Inter, Lexend } from "next/font/google";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-
+import { LoadingProvider } from "@/contexts/LoadingProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,22 +19,22 @@ const geistMono = Geist_Mono({
 });
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 const lexend = Lexend({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-lexend',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-lexend",
+});
 
 export const metadata: Metadata = {
   title: "Zabbot",
   description: "Zabbot Language Learning App",
   icons: {
-    icon: "/favicon.png"
+    icon: "/favicon.png",
   },
 };
 
@@ -44,10 +45,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lexend.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lexend.variable} antialiased`}
+      >
         <Providers>
           <LanguageProvider>
-          {children}
+            <LoadingProvider>
+              {/* <Suspense fallback={<Loader />}> */}
+              {children}
+              {/* </Suspense> */}
+              </LoadingProvider>
           </LanguageProvider>
         </Providers>
       </body>
