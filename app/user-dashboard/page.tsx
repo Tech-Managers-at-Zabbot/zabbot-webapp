@@ -147,7 +147,7 @@ const Dashboard = () => {
           </section>
 
           {/* <section className="relative flex lg:hidden"> */}
-            <section className="relative bg-green-900 flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
+            <section className="relative flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
               {/* Parrot - Hidden on large screens, shown on small+ */}
               <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
                 <div className="w-[80px] h-[80px]">
