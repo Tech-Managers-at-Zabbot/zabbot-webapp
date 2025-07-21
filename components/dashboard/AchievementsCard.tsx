@@ -142,7 +142,7 @@ const AchievementsCard = () => {
               height="60px"
               paddingLeft="16px"
               paddingRight="16px"
-              backgroundColor={"#162B6E"}
+              background={"#162B6E"}
               color="white"
               borderRadius="8px"
             />
