@@ -21,7 +21,8 @@ const UserDashboardFooter = () => {
           />
         </div>
         <div>
-          <div className="flex justify-center items-center gap-2 mt-4">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-2 mt-4">
+            <div className="flex items-center gap-2 text-white text-2xl">
             <a
               href="https://www.linkedin.com/company/zabbot"
               target="_blank"
@@ -38,6 +39,9 @@ const UserDashboardFooter = () => {
             >
               <RxInstagramLogo size={42} color="#FFFFFF" />
             </a>
+            </div>
+
+            <div className="flex items-center gap-2 text-white text-2xl">
             <div className="font-medium text-[32px] leading-[49px] whitespace-nowrap flex-shrink-0">
               Get in touch
             </div>
@@ -50,6 +54,7 @@ const UserDashboardFooter = () => {
             >
               <FaSlack size={42} color="#FFFFFF" />
             </a>
+            </div>
           </div>
           <p className="text-center text-sm sm:text-base md:text-lg lg:text-xl text-white mt-4">
             © 2025 Zabbot. All rights reserved.

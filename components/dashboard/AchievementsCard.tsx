@@ -114,7 +114,7 @@ const AchievementsCard = () => {
     return (
       <>
         <div
-          className="relative flex z-1 bg-white items-center justify-between p-6 rounded-lg w-full"
+          className="relative flex flex-col gap-4 z-1 bg-white items-center justify-between p-6 rounded-lg w-full"
           style={{
             fontFamily: "Lexend",
             boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)",
@@ -123,11 +123,11 @@ const AchievementsCard = () => {
           {/* Left Section */}
           <section className="flex-shrink-0">
             <div className="flex flex-col gap-[14px]">
-              <div className="text-[#737477] flex flex-col gap-2 font-[400] text-[14px] leading-[100%]">
+              <div className="text-[#737477] flex gap-2 font-[400] text-[14px] leading-[100%]">
                 <span className="whitespace-nowrap">ACHIEVEMENTS</span>
                 <span className="whitespace-nowrap">UNLOCKED</span>
               </div>
-              <div className="font-bold text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
+              <div className="font-bold text-center text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
                 RANK #12 / 90
               </div>
             </div>
