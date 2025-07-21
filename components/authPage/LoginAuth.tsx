@@ -331,7 +331,7 @@ const LoginAuth: React.FC = () => {
             disabledColor={appColors.gray300}
             borderRadius="50px"
             height="58px"
-            backgroundColor={"transparent"}
+            background={"transparent"}
             width="100%"
             color="#007AB2"
             border="1px solid #84D8FF"

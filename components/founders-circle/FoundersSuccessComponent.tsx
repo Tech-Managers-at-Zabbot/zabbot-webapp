@@ -41,7 +41,7 @@ const FoundersCircleSuccessComponent = () => {
         <Link href="/" passHref className="w-full mt-2">
           <InAppButton
             borderRadius="8px"
-            backgroundColor="#162B6E"
+            background="#162B6E"
             disabled={loading}
             color="#FFFFFF"
             width="100%"

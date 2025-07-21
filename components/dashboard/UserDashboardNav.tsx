@@ -252,10 +252,10 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <div className="flex gap-x-[32px] gap-y-[16px] xl:gap-x-[40px] xl:gap-y-0">
           {userDashboardDetails.map((item, index) => (
             <nav
-              className={`flex hover:cursor-pointer hover:text-[${
-                pathname === item.route ? "#162B6E" : "#FFE933"
+              className={`flex hover:cursor-${!item.disabled ? "pointer" : "not-allowed"} hover:text-[${
+               pathname === item.route ? "#162B6E" : item.disabled ? "" : "#FFE933"
               }] rounded-4xl px-[16px] text-[${
-                pathname === item.route ? "#162B6E" : "white"
+                pathname === item.route ? "#162B6E" : item.disabled ? "#666666" : "white"
               }] justify-center items-center`}
               key={index}
               onClick={() => item.useAction ? item.action() : handleMenuItemClick(item.route)}
@@ -340,7 +340,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${
                       pathname === item.route
                         ? "bg-[#FFE933] text-[#162B6E]"
-                        : "text-[#FFFFFF]"
+                        : item.disabled ? "text-[#666666]" : "text-[#FFFFFF]"
                     }`}
                   >
                     <Image

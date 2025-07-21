@@ -46,7 +46,7 @@ const SuccessComponent:React.FC<SuccessProps> = ({
         <Link href="/login" passHref className="w-full mt-2">
           <InAppButton
             borderRadius="1192.64px"
-            backgroundColor="#012657"
+            background="#012657"
             disabled={loading}
             disabledColor="#80BBFF"
             color="#FFFFFF"

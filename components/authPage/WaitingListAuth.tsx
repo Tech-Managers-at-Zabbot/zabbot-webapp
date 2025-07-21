@@ -398,7 +398,7 @@ const WaitingListAuthComponent: React.FC = () => {
         </div>
 
         <div className="mt-6">
-          <InAppButton type={'submit'} borderRadius="8.15px" backgroundColor="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
+          <InAppButton type={'submit'} borderRadius="8.15px" background="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
           {isPending ? <CustomSpinner /> : <div className="text-[white]">Sign up</div>}
           </InAppButton>
         </div>

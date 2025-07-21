@@ -9,7 +9,7 @@ import Pagination from "../Pagination";
 
 const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = 12;
 
   // Calculate total pages based on your data
   const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);

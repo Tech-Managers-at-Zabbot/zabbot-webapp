@@ -240,7 +240,7 @@ return (
 
       <div className="mt-4 sm:mt-6">
         <InAppButton
-          backgroundColor={appColors.darkRoyalBlueForBtn}
+          background={appColors.darkRoyalBlueForBtn}
           width="100%"
           disabledColor="#80BBFF"
           disabled={buttonDisabled || isResetPasswordPending || loading}

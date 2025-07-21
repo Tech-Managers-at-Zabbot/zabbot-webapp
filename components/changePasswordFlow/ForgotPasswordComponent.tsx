@@ -151,7 +151,7 @@ const ForgotPassword: React.FC = () => {
             disabledColor="#80BBFF"
             width="100%"
             disabled={buttonDisabled || isRequestingPasswordLink}
-            backgroundColor={appColors.darkRoyalBlueForBtn}
+            background={appColors.darkRoyalBlueForBtn}
           >
             {isRequestingPasswordLink ? <CustomSpinner /> : <div>
               {/* Continue */}

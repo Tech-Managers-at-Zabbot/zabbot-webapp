@@ -79,53 +79,51 @@ const Dashboard = () => {
         className="min-h-screen py-0 my-0 pt-6 relative pb-50 px-[5%] overflow-x-hidden"
         style={{ fontFamily: "Lexend", background: backgroundColor }}
       >
-         <div
-              className="absolute bg-cover inset-0 top-0 h-40 bg-center"
-              style={{ backgroundImage: `url(${cloudsUrl})` }}
-            ></div>
+        <div
+          className="absolute bg-cover inset-0 top-0 h-40 bg-center"
+          style={{ backgroundImage: `url(${cloudsUrl})` }}
+        ></div>
         <div className="max-w-screen-2xl mx-auto">
           <section className="relative flex justify-between items-center mb-6">
-             {/* <div
+            {/* <div
               className="absolute min-h-20 inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${cloudsUrl})` }}
             ></div> */}
-                          {/* Logo */}
-              <div className="flex-shrink-0 order-1">
-                <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
-                  <Image
-                    src={logoUrl}
-                    alt="Zabbot Logo"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div>
+            {/* Logo */}
+            <div className="flex-shrink-0 order-1">
+              <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
+                <Image
+                  src={logoUrl}
+                  alt="Zabbot Logo"
+                  fill
+                  priority
+                  className="object-contain"
+                />
               </div>
+            </div>
 
-                            {/* Right section */}
-              <div className="flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 flex-shrink-0 items-start order-3">
-                {/* Text section - responsive */}
-                <div className="flex flex-col gap-[4px] sm:gap-[6px] md:gap-[8px] text-right">
-                  <span
-                    className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
-                    style={{ color: isDark ? "#D0F7F6" : "#202124" }}
-                  >
-                    {greeting} {userDetails?.firstName || "User"}
-                  </span>
-                  <span
-                    className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
-                    style={{ color: isDark ? "#FFFAEB" : "#333333" }}
-                  >
-                    Learn Yorùbá. Speak Proudly. Belong Deeply.
-                  </span>
-                </div>
-                {/* Menu */}
-                <div className="hidden lg:flex mt-1">
-                  <SettingsBreadcrumb isDark={isDark} />
-                </div>
+            {/* Right section */}
+            <div className="flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 flex-shrink-0 items-start order-3">
+              {/* Text section - responsive */}
+              <div className="flex flex-col gap-[4px] sm:gap-[6px] md:gap-[8px] text-right">
+                <span
+                  className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
+                  style={{ color: isDark ? "#D0F7F6" : "#202124" }}
+                >
+                  {greeting} {userDetails?.firstName || "User"}
+                </span>
+                <span
+                  className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
+                  style={{ color: isDark ? "#FFFAEB" : "#333333" }}
+                >
+                  Learn Yorùbá. Speak Proudly. Belong Deeply.
+                </span>
               </div>
-
-
+              {/* Menu */}
+              <div className="hidden lg:flex mt-1">
+                <SettingsBreadcrumb isDark={isDark} />
+              </div>
+            </div>
           </section>
           <section className="relative">
             {/* <div
@@ -133,7 +131,6 @@ const Dashboard = () => {
               style={{ backgroundImage: `url(${cloudsUrl})` }}
             ></div> */}
             <div className="flex relative z-10 mt-4 sm:mt-6 md:mt-10 justify-between items-start">
-
               {/* Parrot - Hidden on small screens, shown on medium+ */}
               <div className="hidden lg:block absolute top-[60px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 order-2">
                 <div className="w-[113px] h-[137px]">
@@ -148,6 +145,23 @@ const Dashboard = () => {
               </div>
             </div>
           </section>
+
+          {/* <section className="relative flex lg:hidden"> */}
+            <section className="relative bg-green-900 flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
+              {/* Parrot - Hidden on large screens, shown on small+ */}
+              <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
+                <div className="w-[80px] h-[80px]">
+                  <Image
+                    src="/userDashboard/parrot-head.svg"
+                    alt="Centralized rounded parrot mascot"
+                    fill
+                    priority
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </section>
+          {/* </section> */}
 
           <section className="mt-20">
             <AchievementsCard />

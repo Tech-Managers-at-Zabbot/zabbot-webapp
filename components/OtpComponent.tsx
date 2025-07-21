@@ -222,7 +222,7 @@ const OtpComponent: React.FC = () => {
               width="100%"
               disabled={isVerifyLoading || disabler || isResendingVerification}
               disabledColor={appColors.disabledButtonBlue}
-              backgroundColor={appColors.darkRoyalBlueForBtn}
+              background={appColors.darkRoyalBlueForBtn}
             >
               {isVerifyLoading ? (
                 <CustomSpinner spinnerColor="#8B8D98" />
