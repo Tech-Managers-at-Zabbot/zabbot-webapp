@@ -6,12 +6,14 @@ const Loader = () => {
   const [isDark, setIsDark] = useState(false);
   const [zabbotLogo, setZabbotLogo] = useState("/general/zabbot-logo-blue.png")
 
-  useEffect(() => {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
-    setIsDark(hours >= 18 || hours < 6);
-    setZabbotLogo("/general/zabbot-logo-white.png")
-  }, []);
+useEffect(() => {
+  const currentTime = new Date();
+  const hours = currentTime.getHours();
+  const isDarkTime = hours >= 18 || hours < 6;
+  setIsDark(isDarkTime);
+  setZabbotLogo(isDarkTime ? "/general/zabbot-logo-white.png" : "/general/zabbot-logo-blue.png");
+}, []);
+
 
   return (
     <div
