@@ -59,3 +59,8 @@ export const getGoogleAuthErrorMessage = (error: string) => {
   
   return errorMessages[error] || 'An unexpected error occurred.';
 };
+
+
+export const getUserTimezone = () => {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};

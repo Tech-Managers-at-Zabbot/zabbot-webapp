@@ -1,3 +1,4 @@
+import { getUserTimezone } from "@/utilities/utilities";
 import axiosInstance from "../../axiosInstance";
 
 
@@ -84,17 +85,26 @@ export const resetPassword = async (formData: {
 }
 
 export const initiateGoogleRegister = () => {
-  // Redirect to your backend's Google OAuth registration endpoint
-  window.location.href = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/register";
-  // For local development:
+  const timezone = getUserTimezone();
+  const url = new URL("https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/register");
+  url.searchParams.append('timezone', timezone);
+  window.location.href = url.toString();
+
+
+    // For local development:
 //   window.location.href = "http://localhost:3010/api/v1/users/auth/google/register";
+
 };
 
 export const initiateGoogleLogin = () => {
-  // Redirect to your backend's Google OAuth login endpoint
-  window.location.href = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/login";
-  // For local development:
+  const timezone = getUserTimezone();
+  const url = new URL("https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/login");
+  url.searchParams.append('timezone', timezone);
+  window.location.href = url.toString();
+
+    // For local development:
 //   window.location.href = "http://localhost:3010/api/v1/users/auth/google/login";
+
 };
 
 export const handleGoogleAuthCallback = () => {

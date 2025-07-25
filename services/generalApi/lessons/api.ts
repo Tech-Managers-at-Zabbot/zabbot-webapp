@@ -25,8 +25,9 @@ export const completeUserDailyGoal = async (
 
 export const getDailyWord = async (
     languageId: string,
+    userId?:string
 ) => {
-     const response = await axiosInstance.get(`/lessons/daily-words/${languageId}`)
+     const response = await axiosInstance.get(`/lessons/daily-words/${languageId}?userId=${userId}`)
     return response.data;
 }
 

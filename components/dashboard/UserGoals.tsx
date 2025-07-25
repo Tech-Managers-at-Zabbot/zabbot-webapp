@@ -115,7 +115,7 @@ const WordForTheDay = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { data: dailyWord, isLoading: dailyWordLoading } = useGetDailyWord(
-    userDetails?.languageId
+    userDetails?.languageId, userDetails?.id
   );
 
 
