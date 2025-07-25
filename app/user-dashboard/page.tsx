@@ -5,18 +5,31 @@ import Image from "next/image";
 import Head from "next/head";
 import AchievementsCard from "@/components/dashboard/AchievementsCard";
 import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
-import { metricsData } from "@/constants/data-to-populate/dashboardData";
-import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
+// import { metricsData } from "@/constants/data-to-populate/dashboardData";
+import // DashboardMetricCard,
+"@/components/dashboard/DashboardMetricCard";
+import { BsPeople } from "react-icons/bs";
+import { GiTwoHandedSword } from "react-icons/gi";
+import { FaGraduationCap } from "react-icons/fa6";
 // import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import ProgressSection from "@/components/dashboard/ProgressSection";
 import PopularCourses from "@/components/dashboard/PopularCourses";
 import Advert from "@/components/dashboard/Advert";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
+import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard2";
+import { useGetUserCount } from "@/services/generalApi/users/query";
+import { useUserGoals } from "@/contexts/UserGoalsContext";
 
 const Dashboard = () => {
   const [goPremium, setGoPremium] = useState(true);
 
   const handleClosePremiumTag = () => setGoPremium(false);
+
+  const { data:userCountData, isLoading:userCountLoading } = useGetUserCount()
+
+  const { goalsCount, userGoalsLoading } = useUserGoals()
+
+  const userCount = userCountData?.data || 0
 
   const [greeting, setGreeting] = useState("");
 
@@ -27,6 +40,40 @@ const Dashboard = () => {
   const [isDark, setIsDark] = useState(false);
 
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
+
+  const dashboardMetricData = [
+    {
+      title: "Your Completed Daily Goals",
+      value: `${goalsCount} ${goalsCount === 1 ? "goal" : "goals"}`,
+      icon: (
+        <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
+          <GiTwoHandedSword />
+        </div>
+      ),
+      loading: userGoalsLoading || userCountLoading
+    },
+    {
+      title: "Your Completed Courses",
+      value: "0 courses",
+      icon: (
+        <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
+          <FaGraduationCap />
+        </div>
+      ),
+      loading: userGoalsLoading || userCountLoading
+    },
+
+    {
+      title: "Active Learners",
+      value: `${userCount} learners`,
+      icon: (
+        <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
+          <BsPeople />
+        </div>
+      ),
+      loading: userCountLoading || userGoalsLoading
+    },
+  ];
 
   useEffect(() => {
     const currentTime = new Date();
@@ -147,20 +194,20 @@ const Dashboard = () => {
           </section>
 
           {/* <section className="relative flex lg:hidden"> */}
-            <section className="relative flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
-              {/* Parrot - Hidden on large screens, shown on small+ */}
-              <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
-                <div className="w-[80px] h-[80px]">
-                  <Image
-                    src="/userDashboard/parrot-head.svg"
-                    alt="Centralized rounded parrot mascot"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div>
+          <section className="relative flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
+            {/* Parrot - Hidden on large screens, shown on small+ */}
+            <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
+              <div className="w-[80px] h-[80px]">
+                <Image
+                  src="/userDashboard/parrot-head.svg"
+                  alt="Centralized rounded parrot mascot"
+                  fill
+                  priority
+                  className="object-contain"
+                />
               </div>
-            </section>
+            </div>
+          </section>
           {/* </section> */}
 
           <section className="mt-20">
@@ -178,9 +225,15 @@ const Dashboard = () => {
           </section>
           {/* grid-cols-1 md:grid-cols-2 grid lg:grid-cols-3 */}
 
-          <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
+          {/* <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
             {metricsData.map((metric, index) => (
               <DashboardMetricCard key={index} data={metric} />
+            ))}
+          </section> */}
+
+          <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
+            {dashboardMetricData.map((metric, index) => (
+              <DashboardMetricCard2 key={index} data={metric} />
             ))}
           </section>
 

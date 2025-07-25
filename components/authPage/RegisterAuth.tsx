@@ -275,6 +275,7 @@ useEffect(() => {
         email: email.toLowerCase().trim(),
         password: password.trim(),
         confirmPassword: confirmPassword.trim(),
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
       };
 
       await registerUser(userData, {

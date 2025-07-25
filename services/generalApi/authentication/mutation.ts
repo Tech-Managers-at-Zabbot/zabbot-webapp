@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation, 
+import {
+  useMutation,
   // useQueryClient 
 } from "@tanstack/react-query";
 // import { queryKeys } from './queryKeys';
@@ -15,12 +16,12 @@ export function useRegisterUser() {
     onSuccess: async (
       // data
     ) => {
-    //   toast.success(data?.message || "Service Request Created Successfully");
-        // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
+      //   toast.success(data?.message || "Service Request Created Successfully");
+      // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error('Error Registering User:', error);
-    //   toast.error(error?.response?.data?.message || "Error creating space");
+      //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
 }
@@ -32,12 +33,12 @@ export function useVerifyUserEmail() {
     onSuccess: async (
       // data
     ) => {
-    //   toast.success(data?.message || "Service Request Created Successfully");
-        // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
+      //   toast.success(data?.message || "Service Request Created Successfully");
+      // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error('Error verifying email address:', error);
-    //   toast.error(error?.response?.data?.message || "Error creating space");
+      //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
 }
@@ -49,12 +50,12 @@ export function useResendVerificationOtp() {
     onSuccess: async (
       // data
     ) => {
-    //   toast.success(data?.message || "Service Request Created Successfully");
-        // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
+      //   toast.success(data?.message || "Service Request Created Successfully");
+      // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error('Error creating Service Request:', error);
-    //   toast.error(error?.response?.data?.message || "Error creating space");
+      //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
 }
@@ -66,12 +67,12 @@ export function useLoginUser() {
     onSuccess: async (
       // data
     ) => {
-    //   toast.success(data?.message || "Service Request Created Successfully");
-        // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
+      //   toast.success(data?.message || "Service Request Created Successfully");
+      // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error('Error logging in user:', error);
-    //   toast.error(error?.response?.data?.message || "Error creating space");
+      //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
 }
@@ -83,12 +84,12 @@ export function useRequestPasswordLink() {
     onSuccess: async (
       // data
     ) => {
-    //   toast.success(data?.message || "Service Request Created Successfully");
-        // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
+      //   toast.success(data?.message || "Service Request Created Successfully");
+      // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error('Error requesting password link:', error);
-    //   toast.error(error?.response?.data?.message || "Error creating space");
+      //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
 }
@@ -100,12 +101,12 @@ export function useResetPassword() {
     onSuccess: async (
       // data
     ) => {
-    //   toast.success(data?.message || "Service Request Created Successfully");
-        // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
+      //   toast.success(data?.message || "Service Request Created Successfully");
+      // queryClient.invalidateQueries({queryKey: queryKeys.getTenantServiceRequests(data.property_id)});
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error('Error resetting password:', error);
-    //   toast.error(error?.response?.data?.message || "Error creating space");
+      //   toast.error(error?.response?.data?.message || "Error creating space");
     },
   });
 }
@@ -113,7 +114,7 @@ export function useResetPassword() {
 
 export function useGoogleAuth() {
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const initiateGoogleRegistration = () => {
     setIsLoading(true);
     initiateGoogleRegister();

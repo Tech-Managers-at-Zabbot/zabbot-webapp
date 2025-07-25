@@ -80,6 +80,7 @@ const LoginAuth: React.FC = () => {
         {
           email: email.toLowerCase().trim(),
           password: password.trim(),
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           stayLoggedIn,
         },
         {

@@ -2,6 +2,7 @@
 "use client";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import UserDashboardNav from "@/components/dashboard/UserDashboardNav";
+import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
 // import AuthGuard from "@/components/security/AuthGuard";
 import React, { useEffect, useState } from "react";
 
@@ -35,6 +36,7 @@ const Layout = ({
 
   return (
     // <AuthGuard>
+    <UserGoalsProvider>
     <div className="flex flex-col min-h-screen">
       <div className={`flex-1 min-h-screen`}>
         <UserDashboardNav showLogo={showLogo} />
@@ -65,6 +67,7 @@ const Layout = ({
         <UserDashboardFooter />
       </div>
     </div>
+    </UserGoalsProvider>
     // {/* </AuthGuard> */}
   );
 };
