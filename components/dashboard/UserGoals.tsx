@@ -12,6 +12,7 @@ import {
 import { CustomSpinner } from "../CustomSpinner";
 import { PlayerEllipse } from "@/constants/SvgPaths";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { EmptyStateCard } from "../general/EmptyState";
 
 const DailyGoals = () => {
   const { userDailyGoal, goalLoading } = useUserGoals();
@@ -20,6 +21,8 @@ const DailyGoals = () => {
     <>
       {goalLoading ? (
         <DailyGoalsSkeleton />
+      ) : !userDailyGoal ? (
+        <EmptyStateCard title="No Data" subtitle="No Data Available Yet"/>
       ) : (
         <div
           className="bg-white justify-between shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
@@ -201,6 +204,8 @@ const WordForTheDay = () => {
     <>
       {dailyWordLoading ? (
         <WordForTheDaySkeleton />
+      ) : !dailyWord ? (
+        <EmptyStateCard title="No Data" subtitle="No Data Available Yet"/>
       ) : (
         <>
           <div

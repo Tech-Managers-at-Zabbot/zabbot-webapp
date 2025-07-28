@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
+import { EmptyStateCard } from "../general/EmptyState";
 
 export interface MetricData {
   title: string;
@@ -9,6 +9,7 @@ export interface MetricData {
   imgSrc?: string;
   icon?: any;
   loading?: boolean;
+  isEmpty?:boolean;
 }
 
 interface DashboardMetricCard2Props {
@@ -22,6 +23,8 @@ export const DashboardMetricCard2: React.FC<DashboardMetricCard2Props> = ({
     <>
       {data?.loading ? (
         <DashboardMetricCardSkeleton />
+      ) : data?.isEmpty ? (
+        <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
       ) : (
         <div
           className="bg-white w-full border border-gray-200 flex flex-col gap-[24px] rounded-lg p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow"

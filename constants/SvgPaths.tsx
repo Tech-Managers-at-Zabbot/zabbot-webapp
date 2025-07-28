@@ -109,7 +109,7 @@ export const TalkingDrumIcon = () => (
       >
         <rect width="20" height="20" fill="#654321" />
         <circle cx="10" cy="10" r="3" fill="#8B4513" />
-        <path d="M5,5 L15,15 M15,5 L5,15" stroke="#4A2C17" stroke-width="1" />
+        <path d="M5,5 L15,15 M15,5 L5,15" stroke="#4A2C17" strokeWidth="1" />
       </pattern>
     </defs>
 
@@ -128,7 +128,7 @@ export const TalkingDrumIcon = () => (
            Z"
       fill="url(#drumBodyGradient)"
       stroke="#4A2C17"
-      stroke-width="2"
+      strokeWidth="2"
     />
 
     <path
@@ -142,7 +142,7 @@ export const TalkingDrumIcon = () => (
            Z"
       fill="url(#drumBodyGradient)"
       stroke="#4A2C17"
-      stroke-width="2"
+      strokeWidth="2"
     />
 
     {/* <!-- Traditional carved patterns on drum body --> */}
@@ -164,7 +164,7 @@ export const TalkingDrumIcon = () => (
     />
 
     {/* <!-- Geometric patterns --> */}
-    <g stroke="#4A2C17" stroke-width="1.5" fill="none" opacity="0.7">
+    <g stroke="#4A2C17" strokeWidth="1.5" fill="none" opacity="0.7">
       <path d="M140 220 L180 240 L220 220 L260 240" />
       <path d="M140 340 L180 320 L220 340 L260 320" />
       <circle cx="160" cy="250" r="8" />
@@ -180,7 +180,7 @@ export const TalkingDrumIcon = () => (
       ry="25"
       fill="url(#drumHeadGradient)"
       stroke="#A0845C"
-      stroke-width="2"
+      strokeWidth="2"
     />
 
     {/* <!-- Bottom drum head --> */}
@@ -191,15 +191,15 @@ export const TalkingDrumIcon = () => (
       ry="25"
       fill="url(#drumHeadGradient)"
       stroke="#A0845C"
-      stroke-width="2"
+      strokeWidth="2"
     />
 
     {/* <!-- Tension ropes --> */}
     <g
       fill="none"
       stroke="url(#ropeGradient)"
-      stroke-width="6"
-      stroke-linecap="round"
+      strokeWidth="6"
+      strokeLinecap="round"
     >
       {/* <!-- Vertical tension ropes --> */}
       <path d="M140 140 Q130 300, 140 460" />
@@ -290,5 +290,134 @@ export const PlayerEllipse = () => (
         begin="0.4s"
       />
     </rect>
+  </svg>
+);
+
+export const EmptyStateCardIcon = ({
+  width = 150,
+  height = 150,
+}: {
+  width?: number;
+  height?: number;
+}) => (
+  <svg
+    viewBox="0 0 200 200"
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+  >
+    <circle
+      cx="100"
+      cy="100"
+      r="90"
+      fill="#f8fafc"
+      stroke="#e2e8f0"
+      strokeWidth="2"
+    />
+
+    <rect
+      x="60"
+      y="80"
+      width="80"
+      height="60"
+      rx="4"
+      fill="#3b82f6"
+      opacity="0.1"
+    />
+    <rect
+      x="62"
+      y="82"
+      width="76"
+      height="56"
+      rx="3"
+      fill="#ffffff"
+      stroke="#3b82f6"
+      strokeWidth="2"
+    />
+
+    <rect x="60" y="80" width="8" height="60" rx="4" fill="#3b82f6" />
+
+    <line
+      x1="75"
+      y1="95"
+      x2="125"
+      y2="95"
+      stroke="#cbd5e1"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <line
+      x1="75"
+      y1="105"
+      x2="120"
+      y2="105"
+      stroke="#cbd5e1"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <line
+      x1="75"
+      y1="115"
+      x2="115"
+      y2="115"
+      stroke="#cbd5e1"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <line
+      x1="75"
+      y1="125"
+      x2="110"
+      y2="125"
+      stroke="#cbd5e1"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+
+    <ellipse cx="130" cy="65" rx="25" ry="18" fill="#10b981" opacity="0.1" />
+    <ellipse
+      cx="130"
+      cy="65"
+      rx="23"
+      ry="16"
+      fill="#ffffff"
+      stroke="#10b981"
+      strokeWidth="2"
+    />
+
+    <path
+      d="M115 75 L105 85 L120 78 Z"
+      fill="#ffffff"
+      stroke="#10b981"
+      strokeWidth="2"
+    />
+
+    <text
+      x="130"
+      y="70"
+      textAnchor="middle"
+      fill="#10b981"
+      fontFamily="Arial, sans-serif"
+      fontSize="12"
+      fontWeight="bold"
+    >
+      Aa
+    </text>
+
+    <circle cx="45" cy="50" r="3" fill="#f59e0b" opacity="0.6" />
+    <circle cx="155" cy="45" r="2.5" fill="#ef4444" opacity="0.6" />
+    <circle cx="170" cy="120" r="3.5" fill="#8b5cf6" opacity="0.6" />
+    <circle cx="35" cy="140" r="2" fill="#06b6d4" opacity="0.6" />
+
+    <path
+      d="M50 35 L52 41 L58 41 L53 45 L55 51 L50 47 L45 51 L47 45 L42 41 L48 41 Z"
+      fill="#fbbf24"
+      opacity="0.7"
+    />
+    <path
+      d="M160 150 L161.5 154 L165.5 154 L162.5 156.5 L164 160.5 L160 157.5 L156 160.5 L157.5 156.5 L154.5 154 L158.5 154 Z"
+      fill="#fbbf24"
+      opacity="0.7"
+    />
   </svg>
 );

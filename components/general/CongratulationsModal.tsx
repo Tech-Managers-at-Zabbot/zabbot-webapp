@@ -32,7 +32,7 @@ const CongratulationsModal: React.FC<CongratulationsModalProps> = ({
   const [confettiRun, setConfettiRun] = useState(false);
 
   useEffect(() => {
-    console.log("dime", width, height);
+
     if (isOpen) {
       setConfettiRun(true);
       document.body.style.overflow = "hidden";

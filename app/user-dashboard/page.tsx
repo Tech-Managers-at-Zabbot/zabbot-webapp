@@ -50,7 +50,8 @@ const Dashboard = () => {
           <GiTwoHandedSword />
         </div>
       ),
-      loading: userGoalsLoading || userCountLoading
+      loading: userGoalsLoading || userCountLoading,
+      isEmpty: !goalsCount
     },
     {
       title: "Your Completed Courses",
@@ -71,7 +72,8 @@ const Dashboard = () => {
           <BsPeople />
         </div>
       ),
-      loading: userCountLoading || userGoalsLoading
+      loading: userCountLoading || userGoalsLoading,
+      isEmpty: !userCount
     },
   ];
 
@@ -232,7 +234,7 @@ const Dashboard = () => {
           </section> */}
 
           <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
-            {dashboardMetricData.map((metric, index) => (
+            {dashboardMetricData?.map((metric, index) => (
               <DashboardMetricCard2 key={index} data={metric} />
             ))}
           </section>
