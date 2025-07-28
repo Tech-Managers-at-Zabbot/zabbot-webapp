@@ -21,7 +21,7 @@ const DailyGoals = () => {
     <>
       {goalLoading ? (
         <DailyGoalsSkeleton />
-      ) : !userDailyGoal ? (
+      ) : !userDailyGoal && userDailyGoal !== 0 ? (
         <EmptyStateCard title="No Data" subtitle="No Data Available Yet"/>
       ) : (
         <div
