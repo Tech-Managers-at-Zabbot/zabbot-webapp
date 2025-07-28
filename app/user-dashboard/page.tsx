@@ -9,7 +9,6 @@ import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 import // DashboardMetricCard,
 "@/components/dashboard/DashboardMetricCard";
 import { BsPeople } from "react-icons/bs";
-import { GiTwoHandedSword } from "react-icons/gi";
 import { FaGraduationCap } from "react-icons/fa6";
 // import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import ProgressSection from "@/components/dashboard/ProgressSection";
@@ -18,6 +17,7 @@ import Advert from "@/components/dashboard/Advert";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard2";
 import { useGetUserCount } from "@/services/generalApi/users/query";
+import { HiOutlineTrophy } from "react-icons/hi2";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 
 const Dashboard = () => {
@@ -47,7 +47,7 @@ const Dashboard = () => {
       value: `${goalsCount} ${goalsCount === 1 ? "goal" : "goals"}`,
       icon: (
         <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
-          <GiTwoHandedSword />
+          <HiOutlineTrophy />
         </div>
       ),
       loading: userGoalsLoading || userCountLoading,

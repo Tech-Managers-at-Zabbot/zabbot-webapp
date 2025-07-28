@@ -10,7 +10,7 @@ import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { Alerts, useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+// import { useUserGoals } from "@/contexts/UserGoalsContext";
 
 const AdminNavBar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
@@ -20,10 +20,7 @@ const AdminNavBar = ({ showLogo = false }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  const { userDetails } = useUserGoals();
-
-  console.log(userDetails);
-
+  // const { userDetails } = useUserGoals();
   const handleLogout = () => {
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
@@ -208,11 +205,11 @@ const AdminNavBar = ({ showLogo = false }) => {
   // };
 
   const handleMenuItemClick = (route: string) => {
-    if (route !== "#") {
+    if (route !== "#" && pathname !== route) {
+      router.push(route);
       setLoading(true);
+      setIsMobileMenuOpen(false);
     }
-    router.push(route);
-    setIsMobileMenuOpen(false);
   };
 
   const [backgroundColor, setBackgroundColor] = useState("#162B6E");
