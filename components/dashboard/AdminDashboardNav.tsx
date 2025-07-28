@@ -12,23 +12,25 @@ import { Alerts, useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 
-const UserDashboardNavbar = ({ showLogo = false }) => {
+const AdminNavBar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const [logoutLoading, setLogoutLoading] = useState(false);
-    const router = useRouter();
-    const { addAlert } = useAlert();
-    const { userDetails } = useUserGoals()
-  
-    const handleLogout = () => {
-      setLogoutLoading(true);
-      addAlert("Success", "Logout successful", "success");
-      localStorage.removeItem("userProfile");
-      setLoading(true)
-      router.push("/login");
-    };
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  const router = useRouter();
+  const { addAlert } = useAlert();
+  const { userDetails } = useUserGoals();
+
+  console.log(userDetails);
+
+  const handleLogout = () => {
+    setLogoutLoading(true);
+    addAlert("Success", "Logout successful", "success");
+    localStorage.removeItem("userProfile");
+    setLoading(true);
+    router.push("/login");
+  };
 
   const userDashboardDetails = [
     {
@@ -36,55 +38,55 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       route: "/user-dashboard",
       iconPath: "/userDashboard/isHomeInactive.svg",
       isActiveIconPath: "/userDashboard/isHomeActive.svg",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: false
+      disabled: false,
     },
     {
       name: "Lessons",
       route: "/user-dashboard/lessons",
       iconPath: "/userDashboard/isLessons.svg",
       isActiveIconPath: "/userDashboard/isLessonsActive.svg",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: false
+      disabled: false,
     },
     {
       name: "Achievements",
       route: "#",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Marketplace",
       route: "#",
       iconPath: "/userDashboard/isMarketplace.svg",
       isActiveIconPath: "",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Billing",
       route: "#",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
-     ...(userDetails?.role === 'admin' ? [{
-    name: "Admin",
-    route: "/admin",
-    iconPath: "/userDashboard/admin.svg",
-    isActiveIconPath: "/userDashboard/adminActive.svg",
-    action: () => "",
-    useAction: false,
-    disabled: false
-  }] : [])
+    {
+      name: "Admin",
+      route: "/admin",
+      iconPath: "/userDashboard/admin.svg",
+      isActiveIconPath: "/userDashboard/adminActive.svg",
+      action: () => "",
+      useAction: false,
+      disabled: false,
+    },
   ];
 
   const userMobileDashboardDetails = [
@@ -93,90 +95,90 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       route: "/user-dashboard",
       iconPath: "/userDashboard/isHomeInactive.svg",
       isActiveIconPath: "/userDashboard/isHomeActive.svg",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: false
+      disabled: false,
     },
     {
       name: "Lessons",
       route: "/user-dashboard/lessons",
       iconPath: "/userDashboard/isLessons.svg",
       isActiveIconPath: "/userDashboard/isLessonsActive.svg",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: false
+      disabled: false,
     },
     {
       name: "Achievements",
       route: "#",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "#",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Marketplace",
       route: "#",
       iconPath: "/userDashboard/isMarketplace.svg",
       isActiveIconPath: "#",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Billing",
       route: "#",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "#",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Settings",
       route: "#",
       iconPath: "/userDashboard/settings.svg",
       isActiveIconPath: "#",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Profile",
       route: "#",
       iconPath: "/userDashboard/profile.svg",
       isActiveIconPath: "#",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
     {
       name: "Notifications",
       route: "#",
       iconPath: "/userDashboard/notifications.svg",
       isActiveIconPath: "#",
-      action: ()=> "",
+      action: () => "",
       useAction: false,
-      disabled: true
+      disabled: true,
     },
-    ...(userDetails?.role === 'admin' ? [{
-    name: "Admin",
-    route: "/admin",
-    iconPath: "/userDashboard/admin.svg",
-    isActiveIconPath: "/userDashboard/adminActive.svg",
-    action: () => "",
-    useAction: false,
-    disabled: false
-  }] : []),
+    {
+      name: "Admin",
+      route: "/admin",
+      iconPath: "/userDashboard/admin.svg",
+      isActiveIconPath: "/userDashboard/adminActive.svg",
+      action: () => "",
+      useAction: false,
+      disabled: false,
+    },
     {
       name: "Logout",
       route: "#",
       iconPath: "/userDashboard/logout.svg",
       isActiveIconPath: "#",
-      action: ()=> setShowLogoutModal(true),
+      action: () => setShowLogoutModal(true),
       useAction: true,
-      disabled: false
+      disabled: false,
     },
   ];
 
@@ -206,7 +208,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   // };
 
   const handleMenuItemClick = (route: string) => {
-    if(route !== "#"){
+    if (route !== "#") {
       setLoading(true);
     }
     router.push(route);
@@ -236,17 +238,16 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   }, []);
 
   useEffect(() => {
-  if (isMobileMenuOpen) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
 
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [isMobileMenuOpen]);
-
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <nav
@@ -272,13 +273,25 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <div className="flex gap-x-[32px] gap-y-[16px] xl:gap-x-[40px] xl:gap-y-0">
           {userDashboardDetails.map((item, index) => (
             <nav
-              className={`flex hover:cursor-${!item.disabled ? "pointer" : "not-allowed"} hover:text-[${
-               pathname === item.route ? "#162B6E" : item.disabled ? "" : "#FFE933"
+              className={`flex hover:cursor-${
+                !item.disabled ? "pointer" : "not-allowed"
+              } hover:text-[${
+                pathname === item.route
+                  ? "#162B6E"
+                  : item.disabled
+                  ? ""
+                  : "#FFE933"
               }] rounded-4xl px-[16px] text-[${
-                pathname === item.route ? "#162B6E" : item.disabled ? "#666666" : "white"
+                pathname === item.route
+                  ? "#162B6E"
+                  : item.disabled
+                  ? "#666666"
+                  : "white"
               }] justify-center items-center`}
               key={index}
-              onClick={() => item.useAction ? item.action() : handleMenuItemClick(item.route)}
+              onClick={() =>
+                item.useAction ? item.action() : handleMenuItemClick(item.route)
+              }
               style={{
                 backgroundColor: pathname === item.route ? "#FFE933" : "",
               }}
@@ -289,8 +302,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                     ? item.isActiveIconPath
                     : item.iconPath
                 }
-                height={40}
-                width={40}
+                height={45}
+                width={45}
                 alt="Icon image"
               />
               <div>{item.name}</div>
@@ -356,11 +369,17 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                 {userMobileDashboardDetails.map((item, index) => (
                   <button
                     key={index}
-                    onClick={() => item.useAction ? item.action() : handleMenuItemClick(item.route)}
+                    onClick={() =>
+                      item.useAction
+                        ? item.action()
+                        : handleMenuItemClick(item.route)
+                    }
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${
                       pathname === item.route
                         ? "bg-[#FFE933] text-[#162B6E]"
-                        : item.disabled ? "text-[#666666]" : "text-[#FFFFFF]"
+                        : item.disabled
+                        ? "text-[#666666]"
+                        : "text-[#FFFFFF]"
                     }`}
                   >
                     <Image
@@ -467,4 +486,4 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   );
 };
 
-export default UserDashboardNavbar;
+export default AdminNavBar;
