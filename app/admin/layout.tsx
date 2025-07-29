@@ -6,11 +6,9 @@ import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
 import React, { useEffect, useState } from "react";
 
 export default function Layout({
-  children,
-  showLogo = false,
+  children
 }: {
   children: React.ReactNode;
-  showLogo?: boolean;
 }) {
   const [timeSunMoonLink, setTimeSunMoonLink] = useState("#");
 
@@ -31,7 +29,7 @@ export default function Layout({
     <UserGoalsProvider>
       <div className="flex flex-col min-h-screen">
         <div className="flex-1 min-h-screen">
-          <AdminNavBar showLogo={showLogo} />
+          <AdminNavBar showLogo={true} />
           <main style={{ flex: 1 }} className="relative">
             <div className="relative">
               <section
