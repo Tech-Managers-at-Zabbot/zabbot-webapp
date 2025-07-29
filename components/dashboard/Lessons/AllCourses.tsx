@@ -1,23 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import SearchBar from "@/components/general/SearchBar";
 import MainDropdown from "@/components/MainDropdown";
 import React, { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineFilterList } from "react-icons/md";
-import { CoursesCard, LessonProps } from "../UserLessonDataComponent";
+import { CoursesCard } from "../UserLessonDataComponent";
 import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 import Pagination from "../Pagination";
+import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
+import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
+import { EmptyStateCard } from "@/components/general/EmptyState";
 
 const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  const { userDetails } = useUserGoals();
+
+  const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
+    userDetails?.languageId
+  );
+
   // Calculate total pages based on your data
   const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
 
   // Get current page data
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentPageData = lessonProgressData.slice(startIndex, endIndex);
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  // const endIndex = startIndex + itemsPerPage;
+  // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
 
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
@@ -75,17 +86,17 @@ const AllCourses = () => {
 
   return (
     <div
-      className="border shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
+      className="border z-2 shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
       style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px" }}
     >
       {/* Header Section - Made fully responsive */}
       <header className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
         <section className="min-w-0 flex-1">
           <h3 className="font-semibold text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]">
-            Courses
+            Journey Catalog
           </h3>
           <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1">
-            Yorùbá courses learners love!
+            Meaningful Yorùbá learning — one Journey at a time
           </span>
         </section>
 
@@ -95,7 +106,7 @@ const AllCourses = () => {
           <div className="w-full sm:w-auto sm:min-w-[200px]">
             <SearchBar icon={<IoSearchOutline size={20} />} />
           </div>
-          
+
           {/* Filter and Sort Controls */}
           <div className="flex items-center justify-between sm:justify-start gap-4 lg:gap-6">
             {/* Add Filter */}
@@ -111,7 +122,7 @@ const AllCourses = () => {
                 />
               </span>
             </div>
-            
+
             {/* Sort Dropdown */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
@@ -159,14 +170,33 @@ const AllCourses = () => {
       {/* Courses Grid Section - Fully responsive grid */}
       <section className="w-full min-w-0">
         <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
-          {currentPageData.map(
-            (lessonProgressData: LessonProps, index: number) => (
-              <div key={index} className="min-w-0 w-full flex justify-center">
-                <div className="w-full max-w-[278px]">
-                  <CoursesCard {...lessonProgressData} />
-                </div>
-              </div>
-            )
+          {coursesLoading ? (
+            <>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <DashboardMetricCardSkeleton key={index} />
+              ))}
+            </>
+          ) : !allCourses?.data ? (
+            <>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <EmptyStateCard key={index} title="No data" subtitle="No courses yet"/>
+              ))}
+            </>
+          ) : (
+            <>
+              {allCourses?.data.map(
+                (lessonProgressData: Record<string, any>, index: number) => (
+                  <div
+                    key={index}
+                    className="min-w-0 w-full flex justify-center"
+                  >
+                    <div className="w-full max-w-[278px]">
+                      <CoursesCard {...lessonProgressData} />
+                    </div>
+                  </div>
+                )
+              )}
+            </>
           )}
         </div>
       </section>
@@ -180,7 +210,7 @@ const AllCourses = () => {
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
-          maxVisiblePages={3} // Reduced for mobile
+          maxVisiblePages={5} // Reduced for mobile
         />
       </section>
     </div>

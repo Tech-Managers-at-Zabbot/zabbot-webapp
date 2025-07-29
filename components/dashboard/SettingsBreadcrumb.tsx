@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Modal } from "../general/Modal";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
@@ -134,12 +134,12 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
           </div>
         </Modal>
       )}
-      <Alerts
+      {/* <Alerts
         position="top-left"
         direction="right"
         timer={5000}
         className="rounded-md relative z-1000 !w-80"
-      />
+      /> */}
     </div>
   );
 };

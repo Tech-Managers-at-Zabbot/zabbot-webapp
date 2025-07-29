@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import CongratulationsModal from "@/components/general/CongratulationsModal";
-import { useGetDailyWord } from "@/services/generalApi/lessons/query";
+import { useGetDailyWord } from "@/services/generalApi/userGoals/query";
 import {
   DailyGoalsSkeleton,
   WordForTheDaySkeleton,
@@ -22,7 +22,7 @@ const DailyGoals = () => {
       {goalLoading ? (
         <DailyGoalsSkeleton />
       ) : !userDailyGoal && userDailyGoal !== 0 ? (
-        <EmptyStateCard title="No Data" subtitle="No Data Available Yet"/>
+        <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
       ) : (
         <div
           className="bg-white justify-between shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
@@ -33,8 +33,7 @@ const DailyGoals = () => {
               Daily Goal
             </h1>
             <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
-              Keep building your Yorùbá fluency - let's complete today's
-              journey!
+              {userDailyGoal === 100 ? "You did it! You listened and practiced—Your spark is growing." : "Hear it. Say it. Own it. Practice with confidence."}
             </span>
           </section>
           <section className="flex h-full justify-center items-center my-2 sm:my-4">
@@ -93,35 +92,33 @@ const WordForTheDay = () => {
   const [fill, setFill] = useState("white");
   const [color, setColor] = useState("#CDA674");
   const [showCongrats, setShowCongrats] = useState(false);
-  const [isGoalComplete, setIsGoalComplete] = useState(false)
+  const [isGoalComplete, setIsGoalComplete] = useState(false);
 
-  const { 
-    userDetails, 
-    isGoalCompleted, 
-    completeGoal, 
-    isCompletingDailyGoal, 
-    goalLoading 
+  const {
+    userDetails,
+    isGoalCompleted,
+    completeGoal,
+    isCompletingDailyGoal,
+    goalLoading,
   } = useUserGoals();
 
-
-  useEffect(()=> {
-    setIsGoalComplete(isGoalCompleted)
-  },[completeGoal, goalLoading, isGoalCompleted, isCompletingDailyGoal])
+  useEffect(() => {
+    setIsGoalComplete(isGoalCompleted);
+  }, [completeGoal, goalLoading, isGoalCompleted, isCompletingDailyGoal]);
 
   const [dailyWordData, setDailyWordData] = useState({
     audioUrls: [],
     englishText: "",
     languageText: "",
-    pronunciationNote: ""
+    pronunciationNote: "",
   });
   const [audioPlayerLoading, setAudioPlayerLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { data: dailyWord, isLoading: dailyWordLoading } = useGetDailyWord(
-    userDetails?.languageId, userDetails?.id
+    userDetails?.languageId,
+    userDetails?.id
   );
-
-
 
   const completeUserGoal = () => {
     if (!audioPlayerLoading && !isGoalCompleted) {
@@ -129,7 +126,7 @@ const WordForTheDay = () => {
         () => {
           setShowCongrats(true);
         },
-        (error:any) => {
+        (error: any) => {
           console.error("Failed to complete goal:", error);
         }
       );
@@ -143,7 +140,7 @@ const WordForTheDay = () => {
         audioUrls: wordData?.audioUrls,
         englishText: wordData?.englishText,
         languageText: wordData?.languageText,
-        pronunciationNote: wordData?.pronunciationNote
+        pronunciationNote: wordData?.pronunciationNote,
       });
     }
   }, [dailyWord]);
@@ -159,7 +156,7 @@ const WordForTheDay = () => {
     );
     const audio = new Audio(dailyWordData?.audioUrls[randomIndex]);
 
-    audio.addEventListener("canplaythrough", async() => {
+    audio.addEventListener("canplaythrough", async () => {
       setIsPlaying(true);
       setAudioPlayerLoading(false);
       audio.play();
@@ -172,8 +169,8 @@ const WordForTheDay = () => {
     });
 
     audio.addEventListener("ended", () => {
-      if(!isGoalComplete){
-        setShowCongrats(true)
+      if (!isGoalComplete) {
+        setShowCongrats(true);
         completeUserGoal();
       }
       setIsPlaying(false);
@@ -205,7 +202,7 @@ const WordForTheDay = () => {
       {dailyWordLoading ? (
         <WordForTheDaySkeleton />
       ) : !dailyWord ? (
-        <EmptyStateCard title="No Data" subtitle="No Data Available Yet"/>
+        <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
       ) : (
         <>
           <div
@@ -213,13 +210,16 @@ const WordForTheDay = () => {
             style={{ fontFamily: "Lexend" }}
           >
             <div className="font-semibold text-[18px] sm:text-[20px] md:text-[23px] leading-[100%] text-[#162B6E]">
-              Today's Word
+              Word of the Day
+            </div>
+            <div className="font-light mt-2 text-[12px] sm:text-[14px] md:text-[16px] leading-[100%] text-[#666666]">
+              Listen and Practice
             </div>
             <div className="font-bold text-[#000000CC] text-[28px] sm:text-[32px] md:text-[36px] leading-[100%] my-2 sm:my-4">
               {dailyWordData?.languageText}
             </div>
             <div className="flex flex-col gap-[12px] sm:gap-[16px] md:gap-[20px] w-full">
-               <h3 className="font-[400] text-center text-[14px] sm:text-[20px] md:text-[30px] leading-[120%] text-[#666666]">
+              <h3 className="font-[400] text-center text-[14px] sm:text-[20px] md:text-[30px] leading-[120%] text-[#666666]">
                 ({dailyWordData?.pronunciationNote})
               </h3>
               <h3 className="font-[400] text-center text-[14px] sm:text-[20px] md:text-[30px] leading-[120%] text-[#666666]">

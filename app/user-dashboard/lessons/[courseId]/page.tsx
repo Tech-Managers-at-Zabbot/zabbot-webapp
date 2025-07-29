@@ -1,22 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useEffect, useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import UserLessons from "@/components/dashboard/UserLessons";
-import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import AllCourses from "@/components/dashboard/Lessons/AllCourses";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
+import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
+import Image from "next/image";
 
-const Lessons = () => {
-  const [greeting, setGreeting] = useState("Kàbọ̀");
-
-  const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
-
+const CoursePage = () => {
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
-
+  const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
   const [isDark, setIsDark] = useState(false);
-
-  const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
+  //   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
   useEffect(() => {
     const currentTime = new Date();
@@ -24,24 +17,24 @@ const Lessons = () => {
 
     if (hours >= 6 && hours < 12) {
       // Morning: 6 AM to 12 PM
-      setGreeting("Káàrọ̀");
+      //   setGreeting("Káàrọ̀");
     } else if (hours >= 12 && hours < 18) {
       // Afternoon: 12 PM to 6 PM
-      setGreeting("Káàsán");
+      //   setGreeting("Káàsán");
     } else {
       // Night: 6 PM to 6 AM
-      setGreeting("Káalẹ́");
+      //   setGreeting("Káalẹ́");
       setBackgroundColor("#012657");
       setCloudsUrl("/userDashboard/dark-clouds.svg");
       setIsDark(true);
-      setLogoUrl("/general/zabbot-logo-white.svg");
+      //   setLogoUrl("/general/zabbot-logo-white.svg");
     }
   }, []);
 
   return (
-    <div className="">
+    <div>
       <Head>
-        <title>Lessons Page</title>
+        <title>Course Page</title>
         <meta
           name="description"
           content="Join users from all over the world and immerse yourself in language & culture"
@@ -62,6 +55,14 @@ const Lessons = () => {
         ></div>
         <div className="max-w-screen-2xl">
           <div className="w-full">
+            {/* <div className="mt-6">
+             <span
+                  className="text-sm md:text-sm lg:text-2xl"
+                  style={{ color: isDark ? "#D0F7F6" : "#202124" }}
+                >
+                  Welcome! Start Learning{" "}
+                </span>
+            </div> */}
             <div className="flex absolute top-0 right-[5%] items-center z-10 gap-20 flex-shrink-0">
               <div className="w-[70px] mt-1 flex">
                 <div className="h-[80px]">
@@ -80,33 +81,7 @@ const Lessons = () => {
               </div>
             </div>
           </div>
-          <header className="relative">
-            <div className="flex relative z-10 mt-6 justify-between text-[24px] font-semibold leading-[100%] text-[#162B6E]">
-              <div className="flex-shrink-0">
-                {/* <div className="relative w-[156px] h-[46.91px]">
-                  <Image
-                    src="/general/zabbot-logo-blue.svg"
-                    alt="Zabbot blue Logo"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div> */}
-                <span
-                  className="text-sm md:text-sm lg:text-2xl"
-                  style={{ color: isDark ? "#D0F7F6" : "#202124" }}
-                >
-                  Welcome! Start Learning{" "}
-                </span>
-              </div>
-            </div>
-          </header>
-
-          <section className="mt-36">
-            <UserLessons />
-          </section>
-
-          <section className="mt-6">
+          <section className="mt-50 flex">
             <AllCourses />
           </section>
         </div>
@@ -115,4 +90,4 @@ const Lessons = () => {
   );
 };
 
-export default Lessons;
+export default CoursePage;

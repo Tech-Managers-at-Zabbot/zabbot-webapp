@@ -24,7 +24,10 @@ const getToken = async () => {
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    await getToken();
+    const token = await getToken();
+    if (token && config.headers) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {

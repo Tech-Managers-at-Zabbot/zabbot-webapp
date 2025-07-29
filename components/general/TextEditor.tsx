@@ -134,7 +134,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
         <select
           onChange={(e) => executeCommand('fontSize', e.target.value)}
-          className="px-2 py-1 border border-gray-300 rounded text-sm"
+          className="px-2 py-1 border text-[#012657] border-gray-300 rounded text-sm"
           defaultValue="3"
         >
           <option value="1">Small</option>

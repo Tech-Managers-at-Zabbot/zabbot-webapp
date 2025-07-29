@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 import { z } from "zod";
@@ -22,139 +23,36 @@ import {
 import { appColors } from "@/constants/colors";
 import TextEditor from "@/components/general/TextEditor";
 import EdedunModal from "@/components/general/EdedunContentModal";
+import {
+  ContentDataType,
+  ContentSourceType,
+  LanguageCode,
+  Level,
+} from "@/types/enums";
+import {
+  Content,
+  ContentFile,
+  Course,
+  EdedunPhrase,
+  Language,
+  Lesson,
+} from "@/types/interfaces";
+import { courseSchema, lessonSchema } from "@/schemas/lessons.schema";
+import { Alerts, useAlert } from "next-alert";
+import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useCreateCourseWithLessons } from "@/services/generalApi/lessons/mutation";
 
-// Enums to match backend
-enum ContentDataType {
-  VIDEO = "video",
-  AUDIO = "audio",
-  IMAGE = "image",
-}
+const CLOUDINARY_CONFIG = {
+  cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dirr9d0ox",
+  uploadPreset:
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "zabbot-preset",
+};
 
-enum ContentSourceType {
-  EDEDUN = "ededun",
-  NEW = "new",
-}
-
-enum Level {
-  BEGINNER = "beginner",
-  INTERMEDIATE = "intermediate",
-  ADVANCED = "advanced",
-}
-
-enum LanguageCode {
-  // ENGLISH = "EN",
-  // SPANISH = "ES",
-  // FRENCH = "FR",
-  // GERMAN = "DE",
-  // ITALIAN = "IT",
-  // PORTUGUESE = "PT",
-  // MANDARIN = "ZH",
-  // JAPANESE = "JA",
-  // KOREAN = "KO",
-  // ARABIC = "AR",
-  // RUSSIAN = "RU",
-  // HINDI = "HI",
-  YORUBA = "YO",
-  // IGBO = "IG",
-  // HAUSA = "HA",
-  // SWAHILI = "SW",
-}
-
-// Validation schemas
-const courseSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Course title is required")
-    .min(3, "Title must be at least 3 characters"),
-  description: z
-    .string()
-    .min(1, "Description is required")
-    .min(10, "Description must be at least 10 characters"),
-  languageId: z.string().min(1, "Please select a language"),
-  level: z.nativeEnum(Level, {
-    errorMap: () => ({ message: "Please select a level" }),
-  }),
-  estimatedDuration: z
-    .number()
-    .min(1, "Estimated duration must be at least 1 minute")
-    .optional(),
-  tags: z.array(z.string()).optional(),
-  prerequisites: z.array(z.string()).optional(),
-});
-
-const lessonSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Lesson title is required")
-    .min(3, "Title must be at least 3 characters"),
-  description: z.string().min(1, "Description is required"),
-  orderNumber: z.number().min(1, "Order must be at least 1"),
-});
-
-const contentSchema = z.object({
-  translation: z.string().min(1, "Translation is required"),
-});
-
-// Interfaces to match backend
-interface Language {
-  id: string;
-  code: string;
-  title: string;
-  flagIcon?: string;
-  isActive?: boolean;
-}
-
-interface ContentFile {
-  id?: string;
-  contentType: ContentDataType;
-  filePath: string;
-  file?: File; // For handling file uploads
-}
-
-interface Content {
-  id?: string;
-  translation: string;
-  contentFiles: ContentFile[];
-  sourceType: ContentSourceType;
-  ededunPhrases?: EdeunPhrase[];
-  customText?: string;
-  mediaDescriptions?: { [key: string]: string };
-}
-
-interface EdeunPhrase {
-  id: string;
-  yorubaText: string;
-  englishTranslation: string;
-  audioUrl: string;
-  category: string;
-}
-
-interface Lesson {
-  id?: string;
-  title: string;
-  description: string;
-  orderNumber: number;
-  contents: Content[];
-  headlineTag?: string;
-  estimatedTime?: number;
-  outcomes?: string;
-  objectives?: string;
-}
-
-interface Course {
-  id?: string;
-  title: string;
-  description?: string;
-  languageId: string;
-  level: Level;
-  isActive: boolean;
-  estimatedDuration?: number;
-  totalLessons?: number;
-  totalContents?: number;
-  thumbnailImage?: string;
-  tags?: string[];
-  prerequisites?: string[];
-}
+const FILE_LIMITS = {
+  IMAGE_MAX_SIZE: 2,
+  VIDEO_MAX_SIZE: 15,
+  AUDIO_MAX_SIZE: 10,
+};
 
 const CreateContentPage = () => {
   // Mock languages - in real app, fetch from API
@@ -203,14 +101,26 @@ const CreateContentPage = () => {
     // },
   ]);
 
+  const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
+  const [uploadErrors, setUploadErrors] = useState<{ [key: string]: string }>(
+    {}
+  );
+
+  const { addAlert } = useAlert();
+
+  const { userDetails } = useUserGoals();
+
+  const router = useRouter();
+
   // Course state
   const [courseData, setCourseData] = useState<Course>({
     title: "",
     description: "",
     languageId: "",
-    level: Level.BEGINNER,
+    level: Level.BUILDER,
     isActive: true,
     estimatedDuration: undefined,
+    thumbnailFile: undefined, // Add this
     tags: [],
     prerequisites: [],
   });
@@ -276,20 +186,20 @@ const CreateContentPage = () => {
   }, []);
 
   // Prevent background scrolling when any modal is open
-useEffect(() => {
-  if (showLessonModal || showEdeunModal) {
-    // Prevent scrolling
-    document.body.style.overflow = 'hidden';
-  } else {
-    // Re-enable scrolling
-    document.body.style.overflow = 'unset';
-  }
+  useEffect(() => {
+    if (showLessonModal || showEdeunModal) {
+      // Prevent scrolling
+      document.body.style.overflow = "hidden";
+    } else {
+      // Re-enable scrolling
+      document.body.style.overflow = "unset";
+    }
 
-  // Cleanup function to restore scrolling when component unmounts
-  return () => {
-    document.body.style.overflow = 'unset';
-  };
-}, [showLessonModal, showEdeunModal]);
+    // Cleanup function to restore scrolling when component unmounts
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showLessonModal, showEdeunModal]);
 
   // Validate course data
   const validateCourse = () => {
@@ -317,16 +227,35 @@ useEffect(() => {
         title: currentLesson.title,
         description: currentLesson.description,
         orderNumber: currentLesson.orderNumber,
+        contents: currentLesson.contents,
       });
       setLessonErrors({});
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
         const errors: any = {};
+        let firstErrorField = "";
+        let firstErrorMessage = "";
+
         error.errors.forEach((err) => {
           const field = err.path[0] as string;
           errors[field] = err.message;
+
+          // Capture the first error to show in alert
+          if (!firstErrorField) {
+            firstErrorField = field;
+            firstErrorMessage = err.message;
+          }
         });
+
+        // Format the field name for display (e.g., "orderNumber" -> "Order number")
+        const formattedField = firstErrorField
+          ? firstErrorField
+              .replace(/([A-Z])/g, " $1") // Add space before capital letters
+              .replace(/^./, (str) => str.toUpperCase()) // Capitalize first letter
+          : "";
+
+        addAlert("Error", `${firstErrorMessage}`, "error");
         setLessonErrors(errors);
       }
       return false;
@@ -366,23 +295,23 @@ useEffect(() => {
   };
 
   // Handle tags
-  const addTag = () => {
-    if (tagsInput.trim() && !courseData.tags?.includes(tagsInput.trim())) {
-      handleCourseChange("tags", [
-        ...(courseData.tags || []),
-        tagsInput.trim(),
-      ]);
-      setTagsInput("");
-    }
-  };
+  // const addTag = () => {
+  //   if (tagsInput.trim() && !courseData.tags?.includes(tagsInput.trim())) {
+  //     handleCourseChange("tags", [
+  //       ...(courseData.tags || []),
+  //       tagsInput.trim(),
+  //     ]);
+  //     setTagsInput("");
+  //   }
+  // };
 
-  const removeTag = (index: number) => {
-    const newTags = courseData.tags?.filter((_, i) => i !== index) || [];
-    handleCourseChange("tags", newTags);
-  };
+  // const removeTag = (index: number) => {
+  //   const newTags = courseData.tags?.filter((_, i) => i !== index) || [];
+  //   handleCourseChange("tags", newTags);
+  // };
 
   // Add these new handler functions
-  const handleEdedunSelection = (phrases: EdeunPhrase[]) => {
+  const handleEdedunSelection = (phrases: EdedunPhrase[]) => {
     if (editingContentIndex !== null) {
       updateContent(editingContentIndex, {
         ededunPhrases: phrases,
@@ -398,13 +327,26 @@ useEffect(() => {
     fileIndex: number,
     description: string
   ) => {
-    const content = currentLesson.contents[contentIndex];
-    const fileId = `${contentIndex}-${fileIndex}`;
-    const updatedDescriptions = {
-      ...content.mediaDescriptions,
-      [fileId]: description,
-    };
-    updateContent(contentIndex, { mediaDescriptions: updatedDescriptions });
+    setCurrentLesson((prev) => ({
+      ...prev,
+      contents: prev.contents.map((content, cIndex) => {
+        if (cIndex === contentIndex) {
+          return {
+            ...content,
+            contentFiles: content.contentFiles.map((file, fIndex) => {
+              if (fIndex === fileIndex) {
+                return {
+                  ...file,
+                  description,
+                };
+              }
+              return file;
+            }),
+          };
+        }
+        return content;
+      }),
+    }));
   };
 
   // Add new content
@@ -417,7 +359,6 @@ useEffect(() => {
       sourceType,
       ededunPhrases: sourceType === ContentSourceType.EDEDUN ? [] : undefined,
       customText: sourceType === ContentSourceType.NEW ? "" : undefined,
-      mediaDescriptions: {},
     };
 
     setCurrentLesson((prev) => ({
@@ -451,7 +392,6 @@ useEffect(() => {
     setEditingContentIndex(null);
   };
 
-  // Handle file upload
   const handleFileUpload = (
     contentIndex: number,
     files: FileList | null,
@@ -460,10 +400,18 @@ useEffect(() => {
     if (!files || files.length === 0) return;
 
     const file = files[0];
+
+    const sizeError = validateFileSize(file, contentType);
+    if (sizeError) {
+      addAlert("Error", sizeError, "error");
+      return;
+    }
+
     const newContentFile: ContentFile = {
       contentType,
-      filePath: URL.createObjectURL(file), // Temporary URL for preview
-      file, // Store file for actual upload
+      filePath: URL.createObjectURL(file),
+      file,
+      description: "",
     };
 
     const currentContent = currentLesson.contents[contentIndex];
@@ -536,13 +484,63 @@ useEffect(() => {
   };
 
   // Handle course thumbnail upload
-  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThumbnailUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+
+      // Validate file size (2MB limit for images)
+      const sizeError = validateFileSize(file, ContentDataType.IMAGE);
+      if (sizeError) {
+        addAlert("Error", sizeError, "error");
+        return;
+      }
+
+      // Create preview URL
       const imageUrl = URL.createObjectURL(file);
+
+      // Store both the preview URL and the file for later upload
       handleCourseChange("thumbnailImage", imageUrl);
+      handleCourseChange("thumbnailFile", file); // Add this new field to store the file
     }
   };
+
+  const handleThumbnailCloudinaryUpload = async (
+    file: File
+  ): Promise<string> => {
+    try {
+      // Create FormData for Cloudinary upload
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
+      formData.append("resource_type", "image");
+
+      // Upload to Cloudinary
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Upload failed: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const result = await response.json();
+      return result.secure_url;
+    } catch (error) {
+      console.error("Thumbnail upload error:", error);
+      throw error;
+    }
+  };
+
+  const { mutate: createCourse, isPending: creatCourseLoading } =
+    useCreateCourseWithLessons();
 
   // Submit entire course
   const handleSubmit = async () => {
@@ -552,7 +550,7 @@ useEffect(() => {
     }
 
     if (lessons.length === 0) {
-      alert("Please add at least one lesson");
+      addAlert("Error", "Please add at least one lesson", "error");
       setActiveTab("lessons");
       return;
     }
@@ -560,38 +558,66 @@ useEffect(() => {
     setIsLoading(true);
 
     try {
-      const coursePayload = {
-        ...courseData,
-        totalLessons: lessons.length,
-        totalContents: lessons.reduce(
-          (total, lesson) => total + lesson.contents.length,
-          0
-        ),
-        lessons: lessons,
-      };
+      // Check if there are any files still uploading
+      if (uploadingFiles.size > 0) {
+        addAlert(
+          "Info",
+          "Please wait for all files to finish uploading",
+          "info"
+        );
+        setIsLoading(false);
+        return;
+      }
 
-      console.log("Submitting course:", coursePayload);
+      const coursePayload = await prepareDataForBackend();
+      const languageId = userDetails?.languageId;
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (!languageId) {
+        return addAlert(
+          "Error",
+          "An error occurred, please try again",
+          "error"
+        );
+      }
 
-      alert("Course created successfully!");
-
-      // Reset form
-      setCourseData({
-        title: "",
-        description: "",
-        languageId: "",
-        level: Level.BEGINNER,
-        isActive: true,
-        tags: [],
-        prerequisites: [],
-      });
-      setLessons([]);
-      setActiveTab("course");
+      // Send to backend
+      // const response = await apiService.createCourseWithLessons(coursePayload, languageId);
+      createCourse(
+        {
+          courseData: coursePayload,
+          languageId,
+        },
+        {
+          onSuccess: () => {
+            addAlert("Success", "Course created successfully!", "success");
+            setCourseData({
+              title: "",
+              description: "",
+              languageId: "",
+              level: Level.BUILDER,
+              isActive: true,
+              thumbnailFile: undefined,
+              tags: [],
+              prerequisites: [],
+            });
+            setLessons([]);
+            setActiveTab("course");
+            router.push('/user-dashboard')
+          },
+          onError: () => {
+            addAlert("Error", "Course not created, try again", "error");
+          },
+        }
+      );
     } catch (error) {
       console.error("Error creating course:", error);
-      alert("Error creating course. Please try again.");
+      addAlert(
+        "Error",
+        `Error creating course: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+        "error"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -600,6 +626,199 @@ useEffect(() => {
   const selectedLanguage = languages.find(
     (lang) => lang.id === courseData.languageId
   );
+
+  const validateFileSize = (
+    file: File,
+    contentType: ContentDataType
+  ): string | null => {
+    let maxSize: number;
+
+    switch (contentType) {
+      case ContentDataType.IMAGE:
+        maxSize = FILE_LIMITS.IMAGE_MAX_SIZE;
+        break;
+      case ContentDataType.VIDEO:
+        maxSize = FILE_LIMITS.VIDEO_MAX_SIZE;
+        break;
+      case ContentDataType.AUDIO:
+        maxSize = FILE_LIMITS.AUDIO_MAX_SIZE;
+        break;
+      default:
+        return null;
+    }
+
+    const maxSizeInBytes = maxSize * 1024 * 1024;
+    if (file.size > maxSizeInBytes) {
+      return `File size must be less than ${maxSize}MB`;
+    }
+
+    return null;
+  };
+
+  const handleCloudinaryUpload = async (
+    file: File,
+    contentIndex: number,
+    fileIndex: number,
+    contentType: ContentDataType
+  ): Promise<void> => {
+    const fileId = `${contentIndex}-${fileIndex}`;
+
+    try {
+      // Add to uploading files set
+      setUploadingFiles((prev) => new Set([...prev, fileId]));
+
+      // Clear any previous errors for this file
+      setUploadErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[fileId];
+        return newErrors;
+      });
+
+      // Create FormData for Cloudinary upload
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
+
+      // Set resource type based on content type
+      let resourceType = "auto";
+      if (contentType === ContentDataType.IMAGE) {
+        resourceType = "image";
+      } else if (contentType === ContentDataType.VIDEO) {
+        resourceType = "video";
+      } else if (contentType === ContentDataType.AUDIO) {
+        resourceType = "video"; // Cloudinary uses 'video' for audio files
+      }
+
+      formData.append("resource_type", resourceType);
+
+      // Upload to Cloudinary
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      console.log("res", response);
+
+      if (!response.ok) {
+        throw new Error(
+          `Upload failed: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const result = await response.json();
+
+      // Update the content file with the Cloudinary URL
+      setCurrentLesson((prev) => ({
+        ...prev,
+        contents: prev.contents.map((content, cIndex) => {
+          if (cIndex === contentIndex) {
+            return {
+              ...content,
+              contentFiles: content.contentFiles.map((contentFile, fIndex) => {
+                if (fIndex === fileIndex) {
+                  return {
+                    ...contentFile,
+                    filePath: result.secure_url,
+                    file: undefined, // Remove the file object after successful upload
+                  };
+                }
+                return contentFile;
+              }),
+            };
+          }
+          return content;
+        }),
+      }));
+    } catch (error) {
+      console.error("Cloudinary upload error:", error);
+
+      // Set error for this specific file
+      setUploadErrors((prev) => ({
+        ...prev,
+        [fileId]: error instanceof Error ? error.message : "Upload failed",
+      }));
+
+      throw error; // Re-throw to be handled by the calling function
+    } finally {
+      // Remove from uploading files set
+      setUploadingFiles((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(fileId);
+        return newSet;
+      });
+    }
+  };
+
+  const prepareDataForBackend = async () => {
+    const uploadPromises: Promise<void>[] = [];
+
+    // Handle lesson content files (existing code)
+    currentLesson.contents.forEach((content, contentIndex) => {
+      content.contentFiles.forEach((file, fileIndex) => {
+        if (file.file) {
+          const promise = handleCloudinaryUpload(
+            file.file,
+            contentIndex,
+            fileIndex,
+            file.contentType
+          );
+          uploadPromises.push(promise);
+        }
+      });
+    });
+
+    await Promise.all(uploadPromises);
+
+    // Handle course thumbnail upload
+    let thumbnailImageUrl = courseData.thumbnailImage;
+    if (courseData.thumbnailFile) {
+      try {
+        thumbnailImageUrl = await handleThumbnailCloudinaryUpload(
+          courseData.thumbnailFile
+        );
+      } catch (error) {
+        addAlert("Error", "Failed to upload thumbnail image", "error");
+        throw error;
+      }
+    }
+
+    const coursePayload = {
+      courseData: {
+        title: courseData.title,
+        description: courseData.description,
+        level: courseData.level,
+        isActive: courseData.isActive,
+        estimatedDuration: courseData.estimatedDuration,
+        thumbnailImage: thumbnailImageUrl, // Use the Cloudinary URL
+        tags: courseData.tags,
+        prerequisites: courseData.prerequisites,
+      },
+      lessons: lessons.map((lesson) => ({
+        title: lesson.title,
+        description: lesson.description,
+        orderNumber: lesson.orderNumber,
+        headlineTag: lesson.headlineTag,
+        estimatedTime: lesson.estimatedTime,
+        outcomes: lesson.outcomes,
+        objectives: lesson.objectives,
+        contents: lesson.contents.map((content) => ({
+          translation: content.translation,
+          sourceType: content.sourceType,
+          ededunPhrases: content.ededunPhrases,
+          customText: content.customText,
+          contentFiles: content.contentFiles.map((file) => ({
+            contentType: file.contentType,
+            filePath: file.filePath,
+            description: file.description || "",
+          })),
+        })),
+      })),
+    };
+
+    return coursePayload;
+  };
 
   return (
     <div className="">
@@ -1031,7 +1250,7 @@ useEffect(() => {
                   disabledColor={appColors.disabledButtonBlue}
                   width="200px"
                 >
-                  {isLoading ? (
+                  {isLoading || creatCourseLoading ? (
                     <div className="flex items-center">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                       Creating...
@@ -1050,7 +1269,6 @@ useEffect(() => {
           </section>
         </div>
       </div>
-
       {/* Lesson Modal */}
       {showLessonModal && (
         <div
@@ -1111,7 +1329,7 @@ useEffect(() => {
                       onChange={(e) =>
                         handleLessonChange(
                           "orderNumber",
-                          parseInt(e.target.value) || 1
+                          parseInt(e.target.value)
                         )
                       }
                       placeholder="Lesson order"
@@ -1449,8 +1667,7 @@ useEffect(() => {
                               </h5>
                               {content.contentFiles.map((file, fileIndex) => {
                                 const fileId = `${index}-${fileIndex}`;
-                                const description =
-                                  content.mediaDescriptions?.[fileId] || "";
+                                const description = file.description || "";
 
                                 return (
                                   <div
@@ -1572,16 +1789,22 @@ useEffect(() => {
                   Save Lesson
                 </InAppButton>
               </div>
+              <Alerts
+                position="top-right"
+                direction="right"
+                timer={5000}
+                className="rounded-md relative z-100 !w-80"
+              />
             </div>
+            {/* Add this before the lesson modal's closing div */}
+            <EdedunModal
+              isOpen={showEdeunModal}
+              onClose={() => setShowEdeunModal(false)}
+              onSelect={handleEdedunSelection}
+            />
           </div>
         </div>
       )}
-      {/* Add this before the lesson modal's closing div */}
-      <EdedunModal
-        isOpen={showEdeunModal}
-        onClose={() => setShowEdeunModal(false)}
-        onSelect={handleEdedunSelection}
-      />
     </div>
   );
 };

@@ -149,3 +149,211 @@ return (
   </div>
 );
 };
+
+const skeletonStyles = `
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+`;
+
+// Define types for skeleton elements
+type SkeletonElementType = 'line' | 'circle' | 'rectangle' | 'square' | 'custom';
+
+interface SkeletonElement {
+  type: SkeletonElementType;
+  width?: string | number;
+  height?: string | number;
+  className?: string;
+  style?: React.CSSProperties;
+  rounded?: boolean | string; // true for rounded, string for custom border-radius
+  count?: number; // For multiple lines
+  spacing?: string; // Gap between multiple elements
+}
+
+interface SkeletonLoaderProps {
+  // Container props
+  containerClassName?: string;
+  containerStyle?: React.CSSProperties;
+  
+  // Layout props
+  direction?: 'row' | 'column';
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+  align?: 'start' | 'center' | 'end' | 'stretch';
+  gap?: string;
+  padding?: string;
+  
+  // Skeleton elements
+  elements: SkeletonElement[];
+  
+  // Animation props
+  animate?: boolean;
+  animationDuration?: string;
+  baseColor?: string;
+  highlightColor?: string;
+}
+
+const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
+  containerClassName = '',
+  containerStyle = {},
+  direction = 'column',
+  justify = 'start',
+  align = 'start',
+  gap = '12px',
+  padding = '16px',
+  elements,
+  animate = true,
+  animationDuration = '2s',
+  baseColor = '#E5E7EB',
+  // highlightColor = '#F3F4F6',
+}) => {
+  
+  const getJustifyClass = (justify: string) => {
+    const justifyMap = {
+      start: 'justify-start',
+      center: 'justify-center',
+      end: 'justify-end',
+      between: 'justify-between',
+      around: 'justify-around',
+      evenly: 'justify-evenly',
+    };
+    return justifyMap[justify as keyof typeof justifyMap] || 'justify-start';
+  };
+
+  const getAlignClass = (align: string) => {
+    const alignMap = {
+      start: 'items-start',
+      center: 'items-center',
+      end: 'items-end',
+      stretch: 'items-stretch',
+    };
+    return alignMap[align as keyof typeof alignMap] || 'items-start';
+  };
+
+  const getFlexDirection = (direction: string) => {
+    return direction === 'row' ? 'flex-row' : 'flex-col';
+  };
+
+  const renderSkeletonElement = (element: SkeletonElement, index: number) => {
+    const {
+      type,
+      width = '100%',
+      height = '20px',
+      className = '',
+      style = {},
+      rounded = false,
+      count = 1,
+      spacing = '8px',
+    } = element;
+
+    const baseElementStyle: React.CSSProperties = {
+      backgroundColor: baseColor,
+      ...(animate && {
+        animation: `pulse ${animationDuration} cubic-bezier(0.4, 0, 0.6, 1) infinite`,
+      }),
+      ...style,
+    };
+
+    const getRoundedClass = () => {
+      if (typeof rounded === 'string') return '';
+      if (rounded === true) {
+        switch (type) {
+          case 'circle':
+            return 'rounded-full';
+          case 'line':
+            return 'rounded';
+          case 'rectangle':
+          case 'square':
+            return 'rounded-md';
+          default:
+            return 'rounded';
+        }
+      }
+      return '';
+    };
+
+    const getTypeSpecificClasses = () => {
+      switch (type) {
+        case 'circle':
+          return 'rounded-full';
+        case 'line':
+          return 'rounded';
+        case 'rectangle':
+          return 'rounded-md';
+        case 'square':
+          return 'rounded-md';
+        default:
+          return '';
+      }
+    };
+
+    const elementClasses = `
+      ${getTypeSpecificClasses()}
+      ${getRoundedClass()}
+      ${className}
+    `.trim();
+
+    const elementStyle: React.CSSProperties = {
+      ...baseElementStyle,
+      width: typeof width === 'number' ? `${width}px` : width,
+      height: typeof height === 'number' ? `${height}px` : height,
+      ...(typeof rounded === 'string' && { borderRadius: rounded }),
+    };
+
+    if (count > 1) {
+      return (
+        <div
+          key={index}
+          className="flex flex-col"
+          style={{ gap: spacing }}
+        >
+          {Array.from({ length: count }).map((_, i) => (
+            <div
+              key={i}
+              className={elementClasses}
+              style={elementStyle}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div
+        key={index}
+        className={elementClasses}
+        style={elementStyle}
+      />
+    );
+  };
+
+  const containerClasses = `
+    flex
+    ${getFlexDirection(direction)}
+    ${getJustifyClass(justify)}
+    ${getAlignClass(align)}
+    ${containerClassName}
+  `.trim();
+
+  return (
+    <>
+      <style>{skeletonStyles}</style>
+      <div
+        className={containerClasses}
+        style={{
+          gap,
+          padding,
+          ...containerStyle,
+        }}
+      >
+        {elements.map((element, index) => renderSkeletonElement(element, index))}
+      </div>
+    </>
+  );
+};
+
+export default SkeletonLoader;

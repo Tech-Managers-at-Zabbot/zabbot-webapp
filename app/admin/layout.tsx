@@ -5,7 +5,13 @@ import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
 import React, { useEffect, useState } from "react";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({
+  children,
+  showLogo = false,
+}: {
+  children: React.ReactNode;
+  showLogo?: boolean;
+}) {
   const [timeSunMoonLink, setTimeSunMoonLink] = useState("#");
 
   useEffect(() => {
@@ -25,7 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <UserGoalsProvider>
       <div className="flex flex-col min-h-screen">
         <div className="flex-1 min-h-screen">
-          <AdminNavBar showLogo />
+          <AdminNavBar showLogo={showLogo} />
           <main style={{ flex: 1 }} className="relative">
             <div className="relative">
               <section

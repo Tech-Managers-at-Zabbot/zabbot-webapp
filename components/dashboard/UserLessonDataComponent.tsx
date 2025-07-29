@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
@@ -20,7 +21,6 @@ export interface LessonProps {
 export const LessonProgressCard: React.FC<LessonProps> = (
   data: LessonProps
 ) => {
-
   const router = useRouter();
 
   const { setLoading } = useLoading();
@@ -42,8 +42,12 @@ export const LessonProgressCard: React.FC<LessonProps> = (
         </div>
       </section>
 
-      <section className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-      onClick={() => {router.push("/lesson"); setLoading(true)}}
+      <section
+        className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
       >
         <div className="flex-shrink-0">
           <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
@@ -95,10 +99,10 @@ export const LessonProgressCard: React.FC<LessonProps> = (
   );
 };
 
-export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
+export const CoursesCard = (data: any) => {
   const router = useRouter();
   const { setLoading } = useLoading();
-  
+
   return (
     <div
       className="bg-white flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
@@ -107,7 +111,7 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
       <section className="w-full">
         <div className="relative w-full h-[150px]">
           <Image
-            src={`${data.courseImage}`}
+            src={`${data?.thumbnailImage}`}
             alt="An image of a boy prostrating before an elderly woman in greeting"
             fill
             priority
@@ -116,8 +120,12 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
         </div>
       </section>
 
-      <section className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
-      onClick={() => {router.push("/lesson"); setLoading(true)}}
+      <section
+        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
+        onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
       >
         <div className="flex-shrink-0">
           <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
@@ -137,31 +145,117 @@ export const CoursesCard: React.FC<LessonProps> = (data: LessonProps) => {
           className={`px-[12px] py-[8px] border rounded-md`}
           style={{
             color:
-              data.courseUserLevel === "Foundation"
+              data?.level === "foundation"
                 ? "#D3AF37"
-                : data.courseUserLevel === "Builder"
+                : data.level === "builder"
                 ? "#CF0A5C"
                 : "#169A9C",
           }}
         >
-          {data.courseUserLevel}
+          {data?.level}
         </div>
       </section>
 
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
           <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000]">
-            {data.courseTitle.length > 15 ? data.courseTitle.slice(0, 15) + "..." : data.courseTitle}
+            {data?.title?.length > 15
+              ? data?.title.slice(0, 15) + "..."
+              : data?.title}
           </h3>
           <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
-            {data.courseSummary.length > 50 ? data.courseSummary.slice(0, 50) + "..." : data.courseSummary}
+            {data?.description?.length > 50
+              ? data?.description.slice(0, 50) + "..."
+              : data?.description}
           </div>
         </div>
 
         <div className="flex flex-col gap-[4px]">
           <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
-            <span>{data.courseDuration} min</span>
-            <span>{data.courseTotalLessons} lessons</span>
+            <span>{data?.estimatedDuration} min</span>
+            <span>{data?.totalLessons} lessons</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export const LessonsCard = (data: any) => {
+  const router = useRouter();
+  const { setLoading } = useLoading();
+
+  return (
+    <div
+      className="bg-white flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
+      style={{ fontFamily: "Lexend" }}
+    >
+      <section className="w-full">
+        <div className="relative w-full h-[150px]">
+          <Image
+            src={`${data?.thumbnailImage}`}
+            alt="An image of a boy prostrating before an elderly woman in greeting"
+            fill
+            priority
+            className="object-cover object-top rounded-t-sm"
+          />
+        </div>
+      </section>
+
+      <section
+        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
+        onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
+      >
+        <div className="flex-shrink-0">
+          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
+            <Image
+              src="/userDashboard/hand-click-element.svg"
+              alt="A hand clicking the card"
+              fill
+              priority
+              className="object-cover rounded-l-sm"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
+        <div
+          className={`px-[12px] py-[8px] border rounded-md`}
+          style={{
+            color:
+              data.level === "foundation"
+                ? "#D3AF37"
+                : data.level === "builder"
+                ? "#CF0A5C"
+                : "#169A9C",
+          }}
+        >
+          {data?.level}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
+        <div className="flex flex-col gap-[8px]">
+          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000]">
+            {data?.title?.length > 15
+              ? data?.title.slice(0, 15) + "..."
+              : data?.title}
+          </h3>
+          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
+            {data?.description?.length > 50
+              ? data?.description.slice(0, 50) + "..."
+              : data?.description}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[4px]">
+          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
+            <span>{data?.estimatedDuration} min</span>
+            <span>{data?.totalLessons} lessons</span>
           </div>
         </div>
       </section>
@@ -189,12 +283,12 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
   maxWidth = "100%",
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isScrolling, setIsScrolling] = useState<'left' | 'right' | null>(null);
+  const [isScrolling, setIsScrolling] = useState<"left" | "right" | null>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startScrolling = (direction: 'left' | 'right') => {
+  const startScrolling = (direction: "left" | "right") => {
     setIsScrolling(direction);
   };
 
@@ -218,7 +312,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
       // Check on resize
       const resizeObserver = new ResizeObserver(updateArrowVisibility);
       resizeObserver.observe(ref);
-      
+
       return () => {
         ref.removeEventListener("scroll", updateArrowVisibility);
         resizeObserver.disconnect();
@@ -228,13 +322,13 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
 
   useEffect(() => {
     if (isScrolling && scrollRef.current) {
-      const scrollDistance = isScrolling === 'left' ? -50 : 50;
-      
+      const scrollDistance = isScrolling === "left" ? -50 : 50;
+
       intervalRef.current = setInterval(() => {
         if (scrollRef.current) {
           scrollRef.current.scrollBy({
             left: scrollDistance,
-            behavior: 'auto'
+            behavior: "auto",
           });
         }
       }, 16); // ~60fps for smooth scrolling
@@ -255,8 +349,8 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
     <div
       className={`flex flex-col gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full`}
       style={{
-        fontFamily: "Lexend", 
-        maxWidth, 
+        fontFamily: "Lexend",
+        maxWidth,
         padding,
       }}
     >
@@ -273,32 +367,44 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
           <TfiArrowCircleLeft
             size={32}
             color={showLeftArrow ? "#737477" : "#cccccc"}
-            className={`select-none ${showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"}`}
-            onMouseDown={showLeftArrow ? () => startScrolling('left') : undefined}
+            className={`select-none ${
+              showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+            }`}
+            onMouseDown={
+              showLeftArrow ? () => startScrolling("left") : undefined
+            }
             onMouseUp={stopScrolling}
             onMouseLeave={stopScrolling}
-            onTouchStart={showLeftArrow ? () => startScrolling('left') : undefined}
+            onTouchStart={
+              showLeftArrow ? () => startScrolling("left") : undefined
+            }
             onTouchEnd={stopScrolling}
           />
           <TfiArrowCircleRight
             size={32}
             color={showRightArrow ? "#737477" : "#cccccc"}
-            className={`select-none ${showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"}`}
-            onMouseDown={showRightArrow ? () => startScrolling('right') : undefined}
+            className={`select-none ${
+              showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+            }`}
+            onMouseDown={
+              showRightArrow ? () => startScrolling("right") : undefined
+            }
             onMouseUp={stopScrolling}
             onMouseLeave={stopScrolling}
-            onTouchStart={showRightArrow ? () => startScrolling('right') : undefined}
+            onTouchStart={
+              showRightArrow ? () => startScrolling("right") : undefined
+            }
             onTouchEnd={stopScrolling}
           />
         </div>
       </section>
-      <section 
-        className="overflow-x-auto scrollbar-hide" 
+      <section
+        className="overflow-x-auto scrollbar-hide"
         ref={scrollRef}
         style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          WebkitOverflowScrolling: 'touch'
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {children}

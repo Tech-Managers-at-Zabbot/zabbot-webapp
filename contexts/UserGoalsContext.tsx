@@ -4,7 +4,7 @@ import {
   useCompleteUserDailyGoal,
   useGetUserDailyGoals,
   useGetUserDailyGoalsCount,
-} from "@/services/generalApi/lessons/mutation";
+} from "@/services/generalApi/userGoals/mutation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const UserGoalsContext = createContext<unknown | undefined | any>(undefined);
@@ -46,9 +46,10 @@ export const UserGoalsProvider = ({
   const { mutate: completeUserDailyGoal, isPending: isCompletingDailyGoal } =
     useCompleteUserDailyGoal();
 
-const { data:userGoalsCount, isLoading:userGoalsLoading } = useGetUserDailyGoalsCount(userDetails?.id)
+  const { data: userGoalsCount, isLoading: userGoalsLoading } =
+    useGetUserDailyGoalsCount(userDetails?.id);
 
-const goalsCount = userGoalsCount?.data || 0;
+  const goalsCount = userGoalsCount?.data || 0;
 
   const completeGoal = () => {
     if (userDetails?.id && goalId) {
