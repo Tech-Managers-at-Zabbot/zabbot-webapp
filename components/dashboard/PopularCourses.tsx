@@ -29,7 +29,7 @@ const PopularCourses = () => {
                 <DashboardMetricCardSkeleton key={index} />
               ))}
             </div>
-          ) : !allCourses?.data ? (
+          ) : !allCourses?.data || allCourses?.data?.length === 0 ? (
             <div className="flex gap-[15px] min-w-max">
               {Array.from({ length: 6 }).map((_, index) => (
                 <EmptyStateCard
