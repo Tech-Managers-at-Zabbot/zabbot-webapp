@@ -55,7 +55,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Monitor time every minute to auto-switch at 6 PM
+  // Check time on component mount and page navigation
   useEffect(() => {
     const checkTimeAndAutoSwitch = () => {
       const hour = new Date().getHours();
@@ -63,15 +63,14 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (shouldBeDark && theme !== "dark") {
         setTheme("dark");
-      }
-      if (!shouldBeDark && theme !== "light") {
+      } else if (!shouldBeDark && theme !== "light") {
         setTheme("light");
       }
     };
-checkTimeAndAutoSwitch()
-    // const interval = setInterval(checkTimeAndAutoSwitch, 60000); // every minute
-    // return () => clearInterval(interval);
-  }, []);
+
+    // Check immediately when component mounts or theme changes
+    checkTimeAndAutoSwitch();
+  }, [theme]); // Runs on mount and whenever theme changes
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
