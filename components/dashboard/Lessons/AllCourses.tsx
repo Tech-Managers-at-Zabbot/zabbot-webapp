@@ -169,21 +169,21 @@ const AllCourses = () => {
 
       {/* Courses Grid Section - Fully responsive grid */}
       <section className="w-full min-w-0">
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
+        <div className="w-full">
           {coursesLoading ? (
-            <>
+            <div className="w-full flex gap-2">
               {Array.from({ length: 6 }).map((_, index) => (
                 <DashboardMetricCardSkeleton key={index} />
               ))}
-            </>
-          ) : !allCourses?.data ? (
-            <>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <EmptyStateCard key={index} title="No data" subtitle="No courses yet"/>
-              ))}
-            </>
+            </div>
+          ) : !allCourses?.data || allCourses?.data?.length === 0 ? (
+            <div className="w-full flex gap-2">
+              {/* {Array.from({ length: 6 }).map((_, index) => ( */}
+              <EmptyStateCard title="No data" subtitle="No courses yet" />
+              {/* // ))} */}
+            </div>
           ) : (
-            <>
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
               {allCourses?.data.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
@@ -196,7 +196,7 @@ const AllCourses = () => {
                   </div>
                 )
               )}
-            </>
+            </div>
           )}
         </div>
       </section>

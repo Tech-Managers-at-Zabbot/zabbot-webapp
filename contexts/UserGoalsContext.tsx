@@ -6,6 +6,7 @@ import {
   useGetUserDailyGoalsCount,
 } from "@/services/generalApi/userGoals/mutation";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 const UserGoalsContext = createContext<unknown | undefined | any>(undefined);
 
@@ -29,7 +30,7 @@ export const UserGoalsProvider = ({
   const [goalId, setGoalId] = useState("");
 
   useEffect(() => {
-    const user = localStorage.getItem("userProfile");
+    const user = Cookies.get("userProfile");
     if (!user) {
       return;
     }

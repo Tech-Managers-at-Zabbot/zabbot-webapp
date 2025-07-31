@@ -1,17 +1,19 @@
 import React from "react";
 import Image from "next/image";
-import { RxInstagramLogo } from "react-icons/rx";
-import { BsLinkedin } from "react-icons/bs";
-import { FaSlack } from "react-icons/fa";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const UserDashboardFooter = () => {
+  const { theme } = useTheme();
+
   return (
     <footer
-      className="bg-[url('/userDashboard/footer.svg')] bg-cover bg-stretch min-h-[152px]"
+      className={`bg-[url('/userDashboard/footer.svg')] m-0 ${
+        theme === "dark" ? "bg-[#012657]" : "bg-[#dff9fb]"
+      } bg-cover bg-stretch min-h-[152px]`}
       style={{ fontFamily: "Lexend" }}
     >
-      <div className="flex-shrink-0 pb-12 flex flex-col justify-center items-center rounded-full">
-        <div className="relative w-[174px] h-[187px]">
+      <div className="flex-shrink-0 flex flex-col justify-center items-center rounded-full">
+        <div className="relative w-[174px] p-0 h-[150px]">
           <Image
             src="/userDashboard/footer-grandma-owl.png"
             alt="Badge"
@@ -20,47 +22,11 @@ const UserDashboardFooter = () => {
             className="object-contain"
           />
         </div>
-        <div>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-2 mt-4">
-            <div className="flex items-center gap-2 text-white text-2xl">
-            <a
-              href="https://www.linkedin.com/company/zabbot"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white text-2xl"
-            >
-              <BsLinkedin color="#E3F5FF" size={42} />
-            </a>
-            <a
-              href="https://www.instagram.com/zabbot_heritage?igsh=ZWlsejkwOGlvanhi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white text-2xl"
-            >
-              <RxInstagramLogo size={42} color="#FFFFFF" />
-            </a>
-            </div>
-
-            <div className="flex items-center gap-2 text-white text-2xl">
-            <div className="font-medium text-[32px] leading-[49px] whitespace-nowrap flex-shrink-0">
-              Get in touch
-            </div>
-
-            <a
-              href="https://zabbotllc.slack.com/join/shared_invite/zt-39zw6ba7k-EjhqsNxjdo8qF1K8Dddqug"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white text-2xl"
-            >
-              <FaSlack size={42} color="#FFFFFF" />
-            </a>
-            </div>
-          </div>
-          <p className="text-center text-sm sm:text-base md:text-lg lg:text-xl text-white mt-4">
-            © 2025 Zabbot. All rights reserved.
-          </p>
-        </div>
       </div>
+      {/* 
+              <p className="flex text-center text-sm sm:text-base md:text-lg lg:text-xl text-white">
+            © 2025 Zabbot. All rights reserved.
+          </p> */}
     </footer>
   );
 };

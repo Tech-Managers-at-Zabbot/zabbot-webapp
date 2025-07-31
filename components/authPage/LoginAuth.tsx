@@ -15,6 +15,7 @@ import {
   useLoginUser,
   useGoogleAuth,
 } from "@/services/generalApi/authentication/mutation";
+import Cookies from "js-cookie";
 import { GoogleIcon } from "@/constants/SvgPaths";
 import { useSearchParams } from "next/navigation";
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
@@ -85,11 +86,17 @@ const LoginAuth: React.FC = () => {
         },
         {
           onSuccess: (data: Record<string, any>) => {
-            localStorage.setItem(
-              "userProfile",
-              JSON.stringify(data?.data?.user)
-            );
-            localStorage.setItem("token", data?.data?.token);
+            Cookies.set("userProfile", JSON.stringify(data?.data?.user), {
+              expires: stayLoggedIn ? 30 : 1,
+              secure: true,
+              sameSite: "strict",
+            });
+            Cookies.set("access_token", data?.data?.token, {
+              expires: stayLoggedIn ? 30 : 1,
+              secure: true,
+              sameSite: "strict",
+            });
+
             setError({
               emailError: false,
               passwordError: false,
@@ -132,12 +139,12 @@ const LoginAuth: React.FC = () => {
     }
   };
 
-    if (isLanguageLoading) {
-      return(
-        <div className="min-h-[100vh] absolute top-0 flex justify-center items-center">
-          <CustomSpinner spinnerColor="#012657" />
-        </div>
-      )
+  if (isLanguageLoading) {
+    return (
+      <div className="min-h-[100vh] absolute top-0 flex justify-center items-center">
+        <CustomSpinner spinnerColor="#012657" />
+      </div>
+    );
   }
 
   return (
@@ -253,7 +260,7 @@ const LoginAuth: React.FC = () => {
             <div className="text-[#0089C8]">
               {/* Forgot your password? */}
               {getPageText("forgot_password")}
-              </div>{" "}
+            </div>{" "}
             <Link
               href={
                 isCreateAccountLoading || isResetLoading || isLoginLoading
@@ -310,7 +317,7 @@ const LoginAuth: React.FC = () => {
               <div>
                 {/* Login */}
                 {getPageText("login")}
-                </div>
+              </div>
             )}
           </InAppButton>
         </div>
@@ -318,8 +325,8 @@ const LoginAuth: React.FC = () => {
           className="flex gap-[5px] justify-center items-center font-[500] text-[16px] leading-[145%]"
           style={{ color: appColors.gray300, fontFamily: "Lexend" }}
         >
-          <span className="w-[73px] border-1"></span>{getPageText("or")}{" "}
           <span className="w-[73px] border-1"></span>
+          {getPageText("or")} <span className="w-[73px] border-1"></span>
         </div>
         <div>
           <InAppButton
@@ -352,7 +359,7 @@ const LoginAuth: React.FC = () => {
                 <span>
                   {/* Continue with Google */}
                   {getPageText("continue_google")}
-                  </span>
+                </span>
               </div>
             )}
           </InAppButton>
@@ -366,7 +373,7 @@ const LoginAuth: React.FC = () => {
         <div>
           {/* New to Zabbot? Join Now */}
           {getPageText("new_to_zabbot_join_now")}
-          </div>{" "}
+        </div>{" "}
         <Link
           href={
             isLoginLoading || isResetLoading || isResetLoading ? "#" : "/signup"

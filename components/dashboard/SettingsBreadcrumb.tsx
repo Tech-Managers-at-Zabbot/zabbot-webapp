@@ -8,6 +8,7 @@ import { Modal } from "../general/Modal";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
+import Cookies from "js-cookie";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
@@ -21,6 +22,8 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
+    Cookies.remove("access_token");
+    Cookies.remove("userProfile");
     router.push("/login");
   };
 
@@ -43,25 +46,25 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       name: "Settings",
       icon: "/userDashboard/settings.svg",
       action: () => "",
-      isActive: false
+      isActive: false,
     },
     {
       name: "Profile",
       icon: "/userDashboard/profile.svg",
       action: () => "",
-      isActive: false
+      isActive: false,
     },
     {
       name: "Notifications",
       icon: "/userDashboard/notifications.svg",
       action: () => "",
-      isActive: false
+      isActive: false,
     },
     {
       name: "Logout",
       icon: "/userDashboard/logout.svg",
       action: () => setShowLogoutModal(true),
-      isActive: true
+      isActive: true,
     },
   ];
   return (
@@ -81,7 +84,11 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
             {dropdownOptions.map((option, index) => (
               <li
                 key={index}
-                className={`flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 ${!option.isActive ? "hover:cursor-not-allowed" : "hover:bg-gray-300 hover:cursor-pointer"} rounded`}
+                className={`flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 ${
+                  !option.isActive
+                    ? "hover:cursor-not-allowed"
+                    : "hover:bg-gray-300 hover:cursor-pointer"
+                } rounded`}
                 onClick={() => {
                   option.action();
                   setIsBreadcrumbOpen(false);
@@ -93,7 +100,11 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
                   width={window.innerWidth < 640 ? 20 : 25}
                   height={window.innerWidth < 640 ? 20 : 25}
                 />
-                <span className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${!option.isActive ? "text-[#666666]" : "text-[#162B6E]"}`}>
+                <span
+                  className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${
+                    !option.isActive ? "text-[#666666]" : "text-[#162B6E]"
+                  }`}
+                >
                   {option.name}
                 </span>
               </li>

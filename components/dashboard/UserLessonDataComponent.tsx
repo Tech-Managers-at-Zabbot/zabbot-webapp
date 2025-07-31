@@ -27,8 +27,12 @@ export const LessonProgressCard: React.FC<LessonProps> = (
 
   return (
     <div
-      className="bg-white flex relative gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0"
+      className="bg-white flex relative hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0"
       style={{ fontFamily: "Lexend" }}
+       onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
     >
       <section className="w-1/2 flex-shrink-0">
         <div className="relative w-[170px] sm:w-[194px] h-[188px]">
@@ -41,7 +45,7 @@ export const LessonProgressCard: React.FC<LessonProps> = (
           />
         </div>
       </section>
-
+{/* 
       <section
         className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         onClick={() => {
@@ -60,7 +64,7 @@ export const LessonProgressCard: React.FC<LessonProps> = (
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="flex flex-col justify-between p-[10px] w-1/2 pr-4 min-w-0">
         <div className="flex flex-col gap-[8px]">
@@ -105,8 +109,12 @@ export const CoursesCard = (data: any) => {
 
   return (
     <div
-      className="bg-white flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
+      className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
       style={{ fontFamily: "Lexend" }}
+        onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
     >
       <section className="w-full">
         <div className="relative w-full h-[150px]">
@@ -120,7 +128,7 @@ export const CoursesCard = (data: any) => {
         </div>
       </section>
 
-      <section
+      {/* <section
         className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
         onClick={() => {
           router.push("/lesson");
@@ -138,7 +146,7 @@ export const CoursesCard = (data: any) => {
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
         <div
@@ -187,8 +195,12 @@ export const LessonsCard = (data: any) => {
 
   return (
     <div
-      className="bg-white flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
+      className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
       style={{ fontFamily: "Lexend" }}
+       onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
     >
       <section className="w-full">
         <div className="relative w-full h-[150px]">
@@ -202,7 +214,7 @@ export const LessonsCard = (data: any) => {
         </div>
       </section>
 
-      <section
+      {/* <section
         className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
         onClick={() => {
           router.push("/lesson");
@@ -220,7 +232,7 @@ export const LessonsCard = (data: any) => {
             />
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
         <div
@@ -347,7 +359,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
 
   return (
     <div
-      className={`flex flex-col gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full`}
+      className={`flex flex-col h-full min-h-[350px] gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full`}
       style={{
         fontFamily: "Lexend",
         maxWidth,

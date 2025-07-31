@@ -10,6 +10,7 @@ import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { Alerts, useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
+import Cookies from "js-cookie";
 // import { useUserGoals } from "@/contexts/UserGoalsContext";
 
 const AdminNavBar = ({ showLogo = false }) => {
@@ -25,6 +26,8 @@ const AdminNavBar = ({ showLogo = false }) => {
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
+    Cookies.remove("access_token");
+    Cookies.remove("userProfile");
     setLoading(true);
     router.push("/login");
   };

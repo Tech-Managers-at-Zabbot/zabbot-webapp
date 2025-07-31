@@ -12,9 +12,11 @@ import { CustomSpinner } from "../CustomSpinner";
 import { PlayerEllipse } from "@/constants/SvgPaths";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 import { EmptyStateCard } from "../general/EmptyState";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const DailyGoals = () => {
   const { userDailyGoal, goalLoading } = useUserGoals();
+
 
   return (
     <>
@@ -92,6 +94,7 @@ const WordForTheDay = () => {
   const [color, setColor] = useState("#CDA674");
   const [showCongrats, setShowCongrats] = useState(false);
   const [isGoalComplete, setIsGoalComplete] = useState(false);
+  const { theme } = useTheme();
 
   const {
     userDetails,
@@ -177,14 +180,20 @@ const WordForTheDay = () => {
     });
   };
 
-  const [isDark, setIsDark] = useState(false);
 
-  useEffect(() => {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
-    const isNightTime = hours >= 18 || hours < 6;
-    setIsDark(isNightTime);
-  }, []);
+    //   useEffect(() => {
+    //   setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
+    //   setCloudsUrl(
+    //     theme === "dark"
+    //       ? "/userDashboard/dark-clouds.svg"
+    //       : "/userDashboard/light-clouds.svg"
+    //   );
+    //   setLogoUrl(
+    //     theme === "dark"
+    //       ? "/general/zabbot-logo-white.svg"
+    //       : "/general/zabbot-logo-blue.svg"
+    //   );
+    // }, [theme]);
 
   const handleMouseEnter = () => {
     setFill("#CDA674");
@@ -257,7 +266,7 @@ const WordForTheDay = () => {
               message="You've completed your daily goal! Keep up the great work!"
               imageUrl="/userDashboard/parrot-head.svg"
               imageAlt="Zabbot mascot celebrating"
-              darkMode={isDark}
+              darkMode={theme === 'dark'}
               buttonText="Awesome!"
               showConfetti={true}
             />

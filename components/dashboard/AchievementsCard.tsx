@@ -6,30 +6,56 @@ import { Modal, useModal } from "../general/Modal"; // Adjust path as needed
 import InAppButton from "../InAppButton"; // Adjust path as needed
 
 const AchievementsCard = () => {
-  const achievements = [
-    { name: "First Steps", isCompleted: true, icon: "👣" },
-    { name: "7-Day Streak", isCompleted: false, icon: "🔥" },
-    { name: "14-Day Streak", isCompleted: false, icon: "📆" },
-    { name: "30-Day Streak", isCompleted: false, icon: "🏁" },
-    { name: "Social Scholar", isCompleted: false, icon: "📣" },
-    { name: "Tone Tamer", isCompleted: false, icon: "🎵" },
-    { name: "Vocab Master", isCompleted: false, icon: "📖"},
-    { name: "Grammar Pro", isCompleted: false, icon: "🧠" },
-    { name: "Daily Spark", isCompleted: false, icon: "⚡" },
-    { name: "Word Warrior", isCompleted: false, icon: "🗡️" },
-    { name: "Tone Boss", isCompleted: false, icon: "🎤" },
-    { name: "Culture Keeper", isCompleted: false, icon: "🪘" },
-    { name: "Chatterbox", isCompleted: false, icon: "💬" },
-    { name: "Audio Ace", isCompleted: false, icon: "🎧" },
-    { name: "Story Seeker", isCompleted: false, icon: "📚" },
-    { name: "Phrase Crafter", isCompleted: false, icon: "✍️" },
-    { name: "Sound Sensei", isCompleted: false, icon: "🧘" },
-    { name: "Flashcard Fan", isCompleted: false, icon: "🃏" },
-    { name: "Quiz King/Queen", isCompleted: false, icon: "👑" },
-    { name: "Consistency Champ", isCompleted: false, icon: "⏰" },
-    { name: "Voice Verified", isCompleted: false, icon: "🗣️" },
-    { name: "Language Guardian", isCompleted: false, icon: "🤝" },
-    { name: "Zabbot Star", isCompleted: false, icon: "🌟" },
+  // const achievements = [
+  //   { name: "First Steps", isCompleted: true, icon: "👣" },
+  //   { name: "7-Day Streak", isCompleted: false, icon: "🔥" },
+  //   { name: "14-Day Streak", isCompleted: false, icon: "📆" },
+  //   { name: "30-Day Streak", isCompleted: false, icon: "🏁" },
+  //   { name: "Social Scholar", isCompleted: false, icon: "📣" },
+  //   { name: "Tone Tamer", isCompleted: false, icon: "🎵" },
+  //   { name: "Vocab Master", isCompleted: false, icon: "📖"},
+  //   { name: "Grammar Pro", isCompleted: false, icon: "🧠" },
+  //   { name: "Daily Spark", isCompleted: false, icon: "⚡" },
+  //   { name: "Word Warrior", isCompleted: false, icon: "🗡️" },
+  //   { name: "Tone Boss", isCompleted: false, icon: "🎤" },
+  //   { name: "Culture Keeper", isCompleted: false, icon: "🪘" },
+  //   { name: "Chatterbox", isCompleted: false, icon: "💬" },
+  //   { name: "Audio Ace", isCompleted: false, icon: "🎧" },
+  //   { name: "Story Seeker", isCompleted: false, icon: "📚" },
+  //   { name: "Phrase Crafter", isCompleted: false, icon: "✍️" },
+  //   { name: "Sound Sensei", isCompleted: false, icon: "🧘" },
+  //   { name: "Flashcard Fan", isCompleted: false, icon: "🃏" },
+  //   { name: "Quiz King/Queen", isCompleted: false, icon: "👑" },
+  //   { name: "Consistency Champ", isCompleted: false, icon: "⏰" },
+  //   { name: "Voice Verified", isCompleted: false, icon: "🗣️" },
+  //   { name: "Language Guardian", isCompleted: false, icon: "🤝" },
+  //   { name: "Zabbot Star", isCompleted: false, icon: "🌟" },
+  // ];
+
+    const achievements = [
+    { name: "7-Day Streak", isCompleted: true },
+    { name: "14-Day Streak", isCompleted: true },
+    { name: "30-Day Streak", isCompleted: false },
+    { name: "Vocab Master", isCompleted: false },
+    { name: "Grammar Pro", isCompleted: false },
+    { name: "Tonal Hero", isCompleted: false },
+    { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
+    { name: "History Hero", isCompleted: true },
+    { name: "Tonal Hero", isCompleted: false },
+    { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
+    { name: "History Hero", isCompleted: true },
+    { name: "Tonal Hero", isCompleted: false },
+    { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
+    { name: "History Hero", isCompleted: true },
+    { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
+    { name: "History Hero", isCompleted: true },
+    { name: "Tonal Hero", isCompleted: false },
+    { name: "Culture Keeper", isCompleted: false },
+    { name: "Language Master", isCompleted: true },
   ];
 
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -125,11 +151,11 @@ const AchievementsCard = () => {
             <div className="flex flex-col gap-[14px]">
               <div className="text-[#737477] flex gap-2 font-[400] text-[14px] leading-[100%]">
                 <span className="whitespace-nowrap">ACHIEVEMENTS</span>
-                <span className="whitespace-nowrap">UNLOCKED</span>
+                {/* <span className="whitespace-nowrap">UNLOCKED</span> */}
               </div>
-              <div className="font-bold text-center text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
+              {/* <div className="font-bold text-center text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
                 RANK #12 / 90
-              </div>
+              </div> */}
             </div>
           </section>
 
@@ -169,11 +195,11 @@ const AchievementsCard = () => {
                       backgroundColor: item.isCompleted ? "#24A5EE" : "#E4E4E4",
                     }}
                   >
-                    {item.icon ? (
+                    {/* {item.icon ? (
                       <div className="text-white text-[24px]">
                         {item.icon}
                       </div>
-                    ) : (
+                    ) : ( */}
                       <div className="relative w-[24px] h-[24px]">
                         <Image
                           src="/userDashboard/dashboard-streak-badge.svg"
@@ -183,7 +209,7 @@ const AchievementsCard = () => {
                           className="object-contain"
                         />
                       </div>
-                    )}
+                    {/* )} */}
                   </div>
                   <div
                     className="text-[12px] text-[#333333] font-[400] leading-[145%] text-center"
@@ -214,11 +240,11 @@ const AchievementsCard = () => {
         <div className="flex flex-col gap-[14px]">
           <div className="text-[#737477] flex flex-col gap-2 font-[400] text-[14px] leading-[100%]">
             <span className="whitespace-nowrap">ACHIEVEMENTS</span>
-            <span className="whitespace-nowrap">UNLOCKED</span>
+            {/* <span className="whitespace-nowrap">UNLOCKED</span> */}
           </div>
-          <div className="font-bold text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
+          {/* <div className="font-bold text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
             RANK #12 / 90
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -249,7 +275,7 @@ const AchievementsCard = () => {
       )}
 
       {/* Achievements Section */}
-      <section ref={scrollRef} className="flex overflow-x-auto scrollbar-hide">
+      <section ref={scrollRef} className="flex overflow-x-auto scroll-hidden">
         {achievements.map((item, index) => (
           <div
             key={index}
@@ -261,11 +287,11 @@ const AchievementsCard = () => {
                 backgroundColor: item.isCompleted ? "#24A5EE" : "#E4E4E4",
               }}
             >
-              {item.icon ? (
+              {/* {item.icon ? (
                 <div className="text-white text-[24px]">
                   {item.icon}
                 </div>
-              ) : (
+              ) : ( */}
                 <div className="relative w-[24px] h-[24px]">
                   <Image
                     src="/userDashboard/dashboard-streak-badge.svg"
@@ -275,7 +301,7 @@ const AchievementsCard = () => {
                     className="object-contain"
                   />
                 </div>
-              )}
+              {/* )} */}
             </div>
             <div
               className="text-[14px] text-[#333333] font-[400] leading-[145%] whitespace-nowrap text-center"

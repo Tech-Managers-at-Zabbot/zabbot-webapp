@@ -41,6 +41,7 @@ import { courseSchema, lessonSchema } from "@/schemas/lessons.schema";
 import { Alerts, useAlert } from "next-alert";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 import { useCreateCourseWithLessons } from "@/services/generalApi/lessons/mutation";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const CLOUDINARY_CONFIG = {
   cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dirr9d0ox",
@@ -146,7 +147,9 @@ const CreateContentPage = () => {
   // UI state
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [showLevelDropdown, setShowLevelDropdown] = useState(false);
-  const [activeTab, setActiveTab] = useState<"course" | "lessons">("course");
+  const [activeTab, setActiveTab] = useState<"course" | "lessons" | "quizzes">(
+    "course"
+  );
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [editingContentIndex, setEditingContentIndex] = useState<number | null>(
     null
@@ -160,8 +163,6 @@ const CreateContentPage = () => {
   // Loading state
   const [isLoading, setIsLoading] = useState(false);
 
-  // Theme state
-  const [isDark, setIsDark] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
 
@@ -174,16 +175,14 @@ const CreateContentPage = () => {
     fileIndex: number;
   } | null>(null);
 
+  const { theme } = useTheme();
+  
   useEffect(() => {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
-
-    if (hours >= 18 || hours < 6) {
-      setBackgroundColor("#012657");
-      setCloudsUrl("/userDashboard/dark-clouds.svg");
-      setIsDark(true);
-    }
-  }, []);
+    setCloudsUrl(
+      theme === "dark" ? "/userDashboard/dark-clouds.svg" : "/userDashboard/light-clouds.svg"
+    );
+    setBackgroundColor(theme === 'dark' ? "#012657" : "#dff9fb");
+  }, [theme]);
 
   // Prevent background scrolling when any modal is open
   useEffect(() => {
@@ -437,17 +436,43 @@ const CreateContentPage = () => {
     if (!validateLesson()) return;
 
     if (currentLessonIndex !== null) {
-      // Update existing lesson
+      // Update existing lesson - preserve any uploaded files
       setLessons((prev) =>
         prev.map((lesson, i) =>
           i === currentLessonIndex
-            ? { ...currentLesson, id: lesson.id }
+            ? {
+                ...currentLesson,
+                id: lesson.id,
+                // Merge content files to preserve uploaded URLs
+                contents: currentLesson.contents.map((content, cIndex) => ({
+                  ...content,
+                  contentFiles: content.contentFiles.map((file) => ({
+                    ...file,
+                    // Keep the Cloudinary URL if it exists, otherwise keep the blob URL
+                    filePath: file.filePath.startsWith("https://")
+                      ? file.filePath
+                      : file.filePath,
+                  })),
+                })),
+              }
             : lesson
         )
       );
     } else {
       // Add new lesson
-      const newLesson = { ...currentLesson, id: `lesson_${Date.now()}` };
+      const newLesson = {
+        ...currentLesson,
+        id: `lesson_${Date.now()}`,
+        contents: currentLesson.contents.map((content) => ({
+          ...content,
+          contentFiles: content.contentFiles.map((file) => ({
+            ...file,
+            filePath: file.filePath.startsWith("https://")
+              ? file.filePath
+              : file.filePath,
+          })),
+        })),
+      };
       setLessons((prev) => [...prev, newLesson]);
     }
 
@@ -602,7 +627,7 @@ const CreateContentPage = () => {
             });
             setLessons([]);
             setActiveTab("course");
-            router.push('/user-dashboard')
+            router.push("/user-dashboard");
           },
           onError: () => {
             addAlert("Error", "Course not created, try again", "error");
@@ -655,170 +680,165 @@ const CreateContentPage = () => {
     return null;
   };
 
-  const handleCloudinaryUpload = async (
-    file: File,
-    contentIndex: number,
-    fileIndex: number,
-    contentType: ContentDataType
-  ): Promise<void> => {
-    const fileId = `${contentIndex}-${fileIndex}`;
+const handleCloudinaryUpload = async (
+  file: File,
+  contentIndex: number,
+  fileIndex: number,
+  contentType: ContentDataType,
+  lessonIndex?: number
+): Promise<void> => {
+  const fileId = `${
+    lessonIndex !== undefined ? lessonIndex + "-" : ""
+  }${contentIndex}-${fileIndex}`;
 
-    try {
-      // Add to uploading files set
-      setUploadingFiles((prev) => new Set([...prev, fileId]));
+  try {
+    setUploadingFiles((prev) => new Set([...prev, fileId]));
 
-      // Clear any previous errors for this file
-      setUploadErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[fileId];
-        return newErrors;
-      });
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
 
-      // Create FormData for Cloudinary upload
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
-
-      // Set resource type based on content type
-      let resourceType = "auto";
-      if (contentType === ContentDataType.IMAGE) {
-        resourceType = "image";
-      } else if (contentType === ContentDataType.VIDEO) {
-        resourceType = "video";
-      } else if (contentType === ContentDataType.AUDIO) {
-        resourceType = "video"; // Cloudinary uses 'video' for audio files
-      }
-
-      formData.append("resource_type", resourceType);
-
-      // Upload to Cloudinary
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      console.log("res", response);
-
-      if (!response.ok) {
-        throw new Error(
-          `Upload failed: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const result = await response.json();
-
-      // Update the content file with the Cloudinary URL
-      setCurrentLesson((prev) => ({
-        ...prev,
-        contents: prev.contents.map((content, cIndex) => {
-          if (cIndex === contentIndex) {
-            return {
-              ...content,
-              contentFiles: content.contentFiles.map((contentFile, fIndex) => {
-                if (fIndex === fileIndex) {
-                  return {
-                    ...contentFile,
-                    filePath: result.secure_url,
-                    file: undefined, // Remove the file object after successful upload
-                  };
-                }
-                return contentFile;
-              }),
-            };
-          }
-          return content;
-        }),
-      }));
-    } catch (error) {
-      console.error("Cloudinary upload error:", error);
-
-      // Set error for this specific file
-      setUploadErrors((prev) => ({
-        ...prev,
-        [fileId]: error instanceof Error ? error.message : "Upload failed",
-      }));
-
-      throw error; // Re-throw to be handled by the calling function
-    } finally {
-      // Remove from uploading files set
-      setUploadingFiles((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(fileId);
-        return newSet;
-      });
+    let resourceType = "auto";
+    if (contentType === ContentDataType.IMAGE) {
+      resourceType = "image";
+    } else if (contentType === ContentDataType.VIDEO) {
+      resourceType = "video";
+    } else if (contentType === ContentDataType.AUDIO) {
+      resourceType = "video"; // Cloudinary uses 'video' for audio files
     }
-  };
 
-  const prepareDataForBackend = async () => {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+    const secureUrl = result.secure_url;
+
+    // Update state with the secure URL
+    if (lessonIndex !== undefined) {
+      setLessons(prev =>
+        prev.map((lesson, lIdx) => 
+          lIdx === lessonIndex ? {
+            ...lesson,
+            contents: lesson.contents.map((content, cIdx) => 
+              cIdx === contentIndex ? {
+                ...content,
+                contentFiles: content.contentFiles.map((f, fIdx) => 
+                  fIdx === fileIndex ? {
+                    ...f,
+                    filePath: secureUrl,
+                    file: undefined // Remove the file object since we have the URL
+                  } : f
+                )
+              } : content
+            )
+          } : lesson
+        )
+      );
+    } else {
+      setCurrentLesson(prev => ({
+        ...prev,
+        contents: prev.contents.map((content, cIdx) => 
+          cIdx === contentIndex ? {
+            ...content,
+            contentFiles: content.contentFiles.map((f, fIdx) => 
+              fIdx === fileIndex ? {
+                ...f,
+                filePath: secureUrl,
+                file: undefined
+              } : f
+            )
+          } : content
+        )
+      }));
+    }
+  } catch (error) {
+    console.error("Upload failed:", error);
+    setUploadErrors(prev => ({
+      ...prev,
+      [fileId]: error instanceof Error ? error.message : "Upload failed",
+    }));
+    throw error;
+  } finally {
+    setUploadingFiles(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(fileId);
+      return newSet;
+    });
+  }
+};
+
+const prepareDataForBackend = async () => {
+  try {
+    // Upload all lesson content files first
     const uploadPromises: Promise<void>[] = [];
 
-    // Handle lesson content files (existing code)
-    currentLesson.contents.forEach((content, contentIndex) => {
-      content.contentFiles.forEach((file, fileIndex) => {
-        if (file.file) {
-          const promise = handleCloudinaryUpload(
-            file.file,
-            contentIndex,
-            fileIndex,
-            file.contentType
-          );
-          uploadPromises.push(promise);
-        }
+    lessons.forEach((lesson, lessonIndex) => {
+      lesson.contents.forEach((content, contentIndex) => {
+        content.contentFiles.forEach((file, fileIndex) => {
+          if (file.file) { // Only upload if there's a file object
+            const promise = handleCloudinaryUpload(
+              file.file,
+              contentIndex,
+              fileIndex,
+              file.contentType,
+              lessonIndex
+            ).catch(error => {
+              console.error(`Upload failed for lesson ${lessonIndex}, content ${contentIndex}, file ${fileIndex}:`, error);
+              throw error; // Re-throw to fail the whole operation
+            });
+            uploadPromises.push(promise);
+          }
+        });
       });
     });
 
+    // Wait for all uploads to complete
     await Promise.all(uploadPromises);
 
-    // Handle course thumbnail upload
+    // Then handle thumbnail upload
     let thumbnailImageUrl = courseData.thumbnailImage;
     if (courseData.thumbnailFile) {
-      try {
-        thumbnailImageUrl = await handleThumbnailCloudinaryUpload(
-          courseData.thumbnailFile
-        );
-      } catch (error) {
-        addAlert("Error", "Failed to upload thumbnail image", "error");
-        throw error;
-      }
+      thumbnailImageUrl = await handleThumbnailCloudinaryUpload(
+        courseData.thumbnailFile
+      );
     }
 
+    // Prepare the payload with updated URLs
     const coursePayload = {
       courseData: {
-        title: courseData.title,
-        description: courseData.description,
-        level: courseData.level,
-        isActive: courseData.isActive,
-        estimatedDuration: courseData.estimatedDuration,
-        thumbnailImage: thumbnailImageUrl, // Use the Cloudinary URL
-        tags: courseData.tags,
-        prerequisites: courseData.prerequisites,
+        ...courseData,
+        thumbnailImage: thumbnailImageUrl,
       },
-      lessons: lessons.map((lesson) => ({
-        title: lesson.title,
-        description: lesson.description,
-        orderNumber: lesson.orderNumber,
-        headlineTag: lesson.headlineTag,
-        estimatedTime: lesson.estimatedTime,
-        outcomes: lesson.outcomes,
-        objectives: lesson.objectives,
-        contents: lesson.contents.map((content) => ({
-          translation: content.translation,
-          sourceType: content.sourceType,
-          ededunPhrases: content.ededunPhrases,
-          customText: content.customText,
-          contentFiles: content.contentFiles.map((file) => ({
-            contentType: file.contentType,
-            filePath: file.filePath,
-            description: file.description || "",
+      lessons: lessons.map(lesson => ({
+        ...lesson,
+        contents: lesson.contents.map(content => ({
+          ...content,
+          contentFiles: content.contentFiles.map(file => ({
+            ...file,
+            // Ensure we're using the Cloudinary URL if available
+            filePath: file.filePath.startsWith('blob:') 
+              ? file.filePath // This shouldn't happen since we waited for uploads
+              : file.filePath,
           })),
         })),
       })),
     };
 
     return coursePayload;
-  };
+  } catch (error) {
+    console.error('Error preparing data:', error);
+    throw error;
+  }
+};
 
   return (
     <div className="">
@@ -860,7 +880,7 @@ const CreateContentPage = () => {
                 </div>
               </div>
               <div className="hidden lg:flex">
-                <SettingsBreadcrumb isDark={isDark} />
+                <SettingsBreadcrumb isDark={theme === 'dark'} />
               </div>
             </div>
           </div>
@@ -870,7 +890,7 @@ const CreateContentPage = () => {
               <div className="flex-shrink-0">
                 <span
                   className="text-sm md:text-sm lg:text-2xl"
-                  style={{ color: isDark ? "#D0F7F6" : "#202124" }}
+                  style={{ color: theme=== 'dark' ? "#D0F7F6" : "#202124" }}
                 >
                   Create Language Content
                 </span>
@@ -904,6 +924,16 @@ const CreateContentPage = () => {
                   onClick={() => setActiveTab("lessons")}
                 >
                   Lessons ({lessons.length})
+                </button>
+                <button
+                  className={`px-4 py-2 font-medium ml-4 hover:cursor-pointer ${
+                    activeTab === "quizzes"
+                      ? "text-blue-600 border-b-2 border-blue-600"
+                      : "text-gray-600 hover:text-[#f9c10f]"
+                  }`}
+                  onClick={() => setActiveTab("quizzes")}
+                >
+                  Quizzes (0)
                 </button>
               </div>
 
@@ -1238,6 +1268,35 @@ const CreateContentPage = () => {
                       ))}
                     </div>
                   )}
+                </div>
+              )}
+
+              {activeTab === "quizzes" && (
+                <div>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">Lesson Quizzes</h3>
+                    <InAppButton
+                      disabled
+                      // onClick={() => {
+                      //   resetLessonForm();
+                      //   setShowLessonModal(true);
+                      // }}
+                      background={appColors.darkRoyalBlueForBtn}
+                      width="auto"
+                      height="40px"
+                    >
+                      <div className="flex justify-center items-center p-2">
+                        <div>
+                          <Plus size={20} className="mr-2" />
+                        </div>
+                        <div>Add Quiz</div>
+                      </div>
+                    </InAppButton>
+                  </div>
+                  <div className="text-center py-8 text-gray-500">
+                    No lessons created yet. Add a lesson first to attach quizzes
+                    to it.
+                  </div>
                 </div>
               )}
 

@@ -4,32 +4,41 @@ import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import Image from "next/image";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const CoursePage = () => {
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
-  const [isDark, setIsDark] = useState(false);
+  const { theme } = useTheme();
   //   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
-  useEffect(() => {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
+  // useEffect(() => {
+  //   const currentTime = new Date();
+  //   const hours = currentTime.getHours();
 
-    if (hours >= 6 && hours < 12) {
-      // Morning: 6 AM to 12 PM
-      //   setGreeting("Káàrọ̀");
-    } else if (hours >= 12 && hours < 18) {
-      // Afternoon: 12 PM to 6 PM
-      //   setGreeting("Káàsán");
-    } else {
-      // Night: 6 PM to 6 AM
-      //   setGreeting("Káalẹ́");
-      setBackgroundColor("#012657");
-      setCloudsUrl("/userDashboard/dark-clouds.svg");
-      setIsDark(true);
-      //   setLogoUrl("/general/zabbot-logo-white.svg");
-    }
-  }, []);
+  //   if (hours >= 6 && hours < 12) {
+  //     // Morning: 6 AM to 12 PM
+  //     //   setGreeting("Káàrọ̀");
+  //   } else if (hours >= 12 && hours < 18) {
+  //     // Afternoon: 12 PM to 6 PM
+  //     //   setGreeting("Káàsán");
+  //   } else {
+  //     // Night: 6 PM to 6 AM
+  //     //   setGreeting("Káalẹ́");
+  //     // setBackgroundColor("#012657");
+  //     // setCloudsUrl("/userDashboard/dark-clouds.svg");
+  //     //   setLogoUrl("/general/zabbot-logo-white.svg");
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
+    setCloudsUrl(
+      theme === "dark"
+        ? "/userDashboard/dark-clouds.svg"
+        : "/userDashboard/light-clouds.svg"
+    );
+  }, [theme]);
 
   return (
     <div>
@@ -77,7 +86,7 @@ const CoursePage = () => {
                 </div>
               </div>
               <div className="hidden lg:flex">
-                <SettingsBreadcrumb isDark={isDark} />
+                <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
           </div>

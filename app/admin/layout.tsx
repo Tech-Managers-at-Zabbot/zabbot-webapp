@@ -2,14 +2,11 @@
 /* eslint-disable @next/next/no-img-element */
 import AdminNavBar from "@/components/dashboard/AdminDashboardNav";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
+import AuthGuard from "@/components/security/AuthGuard";
 import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
 import React, { useEffect, useState } from "react";
 
-export default function Layout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [timeSunMoonLink, setTimeSunMoonLink] = useState("#");
 
   useEffect(() => {
@@ -26,14 +23,15 @@ export default function Layout({
   }, []);
 
   return (
-    <UserGoalsProvider>
-      <div className="flex flex-col min-h-screen">
-        <div className="flex-1 min-h-screen">
-          <AdminNavBar showLogo={true} />
-          <main style={{ flex: 1 }} className="relative">
-            <div className="relative">
-              <section
-                className="
+    <AuthGuard isAdmin={true}>
+      <UserGoalsProvider>
+        <div className="flex flex-col min-h-screen">
+          <div className="flex-1 min-h-screen">
+            <AdminNavBar showLogo={true} />
+            <main style={{ flex: 1 }} className="relative">
+              <div className="relative">
+                <section
+                  className="
                   absolute top-[80px] 
                   md:top-[100px]
                   left-6
@@ -42,20 +40,21 @@ export default function Layout({
                   lg:right-20
                   max-w-screen-2xl
                 "
-                style={{ zIndex: 1 }}
-              >
-                <img
-                  src={timeSunMoonLink}
-                  alt="image of the sun/moon"
-                  width={120}
-                />
-              </section>
-              {children}
-            </div>
-          </main>
-          <UserDashboardFooter />
+                  style={{ zIndex: 1 }}
+                >
+                  <img
+                    src={timeSunMoonLink}
+                    alt="image of the sun/moon"
+                    width={120}
+                  />
+                </section>
+                {children}
+              </div>
+            </main>
+            <UserDashboardFooter />
+          </div>
         </div>
-      </div>
-    </UserGoalsProvider>
+      </UserGoalsProvider>
+    </AuthGuard>
   );
 }

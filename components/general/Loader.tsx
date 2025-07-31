@@ -1,24 +1,31 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useEffect, useState } from "react";
+import { useTheme } from "@/contexts/ThemeProvider";
+import React, { 
+  // useEffect, 
+  // useState 
+} from "react";
 
-const Loader = () => {
-  const [isDark, setIsDark] = useState(false);
-  const [zabbotLogo, setZabbotLogo] = useState("/general/zabbot-logo-blue.png")
+type LoaderProps = {
+  isDark?: boolean;
+};
 
-useEffect(() => {
-  const currentTime = new Date();
-  const hours = currentTime.getHours();
-  const isDarkTime = hours >= 18 || hours < 6;
-  setIsDark(isDarkTime);
-  setZabbotLogo(isDarkTime ? "/general/zabbot-logo-white.png" : "/general/zabbot-logo-blue.png");
-}, []);
+const Loader = ({ isDark }: LoaderProps) => {
 
+const { theme } = useTheme();
+
+// const [zabbotLogo, setZabbotLogo] = useState("/general/zabbot-logo-blue.png");
+
+// useEffect(() => {
+//   setZabbotLogo(
+//     theme === "dark" ? "/general/zabbot-logo-white.png" : "/general/zabbot-logo-blue.png"
+//   );
+// }, []);
 
   return (
     <div
       className={`fixed inset-0 flex flex-col items-center justify-center w-full min-h-screen overflow-hidden z-[9999] transition-colors opacity-96 ${
-        isDark ? "bg-[#012657]" : "bg-[#dff9fb]"
+        isDark || theme === 'dark' ? "bg-[#012657]" : "bg-[#dff9fb]"
       }`}
       style={{ fontFamily: "Lexend" }}
     >
@@ -30,7 +37,7 @@ useEffect(() => {
         />
         <div className="absolute -bottom-6 left-0 right-0 text-center">
           <img
-            src={zabbotLogo}
+            src={isDark || theme === "dark" ? "/general/zabbot-logo-white.png" : "/general/zabbot-logo-blue.png"}
             alt="Zabbot is loading"
             className="w-[1000px] animate-pulse object-cover"
           />
@@ -38,12 +45,12 @@ useEffect(() => {
       </div>
       <div className="text-center space-y-2">
         <h2 className={`text-2xl font-bold ${
-        isDark ? "text-white" : "text-[#162B6E]"
+        isDark || theme === 'dark' ?  "text-white" : "text-[#162B6E]"
       }`}>
           Zabbot is Loading...
         </h2>
         <p className={`${
-        isDark ? "text-white" : "text-[#162B6E]"
+        isDark || theme === 'dark' ? "text-white" : "text-[#162B6E]"
       }`}>Gathering your language experience…</p>
       </div>
     </div>

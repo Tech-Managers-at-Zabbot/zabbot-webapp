@@ -3,8 +3,9 @@
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import UserDashboardNav from "@/components/dashboard/UserDashboardNav";
 import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
-// import AuthGuard from "@/components/security/AuthGuard";
+import AuthGuard from "@/components/security/AuthGuard";
 import React, { useEffect, useState } from "react";
+import GetInTouch from "@/components/dashboard/GetInTouch";
 
 const Layout = ({
   children,
@@ -35,15 +36,15 @@ const Layout = ({
   }, []);
 
   return (
-    // <AuthGuard>
-    <UserGoalsProvider>
-    <div className="flex flex-col min-h-screen">
-      <div className={`flex-1 min-h-screen`}>
-        <UserDashboardNav showLogo={showLogo} />
-      <main style={{ flex: 1 }} className="relative">
-  <div className="relative">
-    <section
-      className="
+    <AuthGuard isAdmin={false}>
+      <UserGoalsProvider>
+        <div className="flex flex-col min-h-screen">
+          <div className={`flex-1 min-h-screen`}>
+            <UserDashboardNav showLogo={showLogo} />
+            <main style={{ flex: 1 }} className="relative">
+              <div className="relative">
+                <section
+                  className="
         absolute top-[80px] 
         md:top-[100px]
         left-6       // default: small screens
@@ -52,23 +53,24 @@ const Layout = ({
         lg:right-20               // large screens
         max-w-screen-2xl
       "
-      style={{ zIndex: 1 }}
-    >
-      <img
-        src={`${timeSunMoonLink}`}
-        alt="image of the sun/moon"
-        width={120}
-      />
-    </section>
-    {children}
-  </div>
-</main>
+                  style={{ zIndex: 1 }}
+                >
+                  <img
+                    src={`${timeSunMoonLink}`}
+                    alt="image of the sun/moon"
+                    width={120}
+                  />
+                </section>
+                {children}
+              </div>
+            </main>
 
-        <UserDashboardFooter />
-      </div>
-    </div>
-    </UserGoalsProvider>
-    // {/* </AuthGuard> */}
+          <GetInTouch />
+            <UserDashboardFooter />
+          </div>
+        </div>
+      </UserGoalsProvider>
+    </AuthGuard>
   );
 };
 

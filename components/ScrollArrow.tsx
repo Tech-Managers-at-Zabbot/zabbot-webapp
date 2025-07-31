@@ -26,7 +26,7 @@ export const ScrollArrow: React.FC<ScrollArrowProps> = ({
 
   return (
     <button
-      className={`transform hover:cursor-pointer hover:bg-[#162B6E] -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-md ${positionClass} ${className}`}
+      className={`transform hover:cursor-pointer hover:bg-[#162B6E] -translate-y-1/2 bg-gray-400 bg-opacity-50 p-2 rounded-full shadow-md ${positionClass} ${className}`}
       onClick={onClick}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}

@@ -11,6 +11,7 @@ import { CustomSpinner } from "../CustomSpinner";
 import { Alerts, useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
+import Cookies from "js-cookie";
 
 const UserDashboardNavbar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
@@ -26,6 +27,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
+    Cookies.remove("access_token");
+    Cookies.remove("userProfile");
     setLoading(true);
     router.push("/login");
   };

@@ -151,7 +151,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-4rem)]">
+        <div className="overflow-y-auto scroll-hidden max-h-[calc(90vh-4rem)]">
           {children}
         </div>
       </div>

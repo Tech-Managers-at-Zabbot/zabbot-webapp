@@ -15,7 +15,7 @@ const ProgressSection = () => {
           subtitle={"Almost there! Just 4 more steps in your journey"}
           maxWidth="100%"
         >
-          <section className="flex gap-[15px] pb-4">
+          <section className="flex gap-[15px]">
             {lessonProgressData.map(
               (lessonProgressData: LessonProps, index: number) => (
                 <div key={index} className="flex-shrink-0">

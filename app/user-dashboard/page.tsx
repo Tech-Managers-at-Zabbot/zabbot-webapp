@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import AchievementsCard from "@/components/dashboard/AchievementsCard";
-import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
+// import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 // import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import // DashboardMetricCard,
 "@/components/dashboard/DashboardMetricCard";
@@ -19,17 +18,20 @@ import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard
 import { useGetUserCount } from "@/services/generalApi/users/query";
 import { HiOutlineTrophy } from "react-icons/hi2";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useTheme } from "@/contexts/ThemeProvider";
+import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 
 const Dashboard = () => {
-  const [goPremium, setGoPremium] = useState(true);
+  // const [goPremium, setGoPremium] = useState(true);
 
-  const handleClosePremiumTag = () => setGoPremium(false);
+  // const handleClosePremiumTag = () => setGoPremium(false);
 
-  const { data:userCountData, isLoading:userCountLoading } = useGetUserCount()
+  const { data: userCountData, isLoading: userCountLoading } =
+    useGetUserCount();
 
-  const { goalsCount, userGoalsLoading } = useUserGoals()
+  const { goalsCount, userGoalsLoading } = useUserGoals();
 
-  const userCount = userCountData?.data || 0
+  const userCount = userCountData?.data || 0;
 
   const [greeting, setGreeting] = useState("");
 
@@ -37,7 +39,7 @@ const Dashboard = () => {
 
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
 
-  const [isDark, setIsDark] = useState(false);
+  const { theme } = useTheme();
 
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
@@ -51,7 +53,7 @@ const Dashboard = () => {
         </div>
       ),
       loading: userGoalsLoading || userCountLoading,
-      isEmpty: !goalsCount
+      isEmpty: !goalsCount,
     },
     {
       title: "Your Completed Courses",
@@ -61,7 +63,7 @@ const Dashboard = () => {
           <FaGraduationCap />
         </div>
       ),
-      loading: userGoalsLoading || userCountLoading
+      loading: userGoalsLoading || userCountLoading,
     },
 
     {
@@ -73,7 +75,7 @@ const Dashboard = () => {
         </div>
       ),
       loading: userCountLoading || userGoalsLoading,
-      isEmpty: !userCount
+      isEmpty: !userCount,
     },
   ];
 
@@ -90,28 +92,24 @@ const Dashboard = () => {
     } else {
       // Night: 6 PM to 6 AM
       setGreeting("Káalẹ́");
-      setBackgroundColor("#012657");
-      setCloudsUrl("/userDashboard/dark-clouds.svg");
-      setIsDark(true);
-      setLogoUrl("/general/zabbot-logo-white.svg");
     }
   }, []);
-
-  const [userDetails, setUserDetails] = useState<any>({});
 
   useEffect(() => {
-    const isClient = typeof window !== "undefined";
-    if (isClient) {
-      const jsonUserDetails = localStorage.getItem("userProfile");
-      if (jsonUserDetails) {
-        try {
-          setUserDetails(JSON.parse(jsonUserDetails));
-        } catch (error) {
-          console.error("Failed to parse tenant details", error);
-        }
-      }
-    }
-  }, []);
+    setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
+    setCloudsUrl(
+      theme === "dark"
+        ? "/userDashboard/dark-clouds.svg"
+        : "/userDashboard/light-clouds.svg"
+    );
+    setLogoUrl(
+      theme === "dark"
+        ? "/general/zabbot-logo-white.svg"
+        : "/general/zabbot-logo-blue.svg"
+    );
+  }, [theme]);
+
+  const { userDetails } = useUserGoals();
 
   return (
     <div className="min-h-screen">
@@ -157,20 +155,20 @@ const Dashboard = () => {
               <div className="flex flex-col gap-[4px] sm:gap-[6px] md:gap-[8px] text-right">
                 <span
                   className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
-                  style={{ color: isDark ? "#D0F7F6" : "#202124" }}
+                  style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
                 >
                   {greeting} {userDetails?.firstName || "User"}
                 </span>
                 <span
                   className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
-                  style={{ color: isDark ? "#FFFAEB" : "#333333" }}
+                  style={{ color: theme === "dark" ? "#FFFAEB" : "#333333" }}
                 >
                   Learn Yorùbá. Speak Proudly. Belong Deeply.
                 </span>
               </div>
               {/* Menu */}
               <div className="hidden lg:flex mt-1">
-                <SettingsBreadcrumb isDark={isDark} />
+                <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
           </section>
@@ -215,7 +213,7 @@ const Dashboard = () => {
           <section className="mt-20">
             <AchievementsCard />
           </section>
-
+          {/* 
           <section
             className={`transition-all duration-300 ease-in-out ${
               goPremium
@@ -224,7 +222,7 @@ const Dashboard = () => {
             }`}
           >
             <GoPremiumCard onClose={handleClosePremiumTag} />
-          </section>
+          </section> */}
           {/* grid-cols-1 md:grid-cols-2 grid lg:grid-cols-3 */}
 
           {/* <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
@@ -237,6 +235,10 @@ const Dashboard = () => {
             {dashboardMetricData?.map((metric, index) => (
               <DashboardMetricCard2 key={index} data={metric} />
             ))}
+          </section>
+
+          <section className="mt-6">
+            <PremiumFeaturesComponents />
           </section>
 
           <section className="mt-6">

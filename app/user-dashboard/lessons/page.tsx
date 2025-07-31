@@ -6,6 +6,7 @@ import Image from "next/image";
 import UserLessons from "@/components/dashboard/UserLessons";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import AllCourses from "@/components/dashboard/Lessons/AllCourses";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const Lessons = () => {
   const [greeting, setGreeting] = useState("Kàbọ̀");
@@ -14,7 +15,7 @@ const Lessons = () => {
 
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
 
-  const [isDark, setIsDark] = useState(false);
+  const { theme } = useTheme();
 
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
@@ -31,12 +32,22 @@ const Lessons = () => {
     } else {
       // Night: 6 PM to 6 AM
       setGreeting("Káalẹ́");
-      setBackgroundColor("#012657");
-      setCloudsUrl("/userDashboard/dark-clouds.svg");
-      setIsDark(true);
-      setLogoUrl("/general/zabbot-logo-white.svg");
     }
   }, []);
+
+  useEffect(() => {
+    setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
+    setCloudsUrl(
+      theme === "dark"
+        ? "/userDashboard/dark-clouds.svg"
+        : "/userDashboard/light-clouds.svg"
+    );
+    setLogoUrl(
+      theme === "dark"
+        ? "/general/zabbot-logo-white.svg"
+        : "/general/zabbot-logo-blue.svg"
+    );
+  }, [theme]);
 
   return (
     <div className="">
@@ -76,7 +87,7 @@ const Lessons = () => {
                 </div>
               </div>
               <div className="hidden lg:flex">
-                <SettingsBreadcrumb isDark={isDark} />
+                <SettingsBreadcrumb isDark={theme === 'dark'} />
               </div>
             </div>
           </div>
@@ -94,7 +105,7 @@ const Lessons = () => {
                 </div> */}
                 <span
                   className="text-sm md:text-sm lg:text-2xl"
-                  style={{ color: isDark ? "#D0F7F6" : "#202124" }}
+                  style={{ color: theme === 'dark' ? "#D0F7F6" : "#202124" }}
                 >
                   Welcome! Start Learning{" "}
                 </span>

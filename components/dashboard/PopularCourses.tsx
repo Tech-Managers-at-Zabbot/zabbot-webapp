@@ -31,13 +31,13 @@ const PopularCourses = () => {
             </div>
           ) : !allCourses?.data || allCourses?.data?.length === 0 ? (
             <div className="flex gap-[15px] min-w-max">
-              {Array.from({ length: 6 }).map((_, index) => (
+              {/* {Array.from({ length: 6 }).map((_, index) => ( */}
                 <EmptyStateCard
-                  key={index}
+                  // key={index}
                   title="No data"
                   subtitle="No courses yet"
                 />
-              ))}
+              {/* ))} */}
             </div>
           ) : (
             <section className="flex gap-[15px] min-w-max">

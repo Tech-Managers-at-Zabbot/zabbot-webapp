@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// contexts/LanguageContext.tsx
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 export const SUPPORTED_LANGUAGES = {
@@ -62,7 +61,6 @@ interface LanguageProviderProps {
   defaultLanguages?: LanguageKey[];
 }
 
-// Language data cache
 const languageDataCache: Record<string, Record<string, any>> = {};
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ 
@@ -82,7 +80,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     }
 
     try {
-      // Try to fetch the language data
       const response = await fetch(`/data/languageData/${language}DataSet/${page}.json`);
       if (response.ok) {
         const data = await response.json();
@@ -93,11 +90,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       console.warn(`Failed to load language data for ${language}/${page}:`, error);
     }
 
-    // Return empty object if file doesn't exist
     return {};
   };
 
-  // Get text by key
   const getText = (key: string, page: string = 'english'): string => {
     const cacheKey = `${currentLanguage}-${page}`;
     const data = languageDataCache[cacheKey];
@@ -106,7 +101,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       return data[key];
     }
 
-    // Fallback to English if current language doesn't have the key
     if (currentLanguage !== 'english') {
       const englishCacheKey = `english-${page}`;
       const englishData = languageDataCache[englishCacheKey];
@@ -115,11 +109,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       }
     }
 
-    // Return the key itself as fallback
     return key;
   };
 
-  // Set language
   const setLanguage = (language: LanguageKey) => {
     if (!availableLanguages.includes(language)) {
       console.warn(`Language ${language} is not available in current context`);
@@ -128,13 +120,11 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
     setCurrentLanguage(language);
     
-    // Store in localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('currentLanguage', language);
     }
   };
 
-  // Initialize language from localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedLanguage = localStorage.getItem('currentLanguage') as LanguageKey;
@@ -164,7 +154,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   );
 };
 
-// Custom hook to use language context
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
@@ -173,7 +162,6 @@ export const useLanguage = () => {
   return context;
 };
 
-// Hook for page-specific language data
 export const usePageLanguage = (pageName: string) => {
   const { currentLanguage, getText } = useLanguage();
   const [pageData, setPageData] = useState<Record<string, any>>({});
@@ -187,7 +175,7 @@ export const usePageLanguage = (pageName: string) => {
         if (response.ok) {
           const data = await response.json();
           setPageData(data);
-          // Cache the data
+
           languageDataCache[`${currentLanguage}-${pageName}`] = data;
         }
       } catch (error) {

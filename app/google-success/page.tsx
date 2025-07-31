@@ -7,6 +7,7 @@ import React, { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { CustomSpinner } from "@/components/CustomSpinner";
+import Cookies from "js-cookie";
 
 function AuthHandler() {
     const { getPageText, isPageLoading: isLanguageLoading } =
@@ -20,8 +21,16 @@ function AuthHandler() {
 
     if (token && userData) {
       try {
-        localStorage.setItem('token', decodeURIComponent(token));
-        localStorage.setItem('userProfile', decodeURIComponent(userData));
+          Cookies.set("userProfile", JSON.stringify(userData), {
+              expires: 30,
+              secure: true,
+              sameSite: "strict",
+            });
+            Cookies.set("access_token", token, {
+              expires: 30,
+              secure: true,
+              sameSite: "strict",
+            });
       } catch (error) {
         console.error('Error processing Google auth data:', error);
       }
