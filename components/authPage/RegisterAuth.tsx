@@ -9,7 +9,7 @@ import InAppButton from "../InAppButton";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { appColors } from "@/constants/colors";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { GoogleIcon } from "@/constants/SvgPaths";
 import { useRegisterUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
@@ -602,12 +602,6 @@ useEffect(() => {
           </Link>
         </div>
       </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={10000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import NormalInputField from "../NormalInputField";
 import InAppButton from "../InAppButton";
 import NationalityInput from "../NatonalityInput";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
 import { useJoinFoundersList } from '../../services/waitingList/mutation';
@@ -403,12 +403,6 @@ const WaitingListAuthComponent: React.FC = () => {
           </InAppButton>
         </div>
       </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={3000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </div>
   );
 };

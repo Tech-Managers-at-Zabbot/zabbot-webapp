@@ -5,9 +5,7 @@ import "./globals.css";
 import "animate.css";
 import { Providers } from "../components/Providers";
 import { Inter, Lexend } from "next/font/google";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { LoadingProvider } from "@/contexts/LoadingProvider";
-import { ThemeProvider } from '../contexts/ThemeProvider';
+import { Alerts } from "next-alert";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,15 +48,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lexend.variable} antialiased`}
       >
         <Providers>
-          <ThemeProvider>
-          <LanguageProvider>
-            <LoadingProvider>
-              {/* <Suspense fallback={<Loader />}> */}
-              {children}
-              {/* </Suspense> */}
-              </LoadingProvider>
-          </LanguageProvider>
-          </ThemeProvider>
+          {children}
+          <div className="custom-alerts">
+          <Alerts
+            position="top-left"
+            direction="left"
+            timer={6000}
+          />
+          </div>
         </Providers>
       </body>
     </html>

@@ -2,10 +2,11 @@
 "use client";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import UserDashboardNav from "@/components/dashboard/UserDashboardNav";
-import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
 import AuthGuard from "@/components/security/AuthGuard";
 import React, { useEffect, useState } from "react";
 import GetInTouch from "@/components/dashboard/GetInTouch";
+import { Alerts } from "next-alert";
+import { Providers } from "@/components/Providers";
 
 const Layout = ({
   children,
@@ -37,7 +38,7 @@ const Layout = ({
 
   return (
     <AuthGuard isAdmin={false}>
-      <UserGoalsProvider>
+      <Providers>
         <div className="flex flex-col min-h-screen">
           <div className={`flex-1 min-h-screen`}>
             <UserDashboardNav showLogo={showLogo} />
@@ -65,11 +66,14 @@ const Layout = ({
               </div>
             </main>
 
-          <GetInTouch />
+            <GetInTouch />
             <UserDashboardFooter />
           </div>
         </div>
-      </UserGoalsProvider>
+        <div className="custom-alerts">
+          <Alerts position="top-left" direction="left" timer={6000} />
+        </div>
+      </Providers>
     </AuthGuard>
   );
 };

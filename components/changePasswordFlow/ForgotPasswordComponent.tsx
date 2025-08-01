@@ -7,7 +7,7 @@ import InAppButton from "../InAppButton";
 import NormalInputField from "../NormalInputField";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { appColors } from "@/constants/colors";
 import { useRouter } from "next/navigation";
 import { CustomSpinner } from "../CustomSpinner";
@@ -161,12 +161,6 @@ const ForgotPassword: React.FC = () => {
           </InAppButton>
         </div>
       </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={3000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </div>
   );
 };

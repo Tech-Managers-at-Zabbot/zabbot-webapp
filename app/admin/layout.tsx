@@ -2,8 +2,9 @@
 /* eslint-disable @next/next/no-img-element */
 import AdminNavBar from "@/components/dashboard/AdminDashboardNav";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
+import { Providers } from "@/components/Providers";
 import AuthGuard from "@/components/security/AuthGuard";
-import { UserGoalsProvider } from "@/contexts/UserGoalsContext";
+import { Alerts } from "next-alert";
 import React, { useEffect, useState } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -24,7 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthGuard isAdmin={true}>
-      <UserGoalsProvider>
+      <Providers>
         <div className="flex flex-col min-h-screen">
           <div className="flex-1 min-h-screen">
             <AdminNavBar showLogo={true} />
@@ -54,7 +55,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <UserDashboardFooter />
           </div>
         </div>
-      </UserGoalsProvider>
+       <div className="custom-alerts">
+          <Alerts position="top-left" direction="left" timer={6000} />
+        </div>
+      </Providers>
     </AuthGuard>
   );
 }

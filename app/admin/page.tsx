@@ -38,7 +38,7 @@ import {
   Lesson,
 } from "@/types/interfaces";
 import { courseSchema, lessonSchema } from "@/schemas/lessons.schema";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 import { useCreateCourseWithLessons } from "@/services/generalApi/lessons/mutation";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -1848,12 +1848,6 @@ const prepareDataForBackend = async () => {
                   Save Lesson
                 </InAppButton>
               </div>
-              <Alerts
-                position="top-right"
-                direction="right"
-                timer={5000}
-                className="rounded-md relative z-100 !w-80"
-              />
             </div>
             {/* Add this before the lesson modal's closing div */}
             <EdedunModal

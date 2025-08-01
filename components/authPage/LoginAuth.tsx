@@ -9,7 +9,7 @@ import Link from "next/link";
 import { appColors } from "@/constants/colors";
 import { CustomSpinner } from "@/components/CustomSpinner";
 import { z } from "zod";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { useRouter } from "next/navigation";
 import {
   useLoginUser,
@@ -406,12 +406,6 @@ const LoginAuth: React.FC = () => {
           </span>
         </Link>
       </div>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={5000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </div>
   );
 };

@@ -9,7 +9,7 @@ import { PiWarningCircle } from "react-icons/pi";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import { appColors } from "@/constants/colors";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { useRouter } from "next/navigation";
 import { CustomSpinner } from "../CustomSpinner";
 import { useSearchParams } from "next/navigation";
@@ -253,12 +253,6 @@ return (
         </InAppButton>
       </div>
     </form>
-    <Alerts
-      position="top-left"
-      direction="right"
-      timer={3000}
-      className="rounded-md relative z-1000 !w-80"
-    />
   </div>
 );
 };

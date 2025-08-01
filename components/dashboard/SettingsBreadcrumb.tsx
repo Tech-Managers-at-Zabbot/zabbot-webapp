@@ -145,12 +145,6 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
           </div>
         </Modal>
       )}
-      {/* <Alerts
-        position="top-left"
-        direction="right"
-        timer={5000}
-        className="rounded-md relative z-1000 !w-80"
-      /> */}
     </div>
   );
 };

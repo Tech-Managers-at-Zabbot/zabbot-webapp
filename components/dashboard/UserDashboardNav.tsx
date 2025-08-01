@@ -8,7 +8,7 @@ import LanguageToggle from "../languageToggle/LanguageToggle";
 import { Modal } from "../general/Modal";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 import Cookies from "js-cookie";
@@ -485,12 +485,6 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
           </div>
         </Modal>
       )}
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={5000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </nav>
   );
 };

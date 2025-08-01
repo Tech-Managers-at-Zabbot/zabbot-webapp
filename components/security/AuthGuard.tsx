@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
-import { useAlert, Alerts } from "next-alert";
+import { useAlert } from "next-alert";
 import Loader from "../general/Loader";
 
 function parseJwt(token: string) {
@@ -117,12 +117,12 @@ export default function AuthGuard({
     return (
       <>
         <Loader isDark={isDark} />
-        <Alerts
-          position="top-left"
+        {/* <Alerts
+          position="top-right"
           direction="right"
           timer={10000}
           className="rounded-md relative z-100 !w-80"
-        />
+        /> */}
       </>
     );
   }
@@ -130,12 +130,12 @@ export default function AuthGuard({
   return (
     <>
       {children}
-      <Alerts
-        position="top-left"
+      {/* <Alerts
+        position="top-right"
         direction="right"
         timer={10000}
         className="rounded-md relative z-100 !w-80"
-      />
+      /> */}
     </>
   );
 }

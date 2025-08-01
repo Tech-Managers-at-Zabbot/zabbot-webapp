@@ -8,7 +8,7 @@ import LanguageToggle from "../languageToggle/LanguageToggle";
 import { Modal } from "../general/Modal";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import Cookies from "js-cookie";
 // import { useUserGoals } from "@/contexts/UserGoalsContext";
@@ -23,8 +23,8 @@ const AdminNavBar = ({ showLogo = false }) => {
   const { addAlert } = useAlert();
   // const { userDetails } = useUserGoals();
   const handleLogout = () => {
-    setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
+    setLogoutLoading(true);
     localStorage.removeItem("userProfile");
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
@@ -476,12 +476,6 @@ const AdminNavBar = ({ showLogo = false }) => {
           </div>
         </Modal>
       )}
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={5000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </nav>
   );
 };

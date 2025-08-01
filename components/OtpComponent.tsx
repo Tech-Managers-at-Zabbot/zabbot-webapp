@@ -13,7 +13,7 @@ import {
 } from "@/services/generalApi/authentication/mutation";
 import { appColors } from "@/constants/colors";
 import { CustomSpinner } from "@/components/CustomSpinner";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 
 const OtpComponent: React.FC = () => {
    const { getPageText, isPageLoading: isLanguageLoading } =
@@ -233,12 +233,6 @@ const OtpComponent: React.FC = () => {
           </div>
         </div>
       </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={5000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </div>
   );
 };
