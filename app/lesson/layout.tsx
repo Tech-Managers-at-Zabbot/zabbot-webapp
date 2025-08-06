@@ -12,10 +12,8 @@ import { Providers } from "@/components/Providers";
 
 const Layout = ({
   children,
-  showLogo = false,
 }: {
   children: React.ReactNode;
-  showLogo?: boolean;
 }) => {
   // const [timeSunMoonLink, setTimeSunMoonLink] = useState(
   //   // "/userDashboard/morning-sun.png"
@@ -43,7 +41,7 @@ const Layout = ({
       <Providers>
         <div className="flex flex-col min-h-screen">
           <div className={`flex-1 min-h-screen`}>
-            <UserDashboardNav showLogo={showLogo} />
+            <UserDashboardNav />
             <main style={{ flex: 1 }} className="relative">
               <div className="relative">
                 {/* <section

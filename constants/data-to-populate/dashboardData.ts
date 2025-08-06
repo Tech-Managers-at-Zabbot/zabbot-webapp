@@ -1,6 +1,4 @@
 import { MetricData } from "@/components/dashboard/DashboardMetricCard";
-import { LessonProps } from "@/components/dashboard/UserLessonDataComponent";
-
 export const metricsData: MetricData[] = [
   {
     title: 'Total Hours for all Learners',
@@ -59,7 +57,7 @@ export const metricsData: MetricData[] = [
 ];
 
 
-export const lessonProgressData: LessonProps[] = [
+export const lessonProgressData = [
   {
     courseImage: "/userDashboard/say-hello.svg",
     courseTitle: "Say Hello",
