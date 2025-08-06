@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 import { z } from "zod";
-import { ChevronDown, Plus, Trash2, Save, Upload } from "lucide-react";
+import { Plus, Save, } from "lucide-react";
 import { appColors } from "@/constants/colors";
 import { useAlert } from "next-alert";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
@@ -22,7 +23,9 @@ import LessonModal from "../../../components/admin/createCourseFlow/LessonModal"
 
 const CreateCoursePage = () => {
   // State and hooks initialization
-  const [languages, setLanguages] = useState<Language[]>([
+  const [languages, 
+    // setLanguages
+  ] = useState<Language[]>([
     {
       id: "1",
       code: LanguageCode.YORUBA,
@@ -33,7 +36,10 @@ const CreateCoursePage = () => {
   ]);
 
   const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
-  const [uploadErrors, setUploadErrors] = useState<{ [key: string]: string }>({});
+  // const [
+  //   // uploadErrors, 
+  //   setUploadErrors
+  // ] = useState<{ [key: string]: string }>({});
 
   const { addAlert } = useAlert();
   const { userDetails } = useUserGoals();
@@ -74,7 +80,9 @@ const CreateCoursePage = () => {
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [showEdeunModal, setShowEdeunModal] = useState(false);
   const [editingContentIndex, setEditingContentIndex] = useState<number | null>(null);
-  const [currentContentSourceType, setCurrentContentSourceType] = useState<ContentSourceType>(ContentSourceType.NEW);
+  const [
+    // currentContentSourceType, 
+    setCurrentContentSourceType] = useState<ContentSourceType | any>(ContentSourceType.NEW);
 
   // Form validation states
   const [courseErrors, setCourseErrors] = useState<any>({});
@@ -151,11 +159,11 @@ const CreateCoursePage = () => {
           }
         });
 
-        const formattedField = firstErrorField
-          ? firstErrorField
-              .replace(/([A-Z])/g, " $1")
-              .replace(/^./, (str) => str.toUpperCase())
-          : "";
+        // const formattedField = firstErrorField
+        //   ? firstErrorField
+        //       .replace(/([A-Z])/g, " $1")
+        //       .replace(/^./, (str) => str.toUpperCase())
+        //   : "";
 
         addAlert("Error", `${firstErrorMessage}`, "error");
         setLessonErrors(errors);
@@ -241,7 +249,7 @@ const CreateCoursePage = () => {
       contents: [...prev.contents, newContent],
     }));
     setEditingContentIndex(currentLesson.contents.length);
-    setCurrentContentSourceType(sourceType);
+    // setCurrentContentSourceType(sourceType);
 
     if (sourceType === ContentSourceType.EDEDUN) {
       setShowEdeunModal(true);
@@ -484,10 +492,10 @@ const CreateCoursePage = () => {
       }
     } catch (error) {
       console.error("Upload failed:", error);
-      setUploadErrors(prev => ({
-        ...prev,
-        [fileId]: error instanceof Error ? error.message : "Upload failed",
-      }));
+      // setUploadErrors(prev => ({
+      //   ...prev,
+      //   [fileId]: error instanceof Error ? error.message : "Upload failed",
+      // }));
       throw error;
     } finally {
       setUploadingFiles(prev => {
@@ -715,7 +723,7 @@ const CreateCoursePage = () => {
             </div>
           </div>
 
-          <header className="relative">
+          <header className="">
             <div className="flex relative z-10 mt-6 justify-between text-[24px] font-semibold leading-[100%] text-[#162B6E]">
               <div className="flex-shrink-0">
                 <span
@@ -782,7 +790,7 @@ const CreateCoursePage = () => {
                   setShowLanguageDropdown={setShowLanguageDropdown}
                   setShowLevelDropdown={setShowLevelDropdown}
                   handleThumbnailUpload={handleThumbnailUpload}
-                  theme={theme}
+                  // theme={theme}
                 />
               )}
 
@@ -873,7 +881,7 @@ const CreateCoursePage = () => {
         setShowEdeunModal={setShowEdeunModal}
         setCurrentContentSourceType={setCurrentContentSourceType}
         addContent={addContent}
-      />
+        />
 
       {/* Ededun Modal */}
       <EdedunModal
