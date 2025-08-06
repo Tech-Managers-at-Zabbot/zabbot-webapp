@@ -19,7 +19,7 @@ const PopularCourses = () => {
     <div className="flex gap-[30px]">
       <section className="flex-1 xl:max-w-[100%] w-full">
         <UserLessonDataComponent
-          title={"Journey Catalog"}
+          title={"Journey Hub"}
           subtitle={"Meaningful Yorùbá learning — one Journey at a time"}
           maxWidth="100%"
         >

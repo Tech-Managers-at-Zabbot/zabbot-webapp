@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React, { useMemo } from "react";
 import UserLessonDataComponent, {
   LessonProgressCard,
 } from "./UserLessonDataComponent";
@@ -9,6 +9,17 @@ import { useGetCoursesWithLessons } from "@/services/generalApi/lessons/mutation
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 import { useRouter } from "next/navigation";
+import { getShuffledImages } from "@/utilities/utilities";
+
+
+const imagePathsArr: string[] = [
+  "/userDashboard/yoruba/yoruba1.svg",
+  "/userDashboard/yoruba/yoruba2.svg",
+  "/userDashboard/yoruba/yoruba3.svg",
+  "/userDashboard/yoruba/yoruba4.svg",
+  "/userDashboard/yoruba/yoruba5.svg",
+];
+
 
 const ProgressSection = () => {
   const { userDetails } = useUserGoals();
@@ -22,6 +33,21 @@ const ProgressSection = () => {
 
   const courseLessons = coursesWithLessons?.data?.lessons;
 
+    // Prepare a shuffled copy of images to assign to lessons without repetition
+    const shuffledImages = useMemo(() => getShuffledImages(imagePathsArr), []);
+
+    // Keep track of next image index (wrap around)
+    // const [imageIndex, setImageIndex] = useState(0);
+  
+    // Map lessons with assigned images based on imageIndex and reset logic
+    const lessonsWithImages = useMemo(() => {
+      if (!courseLessons) return [];
+      return courseLessons.map((lesson:Record<string, any>, idx:number) => {
+        const img = shuffledImages[idx % shuffledImages.length];
+        return { ...lesson, imagePath: img };
+      });
+    }, [courseLessons, shuffledImages]);
+    
   return (
     <div className="flex flex-col xl:flex-row gap-[20px] w-full">
       <section className="flex-1 xl:w-[58%] w-full">
@@ -52,7 +78,7 @@ const ProgressSection = () => {
                 />
               </div>
             ) : (
-              courseLessons?.map(
+              lessonsWithImages?.map(
                 (lessonData: Record<string, any>, index: number) => (
                   <div
                     key={index}
@@ -67,6 +93,7 @@ const ProgressSection = () => {
                       data={lessonData} 
                       courseId={course?.id}
                       lessonId={lessonData?.id}
+                      imagePath={lessonData.imagePath}
                     />
                   </div>
                 )

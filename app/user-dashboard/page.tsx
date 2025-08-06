@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import AchievementsCard from "@/components/dashboard/AchievementsCard";
-// import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
+import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 // import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import // DashboardMetricCard,
 "@/components/dashboard/DashboardMetricCard";
@@ -22,9 +22,9 @@ import { useTheme } from "@/contexts/ThemeProvider";
 import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 
 const Dashboard = () => {
-  // const [goPremium, setGoPremium] = useState(true);
+  const [goPremium, setGoPremium] = useState(true);
 
-  // const handleClosePremiumTag = () => setGoPremium(false);
+  const handleClosePremiumTag = () => setGoPremium(false);
 
   const { data: userCountData, isLoading: userCountLoading } =
     useGetUserCount();
@@ -213,7 +213,7 @@ const Dashboard = () => {
           <section className="mt-20">
             <AchievementsCard />
           </section>
-          {/* 
+          
           <section
             className={`transition-all duration-300 ease-in-out ${
               goPremium
@@ -222,7 +222,7 @@ const Dashboard = () => {
             }`}
           >
             <GoPremiumCard onClose={handleClosePremiumTag} />
-          </section> */}
+          </section>
           {/* grid-cols-1 md:grid-cols-2 grid lg:grid-cols-3 */}
 
           {/* <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
@@ -237,7 +237,7 @@ const Dashboard = () => {
             ))}
           </section>
 
-          <section className="mt-6">
+          <section className="mt-10">
             <PremiumFeaturesComponents />
           </section>
 
