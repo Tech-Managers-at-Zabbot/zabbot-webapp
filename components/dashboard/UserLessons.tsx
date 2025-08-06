@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import UserLessonDataComponent, {
   LessonProgressCard,
-  LessonProps,
 } from "./UserLessonDataComponent";
 import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 
@@ -16,9 +16,9 @@ const UserLessons = () => {
         >
           <section className="flex gap-[15px] pb-4">
             {lessonProgressData.map(
-              (lessonProgressData: LessonProps, index: number) => (
+              (lessonProgressData: Record<string, any>, index: number) => (
                 <div key={index} className="flex-shrink-0">
-                  <LessonProgressCard {...lessonProgressData} />
+                  <LessonProgressCard data={lessonProgressData} />
                 </div>
               )
             )}

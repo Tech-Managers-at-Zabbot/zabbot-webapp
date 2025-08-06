@@ -83,21 +83,21 @@ export const TalkingDrumIcon = () => (
     <defs>
       {/* <!-- Gradients for depth and shading --> */}
       <radialGradient id="drumBodyGradient" cx="0.3" cy="0.3">
-        <stop offset="0%" stop-color="#8B4513" />
-        <stop offset="50%" stop-color="#654321" />
-        <stop offset="100%" stop-color="#4A2C17" />
+        <stop offset="0%" stopColor="#8B4513" />
+        <stop offset="50%" stopColor="#654321" />
+        <stop offset="100%" stopColor="#4A2C17" />
       </radialGradient>
 
       <radialGradient id="drumHeadGradient" cx="0.3" cy="0.3">
-        <stop offset="0%" stop-color="#F4E4BC" />
-        <stop offset="70%" stop-color="#D2B48C" />
-        <stop offset="100%" stop-color="#A0845C" />
+        <stop offset="0%" stopColor="#F4E4BC" />
+        <stop offset="70%" stopColor="#D2B48C" />
+        <stop offset="100%" stopColor="#A0845C" />
       </radialGradient>
 
       <linearGradient id="ropeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#8B7355" />
-        <stop offset="50%" stop-color="#6B5B47" />
-        <stop offset="100%" stop-color="#4A3728" />
+        <stop offset="0%" stopColor="#8B7355" />
+        <stop offset="50%" stopColor="#6B5B47" />
+        <stop offset="100%" stopColor="#4A3728" />
       </linearGradient>
 
       {/* <!-- Pattern for traditional decorations --> */}

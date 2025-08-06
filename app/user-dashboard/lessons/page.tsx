@@ -107,17 +107,19 @@ const Lessons = () => {
                   className="text-sm md:text-sm lg:text-2xl"
                   style={{ color: theme === 'dark' ? "#D0F7F6" : "#202124" }}
                 >
-                  Welcome! Start Learning{" "}
+                  Journey Hub
                 </span>
               </div>
             </div>
           </header>
 
-          <section className="mt-36">
+          {/* <section className="mt-36">
             <UserLessons />
-          </section>
+          </section> */}
 
-          <section className="mt-6">
+          <section className="mt-36 z-50"
+          style={{zIndex: 50}}
+          >
             <AllCourses />
           </section>
         </div>

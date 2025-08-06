@@ -86,7 +86,7 @@ const AllCourses = () => {
 
   return (
     <div
-      className="border z-2 shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
+      className="border relative z-1 shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
       style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px" }}
     >
       {/* Header Section - Made fully responsive */}

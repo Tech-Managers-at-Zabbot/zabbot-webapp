@@ -83,7 +83,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       ? [
           {
             name: "Admin",
-            route: "/admin",
+            route: "/admin/create-course",
             iconPath: "/userDashboard/admin.svg",
             isActiveIconPath: "/userDashboard/adminActive.svg",
             action: () => "",
@@ -171,7 +171,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       ? [
           {
             name: "Admin",
-            route: "/admin",
+            route: "/admin/create-course",
             iconPath: "/userDashboard/admin.svg",
             isActiveIconPath: "/userDashboard/adminActive.svg",
             action: () => "",

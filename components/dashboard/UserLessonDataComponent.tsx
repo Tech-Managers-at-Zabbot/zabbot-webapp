@@ -2,25 +2,21 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { LinearProgress } from "@mui/material";
+// import { LinearProgress } from "@mui/material";
 import { TfiArrowCircleLeft } from "react-icons/tfi";
 import { TfiArrowCircleRight } from "react-icons/tfi";
 import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 
-export interface LessonProps {
-  courseImage: string;
-  courseTitle: string;
-  courseSummary: string;
-  courseDuration: number;
-  courseTotalLessons: number;
-  userProgress: number;
-  courseUserLevel: string;
-}
-
-export const LessonProgressCard: React.FC<LessonProps> = (
-  data: LessonProps
-) => {
+export const LessonProgressCard = ({
+  data,
+  courseId,
+  lessonId
+}: {
+  data: Record<string, any>;
+  courseId?: string;
+  lessonId?: string;
+}) => {
   const router = useRouter();
 
   const { setLoading } = useLoading();
@@ -30,14 +26,14 @@ export const LessonProgressCard: React.FC<LessonProps> = (
       className="bg-white flex relative hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0"
       style={{ fontFamily: "Lexend" }}
        onClick={() => {
-          router.push("/lesson");
+          router.push(`/lesson/${courseId}/${lessonId}/learn-intro`);
           setLoading(true);
         }}
     >
       <section className="w-1/2 flex-shrink-0">
-        <div className="relative w-[170px] sm:w-[194px] h-[188px]">
+        <div className="relative w-[170px] sm:w-[194px] h-full">
           <Image
-            src={`${data.courseImage}`}
+            src={'/lessons/yoruba.avif'}
             alt="An image of a boy prostrating before an elderly woman in greeting"
             fill
             priority
@@ -69,19 +65,23 @@ export const LessonProgressCard: React.FC<LessonProps> = (
       <section className="flex flex-col justify-between p-[10px] w-1/2 pr-4 min-w-0">
         <div className="flex flex-col gap-[8px]">
           <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000] line-clamp-2">
-            {data.courseTitle}
+          {data?.title?.length > 15
+              ? data?.title.slice(0, 15) + "..."
+              : data?.title}
           </h3>
           <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%] line-clamp-3">
-            {data.courseSummary}
+          {data?.description?.length > 50
+              ? data?.description.slice(0, 50) + "..."
+              : data?.description}
           </div>
         </div>
 
         <div className="flex flex-col gap-[4px]">
           <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
-            <span>{data.courseDuration} min</span>
-            <span>{data.courseTotalLessons} lessons</span>
+            <span>{data?.estimatedDuration} min</span>
+            <span>{data?.totalContents} contents</span>
           </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <LinearProgress
               className=""
               value={data.userProgress}
@@ -96,7 +96,7 @@ export const LessonProgressCard: React.FC<LessonProps> = (
                 },
               }}
             />
-          </div>
+          </div> */}
         </div>
       </section>
     </div>
@@ -112,14 +112,14 @@ export const CoursesCard = (data: any) => {
       className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
       style={{ fontFamily: "Lexend" }}
         onClick={() => {
-          router.push("/lesson");
+          router.push(`/lesson/${data?.id}`);
           setLoading(true);
         }}
     >
       <section className="w-full">
         <div className="relative w-full h-[150px]">
           <Image
-            src={`${data?.thumbnailImage}`}
+            src={data?.thumbnailImage || "/lessons/yoruba.avif"}
             alt="An image of a boy prostrating before an elderly woman in greeting"
             fill
             priority
@@ -198,14 +198,14 @@ export const LessonsCard = (data: any) => {
       className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
       style={{ fontFamily: "Lexend" }}
        onClick={() => {
-          router.push("/lesson");
+          router.push(`/lesson/${data?.id}`);
           setLoading(true);
         }}
     >
       <section className="w-full">
         <div className="relative w-full h-[150px]">
           <Image
-            src={`${data?.thumbnailImage}`}
+            src={data?.thumbnailImage || "/lessons/yoruba.avif"}
             alt="An image of a boy prostrating before an elderly woman in greeting"
             fill
             priority
@@ -267,7 +267,93 @@ export const LessonsCard = (data: any) => {
         <div className="flex flex-col gap-[4px]">
           <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
             <span>{data?.estimatedDuration} min</span>
-            <span>{data?.totalLessons} lessons</span>
+            <span>{data?.totalLessons} {data?.totalLessons === 1 ? 'lesson' : 'lessons'}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export const LessonsCard2 = ({data}: {data:any}) => {
+  const router = useRouter();
+  const { setLoading } = useLoading();
+
+  return (
+    <div
+      className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-sm border border-[#E1E1E1] flex-shrink-0 mx-auto"
+      style={{ fontFamily: "Lexend" }}
+       onClick={() => {
+          router.push(`/lesson/${data?.courseId}/${data?.id}`);
+          setLoading(true);
+        }}
+    >
+      <section className="w-full">
+        <div className="relative w-full h-[150px]">
+          <Image
+            src={"/lessons/yoruba.avif"}
+            alt="An image of a boy prostrating before an elderly woman in greeting"
+            fill
+            priority
+            className="object-cover object-top rounded-t-sm"
+          />
+        </div>
+      </section>
+
+      {/* <section
+        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
+        onClick={() => {
+          router.push("/lesson");
+          setLoading(true);
+        }}
+      >
+        <div className="flex-shrink-0">
+          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
+            <Image
+              src="/userDashboard/hand-click-element.svg"
+              alt="A hand clicking the card"
+              fill
+              priority
+              className="object-cover rounded-l-sm"
+            />
+          </div>
+        </div>
+      </section> */}
+
+      {/* <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
+        <div
+          className={`px-[12px] py-[8px] border rounded-md`}
+          style={{
+            color:
+              data.level === "foundation"
+                ? "#D3AF37"
+                : data.level === "builder"
+                ? "#CF0A5C"
+                : "#169A9C",
+          }}
+        >
+          {data?.level}
+        </div>
+      </section> */}
+
+      <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
+        <div className="flex flex-col gap-[8px]">
+          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000]">
+            {data?.title?.length > 15
+              ? data?.title.slice(0, 15) + "..."
+              : data?.title}
+          </h3>
+          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
+            {data?.description?.length > 50
+              ? data?.description.slice(0, 50) + "..."
+              : data?.description}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[4px]">
+          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
+            <span>{data?.estimatedDuration} min</span>
+            <span>{data?.totalContents} {data?.totalContents === 1 ? 'step' : 'steps'}</span>
           </div>
         </div>
       </section>

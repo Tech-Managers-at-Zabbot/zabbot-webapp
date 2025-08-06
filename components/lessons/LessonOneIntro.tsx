@@ -5,7 +5,7 @@ import InAppButton from "@/components/InAppButton";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
-const LessonOneIntro = ({ onClick }: { onClick: () => void }) => {
+const LessonOneIntro = ({ onClick, lessonNumber }: { onClick: () => void, lessonNumber:number }) => {
   const [startLoading, setStartLoading] = useState(false);
 
   const handleClick = () => {
@@ -29,7 +29,7 @@ const LessonOneIntro = ({ onClick }: { onClick: () => void }) => {
 
       {/* Lesson Title */}
       <div className="font-bold text-[32px] sm:text-[40px] md:text-[50px] lg:text-[40px] leading-[1.2] text-[#F15B29] text-center">
-        LESSON ONE
+        LESSON {lessonNumber}
       </div>
 
       {/* Next Button */}
