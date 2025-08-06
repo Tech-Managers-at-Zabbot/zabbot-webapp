@@ -1,5 +1,22 @@
 import { ContentDataType, ContentSourceType, Level } from "./enums";
 
+
+export interface FileUploadStatus {
+  uploadingFiles: Set<string>;
+  uploadErrors: { [key: string]: string };
+}
+
+export const CLOUDINARY_CONFIG = {
+  cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "dirr9d0ox",
+  uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "zabbot-preset",
+};
+
+export const FILE_LIMITS = {
+  IMAGE_MAX_SIZE: 2,
+  VIDEO_MAX_SIZE: 15,
+  AUDIO_MAX_SIZE: 10,
+};
+
 export interface Language {
   id: string;
   code: string;

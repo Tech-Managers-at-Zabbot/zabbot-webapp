@@ -19,6 +19,16 @@ export async function getCourses(isActive = true, languageId:string) {
   return response.data;
 }
 
+export async function getCourseWithLessons(languageId: string) {
+  const response = await axiosInstance.get(`/lessons/courses/get-course-with-lesson/${languageId}`);
+  return response.data;
+}
+
+export async function getLessonWithContents(id: string | any) {
+  const response = await axiosInstance.get(`/lessons/lessons/lesson-with-contents/${id}`);
+  return response.data;
+}
+
 export async function getCourse(id: string) {
   const response = await axiosInstance.get(`/courses/${id}`);
   return response.data;

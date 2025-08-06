@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createCourseWithLessons, getCourses } from "./api";
+import { createCourseWithLessons, getCourses, getCourseWithLessons, getLessonWithContents } from "./api";
 
 
 
@@ -28,6 +28,36 @@ export function useGetAllCourses(languageId:string) {
     queryFn: () => getCourses(true, languageId),
     refetchOnMount: true,
     enabled: !!languageId,
+    refetchOnWindowFocus: false,
+    //   onError: (error) => {
+    //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
+    //   },
+  });
+
+}
+
+export function useGetCoursesWithLessons(languageId:string) {
+
+  return useQuery({
+    queryKey: ['getCoursesWithLessons', languageId],
+    queryFn: () => getCourseWithLessons(languageId),
+    refetchOnMount: true,
+    enabled: !!languageId,
+    refetchOnWindowFocus: false,
+    //   onError: (error) => {
+    //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
+    //   },
+  });
+
+}
+
+export function useGetLessonWithContents(lessonId:any) {
+
+  return useQuery({
+    queryKey: ['getLessonWithContents', lessonId],
+    queryFn: () => getLessonWithContents(lessonId),
+    refetchOnMount: true,
+    enabled: !!lessonId,
     refetchOnWindowFocus: false,
     //   onError: (error) => {
     //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");

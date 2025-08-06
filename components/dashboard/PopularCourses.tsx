@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import UserLessonDataComponent, {
-  LessonProps,
   LessonsCard,
 } from "./UserLessonDataComponent";
 // import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
@@ -42,7 +42,7 @@ const PopularCourses = () => {
           ) : (
             <section className="flex gap-[15px] min-w-max">
               {allCourses?.data.map(
-                (lessonProgressData: LessonProps, index: number) => (
+                (lessonProgressData:Record<string, any>, index: number) => (
                   <div key={index}>
                     <LessonsCard {...lessonProgressData} />
                   </div>

@@ -19,7 +19,7 @@ const PremiumFeaturesCard: React.FC<PremiumFeaturesData> = ({ data }) => {
   return (
     <>
       <div
-        className="relative w-full min-h-[280px] sm:min-h-[320px] md:min-h-[360px] lg:min-h-[400px] border border-gray-200 flex flex-col justify-between text-center rounded-lg p-3 sm:p-4 md:p-6 shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
+        className="relative w-full border border-gray-200 flex flex-col justify-between text-center rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
         style={{ fontFamily: "Lexend", backgroundColor: data?.backgroundColor }}
       >
         <section className="flex mt-1 md:mt-1 lg:mt-10 flex-col gap-10 justify-between">
