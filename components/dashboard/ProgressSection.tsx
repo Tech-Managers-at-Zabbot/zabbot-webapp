@@ -13,11 +13,11 @@ import { getShuffledImages } from "@/utilities/utilities";
 
 
 const imagePathsArr: string[] = [
-  "/userDashboard/yoruba/yoruba1.svg",
-  "/userDashboard/yoruba/yoruba2.svg",
-  "/userDashboard/yoruba/yoruba3.svg",
-  "/userDashboard/yoruba/yoruba4.svg",
-  "/userDashboard/yoruba/yoruba5.svg",
+  "/userDashboard/yoruba/yoruba1.png",
+  "/userDashboard/yoruba/yoruba2.png",
+  "/userDashboard/yoruba/yoruba3.png",
+  "/userDashboard/yoruba/yoruba4.png",
+  "/userDashboard/yoruba/yoruba5.png",
 ];
 
 
