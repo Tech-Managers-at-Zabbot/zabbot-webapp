@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ScrollArrow } from "../ScrollArrow";
 import { Modal, useModal } from "../general/Modal"; // Adjust path as needed
 import InAppButton from "../InAppButton"; // Adjust path as needed
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const AchievementsCard = () => {
   // const achievements = [
@@ -34,29 +35,31 @@ const AchievementsCard = () => {
 
     const achievements = [
     { name: "7-Day Streak", isCompleted: true },
-    { name: "14-Day Streak", isCompleted: true },
+    { name: "14-Day Streak", isCompleted: false },
     { name: "30-Day Streak", isCompleted: false },
     { name: "Vocab Master", isCompleted: false },
     { name: "Grammar Pro", isCompleted: false },
     { name: "Tonal Hero", isCompleted: false },
     { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
+    { name: "Language Master", isCompleted: false },
+    { name: "History Hero", isCompleted: false },
     { name: "Tonal Hero", isCompleted: false },
     { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
+    { name: "Language Master", isCompleted: false },
+    { name: "History Hero", isCompleted: false },
     { name: "Tonal Hero", isCompleted: false },
     { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
+    { name: "Language Master", isCompleted: false },
+    { name: "History Hero", isCompleted: false },
     { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
-    { name: "History Hero", isCompleted: true },
+    { name: "Language Master", isCompleted: false },
+    { name: "History Hero", isCompleted: false },
     { name: "Tonal Hero", isCompleted: false },
     { name: "Culture Keeper", isCompleted: false },
-    { name: "Language Master", isCompleted: true },
+    { name: "Language Master", isCompleted: false },
   ];
+
+  const { theme } = useTheme();
 
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
@@ -140,7 +143,7 @@ const AchievementsCard = () => {
     return (
       <>
         <div
-          className="relative flex flex-col gap-4 z-1 bg-white items-center justify-between p-6 rounded-lg w-full"
+          className={`relative flex flex-col gap-4 z-1 ${theme === 'dark' ? 'bg-[#1E375A]' : 'bg-white'} items-center justify-between p-6 rounded-lg w-full`}
           style={{
             fontFamily: "Lexend",
             boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)",
@@ -149,9 +152,9 @@ const AchievementsCard = () => {
           {/* Left Section */}
           <section className="flex-shrink-0">
             <div className="flex flex-col gap-[14px]">
-              <div className="text-[#737477] flex gap-2 font-[400] text-[14px] leading-[100%]">
+              <div className="text-[#737477] flex flex-col gap-2 font-[400] text-[14px] leading-[100%]">
                 <span className="whitespace-nowrap">ACHIEVEMENTS</span>
-                {/* <span className="whitespace-nowrap">UNLOCKED</span> */}
+                <span className="whitespace-nowrap text-[#F96129]">UNLOCKED 1/23</span>
               </div>
               {/* <div className="font-bold text-center text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
                 RANK #12 / 90
@@ -229,7 +232,7 @@ const AchievementsCard = () => {
   // Desktop render (original layout)
   return (
     <div
-      className="relative flex z-1 bg-white items-center p-6 rounded-lg gap-10 w-full overflow-hidden"
+      className={`relative flex z-1 ${theme === 'dark' ? 'bg-[#1E375A]' : 'bg-white'} items-center p-6 rounded-lg gap-10 w-full overflow-hidden`}
       style={{
         fontFamily: "Lexend",
         boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)",
@@ -238,9 +241,9 @@ const AchievementsCard = () => {
       {/* Left Section */}
       <section className="min-w-[100px] flex-shrink-0">
         <div className="flex flex-col gap-[14px]">
-          <div className="text-[#737477] flex flex-col gap-2 font-[400] text-[14px] leading-[100%]">
+          <div className="text-[#737477] flex flex-col gap-2 font-[700] text-[14px] leading-[100%]">
             <span className="whitespace-nowrap">ACHIEVEMENTS</span>
-            {/* <span className="whitespace-nowrap">UNLOCKED</span> */}
+            <span className="whitespace-nowrap text-[#F96129]">UNLOCKED 1/23</span>
           </div>
           {/* <div className="font-bold text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
             RANK #12 / 90
@@ -304,8 +307,8 @@ const AchievementsCard = () => {
               {/* )} */}
             </div>
             <div
-              className="text-[14px] text-[#333333] font-[400] leading-[145%] whitespace-nowrap text-center"
-              style={{ color: item.isCompleted ? "#333333" : "#CCCCCC" }}
+              className="text-[14px] font-[400] leading-[145%] whitespace-nowrap text-center"
+              style={{ color: item.isCompleted && theme === 'dark' ? '#F0F0F0' : item.isCompleted && theme === 'light' ? "#333333" : "#CCCCCC" }}
             >
               {item.name}
             </div>

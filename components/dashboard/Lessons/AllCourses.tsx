@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import SearchBar from "@/components/general/SearchBar";
-import MainDropdown from "@/components/MainDropdown";
+// import SearchBar from "@/components/general/SearchBar";
+// import MainDropdown from "@/components/MainDropdown";
 import React, { useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
-import { MdOutlineFilterList } from "react-icons/md";
+// import { IoSearchOutline } from "react-icons/io5";
+// import { MdOutlineFilterList } from "react-icons/md";
 import { CoursesCard } from "../UserLessonDataComponent";
 import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 import Pagination from "../Pagination";
@@ -11,12 +11,15 @@ import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
 import { useUserGoals } from "@/contexts/UserGoalsContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
   const { userDetails } = useUserGoals();
+
+  const { theme } = useTheme()
 
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
     userDetails?.languageId
@@ -30,15 +33,15 @@ const AllCourses = () => {
   // const endIndex = startIndex + itemsPerPage;
   // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
 
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-  const handleFilterClick = (filterName: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filterName)
-        ? prev.filter((f) => f !== filterName)
-        : [...prev, filterName]
-    );
-  };
+  // const handleFilterClick = (filterName: string) => {
+  //   setSelectedFilters((prev) =>
+  //     prev.includes(filterName)
+  //       ? prev.filter((f) => f !== filterName)
+  //       : [...prev, filterName]
+  //   );
+  // };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -46,70 +49,71 @@ const AllCourses = () => {
     // For now, we're just updating the local state
   };
 
-  const dropdownOptions = [
-    {
-      name: "Alphabetical",
-      path: "",
-    },
-    {
-      name: "Newest",
-      path: "",
-    },
-    {
-      name: "Oldest",
-      path: "",
-    },
-  ];
+  // const dropdownOptions = [
+  //   {
+  //     name: "Alphabetical",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Newest",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Oldest",
+  //     path: "",
+  //   },
+  // ];
 
-  const filterMenu = [
-    {
-      name: "Completed",
-      path: "",
-    },
-    {
-      name: "In progress",
-      path: "",
-    },
-    {
-      name: "Explorer",
-      path: "",
-    },
-    {
-      name: "Foundation",
-      path: "",
-    },
-    {
-      name: "Builder",
-      path: "",
-    },
-  ];
+  // const filterMenu = [
+  //   {
+  //     name: "Completed",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "In progress",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Explorer",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Foundation",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Builder",
+  //     path: "",
+  //   },
+  // ];
 
   return (
     <div
-      className="border relative z-1 shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
-      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px" }}
+      className="relative z-1 shadow-sm gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg w-full max-w-full overflow-hidden"
+      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px", background: theme === 'dark' ? "#012657" : "#E0F9FA" }}
     >
       {/* Header Section - Made fully responsive */}
       <header className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
         <section className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]">
-            Journey Catalog
+          <h3 className="font-semibold text-[18px] sm:text-[20px] lg:text-[24px] leading-tight"
+          style={{color: theme === 'dark' ? "#FFFFFF" : "#162B6E"}}
+          >
+            Journey Hub
           </h3>
-          <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1">
+          <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight mt-1"
+          style={{color: theme === 'dark' ? "#ACDBFF" : "#207EC5"}}
+          >
             Meaningful Yorùbá learning — one Journey at a time
           </span>
         </section>
 
         {/* Controls Section - Responsive layout */}
-        <section className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:gap-6 flex-shrink-0">
-          {/* Search Bar */}
+        {/* <section className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:gap-6 flex-shrink-0">
           <div className="w-full sm:w-auto sm:min-w-[200px]">
             <SearchBar icon={<IoSearchOutline size={20} />} />
           </div>
 
-          {/* Filter and Sort Controls */}
           <div className="flex items-center justify-between sm:justify-start gap-4 lg:gap-6">
-            {/* Add Filter */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
                 Add Filter
@@ -123,7 +127,6 @@ const AllCourses = () => {
               </span>
             </div>
 
-            {/* Sort Dropdown */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
                 Sort by
@@ -145,11 +148,11 @@ const AllCourses = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </header>
 
       {/* Filter Tags Section - Responsive */}
-      <section className="w-full overflow-hidden">
+      {/* <section className="w-full overflow-hidden">
         <div className="flex flex-wrap gap-2 sm:gap-3">
           {filterMenu.map((item, index) => (
             <div
@@ -165,7 +168,7 @@ const AllCourses = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Courses Grid Section - Fully responsive grid */}
       <section className="w-full min-w-0">
@@ -202,7 +205,7 @@ const AllCourses = () => {
       </section>
 
       {/* Divider */}
-      <div className="border-t border-[#EAECF0] w-full"></div>
+      {/* <div className="border-t border-[#EAECF0] w-full"></div> */}
 
       {/* Pagination Section */}
       <section className="w-full overflow-x-auto">

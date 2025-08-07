@@ -1,126 +1,192 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import InAppButton from "../InAppButton";
 import { useRouter } from 'next/navigation';
+import Image from "next/image";
 
-interface PremiumFeature {
-  title1?: string;
-  title2?: string;
-  title3?: string;
-  backgroundColor?: string;
-  imgSrc?: string;
-  path?: string;
-}
-
-interface PremiumFeaturesData {
-  data?: PremiumFeature;
-}
-
-const PremiumFeaturesCard: React.FC<PremiumFeaturesData> = ({ data }) => {
-   const router = useRouter();
-
-  const handleClick = () => {
-    if (!data?.path) return;
-    
-    router.push(data.path);
-  }
-
+const PremiumFeaturesOre = () => {
   return (
-    <>
-      <div
-        className="relative w-full border border-gray-200 flex flex-col justify-between text-center rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
-        style={{ fontFamily: "Lexend", backgroundColor: data?.backgroundColor }}
-      >
-        <section className="flex mt-1 md:mt-1 lg:mt-10 flex-col gap-10 justify-between">
+    <div
+      className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
+      style={{ fontFamily: "Lexend", backgroundColor: '#6BBBEB' }}
+    >
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full min-h-[200px] sm:min-h-[160px]">
+        {/* Content Section */}
+        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[140px] md:pr-[181px]">
           {/* Title Section */}
-          <div className="flex-1 flex flex-col justify-center space-y-1 sm:space-y-1">
-            {data?.title1 && (
-              <div className="flex justify-center text-center items-center">
-                <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#162B6E] break-words">
-                  {data.title1}
-                </h3>
-              </div>
-            )}
-
-            {data?.title2 && (
-              <div className="flex justify-center text-center items-center">
-                <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#162B6E] break-words">
-                  {data.title2}
-                </h3>
-              </div>
-            )}
-
-            {data?.title3 && (
-              <div className="flex justify-center text-center items-center">
-                <h3 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#162B6E] break-words">
-                  {data.title3}
-                </h3>
-              </div>
-            )}
+          <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
+              <h3 
+                className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
+                style={{color: '#162B6E'}}
+              >
+                Chat with Ọ̀rẹ
+              </h3>
+              <p 
+                className="text-sm sm:text-sm md:text-base font-normal leading-relaxed break-words"
+                style={{color: '#2E2A2A'}}
+              >
+                Ai powered conversation to translate and chat.
+              </p>
           </div>
 
           {/* Button Section */}
-          <div className="flex justify-center mb-4 sm:mb-6 z-10">
-            <InAppButton
-              background="#24A5EE"
-              width="80px"
-              height="40px"
-              borderRadius="8px"
-              onClick={handleClick}
-            >
-              Start
-            </InAppButton>
+          <div className="z-10">
+          <InAppButton
+          background="#162B6E"
+          paddingTop="16px"
+          paddingBottom="16px"
+          paddingLeft="24px"
+          paddingRight="24px"
+          borderRadius="35.13px"
+          width=""
+        >
+          <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
+            Get Started
+          </div>
+        </InAppButton>
           </div>
         </section>
 
         {/* Image Section */}
-        <div
-          className={`absolute right-1 sm:right-2 bottom-0 flex items-end h-full pointer-events-none transition-all duration-300 transform`}
-        >
-          <img
-            src={data?.imgSrc}
-            alt="Feature illustration"
-            className="w-16 h-auto sm:w-20 md:w-24 lg:w-28 xl:w-32 object-contain"
-          />
-        </div>
+       {/* Image Section */}
+<section className="relative flex-shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
+  <div className="relative sm:absolute sm:bottom-0 sm:right-[-10px] flex justify-center sm:block w-full sm:w-[140px] md:w-[180px] lg:w-[230px] h-auto">
+    <Image
+      src={'/userDashboard/ore-image.svg'}
+      alt="Feature illustration"
+      className="object-contain"
+      width={250}
+      height={55}
+    />
+  </div>
+</section>
+
       </div>
-    </>
+    </div>
+  );
+};
+
+const PremiumFeaturesPara = () => {
+  return (
+    <div
+      className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
+      style={{ fontFamily: "Lexend", backgroundColor: '#FFF351' }}
+    >
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full min-h-[200px] sm:min-h-[160px]">
+        {/* Content Section */}
+        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[140px] md:pr-[181px]">
+          {/* Title Section */}
+          <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
+              <h3 
+                className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
+                style={{color: '#101828'}}
+              >
+                Pronounce with Pàrà
+              </h3>
+          </div>
+
+          {/* Button Section */}
+          <div className="z-10">
+          <InAppButton
+          background="#1671D9"
+          paddingTop="8px"
+          paddingBottom="8px"
+          paddingLeft="16px"
+          paddingRight="16px"
+          borderRadius="35.13px"
+          width=""
+        >
+          <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
+            Get Started
+          </div>
+        </InAppButton>
+          </div>
+        </section>
+
+        {/* Image Section */}
+        <section className="relative flex-shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
+          <div className="relative sm:absolute sm:bottom-0 sm:right-[8px] flex justify-center sm:block w-full sm:w-[140px] md:w-[180px] lg:w-[200px] h-auto">
+            <Image
+              src={'/userDashboard/para-image.svg'}
+              alt="Feature illustration"
+              className="object-contain"
+              width={250}
+              height={55}
+            />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
+  return (
+    <div
+      className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
+      style={{ fontFamily: "Lexend", backgroundColor: '#E66D58' }}
+    >
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full min-h-[200px] sm:min-h-[160px]">
+        {/* Content Section */}
+        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[140px] md:pr-[181px]">
+          {/* Title Section */}
+          <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
+              <h3 
+                className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
+                style={{color: '#101828'}}
+              >
+                Listen with Òwe
+              </h3>
+          </div>
+
+          {/* Button Section */}
+          <div className="z-10">
+          <InAppButton
+          background="#162B6E"
+          paddingTop="8px"
+          paddingBottom="8px"
+          paddingLeft="16px"
+          paddingRight="16px"
+          borderRadius="35.13px"
+          width=""
+          onClick={handleClick}
+        >
+          <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
+            Get Started
+          </div>
+        </InAppButton>
+          </div>
+        </section>
+
+        {/* Image Section */}
+        <section className="relative flex-shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
+          <div className="relative sm:absolute sm:bottom-[-20] sm:right-[20px] flex justify-center sm:block w-full sm:w-[140px] md:w-[160px] lg:w-[210px] h-auto">
+            <Image
+              src={'/userDashboard/owe-image.png'}
+              alt="Feature illustration"
+              className="object-contain"
+              width={200}
+              height={55}
+            />
+          </div>
+        </section>
+      </div>
+    </div>
   );
 };
 
 const PremiumFeaturesComponents = () => {
-  const premiumFeaturesDetails = [
-    {
-      backgroundColor: "#E3F5FF",
-      title1: "Write",
-      title2: "With",
-      title3: "Ọ̀rẹ́",
-      imgSrc: "/premium/zabbot-ore-robot.svg",
-      path: "",
-    },
-    {
-      backgroundColor: "#A6DFFF",
-      title1: "Pronounce",
-      title2: "with",
-      title3: "Pàrà",
-      imgSrc: "/premium/zabbot-para.svg",
-      path: "",
-    },
-    {
-      backgroundColor: "#E3F5FF",
-      title1: "Listen",
-      title2: "with",
-      title3: "Òwe",
-      imgSrc: "/premium/zabbot-owe.png",
-      path: "/premium/listen-with-owe",
-    },
-  ];
+   const router = useRouter();
 
+  const handlePronounceClick = (path: string) => {
+    if (!path) return;
+    
+    router.push(path);
+  }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-4 sm:gap-6 transition-all duration-300 ease-in-out">
-      {premiumFeaturesDetails.map((item, index) => (
-        <PremiumFeaturesCard key={index} data={item} />
-      ))}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 sm:gap-6 transition-all duration-300 ease-in-out">
+      <PremiumFeaturesOre />
+      <PremiumFeaturesPara />
+      <PremiumFeaturesOwe handleClick={() => handlePronounceClick('/premium/listen-with-owe')}/>
     </div>
   );
 };

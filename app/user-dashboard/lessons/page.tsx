@@ -73,8 +73,8 @@ const Lessons = () => {
         ></div>
         <div className="max-w-screen-2xl">
           <div className="w-full">
-            <div className="flex absolute top-0 right-[5%] items-center z-10 gap-20 flex-shrink-0">
-              <div className="w-[70px] mt-1 flex">
+            <div className="flex absolute top-6 right-[5%] items-center z-10 gap-20 flex-shrink-0">
+              {/* <div className="w-[70px] mt-1 flex">
                 <div className="h-[80px]">
                   <Image
                     src="/userDashboard/parrot-head.svg"
@@ -85,6 +85,11 @@ const Lessons = () => {
                     className="object-contain"
                   />
                 </div>
+              </div> */}
+              <div className="font-bold text-[35px] leading-[100%]"
+              style={{color: theme === 'light' ? "#202124" : "#FFFFFF"}}
+              >
+                Journeys
               </div>
               <div className="hidden lg:flex">
                 <SettingsBreadcrumb isDark={theme === 'dark'} />
@@ -94,21 +99,21 @@ const Lessons = () => {
           <header className="relative">
             <div className="flex relative z-10 mt-6 justify-between text-[24px] font-semibold leading-[100%] text-[#162B6E]">
               <div className="flex-shrink-0">
-                {/* <div className="relative w-[156px] h-[46.91px]">
+                <div className="relative w-[156px] h-[46.91px]">
                   <Image
-                    src="/general/zabbot-logo-blue.svg"
+                    src={logoUrl}
                     alt="Zabbot blue Logo"
                     fill
                     priority
                     className="object-contain"
                   />
-                </div> */}
-                <span
+                </div>
+                {/* <span
                   className="text-sm md:text-sm lg:text-2xl"
                   style={{ color: theme === 'dark' ? "#D0F7F6" : "#202124" }}
                 >
                   Journey Hub
-                </span>
+                </span> */}
               </div>
             </div>
           </header>
@@ -117,7 +122,7 @@ const Lessons = () => {
             <UserLessons />
           </section> */}
 
-          <section className="mt-36 z-50"
+          <section className="mt-30 z-50"
           style={{zIndex: 50}}
           >
             <AllCourses />
