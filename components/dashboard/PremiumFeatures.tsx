@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import InAppButton from "../InAppButton";
+import { useRouter } from 'next/navigation';
 
 interface PremiumFeature {
   title1?: string;
@@ -16,6 +17,14 @@ interface PremiumFeaturesData {
 }
 
 const PremiumFeaturesCard: React.FC<PremiumFeaturesData> = ({ data }) => {
+   const router = useRouter();
+
+  const handleClick = () => {
+    if (!data?.path) return;
+    
+    router.push(data.path);
+  }
+
   return (
     <>
       <div
@@ -57,6 +66,7 @@ const PremiumFeaturesCard: React.FC<PremiumFeaturesData> = ({ data }) => {
               width="80px"
               height="40px"
               borderRadius="8px"
+              onClick={handleClick}
             >
               Start
             </InAppButton>
@@ -102,7 +112,7 @@ const PremiumFeaturesComponents = () => {
       title2: "with",
       title3: "Òwe",
       imgSrc: "/premium/zabbot-owe.png",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
   ];
 
