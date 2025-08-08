@@ -21,7 +21,7 @@ const Layout = ({
       <Providers>
         <div className="flex flex-col">
           <div className={`flex-1`}>
-            <UserDashboardNav />
+            <UserDashboardNav showLogo />
             <main style={{ flex: 1 }} className="relative">
               <div className="relative">
                 

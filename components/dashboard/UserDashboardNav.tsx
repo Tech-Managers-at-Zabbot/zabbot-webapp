@@ -216,7 +216,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       path: "",
     },
     {
-      name: "Listen & Practice",
+      name: "Listen with Òwe",
       icon: "/userDashboard/bag.svg",
       path: "/premium/listen-with-owe",
     },
@@ -250,6 +250,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   }
 
   const [backgroundColor, setBackgroundColor] = useState("#162B6E");
+  const isPremiumRoute = pathname.includes("premium");
 
   useEffect(() => {
     const currentTime = new Date();
@@ -347,6 +348,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <MainDropdown
           options={dropdownOptions}
           placeholder="Go Premium"
+          color={isPremiumRoute ? "#000000" : "#ffffff"}
+          backgroundColor={isPremiumRoute ? "#FFE933" : "#162B6E"}
           icon={
             <Image
               src={"/userDashboard/isPremiumImage.svg"}

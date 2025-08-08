@@ -4,6 +4,7 @@ import { FiSearch } from 'react-icons/fi';
 import Head from "next/head";
 import Image from 'next/image';
 import { defaultDiacriticText } from './constants'
+import KeymanToggleLazy from "@/components/KeymanToggleLazy";
 
 const ListenWithOwe = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -134,18 +135,20 @@ const ListenWithOwe = () => {
     return (
         <div>
             <Head>
-                <title>Zabbot - Premium: Pronounce With Para</title>
+                <title>Zabbot - Premium: Listen with Owe</title>
                 <meta
                     name="description"
-                    content="Pronounce With Para on Zabbot Language Learning Platform"
+                    content="Listen with Owe on Zabbot Language Learning Platform"
                 />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                
             </Head>
             <main className="flex flex-col bg-[#002557] relative p-10">
+                <KeymanToggleLazy />
                 <section className="w-full">
                     <div className="flex">
                         {/* Left Pane */}
-                        <div className="w-1/3 max-w-100 border-r p-4 pr-20 bg-[#002557]" style={{
+                        <div className="w-1/3 max-w-100 border-r p-2 pr-20 bg-[#002557] text-white" style={{
                             fontFamily: "Lexend", fontWeight: 400, textAlign: "left"
                         }}>
                             <div className="mb-4">
@@ -154,13 +157,13 @@ const ListenWithOwe = () => {
                                     <input
                                         type="text"
                                         placeholder="Search items..."
-                                        className="w-70 pl-10 pr-4 py-2 border rounded-lg text-white-900"
+                                        className="w-70 pl-10 pr-4 py-2 border rounded-lg text-white"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 text-white">
                                 <div className='p-1 text-lg text-white'>History</div>
 
                                 {filteredItems.length === 0 && (
@@ -241,18 +244,19 @@ const ListenWithOwe = () => {
                                         <textarea
                                             rows={4}
                                             value={inputText}
-                                            onChange={(e) => setInputText(e.target.value)}
+                                            onInput={(e) => setInputText((e.target as HTMLTextAreaElement).value)}
                                             placeholder="Enter Yorùbá text..."
-                                            className="w-full border rounded p-2 bg-white text-black"
+                                            className="w-full border rounded p-2 bg-white text-black keyman-enabled"
                                             style={{ alignContent: 'center' }}
+                                            name="inputText"
                                         /></div>
 
                                     <button
                                         onClick={handleToneMark}
                                         disabled={loading || !inputText.trim()}
-                                        className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 m-2" style={{ height: '46px', width: '176px' }}
+                                        className="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-600 m-2" style={{ height: '46px', alignSelf: 'center' }}
                                     >
-                                        Add Tone Marks
+                                        {'Add Tone Marks >>'}
                                     </button>
 
                                     <div className='border-1 border-[#84D8FF] rounded-md p-4 basis-84 '><div className='text-black min-h-28 bg-[#E0E0E0] p-4 rounded-md align' style={{ alignContent: 'center' }}>{diacriticText}</div></div>
@@ -266,28 +270,30 @@ const ListenWithOwe = () => {
                                         className="inline-block mr-2"
                                         style={{ objectFit: 'contain', marginBottom: '10px' }}
                                     />
-                                    <div className="mt-4">
+                                    <div className="text-white">
                                         <label className="mr-2 font-medium">Use tone-marked text for speech?</label>
                                         <input type="checkbox" checked={useMarkedText} onChange={() => setUseMarkedText(!useMarkedText)} className="mr-1" />
                                         <span>{useMarkedText ? "✔ Tone-marked" : "✘ Original input"}</span>
                                     </div>
                                     <div>
+                                        {speaking && (<div className='text-white text-l flex p-2'><Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15}/> Playing audio. </div>)}
+                                        
                                         <button
                                             onClick={handleSpeak}
                                             disabled={speaking || loading || diacriticText === defaultDiacriticText || diacriticText.trim().length < 1}
-                                            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                                            className="bg-green-600 text-white px-4 py-2 mt-3 rounded hover:bg-green-700"
                                         >
                                             {speaking ? 'Listening...' : 'Speak'}
                                         </button>
                                     </div>
                                 </div>
-                                <div className='flex justify-between items-center mt-4'>
+                                <div className='flex justify-between items-center mt-4 text-white'>
                                     <div>
-                                        <label className="mr-2 font-medium">Voice:</label>
+                                        <label className="mr-2 font-medium text-white">Voice:</label>
                                         <select
                                             value={selectedVoice}
                                             onChange={(e) => setSelectedVoice(e.target.value)}
-                                            className="border p-1 rounded"
+                                            className="border p-1 rounded text-white"
                                         >
                                             <option value="sade">Sade</option>
                                             <option value="femi">Fẹmi</option>
@@ -307,7 +313,6 @@ const ListenWithOwe = () => {
                                             </a>
                                         </div>)}
                                 </div>
-
                             </div>
                         </div>
                     </div>
