@@ -7,7 +7,7 @@ import { defaultDiacriticText } from './constants'
 
 const ListenWithOwe = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState([""]);
     const [selectedItem, setSelectedItem] = useState("");
     const [speaking, setSpeaking] = useState(false);
 
@@ -18,7 +18,7 @@ const ListenWithOwe = () => {
     
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [hoveredHistoryItem, setHoveredHistoryItem] = useState(null);
+    const [hoveredHistoryItem, setHoveredHistoryItem] = useState<string | null>(null);
 
     useEffect(() => {
         const customDiacriticText = localStorage.getItem("diacriticList");
