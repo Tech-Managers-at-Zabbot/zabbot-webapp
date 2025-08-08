@@ -174,7 +174,7 @@ const ListenWithOwe = () => {
                                             onMouseLeave={() => setHoveredHistoryItem(null)}>
                                             <Image src='/general/tailing-quote-icon.svg' alt='quote' width={20} height={20} />
                                             {hoveredHistoryItem === item && (
-                                                <div className="absolute -right-15 top-3 mt-1 bg-white border border-gray-300 rounded shadow-lg p-2 flex items-center gap-2 z-50 text-sm">
+                                                <div className="absolute -right-15 top-3 mt-1 bg-white border border-gray-300 rounded shadow-lg p-2 pr-5 flex flex-col items-center gap-2 z-50 text-sm">
                                                     <div onClick={() => removeFromDiacriticList(item)} className="flex items-center gap-1 cursor-pointer hover:text-red-500">
                                                     <Image
                                                         src="/general/delete-icon.svg"
@@ -183,6 +183,16 @@ const ListenWithOwe = () => {
                                                         height={16}
                                                     />
                                                     <span>Delete</span>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-1 cursor-pointer hover:text-green-500">
+                                                    <Image
+                                                        src="/general/archive-icon.svg"
+                                                        alt="archive"
+                                                        width={16}
+                                                        height={16}
+                                                    />
+                                                    <span>Archive</span>
                                                     </div>
                                                 </div>
                                             )}
