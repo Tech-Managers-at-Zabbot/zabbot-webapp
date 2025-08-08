@@ -24,8 +24,9 @@ export default function KeymanToggleLazy() {
     return () => {
       document.removeEventListener("focusin", handleFocus);
     };
-  }, []);
+  }, [loadKeyman]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function loadKeyman(callback: () => void) {
     // Load Keyman CSS
     const css = document.createElement("link");
