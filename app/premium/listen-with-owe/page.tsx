@@ -10,12 +10,12 @@ const ListenWithOwe = () => {
     const [items, setItems] = useState([""]);
     const [selectedItem, setSelectedItem] = useState("");
     const [speaking, setSpeaking] = useState(false);
-
+    const [useMarkedText, setUseMarkedText] = useState(true);
     const [inputText, setInputText] = useState("");
     const [diacriticText, setDiaCriticText] = useState(defaultDiacriticText);
 
     const [selectedVoice, setSelectedVoice] = useState("sade");
-    
+
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [hoveredHistoryItem, setHoveredHistoryItem] = useState<string | null>(null);
@@ -41,10 +41,14 @@ const ListenWithOwe = () => {
         try {
             const diacriticList = JSON.parse(localStorage.getItem("diacriticList") || "[]");
 
-
             if (inputText &&
                 !diacriticList.some((item: string) => item.toLowerCase() === inputText.toLowerCase())) {
                 diacriticList.push(inputText);
+
+                 // Keep max 5 items
+                if (diacriticList.length > 5) {
+                    diacriticList.shift();
+                }
                 localStorage.setItem("diacriticList", JSON.stringify(diacriticList));
             }
 
@@ -79,7 +83,7 @@ const ListenWithOwe = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    text: diacriticText ? diacriticText : inputText,
+                    text: useMarkedText && diacriticText ? diacriticText : inputText,
                     voice: selectedVoice,
                 }),
             });
@@ -176,23 +180,23 @@ const ListenWithOwe = () => {
                                             {hoveredHistoryItem === item && (
                                                 <div className="absolute -right-15 top-3 mt-1 bg-white border border-gray-300 rounded shadow-lg p-2 pr-5 flex flex-col items-center gap-2 z-50 text-sm">
                                                     <div onClick={() => removeFromDiacriticList(item)} className="flex items-center gap-1 cursor-pointer hover:text-red-500">
-                                                    <Image
-                                                        src="/general/delete-icon.svg"
-                                                        alt="delete"
-                                                        width={16}
-                                                        height={16}
-                                                    />
-                                                    <span>Delete</span>
+                                                        <Image
+                                                            src="/general/delete-icon.svg"
+                                                            alt="delete"
+                                                            width={16}
+                                                            height={16}
+                                                        />
+                                                        <span>Delete</span>
                                                     </div>
 
                                                     <div className="flex items-center gap-1 cursor-pointer hover:text-green-500">
-                                                    <Image
-                                                        src="/general/archive-icon.svg"
-                                                        alt="archive"
-                                                        width={16}
-                                                        height={16}
-                                                    />
-                                                    <span>Archive</span>
+                                                        <Image
+                                                            src="/general/archive-icon.svg"
+                                                            alt="archive"
+                                                            width={16}
+                                                            height={16}
+                                                        />
+                                                        <span>Archive</span>
                                                     </div>
                                                 </div>
                                             )}
@@ -262,7 +266,11 @@ const ListenWithOwe = () => {
                                         className="inline-block mr-2"
                                         style={{ objectFit: 'contain', marginBottom: '10px' }}
                                     />
-
+                                    <div className="mt-4">
+                                        <label className="mr-2 font-medium">Use tone-marked text for speech?</label>
+                                        <input type="checkbox" checked={useMarkedText} onChange={() => setUseMarkedText(!useMarkedText)} className="mr-1" />
+                                        <span>{useMarkedText ? "✔ Tone-marked" : "✘ Original input"}</span>
+                                    </div>
                                     <div>
                                         <button
                                             onClick={handleSpeak}
