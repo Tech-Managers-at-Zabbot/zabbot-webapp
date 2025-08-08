@@ -218,7 +218,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     {
       name: "Listen & Practice",
       icon: "/userDashboard/bag.svg",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
     {
       name: "Speech Feedback",
@@ -241,6 +241,13 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       setIsMobileMenuOpen(false);
     }
   };
+
+  const mobilePremiumItemClick = (data: { name?: string; icon?: string; path: string; }) => {
+    setIsMobileMenuOpen(false);
+    if (!data?.path) return;
+    
+    router.push(data.path);
+  }
 
   const [backgroundColor, setBackgroundColor] = useState("#162B6E");
 
@@ -431,10 +438,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                   {dropdownOptions.map((option, index) => (
                     <button
                       key={index}
-                      onClick={() => {
-                        // Handle premium option click
-                        setIsMobileMenuOpen(false);
-                      }}
+                      onClick={() => mobilePremiumItemClick(option)}
                       className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors text-[#FFFFFF]"
                     >
                       <Image

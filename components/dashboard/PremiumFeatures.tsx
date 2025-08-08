@@ -1,5 +1,6 @@
 import React from "react";
 import InAppButton from "../InAppButton";
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 
 const PremiumFeaturesOre = () => {
@@ -118,7 +119,7 @@ const PremiumFeaturesPara = () => {
   );
 };
 
-const PremiumFeaturesOwe = () => {
+const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -147,6 +148,7 @@ const PremiumFeaturesOwe = () => {
           paddingRight="16px"
           borderRadius="35.13px"
           width=""
+          onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
             Get Started
@@ -173,12 +175,18 @@ const PremiumFeaturesOwe = () => {
 };
 
 const PremiumFeaturesComponents = () => {
+   const router = useRouter();
 
+  const handlePronounceClick = (path: string) => {
+    if (!path) return;
+    
+    router.push(path);
+  }
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 sm:gap-6 transition-all duration-300 ease-in-out">
       <PremiumFeaturesOre />
       <PremiumFeaturesPara />
-      <PremiumFeaturesOwe />
+      <PremiumFeaturesOwe handleClick={() => handlePronounceClick('/premium/listen-with-owe')}/>
     </div>
   );
 };

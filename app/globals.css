@@ -42,3 +42,9 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.gradient-border {
+  border: 6px solid;
+  border-image-source: linear-gradient(180deg, #03A7F3 0%, #005278 100%);
+  border-image-slice: 1;
+}

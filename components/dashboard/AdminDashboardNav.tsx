@@ -209,7 +209,7 @@ const AdminNavBar = ({ showLogo = false }) => {
     {
       name: "Listen & Practice",
       icon: "/userDashboard/bag.svg",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
     {
       name: "Speech Feedback",
