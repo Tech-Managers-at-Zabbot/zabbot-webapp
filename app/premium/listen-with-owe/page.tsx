@@ -15,7 +15,7 @@ const ListenWithOwe = () => {
     const [diacriticText, setDiaCriticText] = useState(defaultDiacriticText);
 
     const [selectedVoice, setSelectedVoice] = useState("sade");
-    const [useDiacriticText, setUseDiacriticText] = useState(true);
+    
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [hoveredHistoryItem, setHoveredHistoryItem] = useState(null);
@@ -79,7 +79,7 @@ const ListenWithOwe = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    text: useDiacriticText && diacriticText ? diacriticText : inputText,
+                    text: diacriticText ? diacriticText : inputText,
                     voice: selectedVoice,
                 }),
             });
