@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
   const { text, language } = await req.json(); // ✅ FIXED: read language
 
-  console.log("TONE_MARK payload:", text, language); // 🔍 for verification
-
   try {
     const res = await fetch('https://api.spi-tch.com/v1/diacritics', {
       method: 'POST',
@@ -14,7 +12,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         text,
-        language: language || "yo" // ✅ fallback to "yo" just in case
+        language: language || "yo" 
       })
     });
 
