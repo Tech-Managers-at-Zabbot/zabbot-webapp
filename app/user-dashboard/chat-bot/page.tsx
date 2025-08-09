@@ -10,6 +10,7 @@ const ChatBot = () => {
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
@@ -24,6 +25,43 @@ const ChatBot = () => {
     //     : "/general/zabbot-logo-blue.svg"
     // );
   }, [theme]);
+  
+  // List of possible proverbs
+  const allProverbs = [
+    'A stitch in time saves nine',
+    'The early bird catches the worm',
+    'Don\'t count your chickens before they hatch',
+    'Actions speak louder than words',
+    'Beauty is in the eye of the beholder',
+    'Better late than never',
+    'Don\'t put all your eggs in one basket',
+    'Every cloud has a silver lining',
+    'Honesty is the best policy',
+    'When in Rome, do as the Romans do',
+    'What is a dog',
+    'Tell me a Proverb',
+    'Translate “dog"',
+    'What is “Saturday” in Yoruba'
+  ];
+
+  // Function to get 4 random proverbs
+  const getRandomProverbs = () => {
+    const shuffled = [...allProverbs].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 4);
+  };
+
+  // State to store the current random proverbs
+  const [randomProverbs, setRandomProverbs] = useState(getRandomProverbs());
+
+  // Function to refresh the random proverbs
+  const refreshProverbs = () => {
+    setRandomProverbs(getRandomProverbs());
+  };
+
+  // Function to handle proverb click
+  const handleProverbClick = (proverb: any) => {
+    setInputValue(proverb);
+  };
 
 
   return (
@@ -62,7 +100,7 @@ const ChatBot = () => {
 
           <div className="flex items-center mb-5">
             <p className="mr-5 text-lg font-medium text-white-800">
-              Recent Conversationsb
+              Recent Conversations
             </p>
             <span className="bg-gray-100 text-black text-xs font-semibold px-2 py-1 rounded-full">
               3
@@ -102,47 +140,33 @@ const ChatBot = () => {
         <main className="flex-1 bg-[#04326B] overflow-y-auto p-6">
           <div className="flex flex-col items-center mt-30">
             <p className="text-white text-[28px] font-[500]">Chat with Ọ̀rẹ́, Your Yorùbá AI Buddy</p>
-            <p className="text-yellow-500 mt-2 text-[16px] font-[400]">Ask question, pratice phrase, get translations, explore culture</p>
+            <p className="text-yellow-500 mt-2 text-[16px] font-[400]">Ask questions, practice phrases, get translations, explore culture.</p>
             <p className="text-yellow-500 mt-20 text-[26px] font-[400]">Instant answers. Bilingual always</p>
             
+            {/* <button
+              onClick={refreshProverbs}
+              className="p-2 bg-[#005278] text-white rounded hover:bg-[#33BBFA] transition mb-6"
+            >
+              Get New Proverbs
+            </button> */}
+
             {/* Cards */}
             <div className="grid grid-cols-2 gap-4 mb-6 mt-5">
-              <div className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5">
-                <div className="bg-[#123F77] flex items-center space-x-2 p-4 rounded-md">
-                  <svg className="h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
-                  </svg>
-                  <p className="text-[#77C2E6] text-[20px] font-[400] py-5">What is "Saturday" in Yoruba</p>
-                </div>
-              </div>
 
-              <div className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5">
-                <div className="bg-[#123F77] flex items-center space-x-2 p-4 rounded-md">
-                  <svg className="h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
-                  </svg>
-                  <p className="text-[#77C2E6] text-[20px] font-[400] py-5">What is a dog</p>
+              {randomProverbs.map((proverb, index) => (
+                <div className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5 cursor-pointer"
+                  onClick={() => handleProverbClick(proverb)}
+                  key={index}
+                >
+                  <div className="bg-[#123F77] flex items-center space-x-2 p-4 rounded-md">
+                    <svg className="h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
+                    </svg>
+                    <p className="text-[#77C2E6] text-[20px] font-[400] py-5">{proverb}</p>
+                  </div>
                 </div>
-              </div>
-
-              <div className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5">
-                <div className="bg-[#123F77] flex items-center space-x-2 p-4 rounded-md">
-                  <svg className="h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
-                  </svg>
-                  <p className="text-[#77C2E6] text-[20px] font-[400] py-5">Tell me a Proverb</p>
-                </div>
-              </div>
-
-              <div className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5">
-                <div className="bg-[#123F77] flex items-center space-x-2 p-4 rounded-md">
-                  <svg className="h-6 w-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-12h4v2h-4v-2zm0 4h4v2h-4v-2z"/>
-                  </svg>
-                  <p className="text-[#77C2E6] text-[20px] font-[400] py-5">Translate "dog"</p>
-                </div>
-              </div>
-
+              ))}
+              
             </div>
           </div>
 
@@ -158,7 +182,12 @@ const ChatBot = () => {
 
             </div>
 
-            <input type="text" placeholder="Ask me anything in English or in Yoruba. My response will always be in both language. For a translation request, start with translate" className="bg-white flex-grow mx-2 px-3 h-15 py-1 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none rounded" />
+            <input 
+              type="text" 
+              placeholder="Ask me anything in English or in Yoruba. My response will always be in both language. For a translation request, start with translate" className="bg-white flex-grow mx-2 px-3 h-15 py-1 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none rounded" 
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
             
             <div className="flex-shrink-0">
               <svg className="w-6 h-6 text-white-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
