@@ -12,6 +12,9 @@ const GetInTouch = () => {
       style={{ fontFamily: "Lexend" }}
     >
       <div className="flex-shrink-0 pb-12 flex flex-col justify-center items-center">
+        {/* <p className="flex text-center text-sm sm:text-base md:text-lg lg:text-xl text-white">
+          © 2025 Zabbot. All rights reserved.
+        </p> */}
         <div
           className={`font-medium text-[32px] ${
             theme === "dark" ? "text-white" : "text-[#012657]"
