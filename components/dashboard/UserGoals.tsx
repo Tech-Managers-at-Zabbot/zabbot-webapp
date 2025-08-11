@@ -10,13 +10,12 @@ import {
 } from "../skeletonLoaders/DashboardSkeletons";
 import { CustomSpinner } from "../CustomSpinner";
 import { PlayerEllipse } from "@/constants/SvgPaths";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { EmptyStateCard } from "../general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
 
 const DailyGoals = () => {
-  const { userDailyGoal, goalLoading } = useUserGoals();
-
+  const { userDailyGoal, goalLoading } = useUser();
 
   return (
     <>
@@ -34,7 +33,9 @@ const DailyGoals = () => {
               Daily Goal
             </h1>
             <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
-              {userDailyGoal === 100 ? "You did it! You listened and practiced—Your spark is growing." : "Hear it. Say it. Own it. Practice with confidence."}
+              {userDailyGoal === 100
+                ? "You did it! You listened and practiced—Your spark is growing."
+                : "Hear it. Say it. Own it. Practice with confidence."}
             </span>
           </section>
           <section className="flex h-full justify-center items-center my-2 sm:my-4">
@@ -102,7 +103,7 @@ const WordForTheDay = () => {
     completeGoal,
     isCompletingDailyGoal,
     goalLoading,
-  } = useUserGoals();
+  } = useUser();
 
   useEffect(() => {
     setIsGoalComplete(isGoalCompleted);
@@ -180,20 +181,19 @@ const WordForTheDay = () => {
     });
   };
 
-
-    //   useEffect(() => {
-    //   setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
-    //   setCloudsUrl(
-    //     theme === "dark"
-    //       ? "/userDashboard/dark-clouds.svg"
-    //       : "/userDashboard/light-clouds.svg"
-    //   );
-    //   setLogoUrl(
-    //     theme === "dark"
-    //       ? "/general/zabbot-logo-white.svg"
-    //       : "/general/zabbot-logo-blue.svg"
-    //   );
-    // }, [theme]);
+  //   useEffect(() => {
+  //   setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
+  //   setCloudsUrl(
+  //     theme === "dark"
+  //       ? "/userDashboard/dark-clouds.svg"
+  //       : "/userDashboard/light-clouds.svg"
+  //   );
+  //   setLogoUrl(
+  //     theme === "dark"
+  //       ? "/general/zabbot-logo-white.svg"
+  //       : "/general/zabbot-logo-blue.svg"
+  //   );
+  // }, [theme]);
 
   const handleMouseEnter = () => {
     setFill("#CDA674");
@@ -266,7 +266,7 @@ const WordForTheDay = () => {
               message="You've completed your daily goal! Keep up the great work!"
               imageUrl="/userDashboard/parrot-head.svg"
               imageAlt="Zabbot mascot celebrating"
-              darkMode={theme === 'dark'}
+              darkMode={theme === "dark"}
               buttonText="Awesome!"
               showConfetti={true}
             />

@@ -11,7 +11,7 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import Cookies from "js-cookie";
-// import { useUserGoals } from "@/contexts/UserGoalsContext";
+// import { useUser } from "@/contexts/UserGoalsContext";
 
 const AdminNavBar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
@@ -21,7 +21,7 @@ const AdminNavBar = ({ showLogo = false }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  // const { userDetails } = useUserGoals();
+  // const { userDetails } = useUser();
   const handleLogout = () => {
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);

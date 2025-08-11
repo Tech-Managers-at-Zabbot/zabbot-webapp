@@ -2,6 +2,7 @@
 "use client";
 import { CustomSpinner } from "@/components/CustomSpinner";
 import InAppButton from "@/components/InAppButton";
+import { numberToWords } from "@/utilities/utilities";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
@@ -29,7 +30,7 @@ const LessonOneIntro = ({ onClick, lessonNumber }: { onClick: () => void, lesson
 
       {/* Lesson Title */}
       <div className="font-bold text-[32px] sm:text-[40px] md:text-[50px] lg:text-[40px] leading-[1.2] text-[#F15B29] text-center">
-        LESSON {lessonNumber}
+        SPARK {numberToWords(lessonNumber).toUpperCase()}
       </div>
 
       {/* Next Button */}

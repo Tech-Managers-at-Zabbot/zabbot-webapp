@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import SearchBar from "@/components/general/SearchBar";
 // import MainDropdown from "@/components/MainDropdown";
-import React, { 
-  // useState 
-} from "react";
+import React from "react"; // useState
 // import { IoSearchOutline } from "react-icons/io5";
 // import { MdOutlineFilterList } from "react-icons/md";
 // import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
@@ -11,7 +9,7 @@ import {
   // useGetAllCourses,
   useGetCoursesWithLessons,
 } from "@/services/generalApi/lessons/mutation";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { LessonsCard2 } from "../dashboard/UserLessonDataComponent";
@@ -21,27 +19,24 @@ const AllCourseLessons = () => {
   // const [currentPage, setCurrentPage] = useState(1);
   // const itemsPerPage = 12;
 
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   const { data: coursesWithLessons, isLoading: lessonsLoading } =
     useGetCoursesWithLessons(userDetails?.languageId);
 
   const courseLessons = coursesWithLessons?.data?.lessons;
 
-  const apiThumbnails = [
-    "/userDashboard/say-hello.svg",
-  ];
+  const apiThumbnails = ["/userDashboard/say-hello.svg"];
 
-  const allStepsWithThumbnails = Array.isArray(courseLessons) 
-  ? courseLessons.map((lesson, index) => ({
-      ...lesson,
-      thumbnailImage: apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg"
-    }))
-  : [];
+  const allStepsWithThumbnails = Array.isArray(courseLessons)
+    ? courseLessons.map((lesson, index) => ({
+        ...lesson,
+        thumbnailImage:
+          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
+      }))
+    : [];
 
-  const stepsToMap = [
-    ...allStepsWithThumbnails,
-  ];
+  const stepsToMap = [...allStepsWithThumbnails];
 
   // Calculate total pages based on your data
   // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
@@ -193,7 +188,8 @@ const AllCourseLessons = () => {
                 <DashboardMetricCardSkeleton key={index} />
               ))}
             </div>
-          ) : !coursesWithLessons?.data || coursesWithLessons?.data?.lessons?.length === 0 ? (
+          ) : !coursesWithLessons?.data ||
+            coursesWithLessons?.data?.lessons?.length === 0 ? (
             <div className="w-full flex gap-2">
               {/* {Array.from({ length: 6 }).map((_, index) => ( */}
               <EmptyStateCard title="No data" subtitle="No courses yet" />
@@ -208,7 +204,10 @@ const AllCourseLessons = () => {
                     className="min-w-0 w-full flex justify-center"
                   >
                     <div className="w-full max-w-[278px]">
-                      <LessonsCard2 data={lessonProgressData} isClickable={index === 0} />
+                      <LessonsCard2
+                        data={lessonProgressData}
+                        isClickable={index === 0}
+                      />
                     </div>
                   </div>
                 )

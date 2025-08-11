@@ -74,3 +74,29 @@ export const getShuffledImages = (images: string[]) => {
   }
   return arr;
 }
+
+
+export function numberToWords(num: number): string {
+  const ones = [
+    "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+    "seventeen", "eighteen", "nineteen"
+  ];
+
+  const tens = [
+    "", "", "twenty", "thirty", "forty", "fifty"
+  ];
+
+  if (num < 1 || num > 50) {
+    throw new Error("Only numbers from 1 to 50 are supported.");
+  }
+
+  if (num < 20) {
+    return ones[num]
+  }
+
+  const ten = Math.floor(num / 10);
+  const one = num % 10;
+
+  return `${tens[ten]}${one ? '-' + ones[one] : ''}`;
+}
