@@ -207,9 +207,9 @@ const AdminNavBar = ({ showLogo = false }) => {
       path: "",
     },
     {
-      name: "Listen & Practice",
+      name: "Listen with Òwe",
       icon: "/userDashboard/bag.svg",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
     {
       name: "Speech Feedback",

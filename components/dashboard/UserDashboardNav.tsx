@@ -216,9 +216,9 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       path: "",
     },
     {
-      name: "Listen & Practice",
+      name: "Listen with Òwe",
       icon: "/userDashboard/bag.svg",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
     {
       name: "Speech Feedback",
@@ -242,7 +242,15 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     }
   };
 
+  const mobilePremiumItemClick = (data: { name?: string; icon?: string; path: string; }) => {
+    setIsMobileMenuOpen(false);
+    if (!data?.path) return;
+    
+    router.push(data.path);
+  }
+
   const [backgroundColor, setBackgroundColor] = useState("#162B6E");
+  const isPremiumRoute = pathname.includes("premium");
 
   useEffect(() => {
     const currentTime = new Date();
@@ -340,6 +348,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <MainDropdown
           options={dropdownOptions}
           placeholder="Go Premium"
+          color={isPremiumRoute ? "#000000" : "#ffffff"}
+          backgroundColor={isPremiumRoute ? "#FFE933" : "#162B6E"}
           icon={
             <Image
               src={"/userDashboard/isPremiumImage.svg"}
@@ -431,10 +441,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                   {dropdownOptions.map((option, index) => (
                     <button
                       key={index}
-                      onClick={() => {
-                        // Handle premium option click
-                        setIsMobileMenuOpen(false);
-                      }}
+                      onClick={() => mobilePremiumItemClick(option)}
                       className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors text-[#FFFFFF]"
                     >
                       <Image
