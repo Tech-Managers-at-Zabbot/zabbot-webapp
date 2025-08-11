@@ -3,6 +3,7 @@ import { RxInstagramLogo } from "react-icons/rx";
 import { BsLinkedin } from "react-icons/bs";
 import { FaSlack } from "react-icons/fa";
 import { useTheme } from "@/contexts/ThemeProvider";
+import Link from "next/link";
 
 const GetInTouch = () => {
   const { theme } = useTheme();
@@ -27,7 +28,7 @@ const GetInTouch = () => {
         <div className={`font-medium text-[16px] ${
             theme === "dark" ? "text-[#F0F0F0]" : "text-[#343434]"
           } leading-[125%] whitespace-nowrap flex-shrink-0`}>
-        Terms · Privacy
+        <Link href="/terms-of-service"><span>Terms</span></Link> · <Link href="/terms-of-service"><span>Privacy</span></Link>
         </div>
         </section>
 
@@ -42,7 +43,7 @@ const GetInTouch = () => {
 
         <div className="flex justify-center items-center gap-6">
           <div
-            className={`flex items-center gap-2 rounded-full bg-[#5EB3D2] p-[10px] border ${
+            className={`flex items-center gap-2 rounded-full bg-[#5EB3D2] p-[10px] ${
               theme === "dark" ? "text-white" : "text-[#012657]"
             } text-2xl`}
           >
@@ -59,7 +60,7 @@ const GetInTouch = () => {
           </div>
 
           <div
-            className={`flex items-center gap-2 rounded-full bg-[#5EB3D2] p-[10px] border ${
+            className={`flex items-center gap-2 rounded-full bg-[#5EB3D2] p-[10px] ${
               theme === "dark" ? "text-white" : "text-[#012657]"
             } text-2xl`}
           >
@@ -75,7 +76,7 @@ const GetInTouch = () => {
             </a>
           </div>
           <div
-            className={`flex items-center gap-2 rounded-full bg-[#5EB3D2] p-[10px] border ${
+            className={`flex items-center gap-2 rounded-full bg-[#5EB3D2] p-[10px] ${
               theme === "dark" ? "text-white" : "text-[#012657]"
             } text-2xl`}
           >

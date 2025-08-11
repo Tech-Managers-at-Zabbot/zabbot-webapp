@@ -54,12 +54,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Steps",
-      route: "#",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Achievements",
@@ -124,12 +124,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Steps",
-      route: "#",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Achievements",

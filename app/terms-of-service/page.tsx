@@ -21,7 +21,7 @@ const TermsOfServicePage = () => {
       <main className="bg-[#cee9fc] min-h-screen py-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <button
-            onClick={() => router.push('/signup')}
+            onClick={() => router.back()}
             className="flex items-center gap-2 mb-6 hover:cursor-pointer text-[#012657] hover:text-[#0098DE] transition-colors"
             aria-label="Go back to previous page"
           >

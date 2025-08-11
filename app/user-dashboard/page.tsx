@@ -157,7 +157,7 @@ const Dashboard = () => {
                   className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
                   style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
                 >
-                  {greeting} {userDetails?.firstName || "User"}
+                  <span className="text-[10px] sm:text-[18px] md:text-[20px] lg:text-[28px]">{greeting}</span> {userDetails?.firstName || "User"}
                 </span>
                 <span
                   className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
