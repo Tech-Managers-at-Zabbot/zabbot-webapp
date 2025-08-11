@@ -4,13 +4,13 @@ import UserLessonDataComponent, {
   LessonsCard,
 } from "./UserLessonDataComponent";
 // import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 
 const PopularCourses = () => {
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
     userDetails?.languageId
   );

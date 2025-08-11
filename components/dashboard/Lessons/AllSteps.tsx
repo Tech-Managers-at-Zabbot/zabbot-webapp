@@ -8,7 +8,7 @@ import { StepsCard } from "../UserLessonDataComponent";
 // import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 import Pagination from "../Pagination";
 import { useGetLanguageLessons } from "@/services/generalApi/lessons/mutation";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -17,31 +17,26 @@ const AllSteps = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // const itemsPerPage = 12;
 
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   const { theme } = useTheme();
 
+  const { data: allLanguageSteps, isLoading: stepsLoading } =
+    useGetLanguageLessons(userDetails?.languageId);
 
-  const { data: allLanguageSteps, isLoading: stepsLoading } = useGetLanguageLessons(
-    userDetails?.languageId
-  );
+  const allSteps = allLanguageSteps?.data;
 
-  const allSteps = allLanguageSteps?.data
+  const apiThumbnails = ["/userDashboard/say-hello.svg"];
 
-  const apiThumbnails = [
-    "/userDashboard/say-hello.svg",
-  ];
-  
-  const allStepsWithThumbnails = Array.isArray(allSteps) 
+  const allStepsWithThumbnails = Array.isArray(allSteps)
     ? allSteps.map((step, index) => ({
         ...step,
-        thumbnailImage: apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg"
+        thumbnailImage:
+          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
       }))
     : [];
 
-  const stepsToMap = [
-    ...allStepsWithThumbnails,
-  ];
+  const stepsToMap = [...allStepsWithThumbnails];
 
   // Calculate total pages based on your data
   // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
@@ -128,12 +123,13 @@ const AllSteps = () => {
             className="font-semibold text-[16px] sm:text-[20px] lg:text-[24pxpx] leading-tight mt-1"
             style={{ color: theme === "dark" ? "white" : "#162B6E" }}
           >
-          Immersing you in Yorùbá, one step at a time
+            Immersing you in Yorùbá, one step at a time
           </span>
-          <span className="text-[15px] leading-[100%] font-semibold"
-          style={{ color:"#207EC5" }}
+          <span
+            className="text-[15px] leading-[100%] font-semibold"
+            style={{ color: "#207EC5" }}
           >
-          Building fluency through culture, sound, and eẹeryday moments.
+            Building fluency through culture, sound, and eẹeryday moments.
           </span>
         </section>
 
@@ -209,7 +205,8 @@ const AllSteps = () => {
                 <DashboardMetricCardSkeleton key={index} />
               ))}
             </div>
-          ) : !allLanguageSteps?.data || allLanguageSteps?.data?.length === 0 ? (
+          ) : !allLanguageSteps?.data ||
+            allLanguageSteps?.data?.length === 0 ? (
             <div className="w-full flex gap-2">
               {/* {Array.from({ length: 6 }).map((_, index) => ( */}
               <EmptyStateCard title="No data" subtitle="No courses yet" />

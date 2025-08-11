@@ -5,25 +5,40 @@ import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 import { z } from "zod";
-import { Plus, Save, } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { appColors } from "@/constants/colors";
 import { useAlert } from "next-alert";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { useCreateCourseWithLessons } from "@/services/generalApi/lessons/mutation";
 import { useTheme } from "@/contexts/ThemeProvider";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import InAppButton from "@/components/InAppButton";
 import EdedunModal from "@/components/general/EdedunContentModal";
-import { ContentDataType, ContentSourceType, LanguageCode, Level } from "@/types/enums";
+import {
+  ContentDataType,
+  ContentSourceType,
+  LanguageCode,
+  Level,
+} from "@/types/enums";
 import { courseSchema, lessonSchema } from "@/schemas/lessons.schema";
-import { Course, Language, Lesson, Content, ContentFile, EdedunPhrase, FILE_LIMITS, CLOUDINARY_CONFIG } from "../../../types/interfaces";
+import {
+  Course,
+  Language,
+  Lesson,
+  Content,
+  ContentFile,
+  EdedunPhrase,
+  FILE_LIMITS,
+  CLOUDINARY_CONFIG,
+} from "../../../types/interfaces";
 import CourseForm from "../../../components/admin/createCourseFlow/CourseForm";
 import LessonsList from "../../../components/admin/createCourseFlow/LessonList";
 import LessonModal from "../../../components/admin/createCourseFlow/LessonModal";
 
 const CreateCoursePage = () => {
   // State and hooks initialization
-  const [languages, 
+  const [
+    languages,
     // setLanguages
   ] = useState<Language[]>([
     {
@@ -37,12 +52,12 @@ const CreateCoursePage = () => {
 
   const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
   // const [
-  //   // uploadErrors, 
+  //   // uploadErrors,
   //   setUploadErrors
   // ] = useState<{ [key: string]: string }>({});
 
   const { addAlert } = useAlert();
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
   const router = useRouter();
   const { theme } = useTheme();
 
@@ -61,7 +76,9 @@ const CreateCoursePage = () => {
 
   // Lessons state
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [currentLessonIndex, setCurrentLessonIndex] = useState<number | null>(null);
+  const [currentLessonIndex, setCurrentLessonIndex] = useState<number | null>(
+    null
+  );
   const [currentLesson, setCurrentLesson] = useState<Lesson>({
     title: "",
     description: "",
@@ -76,13 +93,18 @@ const CreateCoursePage = () => {
   // UI state
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [showLevelDropdown, setShowLevelDropdown] = useState(false);
-  const [activeTab, setActiveTab] = useState<"course" | "lessons" | "quizzes">("course");
+  const [activeTab, setActiveTab] = useState<"course" | "lessons" | "quizzes">(
+    "course"
+  );
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [showEdeunModal, setShowEdeunModal] = useState(false);
-  const [editingContentIndex, setEditingContentIndex] = useState<number | null>(null);
+  const [editingContentIndex, setEditingContentIndex] = useState<number | null>(
+    null
+  );
   const [
-    // currentContentSourceType, 
-    setCurrentContentSourceType] = useState<ContentSourceType | any>(ContentSourceType.NEW);
+    // currentContentSourceType,
+    setCurrentContentSourceType,
+  ] = useState<ContentSourceType | any>(ContentSourceType.NEW);
 
   // Form validation states
   const [courseErrors, setCourseErrors] = useState<any>({});
@@ -96,9 +118,11 @@ const CreateCoursePage = () => {
   // Theme effect
   useEffect(() => {
     setCloudsUrl(
-      theme === "dark" ? "/userDashboard/dark-clouds.svg" : "/userDashboard/light-clouds.svg"
+      theme === "dark"
+        ? "/userDashboard/dark-clouds.svg"
+        : "/userDashboard/light-clouds.svg"
     );
-    setBackgroundColor(theme === 'dark' ? "#012657" : "#dff9fb");
+    setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
   }, [theme]);
 
   // Modal scroll effect
@@ -235,7 +259,9 @@ const CreateCoursePage = () => {
     }));
   };
 
-  const addContent = (sourceType: ContentSourceType = ContentSourceType.NEW) => {
+  const addContent = (
+    sourceType: ContentSourceType = ContentSourceType.NEW
+  ) => {
     const newContent: Content = {
       translation: "",
       contentFiles: [],
@@ -295,7 +321,10 @@ const CreateCoursePage = () => {
     };
 
     const currentContent = currentLesson.contents[contentIndex];
-    const updatedContentFiles = [...currentContent.contentFiles, newContentFile];
+    const updatedContentFiles = [
+      ...currentContent.contentFiles,
+      newContentFile,
+    ];
     updateContent(contentIndex, { contentFiles: updatedContentFiles });
   };
 
@@ -376,7 +405,9 @@ const CreateCoursePage = () => {
     setLessons((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThumbnailUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const sizeError = validateFileSize(file, ContentDataType.IMAGE);
@@ -390,7 +421,10 @@ const CreateCoursePage = () => {
     }
   };
 
-  const validateFileSize = (file: File, contentType: ContentDataType): string | null => {
+  const validateFileSize = (
+    file: File,
+    contentType: ContentDataType
+  ): string | null => {
     let maxSize: number;
     switch (contentType) {
       case ContentDataType.IMAGE:
@@ -420,7 +454,9 @@ const CreateCoursePage = () => {
     contentType: ContentDataType,
     lessonIndex?: number
   ): Promise<void> => {
-    const fileId = `${lessonIndex !== undefined ? lessonIndex + "-" : ""}${contentIndex}-${fileIndex}`;
+    const fileId = `${
+      lessonIndex !== undefined ? lessonIndex + "-" : ""
+    }${contentIndex}-${fileIndex}`;
 
     try {
       setUploadingFiles((prev) => new Set([...prev, fileId]));
@@ -454,40 +490,50 @@ const CreateCoursePage = () => {
       const secureUrl = result.secure_url;
 
       if (lessonIndex !== undefined) {
-        setLessons(prev =>
-          prev.map((lesson, lIdx) => 
-            lIdx === lessonIndex ? {
-              ...lesson,
-              contents: lesson.contents.map((content, cIdx) => 
-                cIdx === contentIndex ? {
-                  ...content,
-                  contentFiles: content.contentFiles.map((f, fIdx) => 
-                    fIdx === fileIndex ? {
-                      ...f,
-                      filePath: secureUrl,
-                      file: undefined
-                    } : f
-                  )
-                } : content
-              )
-            } : lesson
+        setLessons((prev) =>
+          prev.map((lesson, lIdx) =>
+            lIdx === lessonIndex
+              ? {
+                  ...lesson,
+                  contents: lesson.contents.map((content, cIdx) =>
+                    cIdx === contentIndex
+                      ? {
+                          ...content,
+                          contentFiles: content.contentFiles.map((f, fIdx) =>
+                            fIdx === fileIndex
+                              ? {
+                                  ...f,
+                                  filePath: secureUrl,
+                                  file: undefined,
+                                }
+                              : f
+                          ),
+                        }
+                      : content
+                  ),
+                }
+              : lesson
           )
         );
       } else {
-        setCurrentLesson(prev => ({
+        setCurrentLesson((prev) => ({
           ...prev,
-          contents: prev.contents.map((content, cIdx) => 
-            cIdx === contentIndex ? {
-              ...content,
-              contentFiles: content.contentFiles.map((f, fIdx) => 
-                fIdx === fileIndex ? {
-                  ...f,
-                  filePath: secureUrl,
-                  file: undefined
-                } : f
-              )
-            } : content
-          )
+          contents: prev.contents.map((content, cIdx) =>
+            cIdx === contentIndex
+              ? {
+                  ...content,
+                  contentFiles: content.contentFiles.map((f, fIdx) =>
+                    fIdx === fileIndex
+                      ? {
+                          ...f,
+                          filePath: secureUrl,
+                          file: undefined,
+                        }
+                      : f
+                  ),
+                }
+              : content
+          ),
         }));
       }
     } catch (error) {
@@ -498,7 +544,7 @@ const CreateCoursePage = () => {
       // }));
       throw error;
     } finally {
-      setUploadingFiles(prev => {
+      setUploadingFiles((prev) => {
         const newSet = new Set(prev);
         newSet.delete(fileId);
         return newSet;
@@ -506,7 +552,9 @@ const CreateCoursePage = () => {
     }
   };
 
-  const handleThumbnailCloudinaryUpload = async (file: File): Promise<string> => {
+  const handleThumbnailCloudinaryUpload = async (
+    file: File
+  ): Promise<string> => {
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -552,8 +600,11 @@ const CreateCoursePage = () => {
                 fileIndex,
                 file.contentType,
                 lessonIndex
-              ).catch(error => {
-                console.error(`Upload failed for lesson ${lessonIndex}, content ${contentIndex}, file ${fileIndex}:`, error);
+              ).catch((error) => {
+                console.error(
+                  `Upload failed for lesson ${lessonIndex}, content ${contentIndex}, file ${fileIndex}:`,
+                  error
+                );
                 throw error;
               });
               uploadPromises.push(promise);
@@ -576,13 +627,13 @@ const CreateCoursePage = () => {
           ...courseData,
           thumbnailImage: thumbnailImageUrl,
         },
-        lessons: lessons.map(lesson => ({
+        lessons: lessons.map((lesson) => ({
           ...lesson,
-          contents: lesson.contents.map(content => ({
+          contents: lesson.contents.map((content) => ({
             ...content,
-            contentFiles: content.contentFiles.map(file => ({
+            contentFiles: content.contentFiles.map((file) => ({
               ...file,
-              filePath: file.filePath.startsWith('blob:') 
+              filePath: file.filePath.startsWith("blob:")
                 ? file.filePath
                 : file.filePath,
             })),
@@ -592,7 +643,7 @@ const CreateCoursePage = () => {
 
       return coursePayload;
     } catch (error) {
-      console.error('Error preparing data:', error);
+      console.error("Error preparing data:", error);
       throw error;
     }
   };
@@ -718,7 +769,7 @@ const CreateCoursePage = () => {
                 </div>
               </div>
               <div className="hidden lg:flex">
-                <SettingsBreadcrumb isDark={theme === 'dark'} />
+                <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
           </div>
@@ -728,7 +779,7 @@ const CreateCoursePage = () => {
               <div className="flex-shrink-0">
                 <span
                   className="text-sm md:text-sm lg:text-2xl"
-                  style={{ color: theme=== 'dark' ? "#D0F7F6" : "#202124" }}
+                  style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
                 >
                   Create Language Content
                 </span>
@@ -881,7 +932,7 @@ const CreateCoursePage = () => {
         setShowEdeunModal={setShowEdeunModal}
         setCurrentContentSourceType={setCurrentContentSourceType}
         addContent={addContent}
-        />
+      />
 
       {/* Ededun Modal */}
       <EdedunModal

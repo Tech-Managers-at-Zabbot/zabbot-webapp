@@ -10,7 +10,7 @@ import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
 
 const UserDashboardNavbar = ({ showLogo = false }) => {
@@ -21,7 +21,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   const handleLogout = () => {
     setLogoutLoading(true);
@@ -242,13 +242,17 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     }
   };
 
-  const mobilePremiumItemClick = (data: { name?: string; icon?: string; path: string; }) => {
+  const mobilePremiumItemClick = (data: {
+    name?: string;
+    icon?: string;
+    path: string;
+  }) => {
     setIsMobileMenuOpen(false);
     setLoading(true);
     if (!data?.path) return;
-    
+
     router.push(data.path);
-  }
+  };
 
   const [backgroundColor, setBackgroundColor] = useState("#162B6E");
   const isPremiumRoute = pathname.includes("premium");

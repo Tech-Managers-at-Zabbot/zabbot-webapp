@@ -8,7 +8,7 @@ import { CoursesCard } from "../UserLessonDataComponent";
 // import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 import Pagination from "../Pagination";
 import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -17,7 +17,7 @@ const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // const itemsPerPage = 12;
 
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   const { theme } = useTheme();
 
@@ -27,16 +27,15 @@ const AllCourses = () => {
 
   const allData = allCourses?.data;
 
-  const apiThumbnails = [
-    "/userDashboard/yoruba/elderly-yoruba-woman.png"
-  ];
+  const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
-  const allCoursesWithThumbnails = Array.isArray(allData) 
-  ? allData.map((course, index) => ({
-      ...course,
-      thumbnailImage: apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg"
-    }))
-  : [];
+  const allCoursesWithThumbnails = Array.isArray(allData)
+    ? allData.map((course, index) => ({
+        ...course,
+        thumbnailImage:
+          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
+      }))
+    : [];
 
   const coursesToMap = [
     ...allCoursesWithThumbnails,

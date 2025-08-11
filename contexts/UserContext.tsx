@@ -8,17 +8,17 @@ import {
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-const UserGoalsContext = createContext<unknown | undefined | any>(undefined);
+const UserContext = createContext<unknown | undefined | any>(undefined);
 
-export const useUserGoals = () => {
-  const context = useContext(UserGoalsContext);
+export const useUser = () => {
+  const context = useContext(UserContext);
   if (!context) {
-    throw new Error("useUserGoals must be used within a UserGoalsProvider");
+    throw new Error("useUser must be used within a UserGoalsProvider");
   }
   return context;
 };
 
-export const UserGoalsProvider = ({
+export const UserProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -93,8 +93,8 @@ export const UserGoalsProvider = ({
   };
 
   return (
-    <UserGoalsContext.Provider value={value}>
+    <UserContext.Provider value={value}>
       {children}
-    </UserGoalsContext.Provider>
+    </UserContext.Provider>
   );
 };

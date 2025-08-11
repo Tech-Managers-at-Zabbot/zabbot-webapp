@@ -39,7 +39,7 @@ import {
 } from "@/types/interfaces";
 import { courseSchema, lessonSchema } from "@/schemas/lessons.schema";
 import { useAlert } from "next-alert";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { useCreateCourseWithLessons } from "@/services/generalApi/lessons/mutation";
 import { useTheme } from "@/contexts/ThemeProvider";
 
@@ -109,7 +109,7 @@ const CreateContentPage = () => {
 
   const { addAlert } = useAlert();
 
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   const router = useRouter();
 
@@ -176,12 +176,14 @@ const CreateContentPage = () => {
   } | null>(null);
 
   const { theme } = useTheme();
-  
+
   useEffect(() => {
     setCloudsUrl(
-      theme === "dark" ? "/userDashboard/dark-clouds.svg" : "/userDashboard/light-clouds.svg"
+      theme === "dark"
+        ? "/userDashboard/dark-clouds.svg"
+        : "/userDashboard/light-clouds.svg"
     );
-    setBackgroundColor(theme === 'dark' ? "#012657" : "#dff9fb");
+    setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
   }, [theme]);
 
   // Prevent background scrolling when any modal is open
@@ -680,165 +682,179 @@ const CreateContentPage = () => {
     return null;
   };
 
-const handleCloudinaryUpload = async (
-  file: File,
-  contentIndex: number,
-  fileIndex: number,
-  contentType: ContentDataType,
-  lessonIndex?: number
-): Promise<void> => {
-  const fileId = `${
-    lessonIndex !== undefined ? lessonIndex + "-" : ""
-  }${contentIndex}-${fileIndex}`;
+  const handleCloudinaryUpload = async (
+    file: File,
+    contentIndex: number,
+    fileIndex: number,
+    contentType: ContentDataType,
+    lessonIndex?: number
+  ): Promise<void> => {
+    const fileId = `${
+      lessonIndex !== undefined ? lessonIndex + "-" : ""
+    }${contentIndex}-${fileIndex}`;
 
-  try {
-    setUploadingFiles((prev) => new Set([...prev, fileId]));
+    try {
+      setUploadingFiles((prev) => new Set([...prev, fileId]));
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
 
-    let resourceType = "auto";
-    if (contentType === ContentDataType.IMAGE) {
-      resourceType = "image";
-    } else if (contentType === ContentDataType.VIDEO) {
-      resourceType = "video";
-    } else if (contentType === ContentDataType.AUDIO) {
-      resourceType = "video"; // Cloudinary uses 'video' for audio files
-    }
-
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`,
-      {
-        method: "POST",
-        body: formData,
+      let resourceType = "auto";
+      if (contentType === ContentDataType.IMAGE) {
+        resourceType = "image";
+      } else if (contentType === ContentDataType.VIDEO) {
+        resourceType = "video";
+      } else if (contentType === ContentDataType.AUDIO) {
+        resourceType = "video"; // Cloudinary uses 'video' for audio files
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`Upload failed: ${response.status}`);
-    }
-
-    const result = await response.json();
-    const secureUrl = result.secure_url;
-
-    // Update state with the secure URL
-    if (lessonIndex !== undefined) {
-      setLessons(prev =>
-        prev.map((lesson, lIdx) => 
-          lIdx === lessonIndex ? {
-            ...lesson,
-            contents: lesson.contents.map((content, cIdx) => 
-              cIdx === contentIndex ? {
-                ...content,
-                contentFiles: content.contentFiles.map((f, fIdx) => 
-                  fIdx === fileIndex ? {
-                    ...f,
-                    filePath: secureUrl,
-                    file: undefined // Remove the file object since we have the URL
-                  } : f
-                )
-              } : content
-            )
-          } : lesson
-        )
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${resourceType}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
       );
-    } else {
-      setCurrentLesson(prev => ({
+
+      if (!response.ok) {
+        throw new Error(`Upload failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const secureUrl = result.secure_url;
+
+      // Update state with the secure URL
+      if (lessonIndex !== undefined) {
+        setLessons((prev) =>
+          prev.map((lesson, lIdx) =>
+            lIdx === lessonIndex
+              ? {
+                  ...lesson,
+                  contents: lesson.contents.map((content, cIdx) =>
+                    cIdx === contentIndex
+                      ? {
+                          ...content,
+                          contentFiles: content.contentFiles.map((f, fIdx) =>
+                            fIdx === fileIndex
+                              ? {
+                                  ...f,
+                                  filePath: secureUrl,
+                                  file: undefined, // Remove the file object since we have the URL
+                                }
+                              : f
+                          ),
+                        }
+                      : content
+                  ),
+                }
+              : lesson
+          )
+        );
+      } else {
+        setCurrentLesson((prev) => ({
+          ...prev,
+          contents: prev.contents.map((content, cIdx) =>
+            cIdx === contentIndex
+              ? {
+                  ...content,
+                  contentFiles: content.contentFiles.map((f, fIdx) =>
+                    fIdx === fileIndex
+                      ? {
+                          ...f,
+                          filePath: secureUrl,
+                          file: undefined,
+                        }
+                      : f
+                  ),
+                }
+              : content
+          ),
+        }));
+      }
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setUploadErrors((prev) => ({
         ...prev,
-        contents: prev.contents.map((content, cIdx) => 
-          cIdx === contentIndex ? {
-            ...content,
-            contentFiles: content.contentFiles.map((f, fIdx) => 
-              fIdx === fileIndex ? {
-                ...f,
-                filePath: secureUrl,
-                file: undefined
-              } : f
-            )
-          } : content
-        )
+        [fileId]: error instanceof Error ? error.message : "Upload failed",
       }));
+      throw error;
+    } finally {
+      setUploadingFiles((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(fileId);
+        return newSet;
+      });
     }
-  } catch (error) {
-    console.error("Upload failed:", error);
-    setUploadErrors(prev => ({
-      ...prev,
-      [fileId]: error instanceof Error ? error.message : "Upload failed",
-    }));
-    throw error;
-  } finally {
-    setUploadingFiles(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(fileId);
-      return newSet;
-    });
-  }
-};
+  };
 
-const prepareDataForBackend = async () => {
-  try {
-    // Upload all lesson content files first
-    const uploadPromises: Promise<void>[] = [];
+  const prepareDataForBackend = async () => {
+    try {
+      // Upload all lesson content files first
+      const uploadPromises: Promise<void>[] = [];
 
-    lessons.forEach((lesson, lessonIndex) => {
-      lesson.contents.forEach((content, contentIndex) => {
-        content.contentFiles.forEach((file, fileIndex) => {
-          if (file.file) { // Only upload if there's a file object
-            const promise = handleCloudinaryUpload(
-              file.file,
-              contentIndex,
-              fileIndex,
-              file.contentType,
-              lessonIndex
-            ).catch(error => {
-              console.error(`Upload failed for lesson ${lessonIndex}, content ${contentIndex}, file ${fileIndex}:`, error);
-              throw error; // Re-throw to fail the whole operation
-            });
-            uploadPromises.push(promise);
-          }
+      lessons.forEach((lesson, lessonIndex) => {
+        lesson.contents.forEach((content, contentIndex) => {
+          content.contentFiles.forEach((file, fileIndex) => {
+            if (file.file) {
+              // Only upload if there's a file object
+              const promise = handleCloudinaryUpload(
+                file.file,
+                contentIndex,
+                fileIndex,
+                file.contentType,
+                lessonIndex
+              ).catch((error) => {
+                console.error(
+                  `Upload failed for lesson ${lessonIndex}, content ${contentIndex}, file ${fileIndex}:`,
+                  error
+                );
+                throw error; // Re-throw to fail the whole operation
+              });
+              uploadPromises.push(promise);
+            }
+          });
         });
       });
-    });
 
-    // Wait for all uploads to complete
-    await Promise.all(uploadPromises);
+      // Wait for all uploads to complete
+      await Promise.all(uploadPromises);
 
-    // Then handle thumbnail upload
-    let thumbnailImageUrl = courseData.thumbnailImage;
-    if (courseData.thumbnailFile) {
-      thumbnailImageUrl = await handleThumbnailCloudinaryUpload(
-        courseData.thumbnailFile
-      );
-    }
+      // Then handle thumbnail upload
+      let thumbnailImageUrl = courseData.thumbnailImage;
+      if (courseData.thumbnailFile) {
+        thumbnailImageUrl = await handleThumbnailCloudinaryUpload(
+          courseData.thumbnailFile
+        );
+      }
 
-    // Prepare the payload with updated URLs
-    const coursePayload = {
-      courseData: {
-        ...courseData,
-        thumbnailImage: thumbnailImageUrl,
-      },
-      lessons: lessons.map(lesson => ({
-        ...lesson,
-        contents: lesson.contents.map(content => ({
-          ...content,
-          contentFiles: content.contentFiles.map(file => ({
-            ...file,
-            // Ensure we're using the Cloudinary URL if available
-            filePath: file.filePath.startsWith('blob:') 
-              ? file.filePath // This shouldn't happen since we waited for uploads
-              : file.filePath,
+      // Prepare the payload with updated URLs
+      const coursePayload = {
+        courseData: {
+          ...courseData,
+          thumbnailImage: thumbnailImageUrl,
+        },
+        lessons: lessons.map((lesson) => ({
+          ...lesson,
+          contents: lesson.contents.map((content) => ({
+            ...content,
+            contentFiles: content.contentFiles.map((file) => ({
+              ...file,
+              // Ensure we're using the Cloudinary URL if available
+              filePath: file.filePath.startsWith("blob:")
+                ? file.filePath // This shouldn't happen since we waited for uploads
+                : file.filePath,
+            })),
           })),
         })),
-      })),
-    };
+      };
 
-    return coursePayload;
-  } catch (error) {
-    console.error('Error preparing data:', error);
-    throw error;
-  }
-};
+      return coursePayload;
+    } catch (error) {
+      console.error("Error preparing data:", error);
+      throw error;
+    }
+  };
 
   return (
     <div className="">
@@ -880,7 +896,7 @@ const prepareDataForBackend = async () => {
                 </div>
               </div>
               <div className="hidden lg:flex">
-                <SettingsBreadcrumb isDark={theme === 'dark'} />
+                <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
           </div>
@@ -890,7 +906,7 @@ const prepareDataForBackend = async () => {
               <div className="flex-shrink-0">
                 <span
                   className="text-sm md:text-sm lg:text-2xl"
-                  style={{ color: theme=== 'dark' ? "#D0F7F6" : "#202124" }}
+                  style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
                 >
                   Create Language Content
                 </span>
