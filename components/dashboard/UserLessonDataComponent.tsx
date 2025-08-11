@@ -498,7 +498,7 @@ export const StepsCard = ({ data, isClickable = false }: { data: any; isClickabl
           >
             <span>{data?.estimatedDuration} min</span>
             <span>
-              {data?.totalContents} {data?.totalContents === 1 ? "step" : "steps"}
+              {data?.totalContents} {data?.totalContents === 1 ? "spark" : "sparks"}
             </span>
           </div>
         </div>
