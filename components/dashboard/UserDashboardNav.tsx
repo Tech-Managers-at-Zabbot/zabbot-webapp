@@ -354,7 +354,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
           options={dropdownOptions}
           placeholder="Go Premium"
           color={isPremiumRoute ? "#000000" : "#ffffff"}
-          backgroundColor={isPremiumRoute ? "#FFE933" : "#162B6E"}
+          backgroundColor={isPremiumRoute ? "#FFE933" : ""}
           icon={
             <Image
               src={"/userDashboard/isPremiumImage.svg"}
