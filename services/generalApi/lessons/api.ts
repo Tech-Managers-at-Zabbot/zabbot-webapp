@@ -29,6 +29,11 @@ export async function getLessonWithContents(id: string | any) {
   return response.data;
 }
 
+export async function getLanguageLessons(languageId?: string) {
+  const response = await axiosInstance.get(`/lessons/lessons/language-lessons/${languageId}`);
+  return response.data;
+}
+
 export async function getCourse(id: string) {
   const response = await axiosInstance.get(`/courses/${id}`);
   return response.data;
@@ -82,9 +87,7 @@ export async function getLessonContents(lessonId: string) {
 // --- Language Content Endpoints ---
 
 export async function getLanguageContents(languageId?: string) {
-  const response = await axiosInstance.get("/language-contents", {
-    params: languageId ? { languageId } : {},
-  });
+  const response = await axiosInstance.get(`/lessons/contents/language-contents/${languageId}`);
   return response.data;
 }
 

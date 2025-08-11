@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import SearchBar from "@/components/general/SearchBar";
-import MainDropdown from "@/components/MainDropdown";
-import React, { useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
-import { MdOutlineFilterList } from "react-icons/md";
+// import SearchBar from "@/components/general/SearchBar";
+// import MainDropdown from "@/components/MainDropdown";
+import React, { 
+  // useState 
+} from "react";
+// import { IoSearchOutline } from "react-icons/io5";
+// import { MdOutlineFilterList } from "react-icons/md";
 // import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
 import {
   // useGetAllCourses,
@@ -26,6 +28,21 @@ const AllCourseLessons = () => {
 
   const courseLessons = coursesWithLessons?.data?.lessons;
 
+  const apiThumbnails = [
+    "/userDashboard/say-hello.svg",
+  ];
+
+  const allStepsWithThumbnails = Array.isArray(courseLessons) 
+  ? courseLessons.map((lesson, index) => ({
+      ...lesson,
+      thumbnailImage: apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg"
+    }))
+  : [];
+
+  const stepsToMap = [
+    ...allStepsWithThumbnails,
+  ];
+
   // Calculate total pages based on your data
   // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
 
@@ -34,15 +51,15 @@ const AllCourseLessons = () => {
   // const endIndex = startIndex + itemsPerPage;
   // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
 
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
-  const handleFilterClick = (filterName: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(filterName)
-        ? prev.filter((f) => f !== filterName)
-        : [...prev, filterName]
-    );
-  };
+  // const handleFilterClick = (filterName: string) => {
+  //   setSelectedFilters((prev) =>
+  //     prev.includes(filterName)
+  //       ? prev.filter((f) => f !== filterName)
+  //       : [...prev, filterName]
+  //   );
+  // };
 
   // const handlePageChange = (page: number) => {
   //   setCurrentPage(page);
@@ -50,43 +67,43 @@ const AllCourseLessons = () => {
   //   // For now, we're just updating the local state
   // };
 
-  const dropdownOptions = [
-    {
-      name: "Alphabetical",
-      path: "",
-    },
-    {
-      name: "Newest",
-      path: "",
-    },
-    {
-      name: "Oldest",
-      path: "",
-    },
-  ];
+  // const dropdownOptions = [
+  //   {
+  //     name: "Alphabetical",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Newest",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Oldest",
+  //     path: "",
+  //   },
+  // ];
 
-  const filterMenu = [
-    {
-      name: "Completed",
-      path: "",
-    },
-    {
-      name: "In progress",
-      path: "",
-    },
-    {
-      name: "Explorer",
-      path: "",
-    },
-    {
-      name: "Foundation",
-      path: "",
-    },
-    {
-      name: "Builder",
-      path: "",
-    },
-  ];
+  // const filterMenu = [
+  //   {
+  //     name: "Completed",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "In progress",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Explorer",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Foundation",
+  //     path: "",
+  //   },
+  //   {
+  //     name: "Builder",
+  //     path: "",
+  //   },
+  // ];
 
   return (
     <div
@@ -96,24 +113,21 @@ const AllCourseLessons = () => {
       {/* Header Section - Made fully responsive */}
       <header className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
         <section className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]">
+          <span className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]">
             Journey Catalog
-          </h3>
+          </span>
           <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1">
             Meaningful Yorùbá learning — one Journey at a time
           </span>
         </section>
 
         {/* Controls Section - Responsive layout */}
-        <section className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:gap-6 flex-shrink-0">
-          {/* Search Bar */}
+        {/* <section className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:gap-6 flex-shrink-0">
           <div className="w-full sm:w-auto sm:min-w-[200px]">
             <SearchBar icon={<IoSearchOutline size={20} />} />
           </div>
 
-          {/* Filter and Sort Controls */}
           <div className="flex items-center justify-between sm:justify-start gap-4 lg:gap-6">
-            {/* Add Filter */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
                 Add Filter
@@ -127,7 +141,6 @@ const AllCourseLessons = () => {
               </span>
             </div>
 
-            {/* Sort Dropdown */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
                 Sort by
@@ -149,11 +162,11 @@ const AllCourseLessons = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </header>
 
       {/* Filter Tags Section - Responsive */}
-      <section className="w-full overflow-hidden">
+      {/* <section className="w-full overflow-hidden">
         <div className="flex flex-wrap gap-2 sm:gap-3">
           {filterMenu.map((item, index) => (
             <div
@@ -169,7 +182,7 @@ const AllCourseLessons = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Courses Grid Section - Fully responsive grid */}
       <section className="w-full min-w-0">
@@ -188,14 +201,14 @@ const AllCourseLessons = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
-              {courseLessons?.map(
+              {stepsToMap?.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
                     key={index}
                     className="min-w-0 w-full flex justify-center"
                   >
                     <div className="w-full max-w-[278px]">
-                      <LessonsCard2 data={lessonProgressData} />
+                      <LessonsCard2 data={lessonProgressData} isClickable={index === 0} />
                     </div>
                   </div>
                 )

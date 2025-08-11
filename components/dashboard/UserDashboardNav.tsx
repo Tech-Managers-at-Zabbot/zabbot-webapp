@@ -54,12 +54,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Steps",
-      route: "#",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Achievements",
@@ -124,12 +124,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Steps",
-      route: "#",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Achievements",
@@ -244,6 +244,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
 
   const mobilePremiumItemClick = (data: { name?: string; icon?: string; path: string; }) => {
     setIsMobileMenuOpen(false);
+    setLoading(true);
     if (!data?.path) return;
     
     router.push(data.path);

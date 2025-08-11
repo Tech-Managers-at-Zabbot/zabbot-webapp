@@ -11,7 +11,7 @@ const PremiumFeaturesOre = () => {
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full min-h-[200px] sm:min-h-[160px]">
         {/* Content Section */}
-        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[140px] md:pr-[181px]">
+        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[160px] md:pr-[200px] lg:pr-[181px]">
           {/* Title Section */}
           <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
               <h3 
@@ -48,7 +48,7 @@ const PremiumFeaturesOre = () => {
 
         {/* Image Section */}
        {/* Image Section */}
-<section className="relative flex-shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
+<section className="relative flex-shrink-0 w-[50%] sm:w-auto mt-4 sm:mt-0">
   <div className="relative sm:absolute sm:bottom-0 sm:right-[-10px] flex justify-center sm:block w-full sm:w-[140px] md:w-[180px] lg:w-[230px] h-auto">
     <Image
       src={'/userDashboard/ore-image.svg'}
@@ -73,7 +73,7 @@ const PremiumFeaturesPara = () => {
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full min-h-[200px] sm:min-h-[160px]">
         {/* Content Section */}
-        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[140px] md:pr-[181px]">
+        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[160px] md:pr-[200px] lg:pr-[220px]">
           {/* Title Section */}
           <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
               <h3 
@@ -127,7 +127,7 @@ const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full min-h-[200px] sm:min-h-[160px]">
         {/* Content Section */}
-        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[140px] md:pr-[181px]">
+        <section className="flex-1 py-4 sm:py-6 px-4 sm:px-[5%] z-10 w-full sm:pr-[160px] md:pr-[180px] lg:pr-[230px]">
           {/* Title Section */}
           <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
               <h3 

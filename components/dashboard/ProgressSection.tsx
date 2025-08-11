@@ -8,23 +8,19 @@ import { useUserGoals } from "@/contexts/UserGoalsContext";
 import { useGetCoursesWithLessons } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { getShuffledImages } from "@/utilities/utilities";
 
 
 const imagePathsArr: string[] = [
-  "/userDashboard/yoruba/yoruba1.png",
-  "/userDashboard/yoruba/yoruba2.png",
-  "/userDashboard/yoruba/yoruba3.png",
-  "/userDashboard/yoruba/yoruba4.png",
-  "/userDashboard/yoruba/yoruba5.png",
+  "/userDashboard/say-hello.svg",
 ];
 
 
 const ProgressSection = () => {
   const { userDetails } = useUserGoals();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const { data: coursesWithLessons, isLoading: lessonsLoading } =
     useGetCoursesWithLessons(userDetails?.languageId);
@@ -83,17 +79,13 @@ const ProgressSection = () => {
                   <div
                     key={index}
                     className="flex-shrink-0"
-                    onClick={() =>
-                      router.push(
-                        `/lesson/${course?.id}/${lessonData?.id}/learn-intro`
-                      )
-                    }
                   >
                     <LessonProgressCard
                       data={lessonData} 
                       courseId={course?.id}
                       lessonId={lessonData?.id}
-                      imagePath={lessonData.imagePath}
+                      imagePath={index === 0 ? lessonData.imagePath : "/userDashboard/yoruba/coming-soon.svg"}
+                      isClickable={index === 0}
                     />
                   </div>
                 )
