@@ -391,7 +391,9 @@ export const LessonsCard2 = ({ data, isClickable = false }: { data: any; isClick
         </div>
 
         <div className="flex flex-col gap-[4px]">
-          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
+          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]"
+          style={{ color: theme === "dark" ? "#7AACD3" : "#333333" }}
+          >
             <span>{data?.estimatedDuration} min</span>
             <span>
               {data?.totalContents}{" "}

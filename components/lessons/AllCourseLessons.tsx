@@ -13,6 +13,7 @@ import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { LessonsCard2 } from "../dashboard/UserLessonDataComponent";
+import { useTheme } from "@/contexts/ThemeProvider";
 // import Pagination from "../dashboard/Pagination";
 
 const AllCourseLessons = () => {
@@ -20,6 +21,8 @@ const AllCourseLessons = () => {
   // const itemsPerPage = 12;
 
   const { userDetails } = useUser();
+
+  const { theme } = useTheme();
 
   const { data: coursesWithLessons, isLoading: lessonsLoading } =
     useGetCoursesWithLessons(userDetails?.languageId);
@@ -102,17 +105,21 @@ const AllCourseLessons = () => {
 
   return (
     <div
-      className="border z-2 shadow-sm border-[#EAECF0] gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg bg-white w-full max-w-full overflow-hidden"
-      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px" }}
+      className="z-2 shadow-lg gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg w-full max-w-full overflow-hidden"
+      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px", background: theme === "dark" ? "#012657" : "white", }}
     >
       {/* Header Section - Made fully responsive */}
       <header className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
         <section className="min-w-0 flex-1">
-          <span className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]">
-            Journey Catalog
+          <span className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]"
+          style={{ color: theme === "dark" ? "white" : "#162B6E" }}
+          >
+            Immersing you in Yorùbá, one step at a time
           </span>
-          <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1">
-            Meaningful Yorùbá learning — one Journey at a time
+          <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
+          style={{ color: "#207EC5" }}
+          >
+            Building fluency through culture, sound, and eẹeryday moments.
           </span>
         </section>
 
