@@ -244,6 +244,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
 
   const mobilePremiumItemClick = (data: { name?: string; icon?: string; path: string; }) => {
     setIsMobileMenuOpen(false);
+    setLoading(true);
     if (!data?.path) return;
     
     router.push(data.path);
