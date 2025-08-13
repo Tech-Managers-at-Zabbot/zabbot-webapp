@@ -242,6 +242,8 @@ const AllSteps = () => {
       {/* <div className="border-t border-[#EAECF0] w-full"></div> */}
 
       {/* Pagination Section */}
+      {allLanguageSteps?.data &&
+            allLanguageSteps?.data?.length > 0 && (
       <section className="w-full overflow-x-auto">
         <Pagination
           currentPage={currentPage}
@@ -250,6 +252,7 @@ const AllSteps = () => {
           maxVisiblePages={5} // Reduced for mobile
         />
       </section>
+            )}
     </div>
   );
 };
