@@ -29,6 +29,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     localStorage.removeItem("userProfile");
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    localStorage.clear();
     setLoading(true);
     router.push("/login");
   };

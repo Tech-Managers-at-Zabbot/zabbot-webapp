@@ -26,6 +26,7 @@ const AdminNavBar = ({ showLogo = false }) => {
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);
     localStorage.removeItem("userProfile");
+    localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     setLoading(true);

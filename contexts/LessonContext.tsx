@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { getLessonWithContents } from '@/services/generalApi/lessons/api';
-
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
+import { useParams, useRouter } from "next/navigation";
+import { getLessonWithContents } from "@/services/generalApi/lessons/api";
 
 interface Content {
   id: string;
@@ -42,15 +47,16 @@ interface LessonContextType {
   currentContent: Content | null;
   userCourse: UserCourse | null;
   isLoading: boolean;
-  
+
   // Actions
   nextContent: () => void;
+  startLesson: () => void;
   previousContent: () => void;
   goToContent: (index: number) => void;
   markContentComplete: () => void;
   completeLesson: () => void;
   navigateToCompletion: () => void;
-  
+
   // Progress
   progressPercentage: number;
   isFirstContent: boolean;
@@ -62,7 +68,7 @@ const LessonContext = createContext<LessonContextType | undefined>(undefined);
 export const useLessonContext = () => {
   const context = useContext(LessonContext);
   if (!context) {
-    throw new Error('useLessonContext must be used within a LessonProvider');
+    throw new Error("useLessonContext must be used within a LessonProvider");
   }
   return context;
 };
@@ -76,14 +82,10 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const router = useRouter();
   const { courseId, lessonId } = params;
 
-  useEffect(()=> {
-    console.log('idssszzz', courseId, lessonId)
-  },[])
-  
   // State
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [contents, setContents] = useState<Content[]>([]);
-  const [currentContentIndex, setCurrentContentIndex] = useState(0);
+  const [currentContentIndex, setCurrentContentIndex] = useState(-1);
   const [userCourse, setUserCourse] = useState<UserCourse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -95,27 +97,27 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const loadLessonData = useCallback(async () => {
     try {
       setIsLoading(true);
-      
-      // Fetch lesson and contents from your API
 
-      
       const response = await getLessonWithContents(lessonId);
-      const data = response?.data
+      const data = response?.data;
       setLesson(data.lesson);
       setContents(data.contents);
-      
+
       // Load saved progress from localStorage
       const savedProgress = localStorage.getItem(LESSON_PROGRESS_KEY);
       if (savedProgress) {
         const { contentIndex } = JSON.parse(savedProgress);
-        setCurrentContentIndex(Math.min(contentIndex, data.contents.length - 1));
+        setCurrentContentIndex(
+          Math.min(contentIndex, data.contents.length - 1)
+        );
+      } else {
+        // If no saved progress, start at -1 (intro state)
+        setCurrentContentIndex(-1);
       }
-      
-      // Load or create user course
+
       await loadOrCreateUserCourse();
-      
     } catch (error) {
-      console.error('Error loading lesson data:', error);
+      console.error("Error loading lesson data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -126,7 +128,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     try {
       // Check if user course exists in localStorage first
       const savedUserCourse = localStorage.getItem(USER_COURSE_KEY);
-      
+
       if (savedUserCourse) {
         setUserCourse(JSON.parse(savedUserCourse));
         return;
@@ -134,25 +136,25 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
       // Try to fetch from backend
       const response = await fetch(`/api/user-courses/${courseId}`);
-      
+
       if (response.ok) {
         const data = await response.json();
         setUserCourse(data);
         localStorage.setItem(USER_COURSE_KEY, JSON.stringify(data));
       } else {
         // Create new user course
-        const createResponse = await fetch('/api/user-courses', {
-          method: 'POST',
+        const createResponse = await fetch("/api/user-courses", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             courseId,
             lastLessonId: lessonId,
-            languageId: 'your-language-id', // Get this from your app context
+            languageId: "your-language-id", // Get this from your app context
           }),
         });
-        
+
         if (createResponse.ok) {
           const newUserCourse = await createResponse.json();
           setUserCourse(newUserCourse);
@@ -160,43 +162,51 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('Error loading/creating user course:', error);
+      console.error("Error loading/creating user course:", error);
     }
   };
 
   // Save progress to localStorage and backend
-  const saveProgress = useCallback(async (contentIndex: number, contentId?: string) => {
-    // Save to localStorage immediately
-    const progressData = {
-      contentIndex,
-      contentId,
-      timestamp: new Date().toISOString(),
-    };
-    localStorage.setItem(LESSON_PROGRESS_KEY, JSON.stringify(progressData));
-
-    // Update user course
-    if (userCourse && contentId) {
-      const updatedUserCourse = {
-        ...userCourse,
-        lastLessonId: lessonId as string,
-        lastContentId: contentId,
-        lastAccessed: new Date(),
-        progress: Math.round((contentIndex / contents.length) * 100),
+  const saveProgress = useCallback(
+    async (contentIndex: number, contentId?: string) => {
+      // Save to localStorage immediately
+      const progressData = {
+        contentIndex,
+        contentId,
+        timestamp: new Date().toISOString(),
       };
+      localStorage.setItem(LESSON_PROGRESS_KEY, JSON.stringify(progressData));
 
-      setUserCourse(updatedUserCourse);
-      localStorage.setItem(USER_COURSE_KEY, JSON.stringify(updatedUserCourse));
+      // Update user course
+      if (userCourse && contentId) {
+        const updatedUserCourse = {
+          ...userCourse,
+          lastLessonId: lessonId as string,
+          lastContentId: contentId,
+          lastAccessed: new Date(),
+          progress: Math.round((contentIndex / contents.length) * 100),
+        };
 
-      // Save to backend (don't await to avoid blocking UI)
-      fetch(`/api/user-courses/${userCourse.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedUserCourse),
-      }).catch(error => console.error('Error saving progress to backend:', error));
-    }
-  }, [userCourse, lessonId, contents.length]);
+        setUserCourse(updatedUserCourse);
+        localStorage.setItem(
+          USER_COURSE_KEY,
+          JSON.stringify(updatedUserCourse)
+        );
+
+        // Save to backend (don't await to avoid blocking UI)
+        fetch(`/api/user-courses/${userCourse.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedUserCourse),
+        }).catch((error) =>
+          console.error("Error saving progress to backend:", error)
+        );
+      }
+    },
+    [userCourse, lessonId, contents.length]
+  );
 
   // Actions
   const nextContent = useCallback(() => {
@@ -215,12 +225,33 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     }
   }, [currentContentIndex, contents, saveProgress]);
 
-  const goToContent = useCallback((index: number) => {
-    if (index >= 0 && index < contents.length) {
-      setCurrentContentIndex(index);
-      saveProgress(index, contents[index]?.id);
+  const goToContent = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < contents.length) {
+        setCurrentContentIndex(index);
+        saveProgress(index, contents[index]?.id);
+      }
+    },
+    [contents, saveProgress]
+  );
+
+  const startLesson = useCallback(() => {
+    // Use the latest contents from state
+    setContents((prevContents) => {
+      if (prevContents.length > 0) {
+        setCurrentContentIndex(0);
+        saveProgress(0, prevContents[0]?.id);
+      }
+      return prevContents;
+    });
+  }, [saveProgress]);
+
+  useEffect(() => {
+    if (contents.length > 0 && currentContentIndex === -1) {
+      // Ensure we have contents before allowing start
+      setCurrentContentIndex((prev) => (prev === -1 ? prev : 0));
     }
-  }, [contents, saveProgress]);
+  }, [contents.length, currentContentIndex]);
 
   const markContentComplete = useCallback(() => {
     // You can add logic here to mark individual content as complete
@@ -231,7 +262,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const completeLesson = useCallback(async () => {
     // First, set the content index beyond the contents length to show completion screen
     setCurrentContentIndex(contents.length);
-    
+
     if (userCourse) {
       const completedUserCourse = {
         ...userCourse,
@@ -239,22 +270,25 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         progress: 100,
         lastAccessed: new Date(),
       };
-  
+
       setUserCourse(completedUserCourse);
-      localStorage.setItem(USER_COURSE_KEY, JSON.stringify(completedUserCourse));
+      localStorage.setItem(
+        USER_COURSE_KEY,
+        JSON.stringify(completedUserCourse)
+      );
       localStorage.removeItem(LESSON_PROGRESS_KEY); // Clear lesson progress
-  
+
       // Save to backend
       try {
         await fetch(`/api/user-courses/${userCourse.id}`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(completedUserCourse),
         });
       } catch (error) {
-        console.error('Error completing lesson:', error);
+        console.error("Error completing lesson:", error);
       }
     }
   }, [userCourse, contents.length]);
@@ -282,8 +316,12 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   }, [currentContentIndex, contents, saveProgress]);
 
   // Calculated values
-  const currentContent = contents[currentContentIndex] || null;
-  const progressPercentage = contents.length > 0 ? Math.round(((currentContentIndex + 1) / contents.length) * 100) : 0;
+  const currentContent =
+    currentContentIndex >= 0 ? contents[currentContentIndex] || null : null;
+  const progressPercentage =
+    contents.length > 0 && currentContentIndex >= 0
+      ? Math.round(((currentContentIndex + 1) / contents.length) * 100)
+      : 0;
   const isFirstContent = currentContentIndex === 0;
   const isLastContent = currentContentIndex === contents.length - 1;
 
@@ -294,22 +332,21 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     currentContent,
     userCourse,
     isLoading,
-    
+    startLesson,
+
     nextContent,
     previousContent,
     goToContent,
     markContentComplete,
     completeLesson,
     navigateToCompletion,
-    
+
     progressPercentage,
     isFirstContent,
     isLastContent,
   };
 
   return (
-    <LessonContext.Provider value={value}>
-      {children}
-    </LessonContext.Provider>
+    <LessonContext.Provider value={value}>{children}</LessonContext.Provider>
   );
 };
