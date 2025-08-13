@@ -52,7 +52,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     quizType: QuizType.MULTIPLE_CHOICE,
     instruction: "",
     question: "",
-    options: ["", ""],
+    options: ["", "", ""],
     correctOption: "",
   });
 
@@ -101,7 +101,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
         if (value === QuizType.MULTIPLE_CHOICE) {
           newData.correctAnswer = undefined;
           if (!newData.options || newData.options.length < 2) {
-            newData.options = ["", ""];
+            newData.options = ["", "", ""];
           }
           newData.correctOption = "";
         } else if (value === QuizType.FILL_IN_BLANK) {
@@ -142,6 +142,10 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
   };
 
   const addOption = () => {
+    if ((quizData.options?.length ?? 0) === 5) {
+      addAlert("Warning", "Maximum of 5 options allowed", "warning");
+      return;
+    }
     const newOptions = [...(quizData.options || []), ""];
     setQuizData((prev) => ({ ...prev, options: newOptions }));
   };
@@ -417,7 +421,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {quizData.quizType === QuizType.MULTIPLE_CHOICE
-                ? "Options (Required)"
+                ? "Options (Required for multiple choice quizzes)"
                 : "Options (Optional - for memory boost)"}
             </label>
             <div className="space-y-2">
@@ -431,7 +435,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
                     className="flex-1 px-3 py-2 text-[#252525] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   {/* Show remove button based on quiz type and minimum requirements */}
-                  {((quizData.quizType === QuizType.MULTIPLE_CHOICE && (quizData.options?.length || 0) > 2) ||
+                  {((quizData.quizType === QuizType.MULTIPLE_CHOICE && (quizData.options?.length || 0) > 3) ||
                     (quizData.quizType === QuizType.FILL_IN_BLANK)) && (
                     <button
                       type="button"
