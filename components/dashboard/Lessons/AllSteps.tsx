@@ -12,10 +12,11 @@ import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { steps } from '@/constants/data-to-populate/dashboardData';
 
 const AllSteps = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 12;
+  const itemsPerPage = 15;
 
   const { userDetails } = useUser();
 
@@ -36,15 +37,19 @@ const AllSteps = () => {
       }))
     : [];
 
-  const stepsToMap = [...allStepsWithThumbnails];
+  // const stepsToMap = [...allStepsWithThumbnails];
 
+  const stepsToMap = [
+    ...allStepsWithThumbnails,
+    ...steps
+  ]
   // Calculate total pages based on your data
-  // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
+  const totalPages = Math.ceil(stepsToMap.length / itemsPerPage);
 
   // Get current page data
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPageData = stepsToMap.slice(startIndex, endIndex);
 
   // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
@@ -214,7 +219,7 @@ const AllSteps = () => {
             </div>
           ) : (
             <div className="flex flex-wrap justify-center sm:justify-center items-center gap-4 sm:gap-6 md:gap-4">
-              {stepsToMap.map(
+              {currentPageData.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
                     key={index}
@@ -223,7 +228,7 @@ const AllSteps = () => {
                   >
                     <StepsCard
                       data={lessonProgressData}
-                      isClickable={index === 0}
+                      isClickable={lessonProgressData?.title === "Say Hello"}
                     />
                   </div>
                 )
@@ -240,7 +245,7 @@ const AllSteps = () => {
       <section className="w-full overflow-x-auto">
         <Pagination
           currentPage={currentPage}
-          totalPages={1}
+          totalPages={totalPages}
           onPageChange={handlePageChange}
           maxVisiblePages={5} // Reduced for mobile
         />

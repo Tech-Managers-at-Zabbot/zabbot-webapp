@@ -1,3 +1,4 @@
+import { useTheme } from "@/contexts/ThemeProvider";
 import React from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
@@ -24,6 +25,8 @@ const Pagination: React.FC<PaginationProps> = ({
     }
     return maxVisiblePages;
   };
+
+    const { theme } = useTheme()
 
   const getVisiblePages = () => {
     const responsiveMaxPages = getResponsiveMaxPages();
@@ -62,7 +65,7 @@ const Pagination: React.FC<PaginationProps> = ({
           className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg border transition-colors flex-shrink-0 ${
             currentPage === 1
               ? "border-[#EAECF0] text-[#8E8E8E] cursor-not-allowed"
-              : "border-[#EAECF0] text-[#162B6E] hover:bg-[#F3F4F6] cursor-pointer"
+              : `border-[#EAECF0] ${theme === 'light' ? 'text-[#162B6E] hover:bg-[#F3F4F6]' : 'text-[#a9d5f0] hover:bg-[#162B6E]'}  cursor-pointer`
           }`}
           style={{ fontFamily: "Lexend" }}
         >
@@ -78,10 +81,10 @@ const Pagination: React.FC<PaginationProps> = ({
             <>
               <button
                 onClick={() => onPageChange(1)}
-                className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-[50%] border transition-colors flex-shrink-0 ${
+                className={`w-8 h-8 hover:cursor-pointer sm:w-10 sm:h-10 flex items-center justify-center rounded-[50%] border transition-colors flex-shrink-0 ${
                   currentPage === 1
                     ? "bg-[#A8D5F0] border-[#A8D5F0] text-[#162B6E]"
-                    : "border-[#EAECF0] text-[#162B6E] hover:bg-[#F3F4F6]"
+                    : `border-[#EAECF0] ${theme === 'light' ? 'text-[#162B6E] hover:bg-[#F3F4F6]' : 'text-[#a9d5f0] hover:bg-[#162B6E]'}`
                 }`}
                 style={{ fontFamily: "Lexend" }}
               >
@@ -98,10 +101,10 @@ const Pagination: React.FC<PaginationProps> = ({
             <button
               key={page}
               onClick={() => onPageChange(page)}
-              className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-[50%] border transition-colors flex-shrink-0 ${
+              className={`w-8 h-8 sm:w-10 hover:cursor-pointer sm:h-10 flex items-center justify-center rounded-[50%] border transition-colors flex-shrink-0 ${
                 currentPage === page
                   ? "bg-[#A8D5F0] border-[#A8D5F0] text-[#162B6E]"
-                  : "border-[#EAECF0] text-[#162B6E] hover:bg-[#F3F4F6]"
+                  : `border-[#EAECF0] ${theme === 'light' ? 'text-[#162B6E] hover:bg-[#F3F4F6]' : 'text-[#a9d5f0] hover:bg-[#162B6E]'}`
               }`}
               style={{ fontFamily: "Lexend" }}
             >
@@ -117,10 +120,10 @@ const Pagination: React.FC<PaginationProps> = ({
               )}
               <button
                 onClick={() => onPageChange(totalPages)}
-                className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-[50%] border transition-colors flex-shrink-0 ${
+                className={`w-8 h-8 sm:w-10 hover:cursor-pointer sm:h-10 flex items-center justify-center rounded-[50%] border transition-colors flex-shrink-0 ${
                   currentPage === totalPages
                     ? "bg-[#A8D5F0] border-[#A8D5F0] text-[#162B6E]"
-                    : "border-[#EAECF0] text-[#162B6E] hover:bg-[#F3F4F6]"
+                    : `border-[#EAECF0] ${theme === 'light' ? 'text-[#162B6E] hover:bg-[#F3F4F6]' : 'text-[#a9d5f0] hover:bg-[#162B6E]'}`
                 }`}
                 style={{ fontFamily: "Lexend" }}
               >
@@ -137,7 +140,7 @@ const Pagination: React.FC<PaginationProps> = ({
           className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg border transition-colors flex-shrink-0 ${
             currentPage === totalPages
               ? "border-[#EAECF0] text-[#8E8E8E] cursor-not-allowed"
-              : "border-[#EAECF0] text-[#162B6E] hover:bg-[#F3F4F6] cursor-pointer"
+              : `border-[#EAECF0] ${theme === 'light' ? 'text-[#162B6E] hover:bg-[#F3F4F6]' : 'text-[#a9d5f0] hover:bg-[#162B6E]'}`
           }`}
           style={{ fontFamily: "Lexend" }}
         >
