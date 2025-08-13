@@ -366,15 +366,17 @@ const EditCourseModal: React.FC<EditCourseModalProps> = ({
                       </div>
                       <div className="flex items-center gap-2">
                         <button
+                        disabled
                           onClick={() => handleEditLesson(lesson)}
-                          className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded"
+                          className="px-3 py-1 text-sm text-gray-600 cursor-not-allowed rounded"
                         >
                           <Edit size={14} className="mr-1 inline" />
                           Edit
                         </button>
                         <button
+                        disabled
                           onClick={() => onDeleteLesson(lesson.id!)}
-                          className="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                          className="px-3 py-1 text-sm text-gray-600 cursor-not-allowed rounded"
                         >
                           <Trash2 size={14} className="mr-1 inline" />
                           Delete
