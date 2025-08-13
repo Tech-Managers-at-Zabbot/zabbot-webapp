@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import AdminNavBar from "@/components/dashboard/AdminDashboardNav";
+import GetInTouch from "@/components/dashboard/GetInTouch";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 import { Providers } from "@/components/Providers";
 import AuthGuard from "@/components/security/AuthGuard";
@@ -52,6 +53,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {children}
               </div>
             </main>
+            <GetInTouch />
             <UserDashboardFooter />
           </div>
         </div>

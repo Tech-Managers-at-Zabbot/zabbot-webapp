@@ -34,6 +34,7 @@ import {
 import CourseForm from "../../../components/admin/createCourseFlow/CourseForm";
 import LessonsList from "../../../components/admin/createCourseFlow/LessonList";
 import LessonModal from "../../../components/admin/createCourseFlow/LessonModal";
+import { useLoading } from "@/contexts/LoadingProvider";
 
 const CreateCoursePage = () => {
   // State and hooks initialization
@@ -79,6 +80,8 @@ const CreateCoursePage = () => {
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number | null>(
     null
   );
+
+  const { setLoading } = useLoading();
   const [currentLesson, setCurrentLesson] = useState<Lesson>({
     title: "",
     description: "",
@@ -767,6 +770,23 @@ const CreateCoursePage = () => {
                     className="object-contain"
                   />
                 </div>
+              </div>
+              <div className="relative">
+                <InAppButton
+                  onClick={() => {
+                    setLoading(true);
+                    router.push("/admin");
+                  }}
+                  background={theme === 'dark' ? '#dff9fb' : '#012657'}
+                  width="100px"
+                  borderRadius="10px"
+                >
+                  <div className="text-white flex justify-center items-center"
+                  style={{color: theme === 'dark' ? '#012657' : '#dff9fb'}}
+                  >
+                    Journeys
+                  </div>
+                </InAppButton>
               </div>
               <div className="hidden lg:flex">
                 <SettingsBreadcrumb isDark={theme === "dark"} />

@@ -29,6 +29,7 @@ interface ModalProps {
   closeButtonClassName?: string;
   /** Disable body scroll when modal is open (default: true) */
   preventBodyScroll?: boolean;
+  disableClose?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -36,7 +37,8 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
   title,
-  closeOnOverlayClick = true,
+  disableClose= false,
+  // closeOnOverlayClick = true,
   closeOnEscape = true,
   showCloseButton = true,
   size = 'md',
@@ -54,11 +56,11 @@ const Modal: React.FC<ModalProps> = ({
   }, [closeOnEscape, isOpen, onClose]);
 
   // Handle overlay click
-  const handleOverlayClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget && closeOnOverlayClick) {
-      onClose();
-    }
-  }, [closeOnOverlayClick, onClose]);
+  // const handleOverlayClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+  //   if (event.target === event.currentTarget && closeOnOverlayClick) {
+  //     onClose();
+  //   }
+  // }, [closeOnOverlayClick, onClose]);
 
   // Body scroll management and ESC key listener
   useEffect(() => {
@@ -66,6 +68,9 @@ const Modal: React.FC<ModalProps> = ({
       // Prevent body scroll
       if (preventBodyScroll) {
         document.body.style.overflow = 'hidden';
+              document.body.style.touchAction = 'none';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
       }
       
       // Add ESC key listener
@@ -84,6 +89,8 @@ const Modal: React.FC<ModalProps> = ({
       // Restore body scroll
       if (preventBodyScroll) {
         document.body.style.overflow = 'unset';
+        document.body.style.touchAction = ''; // Add this line
+      document.body.style.position = ''; // Add this line
       }
       
       // Remove ESC key listener
@@ -94,13 +101,21 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, closeOnEscape, handleEscapeKey, preventBodyScroll]);
 
   // Size classes mapping
-  const sizeClasses = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
-    full: 'max-w-[95vw] max-h-[95vh]'
-  };
+  // const sizeClasses = {
+  //   sm: 'max-w-md',
+  //   md: 'max-w-lg',
+  //   lg: 'max-w-2xl',
+  //   xl: 'max-w-4xl',
+  //   full: 'max-w-[95vw] max-h-[95vh]'
+  // };
+
+const sizeClasses = {
+  sm: 'max-w-md',
+  md: 'max-w-lg',
+  lg: 'max-w-3xl',  // Changed from max-w-2xl to max-w-3xl
+  xl: 'max-w-5xl',  // Changed from max-w-4xl to max-w-5xl
+  full: 'max-w-[95vw] max-h-[95vh]'
+};
 
   // Don't render if not open
   if (!isOpen) return null;
@@ -109,7 +124,7 @@ const Modal: React.FC<ModalProps> = ({
     <div
       className={`fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 transition-opacity duration-300 ${overlayClassName}`}
       style={{ zIndex, fontFamily: 'Lexend' }}
-      onClick={handleOverlayClick}
+      // onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? "modal-title" : undefined}
@@ -138,11 +153,12 @@ const Modal: React.FC<ModalProps> = ({
               <button
                 onClick={onClose}
                 className={`
-                  p-2 hover:bg-gray-100 rounded-full transition-colors duration-200
+                  p-2 hover:bg-gray-100 rounded-full hover:cursor-pointer transition-colors duration-200
                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
                   ${closeButtonClassName}
                 `}
                 aria-label="Close modal"
+                disabled={disableClose}
               >
                 <X size={20} className="text-gray-600" />
               </button>
@@ -151,7 +167,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Content */}
-        <div className="overflow-y-auto scroll-hidden max-h-[calc(90vh-4rem)]">
+        <div className="overflow-y-auto scroll-hidden max-h-[calc(90vh-4rem)] overscroll-contain">
           {children}
         </div>
       </div>

@@ -100,3 +100,18 @@ export function numberToWords(num: number): string {
 
   return `${tens[ten]}${one ? '-' + ones[one] : ''}`;
 }
+
+export const quizTypeFormatter = (type:string):string => {
+  switch (type) {
+    case 'MULTIPLE_CHOICE':
+      return 'Multiple Choice';
+    case 'FILL_IN_BLANK':
+      return 'Fill in the Blanks';
+    case 'TF':
+      return 'True/False';
+    case 'SA':
+      return 'Short Answer';
+    default:
+      return type;
+  }
+} 

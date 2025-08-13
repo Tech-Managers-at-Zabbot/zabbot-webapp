@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createCourseWithLessons, getCourses, getCourseWithLessons, getLanguageContents, getLanguageLessons, getLessonWithContents } from "./api";
+import { addQuiz,createCourseWithLessons, getCourseLessons, getCourseQuizzes, getCourses, getCourseWithLessons, getLanguageContents, getLanguageLessons, getLessonWithContents } from "./api";
 
 
 
@@ -94,4 +94,53 @@ export function useGetLanguageLessons(languageId:string) {
     //   },
   });
 
+}
+
+export function useGetCourseLessons(courseId:string) {
+
+  return useQuery({
+    queryKey: ['getCourseLessons', courseId],
+    queryFn: () => getCourseLessons(courseId),
+    refetchOnMount: true,
+    enabled: !!courseId,
+    refetchOnWindowFocus: false,
+    //   onError: (error) => {
+    //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
+    //   },
+  });
+
+}
+
+export function useGetCourseQuizzes(courseId:string) {
+
+  return useQuery({
+    queryKey: ['getCourseQuizzes', courseId],
+    queryFn: () => getCourseQuizzes(courseId),
+    refetchOnMount: true,
+    enabled: !!courseId,
+    refetchOnWindowFocus: false,
+    //   onError: (error) => {
+    //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
+    //   },
+  });
+
+}
+
+export function useCreateQuiz() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ quizPayload }: { quizPayload: any }) => {
+      return await addQuiz(quizPayload);
+    },
+     onSuccess: async (_, variables) => {
+      // Fix: Access courseId from quizPayload instead of variables directly
+      const courseId = variables?.quizPayload?.courseId;
+      if (courseId) {
+        queryClient.invalidateQueries({ queryKey: ['getCourseQuizzes', courseId] });
+      }
+    },
+    onError: (error: any) => {
+      console.error('Error Creating Quiz', error);
+    },
+  });
 }
