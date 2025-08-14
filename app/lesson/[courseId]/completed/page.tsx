@@ -33,7 +33,7 @@ const Page = () => {
       disabled={navigationLoading}
       disabledColor="#C98F5DCC"
       >
-        {navigationLoading ? <CustomSpinner spinnerColor="black" title="Redirecting..."/> : "Proceed with the Journey"}
+        {navigationLoading ? <CustomSpinner spinnerColor="black" title="Redirecting..."/> : "More Steps"}
       </InAppButton>
       </div>
       <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[100px]"></footer>
