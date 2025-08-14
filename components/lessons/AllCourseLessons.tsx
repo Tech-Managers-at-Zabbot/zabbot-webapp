@@ -84,7 +84,7 @@ const AllCourseLessons = () => {
   //   {
   //     name: "Completed",
   //     path: "",
-  //   },
+  //   }, ẹ
   //   {
   //     name: "In progress",
   //     path: "",
@@ -119,7 +119,7 @@ const AllCourseLessons = () => {
           <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
           style={{ color: "#207EC5" }}
           >
-            Building fluency through culture, sound, and eẹeryday moments.
+            Building fluency through culture, sound, and everyday moments.
           </span>
         </section>
 

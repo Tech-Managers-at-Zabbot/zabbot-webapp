@@ -20,6 +20,22 @@ interface Content {
   ededunPhrases?: any;
 }
 
+interface Quiz {
+  id: string;
+  courseId: string;
+  lessonId?: string;
+  contentId?: string;
+  languageId: string;
+  quizType: 'MULTIPLE_CHOICE' | 'FILL_IN_BLANK';
+  instruction: string;
+  question: string;
+  options?: string[];
+  correctOption?: string;
+  correctAnswer?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
 interface Lesson {
   id: string;
   title: string;
@@ -40,13 +56,30 @@ interface UserCourse {
   isCompleted: boolean;
 }
 
+interface QuizResult {
+  quizId: string;
+  userAnswer: string;
+  isCorrect: boolean;
+  timestamp: string;
+}
+
+type LessonStep = 'intro' | 'content' | 'lesson-completed' | 'quiz' | 'completed';
+
 interface LessonContextType {
   lesson: Lesson | null;
   contents: Content[];
+  lessonQuizzes: Quiz[];
   currentContentIndex: number;
   currentContent: Content | null;
   userCourse: UserCourse | null;
   isLoading: boolean;
+
+  // Quiz-related state
+  quizzes: Quiz[];
+  currentQuizIndex: number;
+  currentQuiz: Quiz | any;
+  currentStep: LessonStep;
+  quizResults: QuizResult[];
 
   // Actions
   nextContent: () => void;
@@ -57,10 +90,20 @@ interface LessonContextType {
   completeLesson: () => void;
   navigateToCompletion: () => void;
 
+  // Quiz actions
+  nextQuiz: () => void;
+  previousQuiz: () => void;
+  goToQuiz: (index: number) => void;
+  startQuizPhase: () => void;
+  submitQuizAnswer: (quizId: string, userAnswer: string, isCorrect: boolean) => void;
+  completeQuizPhase: () => void;
+
   // Progress
   progressPercentage: number;
   isFirstContent: boolean;
   isLastContent: boolean;
+  isFirstQuiz: boolean;
+  isLastQuiz: boolean;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -84,14 +127,22 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   // State
   const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [lessonQuizzes, setLessonQuizzes] = useState<Quiz[]>([]);
   const [contents, setContents] = useState<Content[]>([]);
   const [currentContentIndex, setCurrentContentIndex] = useState(-1);
   const [userCourse, setUserCourse] = useState<UserCourse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Quiz-related state
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(-1);
+  const [currentStep, setCurrentStep] = useState<LessonStep>('intro');
+  const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
+
   // Local Storage Keys
   const LESSON_PROGRESS_KEY = `lesson_progress_${lessonId}`;
   const USER_COURSE_KEY = `user_course_${courseId}`;
+  const QUIZ_RESULTS_KEY = `quiz_results_${lessonId}`;
 
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
@@ -102,17 +153,33 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       const data = response?.data;
       setLesson(data.lesson);
       setContents(data.contents);
+      setLessonQuizzes(data.lessonQuizzes);
+      setQuizzes(data.lessonQuizzes || []);
 
       // Load saved progress from localStorage
       const savedProgress = localStorage.getItem(LESSON_PROGRESS_KEY);
       if (savedProgress) {
-        const { contentIndex } = JSON.parse(savedProgress);
+        const { contentIndex, quizIndex, step } = JSON.parse(savedProgress);
         setCurrentContentIndex(
           Math.min(contentIndex, data.contents.length - 1)
         );
+        if (quizIndex !== undefined) {
+          setCurrentQuizIndex(Math.min(quizIndex, (data.lessonQuizzes || []).length - 1));
+        }
+        if (step) {
+          setCurrentStep(step);
+        }
       } else {
-        // If no saved progress, start at -1 (intro state)
+        // If no saved progress, start at intro state
         setCurrentContentIndex(-1);
+        setCurrentQuizIndex(-1);
+        setCurrentStep('intro');
+      }
+
+      // Load saved quiz results
+      const savedQuizResults = localStorage.getItem(QUIZ_RESULTS_KEY);
+      if (savedQuizResults) {
+        setQuizResults(JSON.parse(savedQuizResults));
       }
 
       await loadOrCreateUserCourse();
@@ -168,10 +235,12 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   // Save progress to localStorage and backend
   const saveProgress = useCallback(
-    async (contentIndex: number, contentId?: string) => {
+    async (contentIndex: number, quizIndex: number = -1, step: LessonStep, contentId?: string) => {
       // Save to localStorage immediately
       const progressData = {
         contentIndex,
+        quizIndex,
+        step,
         contentId,
         timestamp: new Date().toISOString(),
       };
@@ -179,12 +248,16 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
       // Update user course
       if (userCourse && contentId) {
+        const totalItems = contents.length + quizzes.length;
+        const completedItems = Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
+        const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+
         const updatedUserCourse = {
           ...userCourse,
           lastLessonId: lessonId as string,
           lastContentId: contentId,
           lastAccessed: new Date(),
-          progress: Math.round((contentIndex / contents.length) * 100),
+          progress,
         };
 
         setUserCourse(updatedUserCourse);
@@ -205,53 +278,123 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         );
       }
     },
-    [userCourse, lessonId, contents.length]
+    [userCourse, lessonId, contents.length, quizzes.length]
   );
 
-  // Actions
+  // Content Actions
   const nextContent = useCallback(() => {
     if (currentContentIndex < contents.length - 1) {
       const newIndex = currentContentIndex + 1;
       setCurrentContentIndex(newIndex);
-      saveProgress(newIndex, contents[newIndex]?.id);
+      saveProgress(newIndex, currentQuizIndex, 'content', contents[newIndex]?.id);
+    } else if (currentContentIndex === contents.length - 1){
+            const newIndex = currentContentIndex + 1;
+      setCurrentContentIndex(newIndex);
+      saveProgress(newIndex, currentQuizIndex, 'content', contents[newIndex]?.id);
+      setCurrentStep('lesson-completed');
+    } else if (quizzes.length > 0) {
+      // Move to quiz phase after completing all content
+      startQuizPhase();
+    } else {
+      // No quizzes, complete lesson
+      completeLesson();
     }
-  }, [currentContentIndex, contents, saveProgress]);
+  }, [currentContentIndex, currentQuizIndex, contents, quizzes.length, saveProgress]);
 
   const previousContent = useCallback(() => {
     if (currentContentIndex > 0) {
       const newIndex = currentContentIndex - 1;
       setCurrentContentIndex(newIndex);
-      saveProgress(newIndex, contents[newIndex]?.id);
+      setCurrentStep('content');
+      saveProgress(newIndex, currentQuizIndex, 'content', contents[newIndex]?.id);
     }
-  }, [currentContentIndex, contents, saveProgress]);
+  }, [currentContentIndex, currentQuizIndex, contents, saveProgress]);
 
   const goToContent = useCallback(
     (index: number) => {
       if (index >= 0 && index < contents.length) {
         setCurrentContentIndex(index);
-        saveProgress(index, contents[index]?.id);
+        setCurrentStep('content');
+        saveProgress(index, currentQuizIndex, 'content', contents[index]?.id);
       }
     },
-    [contents, saveProgress]
+    [contents, currentQuizIndex, saveProgress]
   );
 
   const startLesson = useCallback(() => {
-    // Use the latest contents from state
-    setContents((prevContents) => {
-      if (prevContents.length > 0) {
-        setCurrentContentIndex(0);
-        saveProgress(0, prevContents[0]?.id);
-      }
-      return prevContents;
-    });
-  }, [saveProgress]);
-
-  useEffect(() => {
-    if (contents.length > 0 && currentContentIndex === -1) {
-      // Ensure we have contents before allowing start
-      setCurrentContentIndex((prev) => (prev === -1 ? prev : 0));
+    setCurrentContentIndex(0);
+    setCurrentStep('content');
+    if (contents.length > 0) {
+      saveProgress(0, currentQuizIndex, 'content', contents[0]?.id);
     }
-  }, [contents.length, currentContentIndex]);
+  }, [contents, currentQuizIndex, saveProgress]);
+
+  // Quiz Actions
+  const nextQuiz = useCallback(() => {
+    if (currentQuizIndex < quizzes.length - 1) {
+      const newIndex = currentQuizIndex + 1;
+      setCurrentQuizIndex(newIndex);
+      saveProgress(currentContentIndex, newIndex, 'quiz');
+    } else {
+      // Completed all quizzes
+      completeQuizPhase();
+    }
+  }, [currentQuizIndex, currentContentIndex, quizzes.length, saveProgress]);
+
+  const previousQuiz = useCallback(() => {
+    if (currentQuizIndex > 0) {
+      const newIndex = currentQuizIndex - 1;
+      setCurrentQuizIndex(newIndex);
+      saveProgress(currentContentIndex, newIndex, 'quiz');
+    } else {
+      // Go back to content phase
+      setCurrentStep('content');
+      setCurrentContentIndex(contents.length - 1);
+      saveProgress(contents.length - 1, -1, 'content');
+    }
+  }, [currentQuizIndex, currentContentIndex, contents.length, saveProgress]);
+
+  const goToQuiz = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < quizzes.length) {
+        setCurrentQuizIndex(index);
+        setCurrentStep('quiz');
+        saveProgress(currentContentIndex, index, 'quiz');
+      }
+    },
+    [quizzes.length, currentContentIndex, saveProgress]
+  );
+
+  const startQuizPhase = useCallback(() => {
+    if (quizzes.length > 0) {
+      setCurrentQuizIndex(0);
+      setCurrentStep('quiz');
+      saveProgress(currentContentIndex, 0, 'quiz');
+    }
+  }, [quizzes.length, currentContentIndex, saveProgress]);
+
+  const submitQuizAnswer = useCallback((quizId: string, userAnswer: string, isCorrect: boolean) => {
+    const quizResult: QuizResult = {
+      quizId,
+      userAnswer,
+      isCorrect,
+      timestamp: new Date().toISOString(),
+    };
+
+    setQuizResults(prev => {
+      const updated = [...prev.filter(r => r.quizId !== quizId), quizResult];
+      localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
+      return updated;
+    });
+
+    // You can also save to backend here
+    // saveQuizResultToBackend(quizResult);
+  }, []);
+
+  const completeQuizPhase = useCallback(() => {
+    setCurrentStep('completed');
+    completeLesson();
+  }, []);
 
   const markContentComplete = useCallback(() => {
     // You can add logic here to mark individual content as complete
@@ -260,8 +403,8 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   }, [nextContent]);
 
   const completeLesson = useCallback(async () => {
-    // First, set the content index beyond the contents length to show completion screen
-    setCurrentContentIndex(contents.length);
+    // Set completion state
+    setCurrentStep('completed');
 
     if (userCourse) {
       const completedUserCourse = {
@@ -291,10 +434,9 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         console.error("Error completing lesson:", error);
       }
     }
-  }, [userCourse, contents.length]);
+  }, [userCourse]);
 
   const navigateToCompletion = useCallback(() => {
-    // Navigate to completion page or next lesson
     router.push(`/lesson/${courseId}/completed`);
   }, [router, courseId]);
 
@@ -305,35 +447,54 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     }
   }, [lessonId, loadLessonData]);
 
-  // Auto-save progress when content changes
+  // Auto-save progress when content or quiz changes
   useEffect(() => {
-    if (contents.length > 0 && currentContentIndex >= 0) {
+    if (currentStep === 'content' && contents.length > 0 && currentContentIndex >= 0) {
       const currentContent = contents[currentContentIndex];
       if (currentContent) {
-        saveProgress(currentContentIndex, currentContent.id);
+        saveProgress(currentContentIndex, currentQuizIndex, 'content', currentContent.id);
       }
+    } else if (currentStep === 'quiz' && quizzes.length > 0 && currentQuizIndex >= 0) {
+      saveProgress(currentContentIndex, currentQuizIndex, 'quiz');
     }
-  }, [currentContentIndex, contents, saveProgress]);
+  }, [currentContentIndex, currentQuizIndex, currentStep, contents, quizzes, saveProgress]);
 
   // Calculated values
   const currentContent =
     currentContentIndex >= 0 ? contents[currentContentIndex] || null : null;
-  const progressPercentage =
-    contents.length > 0 && currentContentIndex >= 0
-      ? Math.round(((currentContentIndex + 1) / contents.length) * 100)
-      : 0;
+  const currentQuiz =
+    currentQuizIndex >= 0 ? quizzes[currentQuizIndex] || null : null;
+  
+  const totalItems = contents.length + quizzes.length;
+  const completedContentItems = Math.max(0, currentContentIndex + (currentStep === 'content' ? 1 : 0));
+  const completedQuizItems = Math.max(0, currentQuizIndex + (currentStep === 'quiz' ? 1 : 0));
+  const progressPercentage = totalItems > 0 
+    ? Math.round(((completedContentItems + completedQuizItems) / totalItems) * 100) 
+    : 0;
+
   const isFirstContent = currentContentIndex === 0;
   const isLastContent = currentContentIndex === contents.length - 1;
+  const isFirstQuiz = currentQuizIndex === 0;
+  const isLastQuiz = currentQuizIndex === quizzes.length - 1;
 
   const value: LessonContextType = {
     lesson,
     contents,
+    lessonQuizzes,
     currentContentIndex,
     currentContent,
     userCourse,
     isLoading,
-    startLesson,
 
+    // Quiz-related state
+    quizzes,
+    currentQuizIndex,
+    currentQuiz,
+    currentStep,
+    quizResults,
+
+    // Content actions
+    startLesson,
     nextContent,
     previousContent,
     goToContent,
@@ -341,9 +502,20 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     completeLesson,
     navigateToCompletion,
 
+    // Quiz actions
+    nextQuiz,
+    previousQuiz,
+    goToQuiz,
+    startQuizPhase,
+    submitQuizAnswer,
+    completeQuizPhase,
+
+    // Progress
     progressPercentage,
     isFirstContent,
     isLastContent,
+    isFirstQuiz,
+    isLastQuiz,
   };
 
   return (
