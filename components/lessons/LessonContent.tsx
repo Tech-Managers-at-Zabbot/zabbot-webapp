@@ -1,6 +1,6 @@
 "use client";
 import { useLessonContext } from "@/contexts/LessonContext";
-import LessonIntro from "./LessonOneIntro";
+import LessonIntro from "./LessonIntro";
 import ContentRenderer from "./ContentRenderer";
 // import ProgressBar from './ProgressBar';
 import Loader from "../general/Loader";
@@ -56,7 +56,7 @@ const LessonContent = () => {
       <section className="flex flex-col justify-center w-full items-center">
         {showIntro ? (
           <LessonIntro
-            // lesson={lesson}
+            lesson={lesson}
             lessonNumber={lesson?.orderNumber}
             onClick={startLesson}
           />
@@ -67,6 +67,7 @@ const LessonContent = () => {
             onPrevious={previousContent}
             canGoBack={!isFirstContent}
             isLastContent={isLastContent}
+            lessonTitle={lesson?.title}
             onComplete={navigateToCompletion}
           />
         )}

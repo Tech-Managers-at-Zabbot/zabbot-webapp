@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
+import MediaComponents from "./MediaRendererComponent";
 
 interface ContentRendererProps {
   content: any;
@@ -10,6 +11,7 @@ interface ContentRendererProps {
   canGoBack: boolean;
   isLastContent: boolean;
   onComplete: () => void;
+  lessonTitle?: string;
 }
 
 const ContentRenderer: React.FC<ContentRendererProps> = ({
@@ -19,6 +21,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
   canGoBack,
   isLastContent,
   onComplete,
+  lessonTitle,
 }) => {
   const [completeLoading, setCompleteLoading] = useState(false);
 
@@ -37,13 +40,20 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
   };
 
   return (
-    <div className="items-center flex flex-col justify-center w-full h-full mx-auto px-4 relative">
+    <div className="items-center flex flex-col justify-center w-full h-full mx-auto px-4 relative"
+    style={{ fontFamily: "Lexend" }}
+    >
+      <div>
+        <h2 className="text-2xl text-[#F15B29] md:text-3xl font-bold mb-6 text-center">
+          {lessonTitle}
+        </h2>
+      </div>
       <div className="bg-[url('/lessons/questionFrame.svg')] h-[400px] flex flex-col justify-center items-center max-w-[500px] w-full bg-center bg-cover bg-no-repeat p-8 mb-6">
         <div>
           {/* Content Display */}
           <div className="text-center mb-8">
             <div className="text-2xl md:text-3xl font-medium mb-6 leading-relaxed">
-              {cleanContent.split("–").map((part:string, index:number) => (
+              {cleanContent.split("–").map((part: string, index: number) => (
                 <div
                   key={index}
                   className={index > 0 ? "block mt-2" : "inline"}
@@ -71,13 +81,9 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
             </div>
           )}
 
-          {/* Audio Button (if you have audio) */}
-          {content?.isAudio && (
-            <div className="text-center mb-8">
-              <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-medium">
-                🔊 Play Audio
-              </button>
-            </div>
+          {/* Media Components (Audio, Video, Images) */}
+          {content?.files?.length > 0 && (
+            <MediaComponents files={content.files} />
           )}
         </div>
       </div>

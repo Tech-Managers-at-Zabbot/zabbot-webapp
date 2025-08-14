@@ -376,8 +376,6 @@ const Page = () => {
 
   const contents = lessonData?.data?.contents;
 
-  console.log("lezz", lessonData, lesson, contents);
-
   return (
     <div>
       {!lessonData?.data?.lesson || !lesson || isLoading ? (

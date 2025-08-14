@@ -137,7 +137,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg border transition-colors flex-shrink-0 ${
+          className={`flex items-center gap-1 hover:cursor-pointer sm:gap-2 px-2 sm:px-3 py-2 rounded-lg border transition-colors flex-shrink-0 ${
             currentPage === totalPages
               ? "border-[#EAECF0] text-[#8E8E8E] cursor-not-allowed"
               : `border-[#EAECF0] ${theme === 'light' ? 'text-[#162B6E] hover:bg-[#F3F4F6]' : 'text-[#a9d5f0] hover:bg-[#162B6E]'}`
