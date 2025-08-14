@@ -37,23 +37,27 @@ const LessonContent = () => {
   if (!lesson || contents.length === 0) {
     return (
       <div className="bg-[#fef7d0] min-h-screen text-[black]">
-        <EmptyStateCard title="No Data" subtitle="Lesson not found" />
+        <div className="flex flex-col items-center justify-center mt-10">
+        <EmptyStateCard title="No Data" subtitle="Lesson not found, please try again" />
+        </div>
       </div>
     );
   }
   return (
     <div
-      className="bg-[#fef7d0] flex justify-center relative min-h-screen w-full"
+      className="bg-[#fef7d0] py-10 flex flex-col relative justify-center min-h-screen w-full"
       style={{ fontFamily: "Lexend" }}
     >
-      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-center bg-no-repeat min-h-[200px]"></header>
+      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-bottom bg-no-repeat min-h-[150px]"></header>
 
       {/* Progress Bar */}
-      {/* <div className='pt-20'>
-      <ProgressBar progress={progressPercentage} />
-        </div> */}
+      {/* <section className="bg-red-900 h-10 w-full absolute top-0">
+      <div className='w-full'>
+      <ProgressBar progress={100} />
+        </div>
+      </section> */}
 
-      <section className="flex flex-col justify-center w-full items-center">
+      <section className="flex z-10 flex-col justify-center w-full items-center">
         {showIntro ? (
           <LessonIntro
             lesson={lesson}

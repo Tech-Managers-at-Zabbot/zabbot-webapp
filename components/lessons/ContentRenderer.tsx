@@ -40,10 +40,10 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
   };
 
   return (
-    <div className="items-center flex flex-col justify-center w-full h-full mx-auto px-4 relative"
+    <div className="items-center z-10 flex flex-col justify-center w-full h-full mx-auto px-4 relative"
     style={{ fontFamily: "Lexend" }}
     >
-      <div>
+      <div className="mt-12 md:mt-2">
         <h2 className="text-2xl text-[#F15B29] md:text-3xl font-bold mb-6 text-center">
           {lessonTitle}
         </h2>
@@ -88,17 +88,17 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
         </div>
       </div>
 
-      <div className="border-t-1 mt-6 border-[#FCD2C2] w-full">2</div>
+      <div className="border-t-1 h-[0.5px] mt-6 border-[#FCD2C2] w-full"></div>
 
       {/* Navigation Buttons */}
-      <div className="px-[5%] mt-6 flex w-full justify-between items-center">
+      <div className="px-[5%] z-10 mt-6 flex-col md:flex-row gap-2 md:gap-0 flex w-full justify-between items-center">
         <InAppButton
           onClick={onPrevious}
           disabled={!canGoBack || completeLoading}
           disabledColor="#C98F5DCC"
           background={canGoBack ? `#5A2E10` : `#C98F5DCC`}
         >
-          <div className={`px-6 py-3 rounded-lg font-medium`}>← Previous</div>
+          <div className={`px-6 py-3 z-10 rounded-lg font-medium`}>← Previous</div>
         </InAppButton>
 
         <InAppButton

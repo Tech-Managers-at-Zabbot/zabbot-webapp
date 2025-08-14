@@ -4,7 +4,7 @@ interface ProgressBarProps {
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
   return (
-    <div className="justify-between bg-white shadow-sm">
+    <div className="justify-between bg-green-900 shadow-sm">
       <div className="h-2 bg-gray-200">
         <div
           className="h-full bg-[#F15B29] transition-all duration-300 ease-out"
