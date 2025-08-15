@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import AchievementsCard from "@/components/dashboard/AchievementsCard";
-// import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
+import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 // import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import // DashboardMetricCard,
 "@/components/dashboard/DashboardMetricCard";
@@ -17,19 +17,19 @@ import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard2";
 import { useGetUserCount } from "@/services/generalApi/users/query";
 import { HiOutlineTrophy } from "react-icons/hi2";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import { useTheme } from "@/contexts/ThemeProvider";
 import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 
 const Dashboard = () => {
-  // const [goPremium, setGoPremium] = useState(true);
+  const [goPremium, setGoPremium] = useState(true);
 
-  // const handleClosePremiumTag = () => setGoPremium(false);
+  const handleClosePremiumTag = () => setGoPremium(false);
 
   const { data: userCountData, isLoading: userCountLoading } =
     useGetUserCount();
 
-  const { goalsCount, userGoalsLoading } = useUserGoals();
+  const { goalsCount, userGoalsLoading } = useUser();
 
   const userCount = userCountData?.data || 0;
 
@@ -109,7 +109,7 @@ const Dashboard = () => {
     );
   }, [theme]);
 
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   return (
     <div className="min-h-screen">
@@ -157,7 +157,10 @@ const Dashboard = () => {
                   className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
                   style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
                 >
-                  {greeting} {userDetails?.firstName || "User"}
+                  <span className="text-[10px] sm:text-[18px] md:text-[20px] lg:text-[28px]">
+                    {greeting}
+                  </span>{" "}
+                  {userDetails?.firstName || "User"}
                 </span>
                 <span
                   className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
@@ -213,7 +216,7 @@ const Dashboard = () => {
           <section className="mt-20">
             <AchievementsCard />
           </section>
-          {/* 
+
           <section
             className={`transition-all duration-300 ease-in-out ${
               goPremium
@@ -222,7 +225,7 @@ const Dashboard = () => {
             }`}
           >
             <GoPremiumCard onClose={handleClosePremiumTag} />
-          </section> */}
+          </section>
           {/* grid-cols-1 md:grid-cols-2 grid lg:grid-cols-3 */}
 
           {/* <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
@@ -237,7 +240,7 @@ const Dashboard = () => {
             ))}
           </section>
 
-          <section className="mt-6">
+          <section className="mt-10">
             <PremiumFeaturesComponents />
           </section>
 

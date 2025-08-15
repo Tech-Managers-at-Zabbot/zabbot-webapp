@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
@@ -64,7 +65,7 @@ export default function AuthGuard({
       localStorage.removeItem("token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("userProfile");
-      addAlert("Error", "Please login again", "error");
+      addAlert("Error", "Session expired. Please log in again.", "error");
       setTimeout(() => {
         router.replace("/login");
       }, 200);

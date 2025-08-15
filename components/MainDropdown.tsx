@@ -4,6 +4,7 @@ import { appColors } from "@/constants/colors";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface optionsData {
   name: string;
@@ -43,14 +44,20 @@ const MainDropdown: React.FC<MainDropdownProps> = ({
   dropdownMaxWidth="",
   dropdownMinWidth = "220px",
 }) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = (option: optionsData) => {
+    
     if (isSetDropdown) {
-      setSelectedOption(option);
+      setSelectedOption(option?.name);
+    }
+    
+    if (option.path) {
+      router.push(option.path);
     }
     setIsOpen(false);
   };
@@ -99,7 +106,7 @@ const MainDropdown: React.FC<MainDropdownProps> = ({
             options.map((option, index) => (
               <div
                 key={index}
-                onClick={() => handleOptionClick(option.name)}
+                onClick={() => handleOptionClick(option)}
                 className={`p-3 flex items-center gap-4 font-medium leading-[145%] text-[#F6F7F9] hover:text-[#012657] hover:bg-[#FFE933] cursor-pointer ${
                   mobile ? "text-sm" : "text-[12px]"
                 } ${

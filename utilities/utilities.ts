@@ -64,3 +64,54 @@ export const getGoogleAuthErrorMessage = (error: string) => {
 export const getUserTimezone = () => {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 };
+
+
+export const getShuffledImages = (images: string[]) => {
+  const arr = [...images];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+
+export function numberToWords(num: number): string {
+  const ones = [
+    "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+    "seventeen", "eighteen", "nineteen"
+  ];
+
+  const tens = [
+    "", "", "twenty", "thirty", "forty", "fifty"
+  ];
+
+  if (num < 1 || num > 50) {
+    throw new Error("Only numbers from 1 to 50 are supported.");
+  }
+
+  if (num < 20) {
+    return ones[num]
+  }
+
+  const ten = Math.floor(num / 10);
+  const one = num % 10;
+
+  return `${tens[ten]}${one ? '-' + ones[one] : ''}`;
+}
+
+export const quizTypeFormatter = (type:string):string => {
+  switch (type) {
+    case 'MULTIPLE_CHOICE':
+      return 'Multiple Choice';
+    case 'FILL_IN_BLANK':
+      return 'Fill in the Blanks';
+    case 'TF':
+      return 'True/False';
+    case 'SA':
+      return 'Short Answer';
+    default:
+      return type;
+  }
+} 

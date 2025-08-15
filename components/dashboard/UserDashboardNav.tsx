@@ -10,7 +10,7 @@ import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
-import { useUserGoals } from "@/contexts/UserGoalsContext";
+import { useUser } from "@/contexts/UserContext";
 import Cookies from "js-cookie";
 
 const UserDashboardNavbar = ({ showLogo = false }) => {
@@ -21,7 +21,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  const { userDetails } = useUserGoals();
+  const { userDetails } = useUser();
 
   const handleLogout = () => {
     setLogoutLoading(true);
@@ -29,6 +29,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     localStorage.removeItem("userProfile");
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    localStorage.clear();
     setLoading(true);
     router.push("/login");
   };
@@ -44,10 +45,19 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: false,
     },
     {
-      name: "Lessons",
+      name: "Journeys",
       route: "/user-dashboard/lessons",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      iconPath: "/userDashboard/isJourneys.svg",
+      isActiveIconPath: "/userDashboard/isActiveJourneys.svg",
+      action: () => "",
+      useAction: false,
+      disabled: false,
+    },
+    {
+      name: "Steps",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
       disabled: false,
@@ -114,10 +124,19 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: false,
     },
     {
-      name: "Lessons",
+      name: "Journeys",
       route: "/user-dashboard/lessons",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      iconPath: "/userDashboard/isJourneys.svg",
+      isActiveIconPath: "/userDashboard/isActiveJourneys.svg",
+      action: () => "",
+      useAction: false,
+      disabled: false,
+    },
+    {
+      name: "Steps",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
       disabled: false,
@@ -216,9 +235,9 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       path: "",
     },
     {
-      name: "Listen & Practice",
+      name: "Listen with Òwe",
       icon: "/userDashboard/bag.svg",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
     {
       name: "Speech Feedback",
@@ -242,7 +261,20 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     }
   };
 
+  const mobilePremiumItemClick = (data: {
+    name?: string;
+    icon?: string;
+    path: string;
+  }) => {
+    setIsMobileMenuOpen(false);
+    setLoading(true);
+    if (!data?.path) return;
+
+    router.push(data.path);
+  };
+
   const [backgroundColor, setBackgroundColor] = useState("#162B6E");
+  const isPremiumRoute = pathname.includes("premium");
 
   useEffect(() => {
     const currentTime = new Date();
@@ -340,6 +372,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <MainDropdown
           options={dropdownOptions}
           placeholder="Go Premium"
+          color={isPremiumRoute ? "#000000" : "#ffffff"}
+          backgroundColor={isPremiumRoute ? "#FFE933" : ""}
           icon={
             <Image
               src={"/userDashboard/isPremiumImage.svg"}
@@ -431,10 +465,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                   {dropdownOptions.map((option, index) => (
                     <button
                       key={index}
-                      onClick={() => {
-                        // Handle premium option click
-                        setIsMobileMenuOpen(false);
-                      }}
+                      onClick={() => mobilePremiumItemClick(option)}
                       className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors text-[#FFFFFF]"
                     >
                       <Image

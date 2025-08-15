@@ -22,6 +22,7 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
+    localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     router.push("/login");

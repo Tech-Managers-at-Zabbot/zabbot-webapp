@@ -11,7 +11,7 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import Cookies from "js-cookie";
-// import { useUserGoals } from "@/contexts/UserGoalsContext";
+// import { useUser } from "@/contexts/UserGoalsContext";
 
 const AdminNavBar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
@@ -21,11 +21,12 @@ const AdminNavBar = ({ showLogo = false }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  // const { userDetails } = useUserGoals();
+  // const { userDetails } = useUser();
   const handleLogout = () => {
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);
     localStorage.removeItem("userProfile");
+    localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     setLoading(true);
@@ -43,10 +44,19 @@ const AdminNavBar = ({ showLogo = false }) => {
       disabled: false,
     },
     {
-      name: "Lessons",
+      name: "Journeys",
       route: "/user-dashboard/lessons",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      iconPath: "/userDashboard/isJourneys.svg",
+      isActiveIconPath: "/userDashboard/isActiveJourneys.svg",
+      action: () => "",
+      useAction: false,
+      disabled: false,
+    },
+    {
+      name: "Steps",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
       disabled: false,
@@ -100,10 +110,19 @@ const AdminNavBar = ({ showLogo = false }) => {
       disabled: false,
     },
     {
-      name: "Lessons",
+      name: "Journeys",
       route: "/user-dashboard/lessons",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
+      iconPath: "/userDashboard/isJourneys.svg",
+      isActiveIconPath: "/userDashboard/isActiveJourneys.svg",
+      action: () => "",
+      useAction: false,
+      disabled: false,
+    },
+    {
+      name: "Steps",
+      route: "/user-dashboard/steps",
+      iconPath: "/userDashboard/isSteps.svg",
+      isActiveIconPath: "/userDashboard/isStepsActive.svg",
       action: () => "",
       useAction: false,
       disabled: false,
@@ -189,9 +208,9 @@ const AdminNavBar = ({ showLogo = false }) => {
       path: "",
     },
     {
-      name: "Listen & Practice",
+      name: "Listen with Òwe",
       icon: "/userDashboard/bag.svg",
-      path: "",
+      path: "/premium/listen-with-owe",
     },
     {
       name: "Speech Feedback",
