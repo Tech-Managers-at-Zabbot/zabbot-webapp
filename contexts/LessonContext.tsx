@@ -26,7 +26,7 @@ interface Quiz {
   lessonId?: string;
   contentId?: string;
   languageId: string;
-  quizType: 'MULTIPLE_CHOICE' | 'FILL_IN_BLANK';
+  quizType: "MULTIPLE_CHOICE" | "FILL_IN_BLANK";
   instruction: string;
   question: string;
   options?: string[];
@@ -63,7 +63,12 @@ interface QuizResult {
   timestamp: string;
 }
 
-type LessonStep = 'intro' | 'content' | 'lesson-completed' | 'quiz' | 'completed';
+type LessonStep =
+  | "intro"
+  | "content"
+  | "lesson-completed"
+  | "quiz"
+  | "completed";
 
 interface LessonContextType {
   lesson: Lesson | null;
@@ -95,7 +100,11 @@ interface LessonContextType {
   previousQuiz: () => void;
   goToQuiz: (index: number) => void;
   startQuizPhase: () => void;
-  submitQuizAnswer: (quizId: string, userAnswer: string, isCorrect: boolean) => void;
+  submitQuizAnswer: (
+    quizId: string,
+    userAnswer: string,
+    isCorrect: boolean
+  ) => void;
   completeQuizPhase: () => void;
 
   // Progress
@@ -136,7 +145,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Quiz-related state
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [currentQuizIndex, setCurrentQuizIndex] = useState(-1);
-  const [currentStep, setCurrentStep] = useState<LessonStep>('intro');
+  const [currentStep, setCurrentStep] = useState<LessonStep>("intro");
   const [quizResults, setQuizResults] = useState<QuizResult[]>([]);
 
   // Local Storage Keys
@@ -164,7 +173,9 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           Math.min(contentIndex, data.contents.length - 1)
         );
         if (quizIndex !== undefined) {
-          setCurrentQuizIndex(Math.min(quizIndex, (data.lessonQuizzes || []).length - 1));
+          setCurrentQuizIndex(
+            Math.min(quizIndex, (data.lessonQuizzes || []).length - 1)
+          );
         }
         if (step) {
           setCurrentStep(step);
@@ -173,7 +184,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         // If no saved progress, start at intro state
         setCurrentContentIndex(-1);
         setCurrentQuizIndex(-1);
-        setCurrentStep('intro');
+        setCurrentStep("intro");
       }
 
       // Load saved quiz results
@@ -235,7 +246,12 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   // Save progress to localStorage and backend
   const saveProgress = useCallback(
-    async (contentIndex: number, quizIndex: number = -1, step: LessonStep, contentId?: string) => {
+    async (
+      contentIndex: number,
+      quizIndex: number = -1,
+      step: LessonStep,
+      contentId?: string
+    ) => {
       // Save to localStorage immediately
       const progressData = {
         contentIndex,
@@ -249,8 +265,10 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       // Update user course
       if (userCourse && contentId) {
         const totalItems = contents.length + quizzes.length;
-        const completedItems = Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
-        const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+        const completedItems =
+          Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
+        const progress =
+          totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
         const updatedUserCourse = {
           ...userCourse,
@@ -286,12 +304,15 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     if (currentContentIndex < contents.length - 1) {
       const newIndex = currentContentIndex + 1;
       setCurrentContentIndex(newIndex);
-      saveProgress(newIndex, currentQuizIndex, 'content', contents[newIndex]?.id);
-    } else if (currentContentIndex === contents.length - 1){
-            const newIndex = currentContentIndex + 1;
-      setCurrentContentIndex(newIndex);
-      saveProgress(newIndex, currentQuizIndex, 'content', contents[newIndex]?.id);
-      setCurrentStep('lesson-completed');
+      saveProgress(
+        newIndex,
+        currentQuizIndex,
+        "content",
+        contents[newIndex]?.id
+      );
+    } else if (currentContentIndex === contents.length - 1) {
+      setCurrentStep("lesson-completed");
+      saveProgress(contents.length, currentQuizIndex, "lesson-completed");
     } else if (quizzes.length > 0) {
       // Move to quiz phase after completing all content
       startQuizPhase();
@@ -299,14 +320,25 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       // No quizzes, complete lesson
       completeLesson();
     }
-  }, [currentContentIndex, currentQuizIndex, contents, quizzes.length, saveProgress]);
+  }, [
+    currentContentIndex,
+    currentQuizIndex,
+    contents,
+    quizzes.length,
+    saveProgress,
+  ]);
 
   const previousContent = useCallback(() => {
     if (currentContentIndex > 0) {
       const newIndex = currentContentIndex - 1;
       setCurrentContentIndex(newIndex);
-      setCurrentStep('content');
-      saveProgress(newIndex, currentQuizIndex, 'content', contents[newIndex]?.id);
+      setCurrentStep("content");
+      saveProgress(
+        newIndex,
+        currentQuizIndex,
+        "content",
+        contents[newIndex]?.id
+      );
     }
   }, [currentContentIndex, currentQuizIndex, contents, saveProgress]);
 
@@ -314,8 +346,8 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     (index: number) => {
       if (index >= 0 && index < contents.length) {
         setCurrentContentIndex(index);
-        setCurrentStep('content');
-        saveProgress(index, currentQuizIndex, 'content', contents[index]?.id);
+        setCurrentStep("content");
+        saveProgress(index, currentQuizIndex, "content", contents[index]?.id);
       }
     },
     [contents, currentQuizIndex, saveProgress]
@@ -323,9 +355,9 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   const startLesson = useCallback(() => {
     setCurrentContentIndex(0);
-    setCurrentStep('content');
+    setCurrentStep("content");
     if (contents.length > 0) {
-      saveProgress(0, currentQuizIndex, 'content', contents[0]?.id);
+      saveProgress(0, currentQuizIndex, "content", contents[0]?.id);
     }
   }, [contents, currentQuizIndex, saveProgress]);
 
@@ -334,9 +366,11 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     if (currentQuizIndex < quizzes.length - 1) {
       const newIndex = currentQuizIndex + 1;
       setCurrentQuizIndex(newIndex);
-      saveProgress(currentContentIndex, newIndex, 'quiz');
+      saveProgress(currentContentIndex, newIndex, "quiz");
     } else {
       // Completed all quizzes
+      setCurrentStep("completed");
+      saveProgress(currentContentIndex, currentQuizIndex, "completed");
       completeQuizPhase();
     }
   }, [currentQuizIndex, currentContentIndex, quizzes.length, saveProgress]);
@@ -345,12 +379,12 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     if (currentQuizIndex > 0) {
       const newIndex = currentQuizIndex - 1;
       setCurrentQuizIndex(newIndex);
-      saveProgress(currentContentIndex, newIndex, 'quiz');
+      saveProgress(currentContentIndex, newIndex, "quiz");
     } else {
       // Go back to content phase
-      setCurrentStep('content');
+      setCurrentStep("content");
       setCurrentContentIndex(contents.length - 1);
-      saveProgress(contents.length - 1, -1, 'content');
+      saveProgress(contents.length - 1, -1, "content");
     }
   }, [currentQuizIndex, currentContentIndex, contents.length, saveProgress]);
 
@@ -358,8 +392,8 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     (index: number) => {
       if (index >= 0 && index < quizzes.length) {
         setCurrentQuizIndex(index);
-        setCurrentStep('quiz');
-        saveProgress(currentContentIndex, index, 'quiz');
+        setCurrentStep("quiz");
+        saveProgress(currentContentIndex, index, "quiz");
       }
     },
     [quizzes.length, currentContentIndex, saveProgress]
@@ -368,33 +402,44 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const startQuizPhase = useCallback(() => {
     if (quizzes.length > 0) {
       setCurrentQuizIndex(0);
-      setCurrentStep('quiz');
-      saveProgress(currentContentIndex, 0, 'quiz');
+      setCurrentStep("quiz");
+      saveProgress(currentContentIndex, 0, "quiz");
+    } else {
+      // No quizzes, go straight to completion
+      setCurrentStep("completed");
+      saveProgress(currentContentIndex, -1, "completed");
     }
   }, [quizzes.length, currentContentIndex, saveProgress]);
 
-  const submitQuizAnswer = useCallback((quizId: string, userAnswer: string, isCorrect: boolean) => {
-    const quizResult: QuizResult = {
-      quizId,
-      userAnswer,
-      isCorrect,
-      timestamp: new Date().toISOString(),
-    };
+  const submitQuizAnswer = useCallback(
+    (quizId: string, userAnswer: string, isCorrect: boolean) => {
+      const quizResult: QuizResult = {
+        quizId,
+        userAnswer,
+        isCorrect,
+        timestamp: new Date().toISOString(),
+      };
 
-    setQuizResults(prev => {
-      const updated = [...prev.filter(r => r.quizId !== quizId), quizResult];
-      localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
-      return updated;
-    });
+      setQuizResults((prev) => {
+        const updated = [
+          ...prev.filter((r) => r.quizId !== quizId),
+          quizResult,
+        ];
+        localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
+        return updated;
+      });
 
-    // You can also save to backend here
-    // saveQuizResultToBackend(quizResult);
-  }, []);
+      // You can also save to backend here
+      // saveQuizResultToBackend(quizResult);
+    },
+    []
+  );
 
   const completeQuizPhase = useCallback(() => {
-    setCurrentStep('completed');
+    setCurrentStep("completed");
+    saveProgress(currentContentIndex, currentQuizIndex, "completed");
     completeLesson();
-  }, []);
+  }, [currentContentIndex, currentQuizIndex, saveProgress]);
 
   const markContentComplete = useCallback(() => {
     // You can add logic here to mark individual content as complete
@@ -404,7 +449,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   const completeLesson = useCallback(async () => {
     // Set completion state
-    setCurrentStep('completed');
+    setCurrentStep("completed");
 
     if (userCourse) {
       const completedUserCourse = {
@@ -449,28 +494,57 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   // Auto-save progress when content or quiz changes
   useEffect(() => {
-    if (currentStep === 'content' && contents.length > 0 && currentContentIndex >= 0) {
+    if (
+      currentStep === "content" &&
+      contents.length > 0 &&
+      currentContentIndex >= 0
+    ) {
       const currentContent = contents[currentContentIndex];
       if (currentContent) {
-        saveProgress(currentContentIndex, currentQuizIndex, 'content', currentContent.id);
+        saveProgress(
+          currentContentIndex,
+          currentQuizIndex,
+          "content",
+          currentContent.id
+        );
       }
-    } else if (currentStep === 'quiz' && quizzes.length > 0 && currentQuizIndex >= 0) {
-      saveProgress(currentContentIndex, currentQuizIndex, 'quiz');
+    } else if (
+      currentStep === "quiz" &&
+      quizzes.length > 0 &&
+      currentQuizIndex >= 0
+    ) {
+      saveProgress(currentContentIndex, currentQuizIndex, "quiz");
     }
-  }, [currentContentIndex, currentQuizIndex, currentStep, contents, quizzes, saveProgress]);
+  }, [
+    currentContentIndex,
+    currentQuizIndex,
+    currentStep,
+    contents,
+    quizzes,
+    saveProgress,
+  ]);
 
   // Calculated values
   const currentContent =
     currentContentIndex >= 0 ? contents[currentContentIndex] || null : null;
   const currentQuiz =
     currentQuizIndex >= 0 ? quizzes[currentQuizIndex] || null : null;
-  
+
   const totalItems = contents.length + quizzes.length;
-  const completedContentItems = Math.max(0, currentContentIndex + (currentStep === 'content' ? 1 : 0));
-  const completedQuizItems = Math.max(0, currentQuizIndex + (currentStep === 'quiz' ? 1 : 0));
-  const progressPercentage = totalItems > 0 
-    ? Math.round(((completedContentItems + completedQuizItems) / totalItems) * 100) 
-    : 0;
+  const completedContentItems = Math.max(
+    0,
+    currentContentIndex + (currentStep === "content" ? 1 : 0)
+  );
+  const completedQuizItems = Math.max(
+    0,
+    currentQuizIndex + (currentStep === "quiz" ? 1 : 0)
+  );
+  const progressPercentage =
+    totalItems > 0
+      ? Math.round(
+          ((completedContentItems + completedQuizItems) / totalItems) * 100
+        )
+      : 0;
 
   const isFirstContent = currentContentIndex === 0;
   const isLastContent = currentContentIndex === contents.length - 1;
