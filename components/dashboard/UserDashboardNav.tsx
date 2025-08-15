@@ -89,15 +89,6 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       useAction: false,
       disabled: true,
     },
-    {
-      name: "Chat With Ọ̀rẹ́",
-      route: "/user-dashboard/chat-bot",
-      iconPath: "/userDashboard/isPremiumImage.svg",
-      isActiveIconPath: "/userDashboard/isPremiumImage.svg",
-      action: () => "",
-      useAction: false,
-      disabled: false,
-    },
     ...(userDetails?.role === "admin"
       ? [
           {
@@ -169,15 +160,6 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: true,
     },
     {
-      name: "Chat with Ọ̀rẹ́",
-      route: "/user-dashboard/chat-bot",
-      iconPath: "/userDashboard/isLessons.svg",
-      isActiveIconPath: "/userDashboard/isLessonsActive.svg",
-      action: () => "",
-      useAction: false,
-      disabled: false,
-    },
-    {
       name: "Settings",
       route: "#",
       iconPath: "/userDashboard/settings.svg",
@@ -232,7 +214,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     {
       name: "Chat with Ọ̀rẹ́",
       icon: "/userDashboard/isPremiumImage.svg",
-      path: "",
+      path: "/premium/chat-with-ore",
     },
     {
       name: "Listen with Òwe",
