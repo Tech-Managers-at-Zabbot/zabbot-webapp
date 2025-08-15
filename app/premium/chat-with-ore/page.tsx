@@ -9,11 +9,8 @@ import ConversationCard from "./components/conversation-card";
 const ChatBot = () => {
   const { theme } = useTheme();
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
-  const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
-  const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [response, setResponse] = useState('');
 
   interface Message {
@@ -23,16 +20,6 @@ const ChatBot = () => {
 
   useEffect(() => {
     setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
-    // setCloudsUrl(
-    //   theme === "dark"
-    //     ? "/userDashboard/dark-clouds.svg"
-    //     : "/userDashboard/light-clouds.svg"
-    // );
-    // setLogoUrl(
-    //   theme === "dark"
-    //     ? "/general/zabbot-logo-white.svg"
-    //     : "/general/zabbot-logo-blue.svg"
-    // );
   }, [theme]);
   
   // List of possible proverbs
@@ -137,7 +124,7 @@ const ChatBot = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <div className="h-screen flex overflow-hidden" style={{ fontFamily: "Lexend", backgroundColor: backgroundColor }}>
+      <div className=" flex overflow-hidden" style={{ fontFamily: "Lexend", backgroundColor: backgroundColor }}>
 
         {/* Sidebar */}
         <aside className="w-75 bg-[#012657] text-white p-5 overflow-y-auto">
@@ -201,7 +188,7 @@ const ChatBot = () => {
                   onClick={() => handleProverbClick(proverb)}
                   key={index}
                 >
-                  <div className="bg-[#123F77] flex items-center space-x-2 p-4 rounded-md">
+                  <div className="bg-[#123F77] flex items-center space-x-2 h-full p-4 rounded-md">
                     <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M9.86086 2.86842C9.10454 0.599443 5.89514 0.599445 5.13882 2.86842C4.86016 3.70437 4.20419 4.36035 3.36823 4.639C1.09926 5.39532 1.09926 8.60472 3.36823 9.36104C4.20419 9.63969 4.86016 10.2957 5.13882 11.1316C5.89514 13.4006 9.10454 13.4006 9.86086 11.1316C10.1395 10.2957 10.7955 9.63969 11.6314 9.36104C13.9004 8.60472 13.9004 5.39532 11.6314 4.639C10.7955 4.36035 10.1395 3.70437 9.86086 2.86842ZM7.35241 3.60628C7.3712 3.5499 7.39311 3.53322 7.40448 3.52553C7.42306 3.51296 7.45599 3.50002 7.49984 3.50002C7.54369 3.50002 7.57662 3.51296 7.5952 3.52553C7.60656 3.53322 7.62847 3.5499 7.64726 3.60628C8.15816 5.13898 9.36088 6.34169 10.8936 6.85259C10.95 6.87139 10.9666 6.89329 10.9743 6.90466C10.9869 6.92324 10.9998 6.95617 10.9998 7.00002C10.9998 7.04387 10.9869 7.0768 10.9743 7.09538C10.9666 7.10675 10.95 7.12866 10.8936 7.14745C9.36088 7.65835 8.15816 8.86106 7.64726 10.3938C7.62847 10.4501 7.60656 10.4668 7.5952 10.4745C7.57662 10.4871 7.54369 10.5 7.49984 10.5C7.45599 10.5 7.42306 10.4871 7.40448 10.4745C7.39311 10.4668 7.3712 10.4501 7.35241 10.3938C6.84151 8.86106 5.6388 7.65835 4.1061 7.14745C4.04972 7.12866 4.03304 7.10675 4.02535 7.09538C4.01277 7.0768 3.99984 7.04387 3.99984 7.00002C3.99984 6.95617 4.01277 6.92324 4.02535 6.90466C4.03304 6.89329 4.04972 6.87139 4.1061 6.85259C5.6388 6.34169 6.84151 5.13898 7.35241 3.60628Z" fill="#77C2E6"/>
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M21.3015 10.5464C20.2439 7.37345 15.7558 7.37345 14.6981 10.5464C14.1234 12.2706 12.7704 13.6236 11.0462 14.1983C7.87326 15.256 7.87326 19.7441 11.0462 20.8017C12.7704 21.3764 14.1234 22.7294 14.6981 24.4536C15.7558 27.6266 20.2439 27.6266 21.3015 24.4536C21.8763 22.7294 23.2292 21.3764 24.9534 20.8017C28.1264 19.7441 28.1264 15.256 24.9535 14.1983C23.2292 13.6236 21.8763 12.2706 21.3015 10.5464ZM16.9117 11.2843C17.2603 10.2386 18.7394 10.2386 19.0879 11.2843C19.8949 13.7052 21.7946 15.6049 24.2156 16.4119C25.2613 16.7605 25.2613 18.2396 24.2156 18.5881C21.7946 19.3951 19.8949 21.2948 19.0879 23.7158C18.7394 24.7614 17.2603 24.7614 16.9117 23.7158C16.1048 21.2948 14.205 19.3951 11.7841 18.5881C10.7384 18.2396 10.7384 16.7605 11.7841 16.4119C14.205 15.6049 16.1048 13.7052 16.9117 11.2843Z" fill="#77C2E6"/>
