@@ -7,12 +7,12 @@ import {
 import { completeUserDailyGoal, getUserCompletedDailyGoalCount, getUserDailyGoal } from './api';
 
 
-export function useGetUserDailyGoals(userId: string, languageId:string) {
+export function useGetUserDailyGoals(languageId:string) {
 
   return useQuery({
     queryKey: ['getUserDailyGoals'],
-    queryFn: () => getUserDailyGoal(userId, languageId),
-    enabled: !!userId,
+    queryFn: () => getUserDailyGoal(languageId),
+    enabled: !!languageId,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
