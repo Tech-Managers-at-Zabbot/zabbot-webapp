@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import QuizSuccessModal from "./QuizSuccessModal";
@@ -43,10 +43,6 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [completeLoading, setCompleteLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log("QuizRenderer mounted with quiz:", quiz);
-  }, []);
 
   if (!quiz) return null;
 

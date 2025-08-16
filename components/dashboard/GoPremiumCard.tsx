@@ -18,7 +18,7 @@ const GoPremiumCard: React.FC<GoPremiumProps> = ({onClose}) => {
                 </button>
             </div>
             <div className='text-[#B54708] text-sm sm:text-base leading-relaxed'>
-                <span className='hidden sm:inline'>Integration with full Yorùbá Dictionary.</span>
+                <span className=''>Integration with full Yorùbá Dictionary.</span>
                 {/* <span className='sm:hidden'>Unlock the Full Yorùbá Experience. Upgrade now!</span> */}
             </div>
         </section>
