@@ -13,6 +13,10 @@ const UserDashboardFooter = () => {
       style={{ fontFamily: "Lexend" }}
     >
       <div className="flex-shrink-0 flex flex-col justify-center items-center rounded-full">
+        
+        {/* <p className="flex text-center text-sm sm:text-base md:text-lg lg:text-xl text-white">
+          © 2025 Zabbot. All rights reserved.
+        </p> */}
         <div className="relative w-[174px] p-0 h-[150px]">
           <Image
             src="/userDashboard/footer-grandma-owl.png"
@@ -23,10 +27,6 @@ const UserDashboardFooter = () => {
           />
         </div>
       </div>
-      {/* 
-              <p className="flex text-center text-sm sm:text-base md:text-lg lg:text-xl text-white">
-            © 2025 Zabbot. All rights reserved.
-          </p> */}
     </footer>
   );
 };
