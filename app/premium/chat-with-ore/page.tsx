@@ -4,7 +4,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeProvider";
-import ConversationCard from "./components/conversation-card";
+import ConversationCard from "../../../components/premium/chat-with-ore/conversation-card";
+
 
 const ChatBot = () => {
   const { theme } = useTheme();
