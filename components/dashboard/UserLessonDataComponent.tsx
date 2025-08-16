@@ -27,7 +27,6 @@ export const LessonProgressCard = ({
   const { setLoading } = useLoading();
 
 
-
   return (
     <div
   className={`bg-white flex relative transition-all duration-300 gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0 ${
@@ -97,7 +96,7 @@ export const LessonProgressCard = ({
           <div className="w-full">
             <LinearProgress
               className=""
-              value={data.userProgress}
+              value={data?.userProgress ?? 0}
               variant="determinate"
               sx={{
                 height: 8,
