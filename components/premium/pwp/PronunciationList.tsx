@@ -15,7 +15,7 @@ const PronunciationList = ({ setSelectedItem, selectedItem, data, isLoading }: P
       <div
         key={item.id}
         onClick={() => setSelectedItem(item.id)}
-        className={`p-[8px] flex flex-col rounded-sm cursor-pointer text-shadow-white ${selectedItem === item.id ? '' : 'hover:text-gray-600 min-w-[220px]'
+        className={`p-[8px] min-w-[200px] flex flex-col rounded-sm cursor-pointer text-shadow-white ${selectedItem === item.id ? '' : 'hover:text-gray-600'
           }`} style={{ justifyContent: 'space-between', backgroundColor: selectedItem === item.id ? '#0098DE' : '#123F77', border: '2px solid #0098DE', borderRadius: '4px', color: '#FFFFFF', margin: '8px 0' }}
       >
         <div className="flex text-2xl justify-between">
