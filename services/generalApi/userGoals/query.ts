@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDailyWord } from "./api";
 
-export function useGetDailyWord(languageId:string, userId?:string) {
+export function useGetDailyWord(languageId:string) {
 
   return useQuery({
     queryKey: ['getDailyWord', languageId],
-    queryFn: () => getDailyWord(languageId, userId),
+    queryFn: () => getDailyWord(languageId),
     enabled: !!languageId,
     refetchOnMount: true,
     refetchOnWindowFocus: false,

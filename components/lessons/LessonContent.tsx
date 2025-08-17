@@ -23,6 +23,7 @@ const LessonContent = () => {
     nextQuiz,
     previousContent,
     previousQuiz,
+    startQuizPhase,
     // completeLesson,
     startLesson,
     // currentContentIndex,
@@ -99,10 +100,16 @@ const LessonContent = () => {
         </InAppButton>
 
         <InAppButton
-          onClick={nextContent}
-          background={`#5A2E10`}
-          disabledColor="#C98F5DCC"
-        >
+  onClick={() => {
+    if (quizzes.length > 0) {
+      startQuizPhase();
+    } else {
+      navigateToCompletion();
+    }
+  }}
+  background={`#5A2E10`}
+  disabledColor="#C98F5DCC"
+>
           <div>
               Next →
           </div>

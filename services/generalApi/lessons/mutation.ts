@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addQuiz,createCourseWithLessons, getCourseLessons, getCourseQuizzes, getCourses, getCourseWithLessons, getLanguageContents, getLanguageLessons, getLessonWithContents } from "./api";
+import { addQuiz,createCourseWithLessons, getCourse, getCourseLessons, getCourseQuizzes, getCourses, getCourseWithLessons, getLanguageContents, getLanguageLessons, getLessonWithContents } from "./api";
 
 
 
@@ -142,5 +142,15 @@ export function useCreateQuiz() {
     onError: (error: any) => {
       console.error('Error Creating Quiz', error);
     },
+  });
+}
+
+export function useGetCourseDetails(courseId: string, projections?: string) {
+  return useQuery({
+    queryKey: ['getCourseDetails', courseId, projections],
+    queryFn: () => getCourse(courseId, projections),
+    refetchOnMount: true,
+    enabled: !!courseId,
+    refetchOnWindowFocus: false,
   });
 }

@@ -34,8 +34,15 @@ export async function getLanguageLessons(languageId?: string) {
   return response.data;
 }
 
-export async function getCourse(id: string) {
-  const response = await axiosInstance.get(`/courses/${id}`);
+export async function getCourse(id: string, projections?: string) {
+  const params: any = {};
+  if (projections && projections.length > 0) {
+    params.projections = projections;
+  }
+  const response = await axiosInstance.get(`/lessons/courses/single-course/${id}`, {
+    params: Object.keys(params).length > 0 ? params : undefined
+  });
+  
   return response.data;
 }
 

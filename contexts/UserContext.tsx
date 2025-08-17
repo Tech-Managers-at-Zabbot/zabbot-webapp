@@ -42,7 +42,7 @@ export const UserProvider = ({
     data: userGoal,
     isLoading: goalLoading,
     refetch: refetchGoals,
-  } = useGetUserDailyGoals(userDetails?.id, userDetails?.languageId);
+  } = useGetUserDailyGoals(userDetails?.languageId);
 
   const { mutate: completeUserDailyGoal, isPending: isCompletingDailyGoal } =
     useCompleteUserDailyGoal();

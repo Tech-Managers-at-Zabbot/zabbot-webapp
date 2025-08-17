@@ -29,6 +29,8 @@ const AllCourseLessons = () => {
 
   const courseLessons = coursesWithLessons?.data?.lessons;
 
+  const course = coursesWithLessons?.data?.course;
+
   const apiThumbnails = ["/userDashboard/say-hello.svg"];
 
   const allStepsWithThumbnails = Array.isArray(courseLessons)
@@ -114,12 +116,14 @@ const AllCourseLessons = () => {
           <span className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]"
           style={{ color: theme === "dark" ? "white" : "#162B6E" }}
           >
-            Immersing you in Yorùbá, one step at a time
+            {/* Immersing you in Yorùbá, one step at a time */}
+            {lessonsLoading ? "Loading course details..." : course?.title || "Course Title"}
           </span>
           <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
           style={{ color: "#207EC5" }}
           >
-            Building fluency through culture, sound, and everyday moments.
+            {/* Building fluency through culture, sound, and everyday moments. */}
+            {lessonsLoading ? null : course?.description || "Course Description"}
           </span>
         </section>
 

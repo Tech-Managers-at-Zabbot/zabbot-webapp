@@ -48,3 +48,14 @@ body {
   border-image-source: linear-gradient(180deg, #03A7F3 0%, #005278 100%);
   border-image-slice: 1;
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
