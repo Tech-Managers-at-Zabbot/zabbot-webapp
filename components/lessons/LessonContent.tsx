@@ -37,7 +37,11 @@ const LessonContent = () => {
   } = useLessonContext();
 
   // Handle quiz submission
-  const handleQuizSubmit = (quizId: string, userAnswer: string, isCorrect: boolean) => {
+  const handleQuizSubmit = (
+    quizId: string,
+    userAnswer: string,
+    isCorrect: boolean
+  ) => {
     submitQuizAnswer(quizId, userAnswer, isCorrect);
   };
 
@@ -49,7 +53,10 @@ const LessonContent = () => {
     return (
       <div className="bg-[#fef7d0] min-h-screen text-[black]">
         <div className="flex flex-col items-center justify-center pt-10">
-          <EmptyStateCard title="No Data" subtitle="Lesson not found, please try again" />
+          <EmptyStateCard
+            title="No Data"
+            subtitle="Lesson not found, please try again"
+          />
         </div>
       </div>
     );
@@ -58,7 +65,7 @@ const LessonContent = () => {
   // Determine what to render based on current step
   const renderContent = () => {
     switch (currentStep) {
-      case 'intro':
+      case "intro":
         return (
           <LessonIntro
             lesson={lesson}
@@ -67,7 +74,7 @@ const LessonContent = () => {
           />
         );
 
-      case 'content':
+      case "content":
         return (
           <ContentRenderer
             content={currentContent}
@@ -80,45 +87,49 @@ const LessonContent = () => {
           />
         );
 
+      case "lesson-completed":
+        return (
+          <div
+            style={{ fontFamily: "Lexend" }}
+            className="w-full flex flex-col items-center justify-center gap-8 md:gap-12 lg:gap-12 px-4 md:px-6 py-8"
+          >
+            <section className="items-center justify-center">
+              <div className="text-[20px] md:text-[36px] text-center font-medium text-[#F15B29] leading-[150%]">
+                End of Steps! Practice time.
+              </div>
+            </section>
+            <section className="mt-6 w-full flex items-center justify-center">
+              <LessonCompleteComponent />
+            </section>
+            <section className="z-10 mt-6 flex-col md:flex-row gap-2 md:gap-0 flex w-full max-w-[800px] justify-between items-center">
+              <InAppButton
+                onClick={previousContent}
+                disabledColor="#C98F5DCC"
+                background={`#5A2E10`}
+              >
+                <div className={`px-6 py-3 z-10 rounded-lg font-medium`}>
+                  ← Previous
+                </div>
+              </InAppButton>
 
-      case 'lesson-completed': 
-      return(
-        <div style={{ fontFamily: "Lexend" }} className="w-full flex flex-col items-center justify-center gap-8 md:gap-12 lg:gap-12 px-4 md:px-6 py-8">
-          <section className="items-center justify-center">
-            <div className="text-[20px] md:text-[36px] text-center font-medium text-[#F15B29] leading-[150%]">End of Steps! Practice time.</div>
-          </section>
-          <section className="mt-6 w-full flex items-center justify-center">
-          <LessonCompleteComponent />
-          </section>
-          <section className="z-10 mt-6 flex-col md:flex-row gap-2 md:gap-0 flex w-full max-w-[800px] justify-between items-center">
-          <InAppButton
-          onClick={previousContent}
-          disabledColor="#C98F5DCC"
-          background={`#5A2E10`}
-        >
-          <div className={`px-6 py-3 z-10 rounded-lg font-medium`}>← Previous</div>
-        </InAppButton>
-
-        <InAppButton
-  onClick={() => {
-    if (quizzes.length > 0) {
-      startQuizPhase();
-    } else {
-      navigateToCompletion();
-    }
-  }}
-  background={`#5A2E10`}
-  disabledColor="#C98F5DCC"
->
-          <div>
-              Next →
+              <InAppButton
+                onClick={() => {
+                  if (quizzes.length > 0) {
+                    startQuizPhase();
+                  } else {
+                    navigateToCompletion();
+                  }
+                }}
+                background={`#5A2E10`}
+                disabledColor="#C98F5DCC"
+              >
+                <div>Next →</div>
+              </InAppButton>
+            </section>
           </div>
-        </InAppButton>
-          </section>
-        </div>
-      )
+        );
 
-      case 'quiz':
+      case "quiz":
         return (
           <QuizRenderer
             quiz={currentQuiz}
@@ -132,7 +143,7 @@ const LessonContent = () => {
           />
         );
 
-      case 'completed':
+      case "completed":
         // You can create a LessonCompleted component or navigate directly
         return (
           <div className="text-center">
