@@ -9,7 +9,7 @@ export default function MobileHeader() {
 
   return (
     <>
-      <header className="md:hidden bg-gray-800 text-white p-4 w-full flex justify-between items-center sticky top-0 z-30">
+      <header className="md:hidden bg-[#012657] text-white p-4 w-full flex justify-between items-center sticky top-0 z-30">
         <div className="relative h-10 w-30 lg:h-[77px] lg:w-[270px]">
           <Image
             src={"/general/zabbot-logo-white.svg"}

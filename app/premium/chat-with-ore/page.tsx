@@ -98,24 +98,6 @@ const ChatBot = () => {
     }
   };
 
-  const cardData = [
-    {
-      id: 1,
-      title: "What is a dog in Yoruba?",
-      date: "Yesterday"
-    },
-    {
-      id: 2,
-      title: "How to say 'hello' in French",
-      date: "2 days ago"
-    },
-    {
-      id: 3,
-      title: "What are the components of a Next.js app?",
-      date: "Last week"
-    }
-  ];
-
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -140,10 +122,10 @@ const ChatBot = () => {
             </button> */}
 
             {/* Cards */}
-            <div className="grid grid-cols-2 gap-4 mb-6 mt-5">
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-5">
               {randomProverbs.map((proverb, index) => (
-                <div className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5 cursor-pointer"
+                <div 
+                  className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5 cursor-pointer"
                   onClick={() => handleProverbClick(proverb)}
                   key={index}
                 >
@@ -156,7 +138,6 @@ const ChatBot = () => {
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
 
