@@ -4,7 +4,6 @@ import { FiSearch } from 'react-icons/fi';
 import Head from "next/head";
 import Image from 'next/image';
 import { defaultDiacriticText } from './constants'
-import KeymanToggleLazy from "@/components/KeymanToggleLazy";
 
 const ListenWithOwe = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -144,7 +143,6 @@ const ListenWithOwe = () => {
                 
             </Head>
             <main className="flex flex-col bg-[#002557] relative p-10">
-                <KeymanToggleLazy />
                 <section className="w-full bg-[#002557]">
                     <div className="flex">
                         {/* Left Pane */}
@@ -237,7 +235,7 @@ const ListenWithOwe = () => {
                                             value={inputText}
                                             onInput={(e) => setInputText((e.target as HTMLTextAreaElement).value)}
                                             placeholder="Enter Yorùbá text..."
-                                            className="w-full border rounded p-2 bg-white text-black keyman-enabled"
+                                            className="w-full border rounded p-2 bg-white text-black"
                                             style={{ alignContent: 'center' }}
                                             name="inputText"
                                         /></div>
