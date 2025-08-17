@@ -1,10 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
+import { usePageLanguage } from "@/contexts/LanguageContext";
 import React, { useState } from "react";
 
 const ProverbsComponent = () => {
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
+
+  const { getPageText } =
+        usePageLanguage("userDashboard");
+
   return (
     <section
       className="relative w-full items-center justify-center flex min-h-[200px] sm:min-h-[250px] md:min-h-[280px] lg:min-h-[320px] bg-[url('/userDashboard/proverbs-history-card.png')] bg-cover bg-center rounded-lg md:rounded-xl overflow-hidden"
@@ -16,9 +21,9 @@ const ProverbsComponent = () => {
     >
       <div className="flex-1 absolute gap-2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:top-40 lg:left-20 xl:top-40 xl:left-25 2xl:left-45 lg:transform-none flex justify-center items-center flex-col w-full">
         <div className="font-bold text-center text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight text-white">
-          <h3>Proverbs,</h3>
-          <h3>History &</h3>
-          <h3>Humor</h3>
+          <h3>{getPageText("proverbs")},</h3>
+          <h3>{getPageText("history")} {getPageText("and")}</h3>
+          <h3>{getPageText("humour")}</h3>
         </div>
         <div className="flex justify-center items-center mt-2">
           <button
@@ -27,7 +32,7 @@ const ProverbsComponent = () => {
             onMouseLeave={handleMouseLeave}
             disabled={isHovered}
           >
-            {isHovered ? "Coming Soon" : "Learn More"}
+            {isHovered ? getPageText("coming_soon") : getPageText("learn_more")}
           </button>
         </div>
       </div>
@@ -47,6 +52,8 @@ const ConsonantComponent = () => {
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
+    const { getPageText } =
+        usePageLanguage("userDashboard");
   return (
     <section
       className="relative w-full flex-col min-h-[200px] sm:min-h-[250px] md:min-h-[280px] lg:min-h-[320px] justify-between items-center flex bg-[#FFFF79] rounded-lg md:rounded-xl overflow-hidden"
@@ -58,8 +65,8 @@ const ConsonantComponent = () => {
     >
       <div className="flex flex-col justify-center items-center text-center px-4 sm:px-6">
         <div className="text-[#5DA0D7] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight">
-          <h3>Consonant</h3>
-          <h3>Toolkit</h3>
+          <h3>{getPageText("consonant")}</h3>
+          <h3>{getPageText("toolkit")}</h3>
         </div>
         <div className="flex justify-center items-center mt-2 sm:mt-3">
           <button
@@ -68,7 +75,7 @@ const ConsonantComponent = () => {
             onMouseLeave={handleMouseLeave}
             disabled={isHovered}
           >
-            {isHovered ? "Coming Soon" : "Learn More"}
+            {isHovered ? getPageText("coming_soon") : getPageText("learn_more")}
           </button>
         </div>
       </div>
@@ -87,6 +94,10 @@ const InviteFriendsComponent = () => {
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
+
+   const { getPageText } =
+        usePageLanguage("userDashboard");
+
   return (
     <section
       className="relative w-full flex justify-around md:justify-between min-h-[200px] sm:min-h-[250px] md:min-h-[280px] lg:min-h-[320px] bg-[#60C6A0] rounded-lg md:rounded-xl overflow-hidden"
@@ -98,13 +109,13 @@ const InviteFriendsComponent = () => {
     >
       <div className="flex flex-1 flex-col pl-4 sm:pl-6 md:pl-8 lg:pl-6 w-full max-w-1/2 items-start justify-center py-4 sm:py-6 gap-3 sm:gap-4 md:gap-5">
         <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
-          <div className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-white">
-            <h2>Invite</h2>
-            <h2>Friends</h2>
+          <div className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight text-white">
+            <h2>{getPageText("invite")}</h2>
+            <h2>{getPageText("friends")}</h2>
           </div>
 
           <div className="font-bold text-sm sm:text-base md:text-lg lg:text-xl leading-tight text-white">
-            <h2>Win great prizes!</h2>
+            <h2>{getPageText("win_prizes")}</h2>
           </div>
         </div>
 
@@ -115,7 +126,7 @@ const InviteFriendsComponent = () => {
             onMouseLeave={handleMouseLeave}
             disabled={isHovered}
           >
-            {isHovered ? "Coming Soon" : "Get the link"}
+            {isHovered ? getPageText("coming_soon") : getPageText("get_link")}
           </button>
         </div>
       </div>

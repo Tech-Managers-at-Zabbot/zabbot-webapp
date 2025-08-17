@@ -5,10 +5,14 @@ import { FaSlack } from "react-icons/fa";
 import { useTheme } from "@/contexts/ThemeProvider";
 import Link from "next/link";
 import { useLoading } from "@/contexts/LoadingProvider";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const GetInTouch = ({ isDark }: { isDark?: boolean }) => {
   const { theme } = useTheme();
   const { setLoading } = useLoading();
+
+  const { getPageText } =
+        usePageLanguage("userDashboard");
 
   return (
     <div
@@ -22,14 +26,14 @@ const GetInTouch = ({ isDark }: { isDark?: boolean }) => {
               theme === "dark" || isDark ? "text-[#F0F0F0]" : "text-[#343434]"
             } leading-[125%] whitespace-nowrap flex-shrink-0`}
           >
-            Copyright © 2025. All Rights Reserved
+            {getPageText("copyright")}
           </div>
           <div
             className={`font-medium text-[14px] ${
               theme === "dark" || isDark ? "text-[#F0F0F0]" : "text-[#343434]"
             } leading-[125%] whitespace-nowrap flex-shrink-0`}
           >
-            Zabbot® is a registered trademark of Zabbot LLC. 
+            {getPageText("trademark")}
           </div>
           <div
             className={`font-medium text-[16px] ${
@@ -37,11 +41,11 @@ const GetInTouch = ({ isDark }: { isDark?: boolean }) => {
             } leading-[125%] whitespace-nowrap flex-shrink-0`}
           >
             <Link onClick={() => setLoading(true)} href="/terms-of-service">
-              <span className="underline">Terms</span>
+              <span className="underline">{getPageText("terms")}</span>
             </Link>
              · 
             <Link onClick={() => setLoading(true)} href="/terms-of-service">
-              <span className="underline">Privacy</span>
+              <span className="underline">{getPageText("privacy")}</span>
             </Link>
           </div>
         </section>
@@ -52,7 +56,7 @@ const GetInTouch = ({ isDark }: { isDark?: boolean }) => {
               theme === "dark" || isDark ? "text-[#F0F0F0]" : "text-[#343434]"
             } leading-[100%] whitespace-nowrap flex-shrink-0`}
           >
-            Get in touch
+            {getPageText("get_in_touch")}
           </div>
 
           <div className="flex justify-center items-center gap-6">
