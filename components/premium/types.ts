@@ -4,6 +4,7 @@ export interface PronunciationProps {
     yorubaWord: string;
     femaleVoice: string;
     maleVoice: string;
+    tone: string;
   }
 
   export interface PronunciationListProps {
