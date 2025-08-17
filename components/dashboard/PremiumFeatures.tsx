@@ -3,7 +3,7 @@ import InAppButton from "../InAppButton";
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 
-const PremiumFeaturesOre = () => {
+const PremiumFeaturesOre = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -21,7 +21,7 @@ const PremiumFeaturesOre = () => {
                 Chat with Ọ̀rẹ
               </h3>
               <p 
-                className="text-sm sm:text-sm md:text-base font-normal leading-relaxed break-words"
+                className="text-sm sm:text-sm md:text-base font-normal leading-relaxed break-words max-w-[280px]"
                 style={{color: '#2E2A2A'}}
               >
                 Ai powered conversation to translate and chat.
@@ -38,6 +38,7 @@ const PremiumFeaturesOre = () => {
           paddingRight="24px"
           borderRadius="35.13px"
           width=""
+          onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
             Get Started
@@ -65,7 +66,7 @@ const PremiumFeaturesOre = () => {
   );
 };
 
-const PremiumFeaturesPara = () => {
+const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -94,6 +95,7 @@ const PremiumFeaturesPara = () => {
           paddingRight="16px"
           borderRadius="35.13px"
           width=""
+          onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
             Get Started
@@ -184,8 +186,8 @@ const PremiumFeaturesComponents = () => {
   }
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 sm:gap-6 transition-all duration-300 ease-in-out">
-      <PremiumFeaturesOre />
-      <PremiumFeaturesPara />
+      <PremiumFeaturesOre handleClick={() => handlePronounceClick('/premium/chat-with-ore')} />
+      <PremiumFeaturesPara handleClick={() => handlePronounceClick('/premium/pronounce-with-para')} />
       <PremiumFeaturesOwe handleClick={() => handlePronounceClick('/premium/listen-with-owe')}/>
     </div>
   );

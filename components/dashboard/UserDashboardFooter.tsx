@@ -2,13 +2,13 @@ import React from "react";
 import Image from "next/image";
 import { useTheme } from "@/contexts/ThemeProvider";
 
-const UserDashboardFooter = () => {
+const UserDashboardFooter = ({isDark}: {isDark?: boolean}) => {
   const { theme } = useTheme();
 
   return (
     <footer
       className={`bg-[url('/userDashboard/footer.svg')] m-0 ${
-        theme === "dark" ? "bg-[#012657]" : "bg-[#dff9fb]"
+        theme === "dark" || isDark ? "bg-[#012657]" : "bg-[#dff9fb]"
       } bg-cover bg-stretch min-h-[152px]`}
       style={{ fontFamily: "Lexend" }}
     >
