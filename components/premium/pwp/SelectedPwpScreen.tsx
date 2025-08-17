@@ -1,12 +1,18 @@
 import React from 'react';
 import Image from 'next/image';
 import { PronunciationProps } from '../types';
+
+import { usePronunciationFeedback } from '@/services/generalApi/pronounciations/mutation';
+
 const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
     const [speaking, setSpeaking] = React.useState(false);
     const [isRecording, setIsRecording] = React.useState(false);
     const [audioURL, setAudioURL] = React.useState<string | null>(null);
     const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
     const chunks = React.useRef<Blob[]>([]);
+
+    const { mutateAsync: getPronunciationFeedback, isPending: getFeedbackLoading } =
+        usePronunciationFeedback();
 
     const handleListen = async (audioFile: string | undefined) => {
         if (!audioFile) {
@@ -52,17 +58,18 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                 }
             };
 
-            mediaRecorder.onstop = () => {
+            mediaRecorder.onstop = async () => {
                 const blob = new Blob(chunks.current, { type: "audio/webm" });
                 chunks.current = [];
                 const url = URL.createObjectURL(blob);
                 setAudioURL(url);
-
-                // Optional: download file automatically
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "recording.webm";
-                a.click();
+    
+                try {
+                    await getPronunciationFeedback({ id: data.id, file: blob });
+                    console.log("✅ Feedback uploaded successfully");
+                } catch (error) {
+                    console.error("❌ Upload failed:", error);
+                }
             };
 
             mediaRecorder.start();
@@ -95,7 +102,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                         disabled={speaking}
                         className="bg-[#42C2FE] cursor-pointer flex justify-center text-white px-4 py-2 mt-3 rounded hover:bg-[#42C2FE]-500 min-w-[175px]"
                     > <Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15} className='mr-4' />
-                        {speaking ? 'Listening...' : 'Listen'}
+                        {!getFeedbackLoading && speaking ? 'Listening...' : 'Listen'}
                     </button>
 
                     <button
