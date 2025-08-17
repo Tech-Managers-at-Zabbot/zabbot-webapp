@@ -145,10 +145,10 @@ const ListenWithOwe = () => {
             </Head>
             <main className="flex flex-col bg-[#002557] relative p-10">
                 <KeymanToggleLazy />
-                <section className="w-full">
+                <section className="w-full bg-[#002557]">
                     <div className="flex">
                         {/* Left Pane */}
-                        <div className="w-1/3 max-w-100 border-r p-2 pr-20 bg-[#002557] text-white" style={{
+                        <div className="w-1/4 max-w-80 border-r p-2 pr-20 bg-[#002557] text-white" style={{
                             fontFamily: "Lexend", fontWeight: 400, textAlign: "left"
                         }}>
                             <div className="mb-4">
@@ -295,7 +295,7 @@ const ListenWithOwe = () => {
                                             onChange={(e) => setSelectedVoice(e.target.value)}
                                             className="border p-1 rounded text-white"
                                         >
-                                            <option value="sade">Sade</option>
+                                            <option value="sade">Ṣade</option>
                                             <option value="femi">Fẹmi</option>
                                             <option value="funmi">Fúnmi</option>
                                             <option value="segun">Ṣẹgun</option>

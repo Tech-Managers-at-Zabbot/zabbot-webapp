@@ -65,7 +65,7 @@ const PremiumFeaturesOre = () => {
   );
 };
 
-const PremiumFeaturesPara = () => {
+const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -94,6 +94,7 @@ const PremiumFeaturesPara = () => {
           paddingRight="16px"
           borderRadius="35.13px"
           width=""
+          onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
             Get Started
@@ -185,7 +186,7 @@ const PremiumFeaturesComponents = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 sm:gap-6 transition-all duration-300 ease-in-out">
       <PremiumFeaturesOre />
-      <PremiumFeaturesPara />
+      <PremiumFeaturesPara handleClick={() => handlePronounceClick('/premium/pronounce-with-para')} />
       <PremiumFeaturesOwe handleClick={() => handlePronounceClick('/premium/listen-with-owe')}/>
     </div>
   );

@@ -224,7 +224,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     {
       name: "Speech Feedback",
       icon: "/userDashboard/dropdownProfile.svg",
-      path: "",
+      path: "/premium/pronounce-with-para",
     },
   ];
 
