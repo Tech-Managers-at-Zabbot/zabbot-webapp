@@ -192,15 +192,6 @@ const ListenWithOwe = () => {
                                                         <span>Delete</span>
                                                     </div>
 
-                                                    <div className="flex items-center gap-1 cursor-pointer hover:text-green-500">
-                                                        <Image
-                                                            src="/general/archive-icon.svg"
-                                                            alt="archive"
-                                                            width={16}
-                                                            height={16}
-                                                        />
-                                                        <span>Archive</span>
-                                                    </div>
                                                 </div>
                                             )}
                                         </div>

@@ -228,13 +228,6 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
   ];
 
-  // const getCurrentPageName = () => {
-  //   const currentItem = userDashboardDetails.find(
-  //     (item) => item.route === pathname
-  //   );
-  //   return currentItem ? currentItem.name : "Menu";
-  // };
-
   const handleMenuItemClick = (route: string) => {
     if (route !== "#" && pathname !== route) {
       router.push(route);
@@ -387,22 +380,6 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-            {/* <span>{getCurrentPageName()}</span> */}
-            {/* <svg
-              className={`w-4 h-4 transition-transform ${
-                isMobileMenuOpen ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg> */}
           </button>
 
           {/* Mobile Dropdown Menu */}

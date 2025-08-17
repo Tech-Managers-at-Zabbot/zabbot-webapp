@@ -131,19 +131,7 @@ const ChatBot = () => {
 
         {/* Sidebar */}
         <aside className="w-75 bg-[#012657] text-white p-5 overflow-y-auto">
-          {/* <h2 className="text-xl font-semibold mb-4 mt-10">Names</h2> */}
-        
-          <div className="flex items-center">
-            <div className="relative h-10 w-30 lg:h-[77px] lg:w-[273px]">
-              <Image
-                src={"/general/zabbot-logo-white.svg"}
-                alt="Zabbot Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
+         
           <button className="w-full bg-blue-500 mb-5 mt-10 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ New Chat</button>
           <div className="relative mb-10">
             <input type="text" className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Search..."/>

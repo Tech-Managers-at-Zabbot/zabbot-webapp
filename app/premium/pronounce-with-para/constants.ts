@@ -1,1 +1,0 @@
-export const defaultDiacriticText = "Text with tone marks (diacritics) will be displayed here.";
