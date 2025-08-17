@@ -6,7 +6,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeProvider";
-import ConversationCard from "../../../components/premium/chat-with-ore/conversation-card";
+import MobileHeader from '../../../components/premium/chat-with-ore/mobile-header'
 
 
 const ChatBot = () => {
@@ -118,44 +118,12 @@ const ChatBot = () => {
 
 
   return (
-    <div className="">
-      <Head>
-        <title>Chat Bot</title>
-        <meta
-          name="chat with ore"
-          content="Join users from all over the world and immerse yourself in language & culture"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Mobile header (only shows on small screens) */}
+      <MobileHeader />
+      
+      {/* Main content area */}
       <div className=" flex overflow-hidden" style={{ fontFamily: "Lexend", backgroundColor: backgroundColor }}>
-
-        {/* Sidebar */}
-        <aside className="w-75 bg-[#012657] text-white p-5 overflow-y-auto">
-         
-          <button className="w-full bg-blue-500 mb-5 mt-10 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ New Chat</button>
-          <div className="relative mb-10">
-            <input type="text" className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Search..."/>
-            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-          </div>
-
-          <div className="flex items-center mb-5">
-            <p className="mr-5 text-lg font-medium text-white-800">
-              Recent Conversations
-            </p>
-          </div>
-
-          <hr></hr>
-          
-          {cardData.map(item => (
-            <ConversationCard 
-              key={item.id} 
-              title={item.title} 
-              date={item.date} 
-            />
-          ))}
-        </aside>
 
         {/* Main Content */}
         <main className="flex-1 bg-[#04326B] overflow-y-auto p-6">
@@ -213,7 +181,7 @@ const ChatBot = () => {
           </div>
 
           {/* Input box */}
-          <div className="flex items-center p-4 bg-transparent border border-blue-500 rounded-lg mt-30">
+          <div className="flex items-center p-4 border border-blue-500 rounded-lg mt-30">
 
             <div className="flex-shrink-0">
               <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -230,10 +198,9 @@ const ChatBot = () => {
               onChange={(e) => setInputValue(e.target.value)}
             />
             
-            <button className="flex-shrink-0" onClick={sendMessage} disabled={loading}>
-              <svg className="w-6 h-6 text-white-500" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <title>Send icon</title>
-                <path fill="currentColor" d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56-.72 0-.6-.27-.84-.95L6.3 13.7l-5.45-1.7c-1.18-.35-1.19-1.16.26-1.75l21.26-8.2c.97-.43 1.9.24 1.53"></path>
+            <button className="flex-shrink-0 p-3 rounded-lg bg-[#005278]" onClick={sendMessage} disabled={loading}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path d="M26.0704 6.01956C28.3929 5.78534 29.9038 8.4038 28.5391 10.2979L16.8516 26.5205C15.5293 28.3558 12.6721 27.8563 12.0498 25.6817L10.6114 20.6514C10.2874 19.5188 10.7328 18.3068 11.7129 17.6534L17.2217 13.9795L11.2862 16.9151C10.2303 17.437 8.95752 17.2158 8.13871 16.3692L4.50199 12.6075C2.92978 10.9812 3.92624 8.25878 6.1768 8.03128L26.0704 6.01956ZM12.5713 18.9414C12.1514 19.2214 11.96 19.7403 12.0987 20.2256L13.5381 25.2569C13.8051 26.1884 15.0291 26.4017 15.5957 25.6153L27.2842 9.39261C27.3716 9.27127 27.4277 9.14183 27.4629 9.01175L12.5713 18.9414ZM26.2256 7.5596L6.33207 9.57035C5.36751 9.66785 4.9404 10.8353 5.6143 11.5323L9.25102 15.294C9.60195 15.6567 10.1482 15.7511 10.6006 15.5274L26.6446 7.59378C26.5145 7.55943 26.3741 7.54463 26.2256 7.5596Z" fill="#FFF9FF"/>
               </svg>
             </button>
           </div>
