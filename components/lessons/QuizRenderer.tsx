@@ -51,7 +51,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
     const correct = option === quiz.correctOption;
     setIsCorrect(correct);
     setShowResult(true);
-    setHasSubmitted(correct); // Only lock if correct
+    setHasSubmitted(correct);
 
     if (onQuizSubmit) {
       onQuizSubmit(quiz.id, option, correct);
@@ -78,7 +78,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
 
     setIsCorrect(correct);
     setShowResult(true);
-    setHasSubmitted(correct); // Only lock if correct
+    setHasSubmitted(correct);
 
     if (onQuizSubmit) {
       onQuizSubmit(quiz.id, userAnswer, correct);

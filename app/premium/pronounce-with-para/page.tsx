@@ -1,15 +1,49 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import Head from "next/head";
 import Image from 'next/image';
 
 import PronunciationList from '@/components/premium/pwp/PronunciationList'
 import PwpTipScreen from '@/components/premium/pwp/PwpTipScreen';
+import SelectedPwpScreen from '@/components/premium/pwp/SelectedPwpScreen';
+
+import { useGetAllPronunciation } from "@/services/generalApi/pronounciations/mutation";
+import { PronunciationProps } from '@/components/premium/types';
 
 const PronounceWithPara = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedItem, setSelectedItem] = useState("");
+    const [selectedPwpItem, setSelectedPwpItem] = useState<PronunciationProps | null>(null);
+
+    const { data: pronunciations, isLoading: isLoadingPwp } = useGetAllPronunciation();
+
+    const filteredPwpItems = pronunciations?.data.filter((item: PronunciationProps) => {
+        const term = searchTerm.toLowerCase();
+        return (
+            item.englishWord.toLowerCase().includes(term) ||
+            item.yorubaWord.toLowerCase().includes(term)
+        );
+    });
+
+    useEffect(() => {
+        // pick selected item from pronunciations data
+        if (pronunciations && pronunciations.data && selectedItem) {
+            const pronunciationHistoryList = JSON.parse(localStorage.getItem("pwpHistoryList") || "[]");
+            const selected = pronunciations.data.find((item: PronunciationProps) => item.id === selectedItem);
+            if (selected) {
+                setSelectedPwpItem(selected);
+            } else {
+                setSelectedPwpItem(null);
+            }
+
+            if (!pronunciationHistoryList.some((item: string) => item === selected.id)) {
+                pronunciationHistoryList.push(selected.id);
+            }
+
+            localStorage.setItem("pwpHistoryList", JSON.stringify(pronunciationHistoryList));
+        }
+    }, [selectedItem, pronunciations]);
 
     return (
         <div>
@@ -42,13 +76,17 @@ const PronounceWithPara = () => {
                                 </div>
                             </div>
 
-                            <div className="h-[calc(100vh-400px)] overflow-y-auto text-white no-scrollbar">
-                                <PronunciationList setSelectedItem={setSelectedItem} selectedItem={selectedItem} />
-                            </div>
+                            {/* Pronunciation List */}
+                            {filteredPwpItems && filteredPwpItems.length > 0 && (
+                                <div className="h-[calc(100vh-400px)] overflow-y-auto text-white no-scrollbar">
+                                    <PronunciationList setSelectedItem={setSelectedItem} selectedItem={selectedItem} data={filteredPwpItems} isLoading={isLoadingPwp} />
+                                </div>
+                            )}
+
                         </div>
 
                         {/* Right Pane */}
-                        <div className="flex-1 p-4">
+                        <div className="flex-1 p-4 -ml-3">
                             <div className='p-4 flex flex-col items-center justify-center' style={{
                                 fontFamily: "Lexend"
                             }}>
@@ -60,25 +98,35 @@ const PronounceWithPara = () => {
                                         style={{ objectFit: 'contain' }}
                                     />
                                 </div>
-                                <div className='text-[#A6DFFF] text-[30px] md:text-[32px] lg:text-[36px]' style={{
-                                    fontWeight: 500, textAlign: "center"
-                                }}>Your Yorùbá Speech Studio</div>
-                                <div className='text-[#A6DFFF] text-[18px] md:text-[20px] lg:text-[25px]' style={{
-                                    fontSize: "16px", fontWeight: 400, textAlign: "center"
-                                }}>Listen to audio, record your pronunciation, get instant feedback to improve your fluency.</div>
+                                {!selectedItem && (
+                                    <div>
+                                        <div className='text-[#A6DFFF] text-[30px] md:text-[32px] lg:text-[36px]' style={{
+                                            fontWeight: 500, textAlign: "center"
+                                        }}>Your Yorùbá Speech Studio</div>
+                                        <div className='text-[#A6DFFF] text-[18px] md:text-[20px] lg:text-[25px]' style={{
+                                            fontSize: "16px", fontWeight: 400, textAlign: "center"
+                                        }}>Listen to audio, record your pronunciation, get instant feedback to improve your fluency.</div>
+
+                                    </div>
+
+                                )}
+
                             </div>
 
+                            {filteredPwpItems && filteredPwpItems.length > 0 && (
+                                <div className='max-auto max-w-[calc(100vw-50px)] overflow-x-hidden block lg:hidden'>
+                                    <div className="flex flex-row gap-4 overflow-y-auto scroll-smooth hide-scrollbar">
+                                        <PronunciationList setSelectedItem={setSelectedItem} selectedItem={selectedItem} data={filteredPwpItems} isLoading={isLoadingPwp} />
+                                    </div>
+                                </div>
+                            )}
 
                             {!selectedItem && (
                                 <PwpTipScreen />
                             )}
 
-                            {selectedItem && (
-                                <div className="mt-10 p-10 border-[6px] border-solid gradient-border border-r-8 ml-5 bg-[#00527849]">
-                                    <div className='text-[#F9C10F] mb-4' style={{
-                                        fontFamily: "Lexend", fontSize: "24px", fontWeight: 400, textAlign: "center"
-                                    }}>You have selected: {selectedItem}</div>
-                                </div>
+                            {selectedItem && selectedPwpItem && (
+                                <SelectedPwpScreen data={selectedPwpItem} />
                             )}
 
                         </div>

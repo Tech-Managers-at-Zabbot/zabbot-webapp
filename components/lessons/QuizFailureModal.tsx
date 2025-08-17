@@ -16,15 +16,14 @@ const QuizFailureModal: React.FC<QuizFailureModalProps> = ({ onClose }) => {
       
       {/* Modal content */}
       <div className="relative z-10 flex flex-col w-full items-center justify-center p-8 text-center">
-        {/* Large image - replace with your actual image path */}
         <img 
-          src="/userDashboard/footer-grandma-owl.png" 
+          src="/userDashboard/sad-grandma-owl.png" 
           alt="Failure" 
-          className="w-70 h-64"
+          className="w-50 h-65"
         />
         
-        {/* Success text */}
-        <div className="bg-[#FBEAE9] flex gap-4 items-center justify-center py-10 w-full border-t-8 border-[#D42620]">
+        {/* Failure text */}
+        <div className="absolute top-[80%] left-[2%] right-[2%] bg-[#FBEAE9] flex gap-4 items-center justify-center py-10 border-t-8 border-[#D42620]">
             <div>
         <img 
           src="/lessons/quiz-wrong-icon.png" 

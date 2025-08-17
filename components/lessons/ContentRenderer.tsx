@@ -40,51 +40,51 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
   };
 
   return (
-    <div className="items-center z-10 flex flex-col justify-center w-full h-full mx-auto px-4 relative"
-    style={{ fontFamily: "Lexend" }}
+    <div
+      className="items-center z-10 flex flex-col justify-center w-full h-full mx-auto px-4 relative"
+      style={{ fontFamily: "Lexend" }}
     >
       <div className="mt-12 md:mt-2">
         <h2 className="text-2xl text-[#F15B29] md:text-3xl font-bold mb-6 text-center">
           {lessonTitle}
         </h2>
       </div>
-      <div className="bg-[url('/lessons/questionFrame.svg')] h-[400px] flex flex-col justify-center items-center max-w-[500px] w-full bg-center bg-cover bg-no-repeat p-8 mb-6">
-        <div>
-          {/* Content Display */}
-          <div className="text-center mb-8">
-            <div className="text-2xl md:text-3xl font-medium mb-6 leading-relaxed">
-              {cleanContent.split("–").map((part: string, index: number) => (
-                <div
-                  key={index}
-                  className={index > 0 ? "block mt-2" : "inline"}
-                >
-                  {part.trim()}
-                </div>
-              ))}
-            </div>
 
-            {content?.translation && (
-              <div className="mb-6">
-                <div className="p-4 rounded-lg">
-                  <p className="text-lg text-[#EBEBEB]">
-                    {content?.translation}
-                  </p>
-                </div>
+      <div className="bg-[url('/lessons/questionFrame.svg')] min-h-[300px] sm:min-h-[400px] w-full max-w-[90%] sm:max-w-[400px] md:max-w-[500px] flex flex-col justify-center items-center bg-center bg-contain bg-no-repeat p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
+        <div className="w-[80%] px-2 sm:px-4 flex flex-col justify-center items-center text-center">
+          {/* Main Content */}
+          <div className="text-base sm:text-xl md:text-2xl font-medium leading-relaxed">
+            {cleanContent.split("–").map((part: string, index: number) => (
+              <div key={index} className={index > 0 ? "block mt-2" : "inline"}>
+                {part.trim()}
               </div>
-            )}
+            ))}
           </div>
+
+          {/* Translation */}
+          {content?.translation && (
+            <div className="text-[#EBEBEB] flex justify-center items-center text-sm sm:text-base p-3">
+              <div className="flex rounded-lg bg-black/30 p-2">
+                {content.translation}
+              </div>
+            </div>
+          )}
 
           {/* Grammar Rule Indicator */}
           {content?.isGrammarRule && (
-            <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-6">
-              <p className="text-yellow-800 font-medium">📚 Grammar Rule</p>
+            <div className="bg-yellow-100 border-l-4 border-yellow-500 p-3 sm:p-4">
+              <p className="text-yellow-800 font-medium text-sm sm:text-base">
+                📚 Grammar Rule
+              </p>
             </div>
           )}
 
-          {/* Media Components (Audio, Video, Images) */}
-          {content?.files?.length > 0 && (
-            <MediaComponents files={content.files} />
-          )}
+          {/* Media Components */}
+          <div className="flex items-center justify-center">
+            {content?.files?.length > 0 && (
+              <MediaComponents files={content.files} />
+            )}
+          </div>
         </div>
       </div>
 
@@ -98,7 +98,9 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
           disabledColor="#C98F5DCC"
           background={canGoBack ? `#5A2E10` : `#C98F5DCC`}
         >
-          <div className={`px-6 py-3 z-10 rounded-lg font-medium`}>← Previous</div>
+          <div className={`px-6 py-3 z-10 rounded-lg font-medium`}>
+            ← Previous
+          </div>
         </InAppButton>
 
         <InAppButton

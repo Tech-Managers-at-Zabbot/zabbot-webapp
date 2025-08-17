@@ -4,7 +4,6 @@ import { FiSearch } from 'react-icons/fi';
 import Head from "next/head";
 import Image from 'next/image';
 import { defaultDiacriticText } from './constants'
-import KeymanToggleLazy from "@/components/KeymanToggleLazy";
 
 const ListenWithOwe = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -144,7 +143,6 @@ const ListenWithOwe = () => {
                 
             </Head>
             <main className="flex flex-col bg-[#002557] relative p-10">
-                <KeymanToggleLazy />
                 <section className="w-full bg-[#002557]">
                     <div className="flex">
                         {/* Left Pane */}
@@ -237,7 +235,7 @@ const ListenWithOwe = () => {
                                             value={inputText}
                                             onInput={(e) => setInputText((e.target as HTMLTextAreaElement).value)}
                                             placeholder="Enter Yorùbá text..."
-                                            className="w-full border rounded p-2 bg-white text-black keyman-enabled"
+                                            className="w-full border rounded p-2 bg-white text-black"
                                             style={{ alignContent: 'center' }}
                                             name="inputText"
                                         /></div>
@@ -284,12 +282,12 @@ const ListenWithOwe = () => {
                                         <select
                                             value={selectedVoice}
                                             onChange={(e) => setSelectedVoice(e.target.value)}
-                                            className="border p-1 rounded text-white"
+                                            className="border p-1 rounded text-white bg-[#002557]"
                                         >
-                                            <option value="sade">Ṣade</option>
-                                            <option value="femi">Fẹmi</option>
-                                            <option value="funmi">Fúnmi</option>
-                                            <option value="segun">Ṣẹgun</option>
+                                            <option value="sade" className='bg-[#002557]'>Ṣade</option>
+                                            <option value="femi" className='bg-[#002557]'>Fẹmi</option>
+                                            <option value="funmi" className='bg-[#002557]'>Fúnmi</option>
+                                            <option value="segun" className='bg-[#002557]'>Ṣẹgun</option>
                                         </select>
                                     </div>
 

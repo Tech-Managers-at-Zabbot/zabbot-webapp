@@ -4,9 +4,12 @@ export interface PronunciationProps {
     yorubaWord: string;
     femaleVoice: string;
     maleVoice: string;
+    tone: string;
   }
 
   export interface PronunciationListProps {
   setSelectedItem: (item: string) => void;
   selectedItem: string;
+  data: PronunciationProps[];
+  isLoading: boolean;
 }
