@@ -82,7 +82,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
             <div className='flex flex-col justify-center' style={{
                 fontFamily: "Lexend", textAlign: "center"
             }}>
-                <div className='text-[#FCFFFF] mb-1 text-[25px] md:text-[30px] lg:text-[44px]'>{data.yorubaWord}</div>
+                <div className='text-[#FCFFFF] mb-1 text-[25px] md:text-[30px] lg:text-[44px]'>{data.yorubaWord.toLocaleUpperCase()}</div>
 
                 <div className='text-[#F9C10F] mb-4 text-[18px] md:text-[20px] lg:text-[26px]'>{data.tone}</div>
 
