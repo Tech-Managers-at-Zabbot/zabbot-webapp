@@ -282,12 +282,12 @@ const ListenWithOwe = () => {
                                         <select
                                             value={selectedVoice}
                                             onChange={(e) => setSelectedVoice(e.target.value)}
-                                            className="border p-1 rounded text-white"
+                                            className="border p-1 rounded text-white bg-[#002557]"
                                         >
-                                            <option value="sade">Ṣade</option>
-                                            <option value="femi">Fẹmi</option>
-                                            <option value="funmi">Fúnmi</option>
-                                            <option value="segun">Ṣẹgun</option>
+                                            <option value="sade" className='bg-[#002557]'>Ṣade</option>
+                                            <option value="femi" className='bg-[#002557]'>Fẹmi</option>
+                                            <option value="funmi" className='bg-[#002557]'>Fúnmi</option>
+                                            <option value="segun" className='bg-[#002557]'>Ṣẹgun</option>
                                         </select>
                                     </div>
 
