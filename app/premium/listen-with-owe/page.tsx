@@ -142,11 +142,11 @@ const ListenWithOwe = () => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 
             </Head>
-            <main className="flex flex-col bg-[#002557] relative p-10">
+            <main className="flex flex-col bg-[#002557] relative p-5">
                 <section className="w-full bg-[#002557]">
                     <div className="flex">
                         {/* Left Pane */}
-                        <div className="w-1/4 max-w-80 border-r p-2 pr-20 bg-[#002557] text-white" style={{
+                        <div className="hidden lg:block w-1/4 max-w-80 border-r p-2 pr-2 bg-[#002557] text-white" style={{
                             fontFamily: "Lexend", fontWeight: 400, textAlign: "left"
                         }}>
                             <div className="mb-4">
@@ -199,7 +199,7 @@ const ListenWithOwe = () => {
                         </div>
 
                         {/* Right Pane */}
-                        <div className="flex-1 p-4">
+                        <div className="flex-1 p-4 -ml-5">
                             <div className='p-4 flex flex-col items-center justify-center'>
                                 <div style={{ position: 'relative', width: '190px', height: '190px' }}>
                                     <Image
@@ -219,10 +219,10 @@ const ListenWithOwe = () => {
                                     fontFamily: "Lexend", fontSize: "24px", fontWeight: 400, textAlign: "center"
                                 }}>Enter a phrase to hear it spoken - powered by AI.</div>
 
-                                <div className='flex flex-row justity-between items-center' style={{
+                                <div className='flex flex-col lg:flex-row justify-between items-center' style={{
                                     fontFamily: "Lexend", justifyContent: "space-between",
                                 }}>
-                                    <div className='border-[#FFFFFF] border-1 rounded-md p-4 min-h-6 basis-84 flex flex-row items-center'>
+                                    <div className='border-[#FFFFFF] border-1 rounded-md p-4 flex flex-row items-center'>
                                         <Image
                                             src="/general/mini-keyboard.svg"
                                             alt="mini-keyboard"
@@ -248,7 +248,7 @@ const ListenWithOwe = () => {
                                         {'Add Tone Marks >>'}
                                     </button>
 
-                                    <div className='border-1 border-[#84D8FF] rounded-md p-4 basis-84 '><div className='text-black min-h-28 bg-[#E0E0E0] p-4 rounded-md align' style={{ alignContent: 'center' }}>{diacriticText}</div></div>
+                                    <div className='border-1 border-[#84D8FF] rounded-md p-4'><div className='text-black bg-[#E0E0E0] p-4 rounded-md align' style={{ alignContent: 'center' }}>{diacriticText}</div></div>
                                 </div>
                                 <div className='flex m-4 justify-center flex-col items-center'>
                                     <Image
