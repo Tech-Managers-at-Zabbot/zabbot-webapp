@@ -1,18 +1,17 @@
 import React from "react"; // useState
 import Image from 'next/image';
 
-import { useGetAllPronunciation } from "@/services/generalApi/pronounciations/mutation";
 import { PronunciationProps, PronunciationListProps } from '../types';
 
-const PronunciationList = ({ setSelectedItem, selectedItem }: PronunciationListProps) => {
-  const { data: pronunciations } = useGetAllPronunciation();
+const PronunciationList = ({ setSelectedItem, selectedItem, data, isLoading }: PronunciationListProps) => {
+  if (isLoading) return <div>Loading...</div>;
 
-  if (!pronunciations && pronunciations?.status !== "success" && pronunciations?.data.length < 1) return (
+  if (!data || data.length < 1) return (
     <div className='text-sm font-normal pl-1 italic text-gray-400'>...empty data</div>
   );
 
   return (
-    pronunciations && pronunciations?.data?.map((item: PronunciationProps) => (
+    data && data?.map((item: PronunciationProps) => (
       <div
         key={item.id}
         onClick={() => setSelectedItem(item.id)}
