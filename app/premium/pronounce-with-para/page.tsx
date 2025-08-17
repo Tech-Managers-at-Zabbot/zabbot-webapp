@@ -29,12 +29,19 @@ const PronounceWithPara = () => {
     useEffect(() => {
         // pick selected item from pronunciations data
         if (pronunciations && pronunciations.data && selectedItem) {
+            const pronunciationHistoryList = JSON.parse(localStorage.getItem("pwpHistoryList") || "[]");
             const selected = pronunciations.data.find((item: PronunciationProps) => item.id === selectedItem);
             if (selected) {
                 setSelectedPwpItem(selected);
             } else {
                 setSelectedPwpItem(null);
             }
+
+            if (!pronunciationHistoryList.some((item: string) => item === selected.id)) {
+                pronunciationHistoryList.push(selected.id);
+            }
+
+            localStorage.setItem("pwpHistoryList", JSON.stringify(pronunciationHistoryList));
         }
     }, [selectedItem, pronunciations]);
 
@@ -79,7 +86,7 @@ const PronounceWithPara = () => {
                         </div>
 
                         {/* Right Pane */}
-                        <div className="flex-1 p-4">
+                        <div className="flex-1 p-4 -ml-3">
                             <div className='p-4 flex flex-col items-center justify-center' style={{
                                 fontFamily: "Lexend"
                             }}>
@@ -91,14 +98,28 @@ const PronounceWithPara = () => {
                                         style={{ objectFit: 'contain' }}
                                     />
                                 </div>
-                                <div className='text-[#A6DFFF] text-[30px] md:text-[32px] lg:text-[36px]' style={{
-                                    fontWeight: 500, textAlign: "center"
-                                }}>Your Yorùbá Speech Studio</div>
-                                <div className='text-[#A6DFFF] text-[18px] md:text-[20px] lg:text-[25px]' style={{
-                                    fontSize: "16px", fontWeight: 400, textAlign: "center"
-                                }}>Listen to audio, record your pronunciation, get instant feedback to improve your fluency.</div>
+                                {!selectedItem && (
+                                    <div>
+                                        <div className='text-[#A6DFFF] text-[30px] md:text-[32px] lg:text-[36px]' style={{
+                                            fontWeight: 500, textAlign: "center"
+                                        }}>Your Yorùbá Speech Studio</div>
+                                        <div className='text-[#A6DFFF] text-[18px] md:text-[20px] lg:text-[25px]' style={{
+                                            fontSize: "16px", fontWeight: 400, textAlign: "center"
+                                        }}>Listen to audio, record your pronunciation, get instant feedback to improve your fluency.</div>
+
+                                    </div>
+
+                                )}
+
                             </div>
 
+                            {filteredPwpItems && filteredPwpItems.length > 0 && (
+                                <div className='max-auto max-w-[calc(100vw-50px)] overflow-x-hidden block lg:hidden'>
+                                    <div className="flex flex-row gap-4 overflow-y-auto scroll-smooth hide-scrollbar">
+                                        <PronunciationList setSelectedItem={setSelectedItem} selectedItem={selectedItem} data={filteredPwpItems} isLoading={isLoadingPwp} />
+                                    </div>
+                                </div>
+                            )}
 
                             {!selectedItem && (
                                 <PwpTipScreen />
