@@ -66,7 +66,6 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
     
                 try {
                     await getPronunciationFeedback({ id: data.id, file: blob });
-                    console.log("✅ Feedback uploaded successfully");
                 } catch (error) {
                     console.error("❌ Upload failed:", error);
                 }

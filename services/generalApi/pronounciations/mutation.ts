@@ -37,7 +37,6 @@ export function usePronunciationFeedback() {
       pronunciationFeedback(id, file),
     onSuccess: async (data) => {
       // Handle success (e.g., show a success message)
-      console.log("Feedback submitted successfully:", data);
       return data;
     },
     onError: (error) => {
