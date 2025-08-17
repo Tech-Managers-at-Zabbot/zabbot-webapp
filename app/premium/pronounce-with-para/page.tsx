@@ -75,9 +75,9 @@ const PronounceWithPara = () => {
 
                             {selectedItem && (
                                 <div className="mt-10 p-10 border-[6px] border-solid gradient-border border-r-8 ml-5 bg-[#00527849]">
-                                    <div className='text-[#F9C10F] mb-4' style={{
+                                    {/* <div className='text-[#F9C10F] mb-4' style={{
                                         fontFamily: "Lexend", fontSize: "24px", fontWeight: 400, textAlign: "center"
-                                    }}>You have selected: {selectedItem}</div>
+                                    }}>You have selected: {selectedItem}</div> */}
                                 </div>
                             )}
 
