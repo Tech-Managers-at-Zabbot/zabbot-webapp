@@ -10,4 +10,6 @@ export interface PronunciationProps {
   export interface PronunciationListProps {
   setSelectedItem: (item: string) => void;
   selectedItem: string;
+  data: PronunciationProps[];
+  isLoading: boolean;
 }
