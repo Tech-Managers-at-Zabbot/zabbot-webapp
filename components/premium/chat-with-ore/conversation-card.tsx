@@ -29,8 +29,10 @@ const ConversationCard = ({ title, date }: CardProps) => {
       {/* Right Side: Hamburger Menu Button and Dropdown */}
       <div className="ml-auto relative">
         <button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none hover:text-gray-200">
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19" fill="none">
+            <path d="M2.71094 9.62857C2.71094 10.2738 3.23403 10.7969 3.8793 10.7969C4.52458 10.7969 5.04767 10.2738 5.04767 9.62857C5.04767 8.9833 4.52458 8.46021 3.8793 8.46021C3.23403 8.46021 2.71094 8.9833 2.71094 9.62857Z" fill="#EBEBEB"/>
+            <path d="M10.1106 10.7969C9.46533 10.7969 8.94223 10.2738 8.94223 9.62857C8.94223 8.9833 9.46533 8.46021 10.1106 8.46021C10.7559 8.46021 11.279 8.9833 11.279 9.62857C11.279 10.2738 10.7559 10.7969 10.1106 10.7969Z" fill="#EBEBEB"/>
+            <path d="M16.3419 10.7969C15.6966 10.7969 15.1735 10.2738 15.1735 9.62857C15.1735 8.9833 15.6966 8.46021 16.3419 8.46021C16.9872 8.46021 17.5103 8.9833 17.5103 9.62857C17.5103 10.2738 16.9872 10.7969 16.3419 10.7969Z" fill="#EBEBEB"/>
           </svg>
         </button>
         
