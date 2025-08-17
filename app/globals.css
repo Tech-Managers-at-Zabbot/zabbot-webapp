@@ -19,8 +19,43 @@
   }
 }
 
+.scroll-hidden {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-alerts {
+  z-index: 2000 !important;
+  margin-top: 200px !important;
+  margin-left: 300px !important;
+  position: absolute !important;
+  /* background-color: "red" !important; */
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.gradient-border {
+  border: 6px solid;
+  border-image-source: linear-gradient(180deg, #03A7F3 0%, #005278 100%);
+  border-image-slice: 1;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }

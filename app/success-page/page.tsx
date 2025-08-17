@@ -1,10 +1,14 @@
-// import LandingPageNavbar from "@/components/landingPage/landingNav";
-// import OtpComponent from "@/components/OtpComponent";
-import SuccessComponent from "@/components/SuccessComponent";
+"use client";
+import { CustomSpinner } from "@/components/CustomSpinner";
+import Navbar from "@/components/general/Navbar";
+import SuccessComponent from "@/components/general/SuccessComponent";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 import Head from "next/head";
 
 const SuccessPage = () => {
-
+  const { getPageText, isPageLoading: isLanguageLoading } = usePageLanguage(
+    "passwordChangeSuccess"
+  );
 
   return (
     <div>
@@ -17,9 +21,20 @@ const SuccessPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
-      {/* <LandingPageNavbar /> */}
+        <Navbar />
+
         <section className="w-full">
-        <SuccessComponent />
+          {isLanguageLoading ? (
+            <section className="min-h-[80vh] flex justify-center items-center">
+              <CustomSpinner spinnerColor="#012657" />
+              </section>
+          ) : (
+            <SuccessComponent
+              message={getPageText("password_update_success")}
+              title={getPageText("success")}
+              buttonText={getPageText("continue")}
+            />
+          )}
         </section>
       </main>
     </div>

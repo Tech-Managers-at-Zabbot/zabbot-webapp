@@ -1,32 +1,34 @@
 import React from "react";
 import Image from "next/image";
 import ColouredButton from "../ColouredButton";
-import TransparentButton from "../TransparentButton";
-import {
-  ColouredButtonArrow,
-  TransparentButtonArrow,
-} from "@/constants/SvgPaths";
+import { appColors } from "@/constants/colors";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+// import { motion } from "framer-motion";
 
 const HeroSection = () => {
   return (
     <div
-      className="bg-[#FFFAF2] text-[#000000] px-6 sm:px-8 md:px-16 lg:px-[112px] pt-12 md:pt-16 lg:pt-[100px]"
-      style={{ fontFamily: "Inter" }}
+      className="text-[#000000] lg:px-[112px]"
+      style={{ fontFamily: "Lexend", backgroundColor: appColors.primaryBlue }}
     >
       <main className="flex flex-col lg:flex-row gap-10">
         {/* Text Content Section */}
-        <section className="flex flex-col pb-10 gap-6 md:gap-[24px] lg:w-[55%]">
-          <div className="bg-[#EB5017] text-center py-1 px-3 w-fit text-sm sm:text-base font-[600] leading-[145%] rounded-xl text-[#FFFFFF]">
-            ENDLESS SUMMER SALE
+        <section className="flex flex-col justify-center gap-6 md:gap-[50px] lg:w-[55%]">
+          <div
+            className="text-center w-fit text-[20px] font-[400] leading-[145%]"
+            style={{ color: appColors.primaryGrayNormal }}
+          >
+            Ready to improve your Language today?
           </div>
 
-          <div className="text-4xl sm:text-5xl md:text-[56px] font-[400] leading-[112%]">
-            Practice Learning a Language with Ease—We&apos;re So Glad
-            You&apos;re Here! Get Ready to Explore, Grow, and Have Fun Along the
-            Way. Let&apos;s See Where This Adventure Takes You!
+          <div className="text-[62px] text-[#162B6E] font-[700] leading-[100%]">
+            Practice Learning a <br /> Language with Ease.
           </div>
 
-          <div className="text-lg sm:text-xl md:text-[25px] font-[400]">
+          <div
+            className="text-lg sm:text-xl md:text-[25px] font-[400]"
+            style={{ color: appColors.black }}
+          >
             From your first words to fluent conversations, we&apos;re here to
             make learning natural, engaging, and fun. Start practicing today and
             watch your confidence grow!
@@ -38,54 +40,79 @@ const HeroSection = () => {
               paddingLeft="16.31px"
               paddingRight="16.31px"
               paddingTop="16.31px"
+              backgroundColor={appColors.yellowBtnColor}
+              color={appColors.darkRoyalBlueForBtn}
             >
               <main className="flex gap-[10.19px] items-center justify-center">
                 <div className="font-[600] text-sm sm:text-[16.31px] leading-[145%]">
                   Get Started
                 </div>
                 <div>
-                  <ColouredButtonArrow />
+                  <MdOutlineKeyboardArrowRight
+                    size={30}
+                    color={appColors.darkRoyalBlueForBtn}
+                  />
                 </div>
               </main>
             </ColouredButton>
 
-            <TransparentButton
+            <ColouredButton
               paddingBottom="16.31px"
               paddingLeft="21px"
               paddingRight="21px"
               paddingTop="16.31px"
+              backgroundColor={appColors.darkRoyalBlueForBtn}
+              color={appColors.white}
+              width="266"
             >
               <main className="flex gap-[10px] items-center justify-center">
-                <div className="font-[600] text-sm sm:text-[16.31px] leading-[145%]">
+                <div
+                  className="font-[600] text-sm sm:text-[16.31px] leading-[145%]"
+                  style={{ fontFamily: "Inter" }}
+                >
                   I Have An Account Already
                 </div>
                 <div>
-                  <TransparentButtonArrow />
+                  <MdOutlineKeyboardArrowRight
+                    size={30}
+                    color={appColors.white}
+                  />
                 </div>
               </main>
-            </TransparentButton>
+            </ColouredButton>
           </div>
         </section>
 
         {/* Images Section */}
-        <section className="lg:w-[50%] relative">
-          <main className="flex justify-between">
-            <div className="relative mt-10">
+        <section className="lg:w-[50%] mt-12 md:mt-16 relative">
+          <main>
+            <div className="rounded-lg">
               <Image
-                src="/landingPage/hundred-plus-score.svg"
-                alt="over 90 percent acheve 100 plus score"
-                height={96}
-                width={200}
-                className="object-contain"
-                priority
+                src="/general/flags.svg"
+                alt="Language Flags"
+                width={500}
+                height={80}
               />
             </div>
+          </main>
+          <main className="flex justify-start items-center">
             <div className="relative">
               <Image
                 src="/landingPage/join-others.svg"
                 alt="more features"
-                height={82}
-                width={321}
+                height={100}
+                width={380}
+                // className="object-contain"
+                loading="lazy"
+                // priority
+              />
+            </div>
+            <div className="relative">
+              <Image
+                src="/landingPage/hundred-plus-score.svg"
+                alt="over 90 percent acheve 100 plus score"
+                height={96}
+                width={250}
                 className="object-contain"
                 priority
               />
@@ -95,17 +122,8 @@ const HeroSection = () => {
           <main className="relative">
             <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
               <Image
-                src="/landingPage/landing-map.svg"
-                alt="two phones on a world map with flags"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-            <div className="absolute bottom-0 right-0 w-[30%] max-w-[230px] aspect-[230/80]">
-              <Image
-                src="/landingPage/landing-lessons-songs.svg"
-                alt="lessons and songs illustration"
+                src="/landingPage/landing-page-parrot.svg"
+                alt="Zabbot blue mascot parrot, Para standing on a globe"
                 fill
                 className="object-contain"
                 priority
