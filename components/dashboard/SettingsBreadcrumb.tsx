@@ -9,6 +9,7 @@ import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
@@ -17,6 +18,9 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
+
+  const { getPageText } =
+        usePageLanguage("userDashboard");
 
   const handleLogout = () => {
     setLogoutLoading(true);
@@ -44,25 +48,25 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
   const dropdownOptions = [
     {
-      name: "Settings",
+      name: getPageText("settings"),
       icon: "/userDashboard/settings.svg",
       action: () => "",
       isActive: false,
     },
     {
-      name: "Profile",
+      name: getPageText("profile"),
       icon: "/userDashboard/profile.svg",
       action: () => "",
       isActive: false,
     },
     {
-      name: "Notifications",
+      name: getPageText("notifications"),
       icon: "/userDashboard/notifications.svg",
       action: () => "",
       isActive: false,
     },
     {
-      name: "Logout",
+      name: getPageText("logout"),
       icon: "/userDashboard/logout.svg",
       action: () => setShowLogoutModal(true),
       isActive: true,

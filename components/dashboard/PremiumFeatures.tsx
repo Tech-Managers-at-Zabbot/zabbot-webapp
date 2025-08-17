@@ -2,8 +2,13 @@ import React from "react";
 import InAppButton from "../InAppButton";
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const PremiumFeaturesOre = ({ handleClick }: { handleClick: () => void }) => {
+
+const { getPageText } =
+      usePageLanguage("userDashboard");
+
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -18,13 +23,13 @@ const PremiumFeaturesOre = ({ handleClick }: { handleClick: () => void }) => {
                 className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
                 style={{color: '#162B6E'}}
               >
-                Chat with Ọ̀rẹ
+                {getPageText('chat_ore')}
               </h3>
               <p 
                 className="text-sm sm:text-sm md:text-base font-normal leading-relaxed break-words max-w-[280px]"
                 style={{color: '#2E2A2A'}}
               >
-                Ai powered conversation to translate and chat.
+                {getPageText('ai_powered')}
               </p>
           </div>
 
@@ -41,7 +46,7 @@ const PremiumFeaturesOre = ({ handleClick }: { handleClick: () => void }) => {
           onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
-            Get Started
+            {getPageText('get_started')}
           </div>
         </InAppButton>
           </div>
@@ -67,6 +72,9 @@ const PremiumFeaturesOre = ({ handleClick }: { handleClick: () => void }) => {
 };
 
 const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
+  const { getPageText } =
+      usePageLanguage("userDashboard");
+
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -81,7 +89,7 @@ const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
                 className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
                 style={{color: '#101828'}}
               >
-                Pronounce with Pàrà
+                {getPageText('pronounce_with_para')}
               </h3>
           </div>
 
@@ -98,7 +106,7 @@ const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
           onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
-            Get Started
+            {getPageText('get_started')}
           </div>
         </InAppButton>
           </div>
@@ -122,6 +130,9 @@ const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
 };
 
 const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
+  const { getPageText } =
+      usePageLanguage("userDashboard");
+
   return (
     <div
       className="relative w-full border border-gray-200 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
@@ -136,7 +147,7 @@ const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
                 className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
                 style={{color: '#101828'}}
               >
-                Listen with Òwe
+                {getPageText('listen_with_owe')}
               </h3>
           </div>
 
@@ -153,7 +164,7 @@ const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
           onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
-            Get Started
+            {getPageText('get_started')}
           </div>
         </InAppButton>
           </div>

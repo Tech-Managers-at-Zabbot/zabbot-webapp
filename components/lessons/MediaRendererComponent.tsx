@@ -52,26 +52,29 @@ const AudioPlayer: React.FC<{ audioFiles: FileItem[] }> = ({ audioFiles }) => {
     }
   }, []);
 
-  return (
-    <div className="text-center mb-8 bg-[url('/lessons/play-content.svg')] bg-contain bg-center bg-no-repeat p-6">
-      <button 
-        onClick={playRandomAudio}
-        className="text-white hover:cursor-pointer px-6 py-3 rounded-full font-medium transition-colors duration-200"
-        disabled={isPlaying}
-      >
-        {isPlaying ? 
+return (
+  <div className="text-center bg-[url('/lessons/play-content.svg')] bg-contain bg-center bg-no-repeat p-4 sm:p-6 md:p-8">
+    <button 
+      onClick={playRandomAudio}
+      className="text-white hover:cursor-pointer px-5 py-3 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full font-medium transition-colors duration-200"
+      disabled={isPlaying}
+    >
+      {isPlaying ? 
         <CustomSpinner isShowTitle={false} spinnerHeight="30px" spinnerWidth="30px" /> 
-        : <PiSpeakerHighBold size={30} />
-        }
-      </button>
-      <audio ref={audioRef} style={{ display: 'none' }} />
-      {/* {audioFiles.length > 1 && (
-        <p className="text-sm text-gray-500 mt-2">
-          {audioFiles.length} audio files available
-        </p>
-      )} */}
-    </div>
-  );
+        : <PiSpeakerHighBold size={24} className="sm:size-6 md:size-7" />
+      }
+    </button>
+    <audio ref={audioRef} style={{ display: 'none' }} />
+    
+    {/* Uncomment this block if you want to display audio file count */}
+    {/* {audioFiles.length > 1 && (
+      <p className="text-xs sm:text-sm text-gray-500 mt-2">
+        {audioFiles.length} audio files available
+      </p>
+    )} */}
+  </div>
+);
+
 };
 
 // Video Player Component
@@ -220,7 +223,7 @@ const MediaComponents: React.FC<MediaComponentsProps> = ({ files }) => {
   const imageFiles = files.filter(file => file.contentType === 'image');
 
   return (
-    <div className="w-full">
+    <div>
       {/* Audio Player */}
       {audioFiles.length > 0 && <AudioPlayer audioFiles={audioFiles} />}
       

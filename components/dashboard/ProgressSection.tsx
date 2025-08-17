@@ -10,13 +10,15 @@ import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 // import { useRouter } from "next/navigation";
 import { getShuffledImages } from "@/utilities/utilities";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const imagePathsArr: string[] = ["/userDashboard/say-hello.svg"];
 
 const ProgressSection = () => {
   const { userDetails } = useUser();
 
-  // const router = useRouter();
+    const { getPageText } =
+        usePageLanguage("userDashboard");
 
   const { data: coursesWithLessons, isLoading: lessonsLoading } =
     useGetCoursesWithLessons(userDetails?.languageId);
@@ -44,12 +46,12 @@ const ProgressSection = () => {
     <div className="flex flex-col xl:flex-row gap-[20px] w-full">
       <section className="flex-1 xl:w-[58%] w-full">
         <UserLessonDataComponent
-          title={"Immersing you in Yorùbá, one step at a time"}
+          title={getPageText("immersion_tagline")}
           subtitle={
             courseLessons?.length && courseLessons?.length > 0
-              ? `Almost there! Just ${courseLessons?.length} more ${
-                  courseLessons?.length === 1 ? "step" : "steps"
-                } in your journey`
+              ? `${getPageText("almost_there")} ${getPageText("just")} ${courseLessons?.length} ${getPageText("more")} ${
+                  courseLessons?.length === 1 ? getPageText("step") : getPageText("steps")
+                } ${getPageText("in_your_journey")}`
               : "No data yet"
           }
           maxWidth="100%"

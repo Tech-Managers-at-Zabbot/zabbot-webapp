@@ -8,12 +8,16 @@ import { useUser } from "@/contexts/UserContext";
 import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const PopularCourses = () => {
   const { userDetails } = useUser();
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
     userDetails?.languageId
   );
+
+   const { getPageText } =
+        usePageLanguage("userDashboard");
 
   const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
@@ -147,8 +151,8 @@ const PopularCourses = () => {
     <div className="flex gap-[30px]">
       <section className="flex-1 xl:max-w-[100%] w-full">
         <UserLessonDataComponent
-          title={"Journey Hub"}
-          subtitle={"Meaningful Yorùbá learning — one Journey at a time"}
+          title={getPageText("journey_hub")}
+          subtitle={getPageText("learning_tagline")}
           maxWidth="100%"
         >
           {coursesLoading ? (

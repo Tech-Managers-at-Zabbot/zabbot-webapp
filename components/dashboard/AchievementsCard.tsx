@@ -5,6 +5,7 @@ import { ScrollArrow } from "../ScrollArrow";
 import { Modal, useModal } from "../general/Modal"; // Adjust path as needed
 import InAppButton from "../InAppButton"; // Adjust path as needed
 import { useTheme } from "@/contexts/ThemeProvider";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const AchievementsCard = () => {
   // const achievements = [
@@ -32,6 +33,10 @@ const AchievementsCard = () => {
   //   { name: "Language Guardian", isCompleted: false, icon: "🤝" },
   //   { name: "Zabbot Star", isCompleted: false, icon: "🌟" },
   // ];
+
+
+    const { getPageText } =
+        usePageLanguage("userDashboard");
 
     const achievements = [
       { name: "First Steps", isCompleted: true },
@@ -154,8 +159,8 @@ const AchievementsCard = () => {
           <section className="flex-shrink-0">
             <div className="flex flex-col gap-[14px]">
               <div className="text-[#737477] flex flex-col gap-2 font-[400] text-[14px] leading-[100%]">
-                <span className="whitespace-nowrap">ACHIEVEMENTS</span>
-                <span className="whitespace-nowrap text-[#F96129]">UNLOCKED 1/23</span>
+                <span className="whitespace-nowrap">{getPageText("achievements")}</span>
+                <span className="whitespace-nowrap text-[#F96129]">{getPageText("unlocked")} 1/23</span>
               </div>
               {/* <div className="font-bold text-center text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
                 RANK #12 / 90
@@ -243,8 +248,8 @@ const AchievementsCard = () => {
       <section className="min-w-[100px] flex-shrink-0">
         <div className="flex flex-col gap-[14px]">
           <div className="text-[#737477] flex flex-col gap-2 font-[700] text-[14px] leading-[100%]">
-            <span className="whitespace-nowrap">ACHIEVEMENTS</span>
-            <span className="whitespace-nowrap text-[#F96129]">UNLOCKED 1/23</span>
+                       <span className="whitespace-nowrap">{getPageText("achievements")}</span>
+                <span className="whitespace-nowrap text-[#F96129]">{getPageText("unlocked")} 1/23</span>
           </div>
           {/* <div className="font-bold text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
             RANK #12 / 90
