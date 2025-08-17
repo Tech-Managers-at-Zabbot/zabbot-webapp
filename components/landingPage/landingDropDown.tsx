@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { appColors } from "@/constants/colors";
 
 interface DropdownProps {
   options: string[];
@@ -27,11 +28,12 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div
-      className={`relative leading-[145%] font-[600] text-[#E4DBDB] ${
+      className={`relative leading-[145%] font-[600] text-[${appColors.officeBrown100}] ${
         mobile ? "w-full" : "w-auto"
       }`}
-      // style={{ fontFamily: "Inter" }}
+      style={{ fontFamily: "Lexend" }}
     >
+
       <button
         onClick={toggleDropdown}
         className={`${
@@ -78,7 +80,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         <div
           className={`absolute z-10 ${
             mobile ? "w-full" : "w-full min-w-[180px]"
-          } mt-1 bg-[#292424] border border-gray-600 rounded-lg shadow-lg`}
+          } mt-1 bg-[#207EC5] border border-[#046fc1] rounded-lg shadow-lg`}
         >
           {options.length > 0 ? (
             options.map((option, index) => (
@@ -93,7 +95,7 @@ const Dropdown: React.FC<DropdownProps> = ({
               </div>
             ))
           ) : (
-            <div className={`p-3 text-gray-400 ${mobile ? "text-sm" : ""}`}>
+            <div className={`p-3 text-[${appColors.officeBrown100}] ${mobile ? "text-sm" : ""}`}>
               No options available
             </div>
           )}

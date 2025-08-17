@@ -14,12 +14,13 @@ export interface ButtonProps {
   width?: string;
   padding?: string;
   boxShadow?: string;
+  color?: string;
   onClick?: () => void;
 }
 
 const ColouredButton: React.FC<ButtonProps> = ({
   title,
-  borderRadius = "8px",
+  borderRadius = "8.15px",
   children,
   height = '73px',
   paddingTop,
@@ -27,6 +28,7 @@ const ColouredButton: React.FC<ButtonProps> = ({
   paddingLeft,
   paddingRight,
   padding,
+  color="white",
   boxShadow = "0 4px 0 0 rgba(0, 0, 0, 0.2)",
   backgroundColor='#333333',
   width = "230px",
@@ -40,7 +42,7 @@ const ColouredButton: React.FC<ButtonProps> = ({
   hover:translate-y-0.5
   active:shadow-none
   active:translate-y-1
-  transition-all font-[700] text-white`}
+  transition-all font-[700] flex items-center justify-center`}
       onClick={onClick}
       style={{
         borderRadius,
@@ -50,9 +52,11 @@ const ColouredButton: React.FC<ButtonProps> = ({
         paddingLeft,
         paddingRight,
         width,
+        color,
         padding,
         backgroundColor,
-        boxShadow
+        boxShadow,
+        fontFamily: 'Lexend'
       }}
     >
       {children || title}

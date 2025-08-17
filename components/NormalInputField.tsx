@@ -13,7 +13,7 @@ interface NormalInputProps {
   color?: string;
   backgroundColor?: string;
   border?: string;
-  icon?: React.ReactNode; // Add icon prop
+  icon?: React.ReactNode;
 }
 
 const NormalInputField: React.FC<NormalInputProps> = ({
@@ -40,11 +40,11 @@ const NormalInputField: React.FC<NormalInputProps> = ({
           onChange={onChange}
           required={required}
           placeholder={placeholder}
-          className={`mt-1 font-[400] block w-full px-3 h-[56px] py-2 rounded-md shadow-sm placeholder:text-[#98A2B3] ${
+          className={`mt-1 font-[500] block text-[15px] leading-[20px] w-full px-3 h-[56px] py-2 rounded-md shadow-sm placeholder:text-[#98A2B3] ${
             icon ? 'pr-10' : ''
           }`}
           style={{ 
-            fontFamily: "Inter", 
+            fontFamily: "Lexend", 
             color, 
             backgroundColor, 
             border: error ? "1px solid #D42620" : border 
