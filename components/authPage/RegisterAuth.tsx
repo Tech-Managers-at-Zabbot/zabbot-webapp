@@ -1,171 +1,418 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { z } from "zod";
 import NormalInputField from "../NormalInputField";
-// import PhoneInputCustom from "../PhoneNumberInput";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import InAppButton from "../InAppButton";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { appColors } from "@/constants/colors";
+import { useAlert } from "next-alert";
+import { CustomSpinner } from "../CustomSpinner";
+import { GoogleIcon } from "@/constants/SvgPaths";
+import { useRegisterUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
+// import Image from "next/image";
+import { useSearchParams } from 'next/navigation';
+import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
+
+  const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254;
 
 const RegisterAuth: React.FC = () => {
+  const { getPageText, isPageLoading:isLanguageLoading } = usePageLanguage('signup');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const { addAlert } = useAlert();
+ const { initiateGoogleRegistration, isLoading: isGoogleLoading } = useGoogleAuth();
+  // const [loading, setLoading] = useState(false);
+
+
+  // Validation schemas
+const emailSchema = z
+  .string()
+  .min(1, getPageText("email_required"))
+  .email(getPageText("valid_email"));
+
+const nameSchema = z
+  .string()
+  .min(1, getPageText("required_field"))
+  .min(2, getPageText("name_schema"));
+
+const passwordSchema = z
+  .string()
+  .min(8, getPageText("password_specs"));
+
+
+  const handleGoogleRegistration = async (e:any) => {
+    e.preventDefault()
+    if(!agreeToTerms){
+      return  addAlert(
+          "Error",
+          "Please agree to the Terms of Service and Privacy Policy",
+          "error"
+        );
+    }
+
+    return initiateGoogleRegistration()
+  }
+  const router = useRouter();
+  const { mutateAsync: registerUser, isPending: registerUserLoading } =
+    useRegisterUser();
+
+  // Tracking states for user interactions
+  const [hasStartedTypingConfirm, setHasStartedTypingConfirm] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [isLoginRedirect, setIsLoginRedirect] = useState(false);
 
   const [error, setError] = useState({
     firstNameError: false,
     lastNameError: false,
-    phoneError: false,
     emailError: false,
     passwordError: false,
-    genderError: false,
-    ageGroupError: false,
+    confirmPasswordError: false,
+  });
+
+  const [errorMessages, setErrorMessages] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   // Password validation states
-  const [passwordValidations, setPasswordValidations] = useState({
-    hasAlphabet: false,
-    hasCapitalLetter: false,
-    hasNumber: false,
-    hasSpecialChar: false,
-    isLengthValid: false,
-  });
+  // const [passwordValidations, setPasswordValidations] = useState({
+  //   isLengthValid: false,
+  // });
+  const searchParams = useSearchParams();
+useEffect(() => {
+  const googleAuthError = searchParams.get("error");
+  if (googleAuthError) {
+    const errorMessage = getGoogleAuthErrorMessage(googleAuthError);
+    addAlert("Error", errorMessage, "error");
+    
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("error");
+    
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+    router.replace(newUrl);
+  }
+}, [searchParams, router]);
+
+  // Real-time validation and button state management
+  useEffect(() => {
+    // Validate all fields
+    const isFirstNameValid = firstName.trim().length >= 2;
+    const isLastNameValid = lastName.trim().length >= 2;
+    const isEmailValid = emailSchema.safeParse(email).success;
+    const isPasswordValid = passwordSchema.safeParse(password).success;
+    const doPasswordsMatch =
+      password === confirmPassword && confirmPassword.length > 0;
+
+    // Update button state
+    const allFieldsValid =
+      isFirstNameValid &&
+      isLastNameValid &&
+      isEmailValid &&
+      isPasswordValid &&
+      doPasswordsMatch &&
+      agreeToTerms;
+    setButtonDisabled(!allFieldsValid);
+
+    // Handle confirm password error display
+    if (hasStartedTypingConfirm && confirmPassword.length > 0) {
+      if (password !== confirmPassword) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          confirmPassword: getPageText("password_mismatch"),
+        }));
+        setError((prev) => ({ ...prev, confirmPasswordError: true }));
+      } else {
+        setErrorMessages((prev) => ({ ...prev, confirmPassword: "" }));
+        setError((prev) => ({ ...prev, confirmPasswordError: false }));
+      }
+    }
+  }, [
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    agreeToTerms,
+    hasStartedTypingConfirm,
+  ]);
+
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);
+    setFirstName(value);
+
+    const validation = nameSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        firstName: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, firstNameError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, firstName: "" }));
+      setError((prev) => ({ ...prev, firstNameError: false }));
+    }
+  };
+
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);
+    setLastName(value);
+
+    const validation = nameSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        lastName: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, lastNameError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, lastName: "" }));
+      setError((prev) => ({ ...prev, lastNameError: false }));
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.slice(0, MAX_EMAIL_LENGTH);
+    setEmail(value);
+
+    const validation = emailSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        email: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, emailError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, email: "" }));
+      setError((prev) => ({ ...prev, emailError: false }));
+    }
+  };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.slice(0, MAX_NAME_LENGTH);;
     setPassword(value);
-    setError({ ...error, passwordError: false });
 
     // Validate password
-    setPasswordValidations({
-      hasAlphabet: /[a-zA-Z]/.test(value),
-      hasCapitalLetter: /[A-Z]/.test(value),
-      hasNumber: /[0-9]/.test(value),
-      hasSpecialChar: /[@%$!]/.test(value),
-      isLengthValid: value.length >= 8,
-    });
+    // setPasswordValidations({
+    //   isLengthValid: value.length >= 8,
+    // });
+
+    const validation = passwordSchema.safeParse(value);
+    if (!validation.success && value.trim()) {
+      setErrorMessages((prev) => ({
+        ...prev,
+        password: validation.error.errors[0].message,
+      }));
+      setError((prev) => ({ ...prev, passwordError: true }));
+    } else {
+      setErrorMessages((prev) => ({ ...prev, password: "" }));
+      setError((prev) => ({ ...prev, passwordError: false }));
+    }
   };
 
-  // Helper function to render validation icon
-  const renderValidationIcon = (isValid: boolean) => {
-    return isValid ? (
-      <span className="text-green-500">✓</span>
-    ) : (
-      <span className="text-red-500">✗</span>
-    );
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    // Mark that user has started typing in confirm password field
+    if (!hasStartedTypingConfirm) {
+      setHasStartedTypingConfirm(true);
+    }
   };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    // setLoading(true)
+
+    // Final validation before submission
+    try {
+      nameSchema.parse(firstName);
+      nameSchema.parse(lastName);
+      emailSchema.parse(email);
+      passwordSchema.parse(password);
+
+      if (password !== confirmPassword) {
+        // setLoading(false)
+        addAlert("Error", "Passwords do not match", "error");
+      }
+
+      if (!agreeToTerms) {
+        addAlert(
+          "Error",
+          "Please agree to the Terms of Service and Privacy Policy",
+          "error"
+        );
+      }
+
+      // console.log("Form is valid, proceed with registration", {
+      //   firstName,
+      //   lastName,
+      //   email,
+      //   password,
+      // });
+
+      // Call the registerUser mutation
+      const userData = {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        email: email.toLowerCase().trim(),
+        password: password.trim(),
+        confirmPassword: confirmPassword.trim(),
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
+      };
+
+      await registerUser(userData, {
+        onSuccess: (data) => {
+          console.log("Registration successful:", data);
+          addAlert(
+            "Success!",
+            "Signup successful! An email has been sent to you for account verification",
+            "success"
+          );
+          router.push(`/otp?email=${encodeURIComponent(email)}`);
+        },
+        onError: (error: any) => {
+          console.error("Registration error:", error);
+          // setLoading(false); // Make sure to stop loading on error
+          addAlert(
+            "Error",
+            error?.response?.data?.message ||
+              "An error occurred during registration",
+            "error"
+          );
+        },
+      });
+    } catch (error: any) {
+      console.error("Validation error:", error);
+      // setLoading(false);
+      // addAlert("Error", error.message, "error");
+    }
+  };
+
+  if (isLanguageLoading) {
+  return <CustomSpinner spinnerColor="#012657" />
+}
 
   return (
-    <div className="w-full max-w-md mx-auto py-4">
-          <div className="text-[#000000] mb-10 w-full flex flex-col gap-[8px]">
-          <h1 className="text-[27.65px] font-[700] leading-[31.8px]">Create your account</h1>
-          <p className="text-[#645D5D] font-[400] text-[14px] leading-[145%]">Already have an account?  <Link href="/login" style={{ textDecoration: "none", color: "#eb512f" }}><span className="text-[#EB5017] hover:cursor-pointer">Login</span></Link></p>
-        </div>
-      <form className="space-y-4">
+    <div className="w-full border-0 mx-auto" style={{ fontFamily: "Lexend" }}>
+      <div className="mb-10 w-full flex flex-col gap-[8px]">
+        <h1
+          className="text-[28px] font-[600] leading-[31.8px]"
+          style={{ color: appColors.black }}
+        >
+          {getPageText("create_account")}
+        </h1>
+      </div>
+      <form className="mb-10 gap-3 flex flex-col">
         <div>
           <label
             htmlFor="firstName"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            First Name
+            {/* First Name */}
+            {getPageText("first_name")}
           </label>
           <NormalInputField
             id="firstName"
             value={firstName}
-            onChange={(e: any) => {
-              setFirstName(e.target.value);
-              setError({ ...error, firstNameError: false });
-            }}
-            placeholder="Input your first name"
+            onChange={handleFirstNameChange}
+            placeholder={getPageText("type_first_name")}
             type="text"
+            color="black"
             error={error.firstNameError}
-            errorMessage="First name is required"
+            backgroundColor="#E3EFFC"
+            border={"0"}
+            errorMessage={errorMessages.firstName || "First name is required"}
           />
         </div>
+
         <div>
           <label
             htmlFor="lastName"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Last Name
+            {/* Last Name */}
+            {getPageText("last_name")}
           </label>
           <NormalInputField
             id="lastName"
             value={lastName}
-            onChange={(e: any) => {
-              setLastName(e.target.value);
-              setError({ ...error, lastNameError: false });
-            }}
-            placeholder="Input your last name"
+            onChange={handleLastNameChange}
+            placeholder={getPageText("type_last_name")}
             type="text"
+            color="black"
             error={error.lastNameError}
-            errorMessage="Last name is required"
+            backgroundColor="#E3EFFC"
+            border={"0"}
+            errorMessage={errorMessages.lastName || "Last name is required"}
           />
         </div>
+
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Email
+            {/* Email Address */}
+            {getPageText("email_address")}
           </label>
           <NormalInputField
             id="email"
             value={email}
-            onChange={(e: any) => {
-              setEmail(e.target.value);
-              setError({ ...error, emailError: false });
-            }}
-            placeholder="Input your email address"
+            onChange={handleEmailChange}
+            placeholder={getPageText("type_email_address")}
             type="email"
             error={error.emailError}
-            errorMessage="Email is required"
+            color="black"
+            backgroundColor="#E3EFFC"
+            border={"0"}
+            errorMessage={errorMessages.email || "Email is required"}
           />
         </div>
-        {/* <div>
-          <label
-            htmlFor="phoneNumber"
-            className="block text-sm font-medium text-[#60646C]"
-          >
-            Phone Number
-          </label>
-          <PhoneInputCustom
-            value={phone}
-            onChangePhoneNumber={(fullPhoneNumber: string) => {
-              setPhone(fullPhoneNumber);
-              setError({ ...error, phoneError: false });
-            }}
-            placeholder="Input your phone number"
-            initialCountryCode="US"
-            error={error.phoneError}
-            errorMessage="Phone Number is required"
-          />
-        </div> */}
+
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-[#60646C]"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
           >
-            Password
+            {/* Password */}
+            {getPageText("password")}
           </label>
           <div className="relative">
             <NormalInputField
               id="password"
               value={password}
               onChange={handlePasswordChange}
-              placeholder="Create your password"
+              placeholder={getPageText("create_password")}
               type={showPassword ? "text" : "password"}
               error={error.passwordError}
-              errorMessage="Password is required"
+              color="black"
+              backgroundColor="#E3EFFC"
+              border={"0"}
+              errorMessage={errorMessages.password ? getPageText("password_specs") : getPageText("password_specs")}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+              className="absolute inset-y-0 right-0 pr-3 flex hover:cursor-pointer items-center text-sm leading-5 pointer-events-auto"
+              style={{ top: "1px", height: "56px" }}
             >
               {showPassword ? (
                 <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
@@ -174,72 +421,187 @@ const RegisterAuth: React.FC = () => {
               )}
             </button>
           </div>
+
           {/* Password validation checklist */}
-          <div className="mt-2 text-xs text-gray-600 font-[500] space-y-1">
+          {/* <div className="mt-2 text-xs text-gray-600 font-[500] space-y-1">
             <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasAlphabet
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasAlphabet)} Password
-              should have at least one alphabet
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasCapitalLetter
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasCapitalLetter)}{" "}
-              Password should have at least one capital letter
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasNumber
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasNumber)} Password
-              should have at least one number
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
-                passwordValidations.hasSpecialChar
-                  ? "text-green-500"
-                  : "text-gray-500"
-              } gap-2`}
-            >
-              {renderValidationIcon(passwordValidations.hasSpecialChar)}{" "}
-              Password should have at least one @%$! character
-            </div>
-            <div
-              className={`flex leading-[21.33px] items-center ${
+              className={`flex font-[500] leading-[21.33px] items-center ${
                 passwordValidations.isLengthValid
-                  ? "text-green-500"
-                  : "text-gray-500"
+                  ? `text-[${appColors.primaryGreen}]`
+                  : `text-[${appColors.error400}]`
               } gap-2`}
             >
-              {renderValidationIcon(passwordValidations.isLengthValid)} Password
-              should be at least eight characters long
+              {renderValidationIcon(passwordValidations.isLengthValid)} 
+              Password should be a minimum of eight (8) characters
             </div>
+          </div> */}
+        </div>
+
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-[15px] leading-[20px] font-medium text-[#60646C]"
+          >
+            {/* Confirm Password */}
+            {getPageText("confirm_password")}
+          </label>
+          <div className="relative">
+            <NormalInputField
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              placeholder={getPageText("confirm_your_password")}
+              type={showConfirmPassword ? "text" : "password"}
+              error={error.confirmPasswordError}
+              color="black"
+              backgroundColor="#E3EFFC"
+              border={"0"}
+              errorMessage={
+                errorMessages.confirmPassword ? getPageText("password_mismatch") : getPageText("password_mismatch")
+              }
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm hover:cursor-pointer leading-5 pointer-events-auto"
+              style={{ top: "1px", height: "56px" }}
+            >
+              {showConfirmPassword ? (
+                <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
+              ) : (
+                <AiOutlineEye className="h-5 w-5 text-gray-500" />
+              )}
+            </button>
           </div>
         </div>
-        <div className="mt-6">
-          <InAppButton width="100%">
-            <div>Signup</div>
-          </InAppButton>
+
+        <div
+          className="flex mb-8 gap-[20px] font-[500] text-[12px] leading-[145%] mt-4 items-center"
+          style={{ fontFamily: "Lexend", color: appColors.darkRoyalBlueForBtn }}
+        >
+          <input
+            type="checkbox"
+            id="sendUpdates"
+            name="sendUpdates"
+            checked={agreeToTerms}
+            onChange={(e) => setAgreeToTerms(e.target.checked)}
+            className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
+          />
+          <div className="block">
+            <label htmlFor="sendUpdates" className="block hover:cursor-pointer">
+              {/* I agree to the */}
+              {getPageText("i_agree_to_the")}{" "}
+              <Link
+                href="/terms-of-service"
+                target="blank"
+                style={{ textDecoration: "none" }}
+              >
+                <span
+                  className={`underline hover:cursor-pointer hover:text-[#0098DE]`}
+                >
+                  {/* Terms of Service and Privacy Policy */}
+                  {getPageText("terms_of_service_policy")}
+                </span>
+              </Link>
+            </label>
+          </div>
+        </div>
+
+        <InAppButton
+          disabled={
+            buttonDisabled ||
+            isGoogleLoading ||
+            registerUserLoading ||
+            isLoginRedirect
+          }
+          disabledColor={appColors.disabledButtonBlue}
+          background={appColors.darkRoyalBlueForBtn}
+          width="100%"
+          onClick={handleSubmit}
+        >
+          {registerUserLoading ? <CustomSpinner /> : <div>
+            {/* Agree & Join */}
+            {getPageText("agree_join")}
+            </div>
+            }
+        </InAppButton>
+
+        <div
+          className="flex gap-[5px] justify-center items-center font-[500] text-[16px] leading-[145%]"
+          style={{ color: appColors.gray300, fontFamily: "Lexend" }}
+        >
+          <span className="w-[73px] border-1"></span>{getPageText("or")}{" "}
+          <span className="w-[73px] border-1"></span>
+        </div>
+
+        <InAppButton
+          disabled={isGoogleLoading || registerUserLoading || isLoginRedirect}
+          disabledColor={appColors.gray300}
+          borderRadius="50px"
+          height="58px"
+          backgroundColor={"transparent"}
+          width="100%"
+          color="#007AB2"
+          border="1px solid #84D8FF"
+          onClick={handleGoogleRegistration}
+          isShadowShow={false}
+        >
+          {isGoogleLoading ? (
+            <CustomSpinner />
+          ) : (
+            <div
+              className="flex justify-center font-[700] text-[14px] leading-[160%] items-center gap-4"
+              style={{ fontFamily: "Lexend" }}
+            >
+              <span>
+                <GoogleIcon />
+              </span>
+              <span>
+                {/* Continue with Google */}
+                {getPageText("continue_google")}
+                </span>
+            </div>
+          )}
+        </InAppButton>
+
+        <div
+          className="text-[#645D5D] gap-[6px] flex justify-center items-center mt-6 font-[500] text-[16px] leading-[145%]"
+          style={{ fontFamily: "Lexend", color: "#162B6E" }}
+        >
+          <div>
+            {/* Already have an account? */}
+            {getPageText("already_have_account")}
+            </div>
+          <Link
+            // href="/login"
+            href={isLoginRedirect || registerUserLoading ? "#" : "/login"}
+            onClick={() => {
+              setIsLoginRedirect(true);
+            }}
+            // style={{ textDecoration: "none", color: appColors.normalBlue }}
+            style={{
+              textDecoration: "none",
+              color:
+                registerUserLoading || isLoginRedirect
+                  ? "#9CA3AF"
+                  : appColors.normalBlue,
+              pointerEvents:
+                registerUserLoading || isLoginRedirect ? "none" : "auto",
+            }}
+          >
+            <span
+              className={`font-[600] ${
+                registerUserLoading || isLoginRedirect
+                  ? "cursor-not-allowed"
+                  : "hover:cursor-pointer"
+              }`}
+            >
+              {/* Sign In */}
+              {getPageText("sign_in")}
+            </span>
+          </Link>
         </div>
       </form>
-      {/* <Alerts
-        position="bottom-right"
-        direction="right"
-        timer={3000}
-        className="rounded-md relative z-50 !w-80"
-      /> */}
     </div>
   );
 };

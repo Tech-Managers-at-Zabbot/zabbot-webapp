@@ -1,15 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NormalInputField from "../NormalInputField";
 import InAppButton from "../InAppButton";
 import NationalityInput from "../NatonalityInput";
-import { Alerts, useAlert } from "next-alert";
+import { useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
 import { useJoinFoundersList } from '../../services/waitingList/mutation';
 import { MessageIcon } from "@/constants/SvgPaths";
+import { useSearchParams } from 'next/navigation';
+import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
+
 
 
 const MAX_NAME_LENGTH = 100;
@@ -41,6 +45,23 @@ const WaitingListAuthComponent: React.FC = () => {
 
   const [checkboxError, setCheckboxError] = useState(false);
   const { mutate:waitingListData, isPending } = useJoinFoundersList()
+
+      const searchParams = useSearchParams();
+
+    useEffect(() => {
+      const googleAuthSuccess = searchParams.get("success");
+      console.log('success:', googleAuthSuccess)
+      if (googleAuthSuccess) {
+        const successMessage = getGoogleAuthErrorMessage(googleAuthSuccess);
+        addAlert("Success", successMessage, "success");
+        
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("success");
+        
+        const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+        router.replace(newUrl);
+      }
+    }, [searchParams, router]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.slice(0, MAX_NAME_LENGTH);
@@ -141,9 +162,9 @@ const WaitingListAuthComponent: React.FC = () => {
     }
     try {
       waitingListData({
-        name,
-        email,
-        country: useOtherCountry ? otherCountry : country,
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        country: useOtherCountry ? otherCountry.trim() : country,
         sendUpdates: checkboxes.sendUpdates,
         betaTest: checkboxes.betaTest,
         contributeSkills: checkboxes.contributeRecordings,
@@ -165,7 +186,7 @@ const WaitingListAuthComponent: React.FC = () => {
             betaTest: false,
             contributeRecordings: false,
           })
-          return router.push('/success-page')
+          return router.push('/founders-circle/founders-success')
         },
         onError: (error) => {
           console.error("Error joining founders list", error);
@@ -377,17 +398,11 @@ const WaitingListAuthComponent: React.FC = () => {
         </div>
 
         <div className="mt-6">
-          <InAppButton type={'submit'} borderRadius="8.15px" backgroundColor="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
+          <InAppButton type={'submit'} borderRadius="8.15px" background="#162B6E" width="100%" disabled={isPending} onClick={(e: any) => handleSubmit(e)}>
           {isPending ? <CustomSpinner /> : <div className="text-[white]">Sign up</div>}
           </InAppButton>
         </div>
       </form>
-      <Alerts
-        position="top-left"
-        direction="right"
-        timer={3000}
-        className="rounded-md relative z-1000 !w-80"
-      />
     </div>
   );
 };
