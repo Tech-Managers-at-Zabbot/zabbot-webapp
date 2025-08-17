@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -20,6 +21,8 @@ import { HiOutlineTrophy } from "react-icons/hi2";
 import { useUser } from "@/contexts/UserContext";
 import { useTheme } from "@/contexts/ThemeProvider";
 import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
+import { usePageLanguage } from "@/contexts/LanguageContext";
+import { useLoading } from "@/contexts/LoadingProvider";
 
 const Dashboard = () => {
   const [goPremium, setGoPremium] = useState(true);
@@ -30,6 +33,11 @@ const Dashboard = () => {
     useGetUserCount();
 
   const { goalsCount, userGoalsLoading } = useUser();
+
+  const { getPageText, isPageLoading: isLanguageLoading } =
+      usePageLanguage("userDashboard");
+
+  const { loading, setLoading } = useLoading();
 
   const userCount = userCountData?.data || 0;
 
@@ -45,8 +53,8 @@ const Dashboard = () => {
 
   const dashboardMetricData = [
     {
-      title: "Your Completed Daily Goals",
-      value: `${goalsCount} ${goalsCount === 1 ? "goal" : "goals"}`,
+      title: getPageText("completed_daily_goals"),
+      value: `${goalsCount} ${goalsCount === 1 ? getPageText("goal") : getPageText("goals")}`,
       icon: (
         <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <HiOutlineTrophy />
@@ -56,8 +64,8 @@ const Dashboard = () => {
       isEmpty: !goalsCount,
     },
     {
-      title: "Your Completed Courses",
-      value: "0 courses",
+      title: getPageText("completed_courses"),
+      value: `0 ${getPageText("courses")}`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <FaGraduationCap />
@@ -67,8 +75,8 @@ const Dashboard = () => {
     },
 
     {
-      title: "Active Learners",
-      value: `${userCount} learners`,
+      title: getPageText("active_learners"),
+      value: `${userCount} ${getPageText("learners")}`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <BsPeople />
@@ -110,6 +118,19 @@ const Dashboard = () => {
   }, [theme]);
 
   const { userDetails } = useUser();
+
+  function LanguageCheck(){
+    if (isLanguageLoading) {
+     if(!loading){
+       return setLoading(true);
+     }
+   }
+   return setLoading(false);
+  }
+
+  useEffect(()=> {
+    LanguageCheck()
+  },[isLanguageLoading])
 
   return (
     <div className="min-h-screen">
@@ -166,7 +187,7 @@ const Dashboard = () => {
                   className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
                   style={{ color: theme === "dark" ? "#FFFAEB" : "#333333" }}
                 >
-                  Learn Yorùbá. Speak Proudly. Belong Deeply.
+                  {getPageText("learn_speak_belong")}
                 </span>
               </div>
               {/* Menu */}

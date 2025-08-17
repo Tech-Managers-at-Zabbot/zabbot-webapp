@@ -13,9 +13,13 @@ import { PlayerEllipse } from "@/constants/SvgPaths";
 import { useUser } from "@/contexts/UserContext";
 import { EmptyStateCard } from "../general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const DailyGoals = () => {
   const { userDailyGoal, goalLoading } = useUser();
+
+  const { getPageText } =
+        usePageLanguage("userDashboard");
 
   return (
     <>
@@ -30,7 +34,7 @@ const DailyGoals = () => {
         >
           <section>
             <h1 className="font-semibold text-[18px] sm:text-[20px] md:text-[24px] leading-[100%] text-[#162B6E]">
-              Daily Goal
+              {getPageText("daily_goal")}
             </h1>
             <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
               {userDailyGoal === 100
@@ -96,6 +100,9 @@ const WordForTheDay = () => {
   const [showCongrats, setShowCongrats] = useState(false);
   const [isGoalComplete, setIsGoalComplete] = useState(false);
   const { theme } = useTheme();
+
+  const { getPageText } =
+        usePageLanguage("userDashboard");
 
   const {
     userDetails,
@@ -217,10 +224,10 @@ const WordForTheDay = () => {
             style={{ fontFamily: "Lexend" }}
           >
             <div className="font-semibold text-[18px] sm:text-[20px] md:text-[23px] leading-[100%] text-[#162B6E]">
-              Word of the Day
+              {getPageText("word_of_the_day")}
             </div>
             <div className="font-light mt-2 text-[12px] sm:text-[14px] md:text-[16px] leading-[100%] text-[#666666]">
-              Listen and Practice
+              {getPageText("listen_and_practice")}
             </div>
             <div className="font-bold text-[#000000CC] text-[28px] sm:text-[32px] md:text-[36px] leading-[100%] my-2 sm:my-4">
               {dailyWordData?.languageText}

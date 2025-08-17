@@ -115,6 +115,7 @@ export default function AuthGuard({
   // }, [isChecking, setLoading]);
 
   if (isChecking) {
+    if(!loading){
     return (
       <>
         <Loader isDark={isDark} />
@@ -126,6 +127,7 @@ export default function AuthGuard({
         /> */}
       </>
     );
+  }
   }
 
   return (
