@@ -213,8 +213,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const dropdownOptions = [
     {
       name: "Chat with Ọ̀rẹ́",
-      icon: "/userDashboard/trophy.svg",
-      path: "",
+      icon: "/userDashboard/isPremiumImage.svg",
+      path: "/premium/chat-with-ore",
     },
     {
       name: "Listen with Òwe",

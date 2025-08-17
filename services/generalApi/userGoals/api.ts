@@ -2,10 +2,9 @@ import axiosInstance from "../../axiosInstance";
 
 
 export const getUserDailyGoal = async (
-    userId: string,
     languageId: string,
 ) => {
-     const response = await axiosInstance.get(`/lessons/goals/daily-goal/${userId}/${languageId}`)
+     const response = await axiosInstance.get(`/lessons/goals/daily-goal/${languageId}`)
     return response.data;
 }
 
@@ -25,9 +24,8 @@ export const completeUserDailyGoal = async (
 
 export const getDailyWord = async (
     languageId: string,
-    userId?:string
 ) => {
-     const response = await axiosInstance.get(`/lessons/daily-words/${languageId}?userId=${userId}`)
+     const response = await axiosInstance.get(`/lessons/daily-words/${languageId}`)
     return response.data;
 }
 
