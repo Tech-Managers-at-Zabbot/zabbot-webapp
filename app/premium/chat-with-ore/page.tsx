@@ -6,9 +6,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTheme } from "@/contexts/ThemeProvider";
-import SideMenu from '../../../components/premium/chat-with-ore/side-menu';
 import MobileHeader from '../../../components/premium/chat-with-ore/mobile-header'
-import ConversationCard from "../../../components/premium/chat-with-ore/conversation-card";
 
 
 const ChatBot = () => {
