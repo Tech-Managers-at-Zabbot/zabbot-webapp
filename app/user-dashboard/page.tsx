@@ -61,7 +61,7 @@ const Dashboard = () => {
         </div>
       ),
       loading: userGoalsLoading || userCountLoading,
-      isEmpty: !goalsCount,
+      isEmpty: !goalsCount && goalsCount !== 0,
     },
     {
       title: getPageText("completed_courses"),
