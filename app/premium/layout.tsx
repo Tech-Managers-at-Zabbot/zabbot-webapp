@@ -20,6 +20,10 @@ const Layout = ({
  
   const { theme } = useTheme();
   const logoUrl = "/general/zabbot-logo-white.svg";
+
+  const goToHome = () => {
+    window.location.href = '/user-dashboard';
+  }
   
   return (
     <AuthGuard isAdmin={false}>
@@ -36,7 +40,8 @@ const Layout = ({
                   alt="Zabbot Logo"
                   fill
                   priority
-                  className="object-contain"
+                  className="object-contain cursor-pointer"
+                  onClick={goToHome}
                 />
               </div>
             </div>
