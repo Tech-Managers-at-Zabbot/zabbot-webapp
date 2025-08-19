@@ -28,7 +28,7 @@ const Layout = ({
           <div className={`flex-1`}>
             <UserDashboardNav />
 
-          {/* <section className="relative bg-[#002557] flex justify-between items-center p2 text-xs lg:text-xs xl:text-sm leading-[100%] px-[5%] py-[16px]">
+          <section className="relative bg-[#002557] flex justify-between items-center p2 text-xs lg:text-xs xl:text-sm leading-[100%] px-[5%] py-[16px]">
             <div className="flex-shrink-0 order-1">
               <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
                 <Image
@@ -49,7 +49,7 @@ const Layout = ({
                 <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
-          </section> */}
+          </section>
 
 
             <main style={{ flex: 1 }} className="relative">
