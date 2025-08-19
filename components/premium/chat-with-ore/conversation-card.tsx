@@ -2,16 +2,35 @@ import React, { useState } from 'react';
 
 // Define the shape of the props
 interface CardProps {
+  id: string;
   title: string;
   date: string;
+  onRename: (id: string, newTitle: string) => void;
+  onDelete: (id: string) => void;
 }
 
 // The component now accepts 'title' and 'date' as props
-const ConversationCard = ({ title, date }: CardProps) => {
+const ConversationCard = ({id, title, date, onRename, onDelete }: CardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Close the menu when a button is clicked
+  const handleRenameClick = () => {
+    setIsOpen(false);
+    const newTitle = prompt('Enter a new title:');
+    if (newTitle) {
+      onRename(id, newTitle);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    setIsOpen(false);
+    if (confirm('Are you sure you want to delete this conversation?')) {
+      onDelete(id);
+    }
+  };
+
   return (
-    <div className="mt-5 flex items-center p-4 bg-blue-400 rounded-lg shadow-md max-w-sm relative">
+    <div className="mt-5 flex items-center p-4 bg-blue-400 rounded-lg shadow-md max-w-sm relative h-full">
       
       {/* Left Side: Chat Icon */}
       <div className="flex items-center justify-center w-10 h-10 rounded-full mr-1">
@@ -40,7 +59,7 @@ const ConversationCard = ({ title, date }: CardProps) => {
         {isOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
             {/* Rename Option */}
-            <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="#" onClick={handleRenameClick} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
               </svg>
@@ -48,15 +67,15 @@ const ConversationCard = ({ title, date }: CardProps) => {
             </a>
 
             {/* Archive Option */}
-            <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            {/* <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6zm0 0v6a2 2 0 002 2h10a2 2 0 002-2v-6m-4 5h-4"></path>
               </svg>
               Archive
-            </a>
+            </a> */}
 
             {/* Delete Option */}
-            <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="#" onClick={handleDeleteClick} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
               <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.013 21H7.987a2 2 0 01-1.92-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
               </svg>
