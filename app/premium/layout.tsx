@@ -46,10 +46,10 @@ const Layout = ({
               </div>
             </div>
 
-            {/* Right section */}
+            
             <div className="flex gap-2  bg-[#002557] sm:gap-4 md:gap-6 lg:gap-8 flex-shrink-0 items-start order-3">
               
-              {/* Menu */}
+            
               <div className="lg:flex mt-1">
                 <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
