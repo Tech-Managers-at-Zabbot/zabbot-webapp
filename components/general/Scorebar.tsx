@@ -1,3 +1,5 @@
+"use client";
+
 const ScoreBar = ({ finalScore }: { finalScore: number }) => {
     const percentage = Math.round(finalScore * 100); // 0–100
 

@@ -4,6 +4,7 @@ import { PronunciationProps } from '../types';
 
 import { usePronunciationFeedback } from '@/services/generalApi/pronounciations/mutation';
 import ScoreBar from '@/components/general/Scorebar';
+
 const generateRandomString = (length = 6) => {
     return Math.random().toString(36).substring(2, 2 + length);
 }
@@ -86,21 +87,21 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                 formData.append("file", blob, fileName);
 
                 try {
-                    const feedbackRes = await getPronunciationFeedback({ id: data.id, payload: formData });
+                    const feedbackRes = await getPronunciationFeedback({ id: data?.id, payload: formData });
 
                     if (!feedbackRes) {
                         setIsProcessingRecord(false);
                         return;
                     }
 
-                    if (feedbackRes.status === 'success' && feedbackRes.data) {
+                    if (feedbackRes?.status === 'success' && feedbackRes?.data) {
                         // Handle successful feedback response
                         setProcessedData({
-                            embeddingSimilarity: feedbackRes.data.embeddingSimilarity,
-                            finalScore: feedbackRes.data.finalScore,
-                            plot: feedbackRes.data.plot,
-                            remark: feedbackRes.data.remark,
-                            textSimilarity: feedbackRes.data.textSimilarity,
+                            embeddingSimilarity: feedbackRes.data?.embeddingSimilarity,
+                            finalScore: feedbackRes.data?.finalScore,
+                            plot: feedbackRes.data?.plot,
+                            remark: feedbackRes.data?.remark,
+                            textSimilarity: feedbackRes.data?.textSimilarity,
                         });
 
                         setIsProcessingRecord(false);
