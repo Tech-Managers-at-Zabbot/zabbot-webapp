@@ -158,7 +158,7 @@ const AchievementsCard = () => {
           {/* Left Section */}
           <section className="flex-shrink-0">
             <div className="flex flex-col gap-[14px]">
-              <div className="text-[#737477] flex flex-col gap-2 font-[400] text-[14px] leading-[100%]">
+              <div className="text-[#737477] flex flex-col gap-2 text-center font-[400] text-[14px] leading-[100%]">
                 <span className="whitespace-nowrap">{getPageText("achievements")}</span>
                 <span className="whitespace-nowrap text-[#F96129]">{getPageText("unlocked")} 1/23</span>
               </div>
