@@ -89,25 +89,28 @@ const PronounceWithPara = () => {
 
                             </div>
 
-                            <div className="mb-4 block lg:hidden no-scrollbar">
-                                <div className="relative mx-auto justify-center items-center w-70">
-                                    <FiSearch className="absolute left-3 top-3 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search"
-                                        className="w-70 pl-10 pr-4 py-2 border rounded-lg text-white"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                </div>
-                            </div>
+
 
                             {filteredPwpItems && filteredPwpItems.length > 0 && (
-                                <div className='max-auto max-w-[calc(100vw-50px)] overflow-x-hidden block lg:hidden no-scrollbar'>
-                                    <div className="flex flex-row gap-4 overflow-x-auto scroll-smooth hide-scrollbar">
-                                        <PronunciationList setSelectedItem={setSelectedItem} selectedItem={selectedItem} data={filteredPwpItems} isLoading={isLoadingPwp} />
+                                <>
+                                    <div className="mb-4 block lg:hidden no-scrollbar">
+                                        <div className="relative mx-auto justify-center items-center w-70">
+                                            <FiSearch className="absolute left-3 top-3 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Search"
+                                                className="w-70 pl-10 pr-4 py-2 border rounded-lg text-white"
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                    <div className='max-auto max-w-[calc(100vw-50px)] overflow-x-hidden block lg:hidden no-scrollbar'>
+                                        <div className="flex flex-row gap-4 overflow-x-auto scroll-smooth hide-scrollbar">
+                                            <PronunciationList setSelectedItem={setSelectedItem} selectedItem={selectedItem} data={filteredPwpItems} isLoading={isLoadingPwp} />
+                                        </div>
+                                    </div>
+                                </>
                             )}
 
                             {!selectedItem && (
