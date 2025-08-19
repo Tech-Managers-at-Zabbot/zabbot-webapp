@@ -69,7 +69,6 @@ const ChatWithOre = () => {
     setInputValue("");
     setLoading(true);
 
-    // For testing purposes, simulate a local save
     addMessage('user', inputValue);
 
     try {
@@ -82,7 +81,6 @@ const ChatWithOre = () => {
       const reply =
         data.choices?.[0]?.message?.content || "No response received.";
 
-      // For testing purposes, simulate a local save
       addMessage('assistant', reply);
       
       if (reply !== "No response received.") 
