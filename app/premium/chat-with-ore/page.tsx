@@ -2,9 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import { useAlert } from "next-alert";
+import Head from "next/head";
 import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import Head from "next/head";
 import { useDailyLimit } from '@/hooks/useChatDailyLimit';
 import { useConversations } from '@/components/premium/chat-with-ore/use-conversation';
 import ConversationCard from '@/components/premium/chat-with-ore/conversation-card';
@@ -17,6 +18,7 @@ const ChatWithOre = () => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
+  const { addAlert } = useAlert();
 
   // List of possible proverbs
   const allProverbs = [
@@ -59,7 +61,7 @@ const ChatWithOre = () => {
   const sendMessage = async () => {
     if (!inputValue.trim()) return;
     if (!canMakeCall) {
-      alert("You have reached your daily limit of 30 calls. Please try again tomorrow.");
+      addAlert("Error", "You have reached your daily limit of 30 calls. Please try again tomorrow.", "error");
       return; 
     }
 
