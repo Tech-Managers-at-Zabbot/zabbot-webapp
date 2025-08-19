@@ -61,7 +61,7 @@ const ChatWithOre = () => {
   const sendMessage = async () => {
     if (!inputValue.trim()) return;
     if (!canMakeCall) {
-      addAlert("Error", "You have reached your daily limit of 30 calls. Please try again tomorrow.", "error");
+      addAlert("Notice", "You have reached your daily limit of 30 calls. Please try again tomorrow.", "error");
       return; 
     }
 
