@@ -38,8 +38,8 @@ const DailyGoals = () => {
             </h1>
             <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
               {userDailyGoal === 100
-                ? "You did it! You listened and practiced—Your spark is growing."
-                : "Hear it. Say it. Own it. Practice with confidence."}
+                ? getPageText("completed_daily_goal_tag")
+                : getPageText("uncompleted_daily_goal_tag")}
             </span>
           </section>
           <section className="flex h-full justify-center items-center my-2 sm:my-4">
