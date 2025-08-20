@@ -28,14 +28,14 @@
   "listen_and_practice": "Listen and Practice",
   "journey_hub": "Journey Hub",
   "learning_tagline": "Meaningful Yoruba learning - one Journey at a time",
-   "proverbs": "Proverbs",
+  "proverbs": "Proverbs",
   "history": "History",
   "and": "&",
   "humour": "Humor",
   "learn_more": "Learn More",
   "consonant": "Consonant",
   "toolkit": "Toolkit",
-    "invite": "Invite",
+  "invite": "Invite",
   "friends": "Friends",
   "win_prizes": "Win great prizes!",
   "get_link": "Get the link",
@@ -47,5 +47,7 @@
   "profile": "Profile",
   "notifications": "Notifications",
   "logout": "Logout",
-  "get_in_touch": "Get in Touch"
+  "get_in_touch": "Get in Touch",
+  "uncompleted_daily_goal_tag": "Hear it. Say it. Own it. Practice with confidence.",
+  "completed_daily_goal_tag":"You did it! You listened and practiced — Your spark is growing."
 }
