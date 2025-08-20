@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
+
+import { useAlert } from "next-alert";
+import Head from "next/head";
 import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import Head from "next/head";
-
+import { useDailyLimit } from '@/hooks/useChatDailyLimit';
 import { useConversations } from '@/components/premium/chat-with-ore/use-conversation';
-
 import ConversationCard from '@/components/premium/chat-with-ore/conversation-card';
 
 const ChatWithOre = () => {
@@ -17,6 +18,7 @@ const ChatWithOre = () => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
+  const { addAlert } = useAlert();
 
   // List of possible proverbs
   const allProverbs = [
@@ -58,12 +60,15 @@ const ChatWithOre = () => {
 
   const sendMessage = async () => {
     if (!inputValue.trim()) return;
+    if (!canMakeCall) {
+      addAlert("Notice!!!", "You have reached your daily limit of 30 calls. Please try again tomorrow.", "error");
+      return; 
+    }
 
     
     setInputValue("");
     setLoading(true);
 
-    // For testing purposes, simulate a local save
     addMessage('user', inputValue);
 
     try {
@@ -76,16 +81,17 @@ const ChatWithOre = () => {
       const reply =
         data.choices?.[0]?.message?.content || "No response received.";
 
-      // For testing purposes, simulate a local save
       addMessage('assistant', reply);
+      
+      if (reply !== "No response received.") 
+        decrementCalls();
+
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
-
-  
 
   const { 
     currentConversation, 
@@ -98,6 +104,8 @@ const ChatWithOre = () => {
     searchTerm, // Get the search term state
     setSearchTerm // Get the function to update search term
    } = useConversations();
+
+   const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } = useDailyLimit();
 
   return (
     <div>
@@ -118,12 +126,13 @@ const ChatWithOre = () => {
               fontFamily: "Lexend", fontWeight: 400, textAlign: "left"
             }}>
               <div className="mb-4">
+                <p className="mb-3 text-center">Used {TOTAL_CALLS - callsRemaining} out of {TOTAL_CALLS}</p>
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-3 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search"
-                    className="w-70 pl-10 pr-4 py-2 border rounded-lg text-white"
+                    className="w-auto pl-10 pr-4 py-2 border rounded-lg text-white"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
