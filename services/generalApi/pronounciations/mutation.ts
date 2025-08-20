@@ -1,5 +1,5 @@
- import { useQuery } from "@tanstack/react-query";
-import { getPronunciationList, getPronunciationById, addPronunciation } from "./api";
+ import { useMutation, useQuery } from "@tanstack/react-query";
+import { getPronunciationList, getPronunciationById, addPronunciation, pronunciationFeedback } from "./api";
 
 export function useGetAllPronunciation() {
   return useQuery({
@@ -27,5 +27,21 @@ export function useAddPronunciation() {
     refetchOnMount: true,
     enabled: true,
     refetchOnWindowFocus: false,
+  });
+}
+
+// getPronunciationFeedback
+export function usePronunciationFeedback() {
+  return useMutation({
+   mutationFn: ({ id, payload }: { id: string; payload: FormData }) =>
+      pronunciationFeedback(id, payload),
+    onSuccess: async (data) => {
+      // Handle success (e.g., show a success message)
+      return data;
+    },
+    onError: (error) => {
+      // Handle error (e.g., show an error message)
+      console.error("Error submitting feedback:", error);
+    },
   });
 }

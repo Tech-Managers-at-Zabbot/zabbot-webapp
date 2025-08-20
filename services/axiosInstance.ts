@@ -3,12 +3,8 @@ import Cookies from 'js-cookie';
 // import { redirect } from "next/navigation";
 // import Cookies from "js-cookie";
 
-const BASE_URL = "https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1"
-
-//LOCAL ==> 'http://localhost:3010/api/v1'
-//MAIN BRANCH/WAITING LIST BRANCH ==> 'https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1';
-//DEMO BRANCH ==> 'https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1'
-
+const BASE_URL = "https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1"
+// const DEVELOPMENT_BRANCH = 'https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1'
 // process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const axiosInstance = axios.create({

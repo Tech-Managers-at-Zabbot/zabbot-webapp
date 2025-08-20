@@ -20,6 +20,10 @@ const Layout = ({
  
   const { theme } = useTheme();
   const logoUrl = "/general/zabbot-logo-white.svg";
+
+  const goToHome = () => {
+    window.location.href = '/user-dashboard';
+  }
   
   return (
     <AuthGuard isAdmin={false}>
@@ -36,15 +40,16 @@ const Layout = ({
                   alt="Zabbot Logo"
                   fill
                   priority
-                  className="object-contain"
+                  className="object-contain cursor-pointer"
+                  onClick={goToHome}
                 />
               </div>
             </div>
 
-            {/* Right section */}
+            
             <div className="flex gap-2  bg-[#002557] sm:gap-4 md:gap-6 lg:gap-8 flex-shrink-0 items-start order-3">
               
-              {/* Menu */}
+            
               <div className="lg:flex mt-1">
                 <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>

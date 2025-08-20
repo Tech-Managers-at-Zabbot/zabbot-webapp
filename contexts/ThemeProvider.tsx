@@ -46,7 +46,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       updateBodyClass(storedTheme);
     } else {
       const currentHour = new Date().getHours();
-      const autoDark = currentHour >= 18 || currentHour < 6;
+      const autoDark = currentHour >= 18 || currentHour < 1;
       const defaultTheme: Theme = autoDark ? "dark" : "light";
 
       setThemeState(defaultTheme);
@@ -59,7 +59,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkTimeAndAutoSwitch = () => {
       const hour = new Date().getHours();
-      const shouldBeDark = hour >= 18 || hour < 6;
+      const shouldBeDark = hour >= 18 || hour < 1;
 
       if (shouldBeDark && theme !== "dark") {
         setTheme("dark");

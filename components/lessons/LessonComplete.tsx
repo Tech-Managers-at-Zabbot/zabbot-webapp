@@ -11,7 +11,7 @@ const LessonCompleteComponent = () => {
               <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-[#EBEBEB]">
                 O parí
               </p>
-              <p className="flex rounded-lg bg-black/30 p-2 text-lg sm:text-xl md:text-2xl lg:text-3xl font-[400] leading-tight text-[#EBEBEB]">
+              <p className="flex rounded-lg bg-black/30 p-2 text-lg sm:text-xl md:text-2xl lg:text-3xl font-[400] leading-tight items-center justify-center text-center text-[#EBEBEB]">
                 Re Re Mi
               </p>
               <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal leading-tight text-[#EBEBEB]">

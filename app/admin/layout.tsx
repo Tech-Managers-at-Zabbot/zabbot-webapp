@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const currentTime = new Date();
     const hours = currentTime.getHours();
 
-    if (hours >= 6 && hours < 12) {
+    if (hours >= 1 && hours < 12) {
       setTimeSunMoonLink("/userDashboard/morning-sun.svg");
     } else if (hours >= 12 && hours < 18) {
       setTimeSunMoonLink("/userDashboard/afternoon-sun.svg");
