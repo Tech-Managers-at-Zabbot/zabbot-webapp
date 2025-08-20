@@ -16,7 +16,6 @@ const QuizSuccessModal: React.FC<QuizSuccessModalProps> = ({ onClose }) => {
       
       {/* Modal content */}
       <div className="relative z-10 flex flex-col w-full items-center justify-center p-8 text-center">
-        {/* Large image - replace with your actual image path */}
         <img 
           src="/userDashboard/footer-grandma-owl.png" 
           alt="Success" 

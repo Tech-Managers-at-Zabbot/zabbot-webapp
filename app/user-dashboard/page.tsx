@@ -61,7 +61,7 @@ const Dashboard = () => {
         </div>
       ),
       loading: userGoalsLoading || userCountLoading,
-      isEmpty: !goalsCount,
+      isEmpty: !goalsCount && goalsCount !== 0,
     },
     {
       title: getPageText("completed_courses"),
@@ -91,14 +91,14 @@ const Dashboard = () => {
     const currentTime = new Date();
     const hours = currentTime.getHours();
 
-    if (hours >= 6 && hours < 12) {
-      // Morning: 6 AM to 12 PM
+    if (hours >= 1 && hours < 12) {
+      // Morning: 1 AM to 12 PM
       setGreeting("Káàrọ̀");
     } else if (hours >= 12 && hours < 18) {
       // Afternoon: 12 PM to 6 PM
       setGreeting("Káàsán");
     } else {
-      // Night: 6 PM to 6 AM
+      // Night: 6 PM to 1 AM
       setGreeting("Káalẹ́");
     }
   }, []);
