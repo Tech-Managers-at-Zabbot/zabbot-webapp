@@ -10,6 +10,12 @@ import React, {
 } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getLessonWithContents } from "@/services/generalApi/lessons/api";
+import { useUser } from "./UserContext";
+import {
+  useCreateUserCourse,
+  useGetUserCourse,
+  useUpdateUserCourse,
+} from "@/services/generalApi/lessons/mutation";
 
 interface Content {
   id: string;
@@ -133,6 +139,17 @@ interface LessonProviderProps {
 export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const params = useParams();
   const router = useRouter();
+
+  const {
+    mutate: addUserCourse,
+    // isPending: createUserCourseLoading
+  } = useCreateUserCourse();
+
+  const {
+    mutate: userCourseUpdate,
+    // isPending: userCourseUpdateLoading
+  } = useUpdateUserCourse();
+
   const { courseId, lessonId } = params;
 
   // State
@@ -142,6 +159,13 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const [currentContentIndex, setCurrentContentIndex] = useState(-1);
   const [userCourse, setUserCourse] = useState<UserCourse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const { userDetails } = useUser();
+
+  const {
+    data: userCourseDetails,
+    //  isLoading:isUserCourseLoading
+  } = useGetUserCourse(userDetails.languageId, courseId);
 
   // Quiz-related state
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -205,40 +229,44 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load or create user course
   const loadOrCreateUserCourse = async () => {
     try {
-      // Check if user course exists in localStorage first
       const savedUserCourse = localStorage.getItem(USER_COURSE_KEY);
 
-      if (savedUserCourse) {
+      if (savedUserCourse && savedUserCourse !== "undefined") {
         setUserCourse(JSON.parse(savedUserCourse));
         return;
       }
 
-      // Try to fetch from backend
-      const response = await fetch(`/api/user-courses/${courseId}`);
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserCourse(data);
-        localStorage.setItem(USER_COURSE_KEY, JSON.stringify(data));
+      if (userCourseDetails?.data) {
+        setUserCourse(userCourseDetails?.data);
+        localStorage.setItem(
+          USER_COURSE_KEY,
+          JSON.stringify(userCourseDetails?.data)
+        );
       } else {
         // Create new user course
-        const createResponse = await fetch("/api/user-courses", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            courseId,
-            lastLessonId: lessonId,
-            languageId: "your-language-id", // Get this from your app context
-          }),
-        });
+        const userCourseDetailsInfo = {
+          lastLessonId: null,
+          lastContentId: null,
+        };
 
-        if (createResponse.ok) {
-          const newUserCourse = await createResponse.json();
-          setUserCourse(newUserCourse);
-          localStorage.setItem(USER_COURSE_KEY, JSON.stringify(newUserCourse));
-        }
+        addUserCourse(
+          {
+            languageId: userDetails?.languageId,
+            courseId: courseId,
+            userCourseData: userCourseDetailsInfo,
+          },
+          {
+            onSuccess: (data) => {
+              setUserCourse(data?.data?.newUserCourse);
+              localStorage.setItem(
+                USER_COURSE_KEY,
+                JSON.stringify(data?.data?.newUserCourse)
+              );
+            },
+            // onError: (error) => {
+            // },
+          }
+        );
       }
     } catch (error) {
       console.error("Error loading/creating user course:", error);
@@ -251,7 +279,8 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       contentIndex: number,
       quizIndex: number = -1,
       step: LessonStep,
-      contentId?: string
+      contentId?: string,
+      sendToBackend: boolean = false
     ) => {
       // Save to localStorage immediately
       const progressData = {
@@ -264,37 +293,50 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       localStorage.setItem(LESSON_PROGRESS_KEY, JSON.stringify(progressData));
 
       // Update user course
-      if (userCourse && contentId) {
-        const totalItems = contents.length + quizzes.length;
-        const completedItems =
-          Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
-        const progress =
-          totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+      if (sendToBackend) {
+        if (userCourse && contentId) {
+          const totalItems = contents.length + quizzes.length;
+          const completedItems =
+            Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
+          const progress =
+            totalItems > 0
+              ? Math.round((completedItems / totalItems) * 100)
+              : 0;
 
-        const updatedUserCourse = {
-          ...userCourse,
-          lastLessonId: lessonId as string,
-          lastContentId: contentId,
-          lastAccessed: new Date(),
-          progress,
-        };
+          const updatedUserCourse = {
+            ...userCourse,
+            lastLessonId: lessonId as string,
+            lastContentId: contentId,
+            lastAccessed: new Date(),
+            progress,
+          };
 
-        setUserCourse(updatedUserCourse);
-        localStorage.setItem(
-          USER_COURSE_KEY,
-          JSON.stringify(updatedUserCourse)
-        );
+          setUserCourse(updatedUserCourse);
+          localStorage.setItem(
+            USER_COURSE_KEY,
+            JSON.stringify(updatedUserCourse)
+          );
 
-        // Save to backend (don't await to avoid blocking UI)
-        fetch(`/api/user-courses/${userCourse.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUserCourse),
-        }).catch((error) =>
-          console.error("Error saving progress to backend:", error)
-        );
+          // Save to backend (don't await to avoid blocking UI)
+          userCourseUpdate(
+            {
+              languageId: userDetails.languageId,
+              courseId,
+              updateData: {
+                ...updatedUserCourse,
+                isCompleted: true,
+              },
+            },
+            {
+              onSuccess: (data: Record<string, any>) => {
+                console.log("successfulCompletion", data);
+              },
+              onError: (error: any) => {
+                console.log("failedCompletion", error);
+              },
+            }
+          );
+        }
       }
     },
     [userCourse, lessonId, contents.length, quizzes.length]
@@ -465,24 +507,20 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         USER_COURSE_KEY,
         JSON.stringify(completedUserCourse)
       );
-      localStorage.removeItem(LESSON_PROGRESS_KEY); // Clear lesson progress
-
-      // Save to backend
-      try {
-        await fetch(`/api/user-courses/${userCourse.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(completedUserCourse),
-        });
-      } catch (error) {
-        console.error("Error completing lesson:", error);
-      }
+      localStorage.removeItem(LESSON_PROGRESS_KEY);
+      saveProgress(
+        contents.length - 1,
+        quizzes.length - 1,
+        "lesson-completed",
+        quizzes.length > 0
+          ? quizzes[quizzes.length - 1].id
+          : contents[contents.length - 1].id,
+        true
+      );
     }
   }, [userCourse]);
 
-  const navigateToCompletion = useCallback(() => {
+  const navigateToCompletion = useCallback(async () => {
     router.push(`/lesson/${courseId}/completed`);
   }, [router, courseId]);
 
