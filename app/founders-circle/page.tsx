@@ -11,12 +11,6 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { useRouter } from "next/navigation";
 
 
-export const metadata = {
-  title: "Practice Learning a Language with Ease",
-  description: "Join users from all over the world and immerse yourself in language & culture",
-};
-
-
 export default function WaitingListPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [isSignupRedirectLoading, setIsSignupRedirectLoading] = useState(false);
