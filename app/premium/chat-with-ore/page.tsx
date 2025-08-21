@@ -233,20 +233,20 @@ const ChatWithOre = () => {
                       }`}
                     >
                       <div
-                        className={`px-4 py-2 rounded-lg max-w-xs md:max-w-md ${
+                        className={`px-4 py-2 rounded-lg max-w-xs md:max-w-md border border-2 border-[#33BBFA] ${
                           msg.role === "user"
-                            ? "bg-blue-500 text-white rounded-br-none"
-                            : "bg-gray-400 text-gray-900 rounded-bl-none"
+                            ? "bg-[#213F67] text-white rounded-br-none"
+                            : "bg-[#213F67] text-gray-900 rounded-bl-none"
                         }`}
                       >
                         {/* {msg.content} */}
                         {msg.role === "assistant" && msg.content.includes("[") ? (
                           <>
-                            <span className="text-yellow-300">{msg.content.substring(0, msg.content.indexOf("["))}</span>
-                            <span>{msg.content.substring(msg.content.indexOf("["))}</span>
+                            <span className="text-yellow-500">{msg.content.substring(0, msg.content.indexOf("["))}</span>
+                            <span className="text-white">{msg.content.substring(msg.content.indexOf("["))}</span>
                           </>
                         ) : (
-                          <span>{msg.content}</span>
+                          <span className="text-white">{msg.content}</span>
                         )}
                       </div>
                     </div>
@@ -267,7 +267,7 @@ const ChatWithOre = () => {
 
                   <input
                     type="text"
-                    placeholder="Ask me anything in English or in Yoruba. My response will always be in both language. For a translation request, start with translate"
+                    placeholder="Ask me anything in English or in Yorùbá. My response will always be in both languages. For a translation request, start with translate"
                     className="bg-white flex-grow mx-2 px-3 h-15 py-1 bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none rounded"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
