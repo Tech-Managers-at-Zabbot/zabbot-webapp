@@ -24,7 +24,7 @@ const LessonContent = () => {
     previousContent,
     previousQuiz,
     startQuizPhase,
-    // completeLesson,
+    completeLesson,
     startLesson,
     // currentContentIndex,
     // currentQuizIndex,
@@ -83,7 +83,7 @@ const LessonContent = () => {
             canGoBack={!isFirstContent}
             isLastContent={isLastContent && quizzes.length === 0}
             lessonTitle={lesson?.title}
-            onComplete={navigateToCompletion}
+            onComplete={()=> {completeLesson(); navigateToCompletion()}}
           />
         );
 
@@ -117,7 +117,8 @@ const LessonContent = () => {
                   if (quizzes.length > 0) {
                     startQuizPhase();
                   } else {
-                    navigateToCompletion();
+                  completeLesson(); 
+                   navigateToCompletion()
                   }
                 }}
                 background={`#5A2E10`}
@@ -138,7 +139,7 @@ const LessonContent = () => {
             canGoBack={!isFirstQuiz || contents.length > 0}
             isLastQuiz={isLastQuiz}
             lessonTitle={lesson?.title}
-            onComplete={navigateToCompletion}
+            onComplete={()=> {completeLesson(); navigateToCompletion()}}
             onQuizSubmit={handleQuizSubmit}
           />
         );
