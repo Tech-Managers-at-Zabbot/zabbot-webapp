@@ -11,7 +11,7 @@
   "courses": "courses",
   "active_learners": "Active Learners",
   "learners": "learners",
-  "chat_ore": "Chat with Òré",
+  "chat_ore": "Chat with Ọ̀rẹ́",
   "ai_powered": "Ai powered conversation to translate and chat.",
   "get_started": "Get Started",
   "pronounce_with_para": "Pronounce with Pàrà",
@@ -49,5 +49,5 @@
   "logout": "Logout",
   "get_in_touch": "Get in Touch",
   "uncompleted_daily_goal_tag": "Hear it. Say it. Own it. Practice with confidence.",
-  "completed_daily_goal_tag":"You did it! You listened and practiced — Your spark is growing."
+  "completed_daily_goal_tag": "You did it! You listened and practiced — Your spark is growing."
 }
