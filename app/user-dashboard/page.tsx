@@ -57,6 +57,8 @@ const Dashboard = () => {
     isLoading: isUserCompletedCoursesCountLoading,
   } = useGetUserCompletedCourses(userDetails.languageId, true);
 
+    const userCoursesCount = userCompletedCoursesCount?.data || 0;
+
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
   const dashboardMetricData = [
@@ -78,8 +80,8 @@ const Dashboard = () => {
     },
     {
       title: getPageText("completed_courses"),
-      value: `${userCompletedCoursesCount?.data} ${
-        userCompletedCoursesCount?.data === 1
+      value: `${userCoursesCount} ${
+        userCoursesCount === 1
           ? getPageText("course")
           : getPageText("courses")
       }`,
@@ -93,8 +95,8 @@ const Dashboard = () => {
         userCountLoading ||
         isUserCompletedCoursesCountLoading,
       isEmpty:
-        !userCompletedCoursesCount?.data &&
-        userCompletedCoursesCount?.data !== 0,
+        !userCoursesCount &&
+        userCoursesCount !== 0,
     },
 
     {
