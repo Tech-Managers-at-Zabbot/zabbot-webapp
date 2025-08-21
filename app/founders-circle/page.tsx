@@ -1,5 +1,4 @@
 "use client";
-import Head from "next/head";
 import Image from "next/image";
 import WaitingListAuth from "@/components/authPage/WaitingListAuth";
 import { motion } from "framer-motion";
@@ -10,6 +9,13 @@ import FoundersMascotComponent from "@/components/founders-circle/MascotComponen
 import { appColors } from "@/constants/colors";
 import { CustomSpinner } from "@/components/CustomSpinner";
 import { useRouter } from "next/navigation";
+
+
+export const metadata = {
+  title: "Practice Learning a Language with Ease",
+  description: "Join users from all over the world and immerse yourself in language & culture",
+};
+
 
 export default function WaitingListPage() {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,14 +38,6 @@ export default function WaitingListPage() {
 
   return (
     <div className="p-0 m-0 overflow-x-hidden">
-      <Head>
-        <title>Practice Learning a Language with Ease</title>
-        <meta
-          name="description"
-          content="Join users from all over the world and immerse yourself in language & culture"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
 
       {/* Full width blue top section */}
       <div className="w-full bg-[#A6DFFF]">
