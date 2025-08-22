@@ -317,8 +317,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         const existing = JSON.stringify(userCourse);
         const updated = JSON.stringify(updatedUserCourse);
 
-        console.log("exisitng", userCourse);
-        console.log("updated", updatedUserCourse);
         if (existing !== updated) {
           setUserCourse(updatedUserCourse);
           localStorage.setItem(USER_COURSE_KEY, updated);
