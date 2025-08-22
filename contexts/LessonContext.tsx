@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -9,11 +11,13 @@ import React, {
   useCallback,
 } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getLessonWithContents } from "@/services/generalApi/lessons/api";
+import {
+  getLessonWithContents,
+  getUserCourse,
+} from "@/services/generalApi/lessons/api";
 import { useUser } from "./UserContext";
 import {
   useCreateUserCourse,
-  useGetUserCourse,
   useUpdateUserCourse,
 } from "@/services/generalApi/lessons/mutation";
 
@@ -139,9 +143,8 @@ interface LessonProviderProps {
 export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const params = useParams();
   const router = useRouter();
-
   const {
-    mutate: addUserCourse,
+    mutateAsync: addUserCourse,
     // isPending: createUserCourseLoading
   } = useCreateUserCourse();
 
@@ -162,10 +165,13 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   const { userDetails } = useUser();
 
-  const {
-    data: userCourseDetails,
-    //  isLoading:isUserCourseLoading
-  } = useGetUserCourse(userDetails.languageId, courseId);
+  //  const {
+  //   data: userCourseDetails,
+  //   refetch: refetchUserCourse,
+  //   error: userCourseError
+  // } = useGetUserCourse(userDetails.languageId, courseId, {
+  //   enabled: false,
+  // });
 
   // Quiz-related state
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -229,51 +235,43 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load or create user course
   const loadOrCreateUserCourse = async () => {
     try {
-      const savedUserCourse = localStorage.getItem(USER_COURSE_KEY);
+      let userCourse;
 
-      if (savedUserCourse && savedUserCourse !== "undefined") {
-        setUserCourse(JSON.parse(savedUserCourse));
-        return;
-      }
-
-      if (userCourseDetails?.data) {
-        setUserCourse(userCourseDetails?.data);
-        localStorage.setItem(
-          USER_COURSE_KEY,
-          JSON.stringify(userCourseDetails?.data)
+      try {
+        const response = await getUserCourse(
+          userDetails.languageId,
+          courseId,
+          lessonId
         );
-      } else {
-        // Create new user course
-        const userCourseDetailsInfo = {
-          lastLessonId: null,
-          lastContentId: null,
-        };
+        userCourse = response.data;
+      } catch (error: any) {
+        if (error.response && error.response.status === 404) {
+          const userCourseDetailsInfo = {
+            lastLessonId: lessonId,
+            lastContentId: null,
+          };
 
-        addUserCourse(
-          {
-            languageId: userDetails?.languageId,
+          const createResponse = await addUserCourse({
+            languageId: userDetails.languageId,
             courseId: courseId,
             userCourseData: userCourseDetailsInfo,
-          },
-          {
-            onSuccess: (data) => {
-              setUserCourse(data?.data?.newUserCourse);
-              localStorage.setItem(
-                USER_COURSE_KEY,
-                JSON.stringify(data?.data?.newUserCourse)
-              );
-            },
-            // onError: (error) => {
-            // },
-          }
-        );
+          });
+
+          userCourse = createResponse?.data?.newUserCourse;
+        } else {
+          throw error;
+        }
+      }
+
+      if (userCourse) {
+        setUserCourse(userCourse);
+        localStorage.setItem(USER_COURSE_KEY, JSON.stringify(userCourse));
       }
     } catch (error) {
-      console.error("Error loading/creating user course:", error);
+      console.error("Error in loadOrCreateUserCourse:", error);
     }
   };
 
-  // Save progress to localStorage and backend
   const saveProgress = useCallback(
     async (
       contentIndex: number,
@@ -282,7 +280,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       contentId?: string,
       sendToBackend: boolean = false
     ) => {
-      // Save to localStorage immediately
       const progressData = {
         contentIndex,
         quizIndex,
@@ -290,47 +287,49 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         contentId,
         timestamp: new Date().toISOString(),
       };
+
       localStorage.setItem(LESSON_PROGRESS_KEY, JSON.stringify(progressData));
 
-      // Update user course
-      if (sendToBackend) {
-        if (userCourse && contentId) {
-          const totalItems = contents.length + quizzes.length;
-          const completedItems =
-            Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
-          const progress =
-            totalItems > 0
-              ? Math.round((completedItems / totalItems) * 100)
-              : 0;
+      if (userCourse && contentId) {
+        const totalItems = contents.length + quizzes.length;
+        const completedItems =
+          Math.max(0, contentIndex + 1) + Math.max(0, quizIndex + 1);
+        const progress =
+          totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
-          const updatedUserCourse = {
-            ...userCourse,
-            lastLessonId: lessonId as string,
-            lastContentId: contentId,
-            lastAccessed: new Date(),
-            progress,
-          };
+        const newLastAccessed = new Date().toISOString();
 
+        const updatedUserCourse = {
+          ...userCourse,
+          isCompleted: progress >= 100 ? true : false,
+          lastLessonId: lessonId as string,
+          lastContentId: contentId,
+          lastAccessed: newLastAccessed,
+          progress
+        };
+        const existing = JSON.stringify(userCourse);
+        const updated = JSON.stringify(updatedUserCourse);
+
+        console.log('exisitng', userCourse)
+        console.log('updated', updatedUserCourse)
+        if (existing !== updated) {
           setUserCourse(updatedUserCourse);
-          localStorage.setItem(
-            USER_COURSE_KEY,
-            JSON.stringify(updatedUserCourse)
-          );
+          localStorage.setItem(USER_COURSE_KEY, updated);
+        }
 
-          // Save to backend (don't await to avoid blocking UI)
+        if (sendToBackend) {
           userCourseUpdate(
             {
               languageId: userDetails.languageId,
               courseId,
               updateData: {
                 ...updatedUserCourse,
+                 progress:100,
                 isCompleted: true,
               },
             },
             {
-              onSuccess: (data: Record<string, any>) => {
-                console.log("successfulCompletion", data);
-              },
+              onSuccess: () => localStorage.removeItem(USER_COURSE_KEY),
               onError: (error: any) => {
                 console.log("failedCompletion", error);
               },
@@ -339,7 +338,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         }
       }
     },
-    [userCourse, lessonId, contents.length, quizzes.length]
+    [lessonId, contents.length, quizzes.length, userCourseUpdate, userDetails.languageId, courseId]
   );
 
   // Content Actions
@@ -406,12 +405,15 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   // Quiz Actions
   const nextQuiz = useCallback(() => {
-    if (currentQuizIndex < quizzes.length - 1) {
+    const isLast = currentQuizIndex >= quizzes.length - 1;
+
+    if (!isLast) {
       const newIndex = currentQuizIndex + 1;
       setCurrentQuizIndex(newIndex);
       saveProgress(currentContentIndex, newIndex, "quiz");
-    } else {
-      // Completed all quizzes
+    }
+
+    if (isLast || currentQuizIndex + 1 >= quizzes.length) {
       setCurrentStep("completed");
       saveProgress(currentContentIndex, currentQuizIndex, "completed");
       completeQuizPhase();
@@ -471,9 +473,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
         return updated;
       });
-
-      // You can also save to backend here
-      // saveQuizResultToBackend(quizResult);
     },
     []
   );
@@ -485,13 +484,10 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   }, [currentContentIndex, currentQuizIndex, saveProgress]);
 
   const markContentComplete = useCallback(() => {
-    // You can add logic here to mark individual content as complete
-    // For now, just move to next content
     nextContent();
   }, [nextContent]);
 
   const completeLesson = useCallback(async () => {
-    // Set completion state
     setCurrentStep("completed");
 
     if (userCourse) {
@@ -518,7 +514,14 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         true
       );
     }
-  }, [userCourse]);
+  }, [
+    userCourse,
+    saveProgress,
+    contents,
+    quizzes,
+    LESSON_PROGRESS_KEY,
+    USER_COURSE_KEY,
+  ]);
 
   const navigateToCompletion = useCallback(async () => {
     router.push(`/lesson/${courseId}/completed`);
@@ -630,6 +633,69 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     isFirstQuiz,
     isLastQuiz,
   };
+
+  useEffect(() => {
+    const syncCourse = () => {
+      const storedUserCourse = localStorage.getItem(USER_COURSE_KEY);
+      if (storedUserCourse) {
+        const parsed = JSON.parse(storedUserCourse);
+        const currentContent =
+          currentContentIndex >= 0
+            ? contents[currentContentIndex] || null
+            : null;
+        const currentQuiz =
+          currentQuizIndex >= 0 ? quizzes[currentQuizIndex] || null : null;
+
+        const totalItems = contents.length + quizzes.length;
+        const completedContentItems = Math.max(
+          0,
+          currentContentIndex + (currentStep === "content" ? 1 : 0)
+        );
+        const completedQuizItems = Math.max(
+          0,
+          currentQuizIndex + (currentStep === "quiz" ? 1 : 0)
+        );
+        const progressPercentage =
+          totalItems > 0
+            ? Math.round(
+                ((completedContentItems + completedQuizItems) / totalItems) *
+                  100
+              )
+            : 0;
+        userCourseUpdate({
+          languageId: userDetails.languageId,
+          courseId,
+          updateData: {
+            ...parsed,
+            lastLessonId: parsed.lastLessonId || lessonId || null,
+            lastContentId:
+              parsed.lastContentId || contents[currentContentIndex]?.id || null,
+            progress: progressPercentage,
+            isCompleted: parsed?.progress >= 100 || progressPercentage >= 100,
+          },
+        });
+      }
+    };
+
+    syncCourse();
+    const interval = setInterval(syncCourse, 60 * 60 * 1000);
+    window.addEventListener("focus", syncCourse);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", syncCourse);
+    };
+  }, [
+    userCourseUpdate,
+    userDetails.languageId,
+    courseId,
+    contents,
+    quizzes,
+    currentContentIndex,
+    currentQuizIndex,
+    currentStep,
+    lessonId,
+  ]);
 
   return (
     <LessonContext.Provider value={value}>{children}</LessonContext.Provider>

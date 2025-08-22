@@ -80,7 +80,7 @@ export async function getCourseQuizzes(courseId: string) {
 export async function addUserCourse(
   languageId: string,
   courseId: string | any,
-  userCourseData?: Record<string, any>
+  userCourseData?: Record<string, any>,
 ) {
   const response = await axiosInstance.post(
     `/lessons/courses/add-user-course/${languageId}/${courseId}`,
@@ -91,10 +91,11 @@ export async function addUserCourse(
 
 export async function getUserCourse(
   languageId: string,
-  courseId: string | any
+  courseId: string | any,
+  lastLessonId: string | any
 ) {
   const response = await axiosInstance.get(
-    `/lessons/courses/user-course/${languageId}/${courseId}`
+    `/lessons/courses/user-course/${languageId}/${courseId}?lastLessonId=${lastLessonId}`
   );
   return response.data;
 }
