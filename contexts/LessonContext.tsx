@@ -187,6 +187,10 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
     try {
+      localStorage.removeItem(USER_COURSE_KEY);
+      localStorage.removeItem(LESSON_PROGRESS_KEY);
+      localStorage.removeItem(QUIZ_RESULTS_KEY);
+
       setIsLoading(true);
 
       const response = await getLessonWithContents(lessonId);
@@ -235,7 +239,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load or create user course
   const loadOrCreateUserCourse = async () => {
     try {
-
       localStorage.removeItem(USER_COURSE_KEY);
       localStorage.removeItem(LESSON_PROGRESS_KEY);
       localStorage.removeItem(QUIZ_RESULTS_KEY);
@@ -309,13 +312,13 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           lastLessonId: lessonId as string,
           lastContentId: contentId,
           lastAccessed: newLastAccessed,
-          progress
+          progress,
         };
         const existing = JSON.stringify(userCourse);
         const updated = JSON.stringify(updatedUserCourse);
 
-        console.log('exisitng', userCourse)
-        console.log('updated', updatedUserCourse)
+        console.log("exisitng", userCourse);
+        console.log("updated", updatedUserCourse);
         if (existing !== updated) {
           setUserCourse(updatedUserCourse);
           localStorage.setItem(USER_COURSE_KEY, updated);
@@ -328,7 +331,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
               courseId,
               updateData: {
                 ...updatedUserCourse,
-                 progress:100,
+                progress: 100,
                 isCompleted: true,
               },
             },
@@ -342,7 +345,14 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         }
       }
     },
-    [lessonId, contents.length, quizzes.length, userCourseUpdate, userDetails.languageId, courseId]
+    [
+      lessonId,
+      contents.length,
+      quizzes.length,
+      userCourseUpdate,
+      userDetails.languageId,
+      courseId,
+    ]
   );
 
   // Content Actions
