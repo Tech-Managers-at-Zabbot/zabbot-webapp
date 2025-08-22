@@ -82,8 +82,8 @@ const Dashboard = () => {
       title: getPageText("completed_courses"),
       value: `${userCoursesCount} ${
         userCoursesCount === 1
-          ? getPageText("course")
-          : getPageText("courses")
+          ? getPageText("step")
+          : getPageText("steps")
       }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
