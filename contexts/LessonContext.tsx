@@ -235,6 +235,10 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load or create user course
   const loadOrCreateUserCourse = async () => {
     try {
+
+      localStorage.removeItem(USER_COURSE_KEY);
+      localStorage.removeItem(LESSON_PROGRESS_KEY);
+      localStorage.removeItem(QUIZ_RESULTS_KEY);
       let userCourse;
 
       try {
@@ -257,7 +261,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
             userCourseData: userCourseDetailsInfo,
           });
 
-          userCourse = createResponse?.data?.newUserCourse;
+          userCourse = createResponse?.data;
         } else {
           throw error;
         }
