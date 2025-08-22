@@ -115,3 +115,69 @@ export const quizTypeFormatter = (type:string):string => {
       return type;
   }
 } 
+
+
+export function removeYorubaDiacritics(text: string): string {
+  // console.log('Original text:', text);
+  
+  // Normalize the text to decompose combined characters
+  const normalized = text.normalize('NFD');
+  // console.log('Normalized:', normalized);
+  
+  // Remove all combining diacritical marks (Unicode category Mn)
+  const withoutCombiningMarks = normalized.replace(/[\u0300-\u036f]/g, '');
+  // console.log('After removing combining marks:', withoutCombiningMarks);
+  
+  // Handle precomposed characters and Yoruba-specific letters
+  const yorubaDiacriticMap: Record<string, string> = {
+    // Regular vowels with tone marks (precomposed)
+    'á': 'a', 'à': 'a', 'ā': 'a', 'Á': 'A', 'À': 'A', 'Ā': 'A',
+    'é': 'e', 'è': 'e', 'ē': 'e', 'É': 'E', 'È': 'E', 'Ē': 'E',
+    'í': 'i', 'ì': 'i', 'ī': 'i', 'Í': 'I', 'Ì': 'I', 'Ī': 'I',
+    'ó': 'o', 'ò': 'o', 'ō': 'o', 'Ó': 'O', 'Ò': 'O', 'Ō': 'O',
+    'ú': 'u', 'ù': 'u', 'ū': 'u', 'Ú': 'U', 'Ù': 'U', 'Ū': 'U',
+    
+    // Special Yoruba letters (these should remain after tone mark removal)
+    'ẹ': 'e', 'Ẹ': 'E',  // open e
+    'ọ': 'o', 'Ọ': 'O',  // open o
+    'ṣ': 's', 'Ṣ': 'S',  // sh sound
+    
+    // Nasal n
+    'ń': 'n', 'ǹ': 'n', 'n̄': 'n', 'Ń': 'N', 'Ǹ': 'N', 'N̄': 'N',
+    
+    // Additional common diacritics (if needed)
+    'â': 'a', 'ä': 'a', 'ã': 'a', 'å': 'a',
+    'ê': 'e', 'ë': 'e',
+    'î': 'i', 'ï': 'i',
+    'ô': 'o', 'ö': 'o', 'õ': 'o',
+    'û': 'u', 'ü': 'u',
+    'ñ': 'n'
+  };
+  
+  const result = withoutCombiningMarks
+    .split('')
+    .map((char: string) => yorubaDiacriticMap[char] || char)
+    .join('')
+    .toLowerCase();
+    
+  // console.log('Final result:', result);
+  return result;
+}
+
+
+
+// export function removeYorubaDiacriticsAlternative(text: string): string {
+//   console.log('Original text:', text);
+  
+//   // This approach uses Unicode normalization and removes diacritics more comprehensively
+//   const result = text
+//     .normalize('NFD') // Decompose combined characters
+//     .replace(/[\u0300-\u036f]/g, '') // Remove combining diacritical marks
+//     .replace(/[ẹẸ]/g, (match) => match === 'ẹ' ? 'e' : 'E') // Handle special Yoruba e
+//     .replace(/[ọỌ]/g, (match) => match === 'ọ' ? 'o' : 'O') // Handle special Yoruba o  
+//     .replace(/[ṣṢ]/g, (match) => match === 'ṣ' ? 's' : 'S') // Handle special Yoruba s
+//     .toLowerCase();
+    
+//   console.log('Alternative result:', result);
+//   return result;
+// }

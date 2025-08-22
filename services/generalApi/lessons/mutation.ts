@@ -187,15 +187,34 @@ export function useCreateUserCourse() {
   });
 }
 
-export function useGetUserCourse(langugageId: string, courseId: string | any) {
+export function useGetUserCourse(
+  languageId: string,
+  courseId: string | any,
+  lessonId: string | any,
+  options?: { enabled?: boolean }
+) {
   return useQuery({
-    queryKey: ["getUserCourse", langugageId, courseId],
-    queryFn: () => getUserCourse(langugageId, courseId),
+    queryKey: ["getUserCourse", languageId, courseId, lessonId],
+    queryFn: async () => {
+      try {
+        const response = await getUserCourse(languageId, courseId, lessonId);
+        return response;
+      } catch (error: any) {
+        // Re-throw the error so React Query can handle it properly
+        if (error.response?.status === 404) {
+          // You can handle 404 specifically if needed
+          throw new Error("User course not found");
+        }
+        throw error;
+      }
+    },
+    enabled: options?.enabled ?? !!courseId,
     refetchOnMount: true,
-    enabled: !!courseId,
     refetchOnWindowFocus: false,
+    retry: false, // Don't retry on 404 errors
   });
 }
+
 
 export function useUpdateUserCourse() {
   const queryClient = useQueryClient();
