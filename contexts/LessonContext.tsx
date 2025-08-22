@@ -187,9 +187,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
     try {
-      localStorage.removeItem(USER_COURSE_KEY);
-      localStorage.removeItem(LESSON_PROGRESS_KEY);
-      localStorage.removeItem(QUIZ_RESULTS_KEY);
 
       setIsLoading(true);
 
@@ -240,8 +237,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const loadOrCreateUserCourse = async () => {
     try {
       localStorage.removeItem(USER_COURSE_KEY);
-      localStorage.removeItem(LESSON_PROGRESS_KEY);
-      localStorage.removeItem(QUIZ_RESULTS_KEY);
       let userCourse;
 
       try {
