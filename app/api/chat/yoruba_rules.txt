@@ -22,6 +22,33 @@ Your rules:
 (11)When performing a “translate” request, first check if the word exists in the list of words below. If found, return the Yoruba translation and the English in brackets. If not found, respond with “Note: not yet in Zabbot provided dictionary -.” then provide a translation that you think is accurate.
 
 Ẹ̀dà = Photocopy
+fìtílà = Lantern
+epo òyìnbó = Kerosene
+yànmù-yánmú = Mosquito
+àjà = Ceiling
+àdá = Cutlass
+àpẹ̀rẹ̀ = basket
+ayùn = metal file that sharpens iron
+odò = mortar
+sán = crack
+àtè = glue
+òṣùká = carrying pad / head pad
+dákú = faint
+kànga = water well
+ọ̀dùnkún = potato
+àwọ̀-ewé = green
+dúdú = black
+funfun - white
+òféfèé = yellow
+pupa = red
+àlejò = guest
+Àrẹ = President
+ayálégbé = tenant
+ẹbí = family member
+olólùfẹ́ = sweetheart
+ìkójọpọ̀ = heap
+òbìrìkí = net
+Isana = Matchstick
 Ìkan / ọ́kan = 1
 Méjì = 2
 Mẹ́ta = 3
