@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import MediaComponents from "../MediaRendererComponent";
 import React from "react";
@@ -9,10 +10,10 @@ const ProverbsContentComponent = ({
 }) => {
   return (
     <div className="flex items-center justify-center flex-col">
-      <div className="relative w-full max-w-2xl flex flex-col items-center">
+      <div className="relative w-full max-w-3xl flex flex-col items-center">
         {/* The main paper section of the scroll */}
         <div
-          className={`relative w-11/12 h-auto max-h-[80vh] py-16 px-4 md:px-20 scale-y-100 max-w-2xl bg-[#F5F5DC] border-2 border-[#5A2E10] shadow-lg rounded-lg overflow-hidden transition-all duration-1000 ease-in-out transform origin-top z-10`}
+          className={`relative w-11/12 h-auto py-16 px-4 md:px-20 scale-y-100 max-w-2xl bg-[#F5F5DC] border-2 border-[#5A2E10] shadow-lg rounded-lg overflow-hidden transition-all duration-1000 ease-in-out transform origin-top z-10`}
         >
           {/* Top border of the scroll */}
           <div
@@ -42,10 +43,19 @@ const ProverbsContentComponent = ({
           ></div>
 
           {/* Media Components */}
-          <div className="flex items-center justify-center">
+          <div className="flex items-center">
+            <div className="absolute bottom-0 w-full max-w-[150px] sm:max-w-[200px] md:max-w-[200px]">
+              <img
+                src="/general/prof-grandpa-owl.png"
+                alt="Professor Grandpa Owl"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+            <div className="w-full flex justify-end">
             {content?.files?.length > 0 && (
               <MediaComponents files={content.files} />
             )}
+            </div>
           </div>
 
           {/* Bottom border of the scroll */}

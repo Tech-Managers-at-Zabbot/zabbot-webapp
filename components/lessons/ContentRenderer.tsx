@@ -54,7 +54,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
       </div>
 
       {content?.contentType === "proverb" && (
-        <div>
+        <div className="">
           <ProverbsContentComponent content={content} />
         </div>
       )}
