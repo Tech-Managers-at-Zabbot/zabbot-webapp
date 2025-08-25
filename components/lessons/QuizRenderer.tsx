@@ -6,6 +6,7 @@ import QuizSuccessModal from "./QuizSuccessModal";
 import QuizFailureModal from "./QuizFailureModal";
 import { FaKeyboard } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
+import { removeYorubaDiacritics } from "@/utilities/utilities";
 
 enum QuizType {
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
@@ -73,7 +74,9 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
       correct = selectedAnswer === quiz.correctOption;
     } else if (quiz.quizType === QuizType.FILL_IN_BLANK) {
       userAnswer = fillInAnswer.trim();
-      correct = userAnswer.toLowerCase() === quiz.correctAnswer?.toLowerCase();
+      correct =
+        removeYorubaDiacritics(userAnswer).toLowerCase() ===
+        removeYorubaDiacritics(quiz.correctAnswer)?.toLowerCase();
     }
 
     setIsCorrect(correct);

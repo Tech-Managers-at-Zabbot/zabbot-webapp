@@ -23,9 +23,12 @@ import { useTheme } from "@/contexts/ThemeProvider";
 import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { useLoading } from "@/contexts/LoadingProvider";
+import { useGetUserCompletedCourses } from "@/services/generalApi/lessons/mutation";
 
 const Dashboard = () => {
   const [goPremium, setGoPremium] = useState(true);
+
+  const { userDetails } = useUser();
 
   const handleClosePremiumTag = () => setGoPremium(false);
 
@@ -35,7 +38,7 @@ const Dashboard = () => {
   const { goalsCount, userGoalsLoading } = useUser();
 
   const { getPageText, isPageLoading: isLanguageLoading } =
-      usePageLanguage("userDashboard");
+    usePageLanguage("userDashboard");
 
   const { loading, setLoading } = useLoading();
 
@@ -49,29 +52,51 @@ const Dashboard = () => {
 
   const { theme } = useTheme();
 
+  const {
+    data: userCompletedCoursesCount,
+    isLoading: isUserCompletedCoursesCountLoading,
+  } = useGetUserCompletedCourses(userDetails.languageId, true);
+
+    const userCoursesCount = userCompletedCoursesCount?.data || 0;
+
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
   const dashboardMetricData = [
     {
       title: getPageText("completed_daily_goals"),
-      value: `${goalsCount} ${goalsCount === 1 ? getPageText("goal") : getPageText("goals")}`,
+      value: `${goalsCount} ${
+        goalsCount === 1 ? getPageText("goal") : getPageText("goals")
+      }`,
       icon: (
         <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <HiOutlineTrophy />
         </div>
       ),
-      loading: userGoalsLoading || userCountLoading,
+      loading:
+        userGoalsLoading ||
+        userCountLoading ||
+        isUserCompletedCoursesCountLoading,
       isEmpty: !goalsCount && goalsCount !== 0,
     },
     {
       title: getPageText("completed_courses"),
-      value: `0 ${getPageText("courses")}`,
+      value: `${userCoursesCount} ${
+        userCoursesCount === 1
+          ? getPageText("step")
+          : getPageText("steps")
+      }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <FaGraduationCap />
         </div>
       ),
-      loading: userGoalsLoading || userCountLoading,
+      loading:
+        userGoalsLoading ||
+        userCountLoading ||
+        isUserCompletedCoursesCountLoading,
+      isEmpty:
+        !userCoursesCount &&
+        userCoursesCount !== 0,
     },
 
     {
@@ -82,7 +107,10 @@ const Dashboard = () => {
           <BsPeople />
         </div>
       ),
-      loading: userCountLoading || userGoalsLoading,
+      loading:
+        userCountLoading ||
+        userGoalsLoading ||
+        isUserCompletedCoursesCountLoading,
       isEmpty: !userCount,
     },
   ];
@@ -91,14 +119,14 @@ const Dashboard = () => {
     const currentTime = new Date();
     const hours = currentTime.getHours();
 
-    if (hours >= 6 && hours < 12) {
-      // Morning: 6 AM to 12 PM
+    if (hours >= 1 && hours < 12) {
+      // Morning: 1 AM to 12 PM
       setGreeting("Káàrọ̀");
     } else if (hours >= 12 && hours < 18) {
       // Afternoon: 12 PM to 6 PM
       setGreeting("Káàsán");
     } else {
-      // Night: 6 PM to 6 AM
+      // Night: 6 PM to 1 AM
       setGreeting("Káalẹ́");
     }
   }, []);
@@ -117,20 +145,18 @@ const Dashboard = () => {
     );
   }, [theme]);
 
-  const { userDetails } = useUser();
-
-  function LanguageCheck(){
+  function LanguageCheck() {
     if (isLanguageLoading) {
-     if(!loading){
-       return setLoading(true);
-     }
-   }
-   return setLoading(false);
+      if (!loading) {
+        return setLoading(true);
+      }
+    }
+    return setLoading(false);
   }
 
-  useEffect(()=> {
-    LanguageCheck()
-  },[isLanguageLoading])
+  useEffect(() => {
+    LanguageCheck();
+  }, [isLanguageLoading]);
 
   return (
     <div className="min-h-screen">

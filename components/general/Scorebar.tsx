@@ -1,3 +1,5 @@
+"use client";
+
 const ScoreBar = ({ finalScore }: { finalScore: number }) => {
     const percentage = Math.round(finalScore * 100); // 0–100
 
@@ -12,7 +14,7 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
     }
 
     return (
-        <div className="w-full">
+        <div className="w-full max-w-[600px]">
             <div className="w-full bg-gray-200 rounded-full h-3">
                 <div
                     className={`${barColor} h-3 rounded-full transition-all duration-500`}

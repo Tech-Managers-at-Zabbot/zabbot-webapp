@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
 import { useLessonContext } from "@/contexts/LessonContext";
 import LessonIntro from "./LessonIntro";
@@ -8,6 +7,7 @@ import Loader from "../general/Loader";
 import { EmptyStateCard } from "../general/EmptyState";
 import LessonCompleteComponent from "./LessonComplete";
 import InAppButton from "../InAppButton";
+import { CustomSpinner } from "../CustomSpinner";
 // import { CustomSpinner } from "../CustomSpinner";
 
 const LessonContent = () => {
@@ -24,7 +24,7 @@ const LessonContent = () => {
     previousContent,
     previousQuiz,
     startQuizPhase,
-    // completeLesson,
+    completeLesson,
     startLesson,
     // currentContentIndex,
     // currentQuizIndex,
@@ -83,7 +83,7 @@ const LessonContent = () => {
             canGoBack={!isFirstContent}
             isLastContent={isLastContent && quizzes.length === 0}
             lessonTitle={lesson?.title}
-            onComplete={navigateToCompletion}
+            onComplete={()=> {completeLesson(); navigateToCompletion()}}
           />
         );
 
@@ -117,7 +117,8 @@ const LessonContent = () => {
                   if (quizzes.length > 0) {
                     startQuizPhase();
                   } else {
-                    navigateToCompletion();
+                  completeLesson(); 
+                   navigateToCompletion()
                   }
                 }}
                 background={`#5A2E10`}
@@ -138,7 +139,7 @@ const LessonContent = () => {
             canGoBack={!isFirstQuiz || contents.length > 0}
             isLastQuiz={isLastQuiz}
             lessonTitle={lesson?.title}
-            onComplete={navigateToCompletion}
+            onComplete={()=> {completeLesson(); navigateToCompletion()}}
             onQuizSubmit={handleQuizSubmit}
           />
         );
@@ -147,18 +148,7 @@ const LessonContent = () => {
         // You can create a LessonCompleted component or navigate directly
         return (
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-green-600 mb-4">
-              🎉 Lesson Completed!
-            </h2>
-            <p className="text-lg mb-6">
-              Congratulations! You've successfully completed this lesson.
-            </p>
-            <button
-              onClick={navigateToCompletion}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium"
-            >
-              Continue to Next Lesson
-            </button>
+           <CustomSpinner title="Saving Progress..." spinnerColor="#5A2E10"/>
           </div>
         );
 

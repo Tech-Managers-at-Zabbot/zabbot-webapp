@@ -9,12 +9,13 @@
   "goals": "Àfojúsùn",
   "completed_courses": "Àwọn Ẹ̀kọ́ Rẹ Tí O Parí",
   "courses": "Ẹ̀kọ́",
+  "course": "Ẹ̀kọ́",
   "active_learners": "Àwọn Akẹ́kọ̀ọ́ Aláàyè",
   "learners": "Akẹ́kọ̀ọ́",
-  "chat_ore": "Bá Òré Sọ̀rọ̀",
+  "chat_ore": "Bá Ọ̀rẹ́ Sọ̀rọ̀",
   "ai_powered": "Ìbànújẹ̀pọ̀ tí AI ń ṣàkóso fún ìtúmọ̀ àti ìjíròrò.",
   "get_started": "Bẹ̀rẹ̀",
-  "pronounce_with_para": "Ṣe Ìtúpalẹ̀ Ohùn Pẹ̀lú Para",
+  "pronounce_with_para": "Ṣe Ìtúpalẹ̀ Ohùn Pẹ̀lú Pàrà",
   "listen_with_owe": "Gbọ́ Pẹ̀lú Òwe",
   "immersion_tagline": "Kọ́ Èdè Yorùbá, díẹ̀ díẹ̀",
   "almost_there": "A fẹrẹ dé!",
@@ -47,5 +48,7 @@
   "profile": "Àwòrán Ara Rẹ",
   "notifications": "Ìkìlọ̀",
   "logout": "Jádé",
-  "get_in_touch": "Bá Wa Sọ̀rọ̀"
+  "get_in_touch": "Bá Wa Sọ̀rọ̀",
+  "uncompleted_daily_goal_tag": "Gbọ́. Sọ. Dìmù. Lò pẹ̀lú ìgboyà.",
+  "completed_daily_goal_tag":"O ṣe! O gbọ́, o sì ṣe àdánwò – Ìmólẹ̀ rẹ ń ga si."
 }

@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import React, { useState } from "react";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
-import MediaComponents from "./MediaRendererComponent";
+// import MediaComponents from "./MediaRendererComponent";
+import ProverbsContentComponent from "./contents/ProverbsContent";
+import NormalComponentComponent from "./contents/NormalContent";
+import GrammarRuleComponent from "./contents/GrammarRuleContent";
 
 interface ContentRendererProps {
   content: any;
@@ -27,8 +31,8 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
 
   if (!content) return null;
 
-  // Clean HTML content (remove inline styles for better control)
-  const cleanContent = content.customText?.replace(/<[^>]*>/g, "") || "";
+// Clean HTML content (remove inline styles for better control)
+
 
   const handleNext = () => {
     if (isLastContent) {
@@ -50,43 +54,23 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
         </h2>
       </div>
 
-      <div className="bg-[url('/lessons/questionFrame.svg')] min-h-[300px] sm:min-h-[400px] w-full max-w-[90%] sm:max-w-[400px] md:max-w-[500px] flex flex-col justify-center items-center bg-center bg-contain bg-no-repeat p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
-        <div className="w-[80%] px-2 sm:px-4 flex flex-col justify-center items-center text-center">
-          {/* Main Content */}
-          <div className="text-base sm:text-xl md:text-2xl font-medium leading-relaxed">
-            {cleanContent.split("–").map((part: string, index: number) => (
-              <div key={index} className={index > 0 ? "block mt-2" : "inline"}>
-                {part.trim()}
-              </div>
-            ))}
-          </div>
-
-          {/* Translation */}
-          {content?.translation && (
-            <div className="text-[#EBEBEB] flex justify-center items-center text-sm sm:text-base p-3">
-              <div className="flex rounded-lg bg-black/30 p-2">
-                {content.translation}
-              </div>
-            </div>
-          )}
-
-          {/* Grammar Rule Indicator */}
-          {content?.isGrammarRule && (
-            <div className="bg-yellow-100 border-l-4 border-yellow-500 p-3 sm:p-4">
-              <p className="text-yellow-800 font-medium text-sm sm:text-base">
-                📚 Grammar Rule
-              </p>
-            </div>
-          )}
-
-          {/* Media Components */}
-          <div className="flex items-center justify-center">
-            {content?.files?.length > 0 && (
-              <MediaComponents files={content.files} />
-            )}
-          </div>
+      {content?.contentType === "proverb" && (
+        <div className="">
+          <ProverbsContentComponent content={content} />
         </div>
-      </div>
+      )}
+
+      {content?.contentType === "normal" && (
+        <div className="w-full flex items-center justify-center">
+          <NormalComponentComponent content={content} />
+        </div>
+      )}
+
+      {content.isGrammarRule && (
+        <div className="w-full flex items-center justify-center">
+          <GrammarRuleComponent content={content} />
+        </div>
+      )}
 
       <div className="border-t-1 h-[0.5px] mt-6 border-[#FCD2C2] w-full"></div>
 
@@ -120,6 +104,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
           </div>
         </InAppButton>
       </div>
+
     </div>
   );
 };
