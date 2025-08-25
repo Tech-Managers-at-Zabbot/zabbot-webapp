@@ -2,10 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useAlert } from "next-alert";
 import Head from "next/head";
 import { useState } from "react";
+import { useAlert } from "next-alert";
 import { FiSearch } from "react-icons/fi";
+import { useUser } from "@/contexts/UserContext";
 import { useDailyLimit } from "@/hooks/useChatDailyLimit";
 import { useConversations } from "@/components/premium/chat-with-ore/use-conversation";
 import ConversationCard from "@/components/premium/chat-with-ore/conversation-card";
@@ -17,6 +18,9 @@ const ChatWithOre = () => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const { addAlert } = useAlert();
+  const { userDetails } = useUser();
+  const firstName = userDetails?.firstName || "User";
+  const chatLetter = firstName.charAt(0).toUpperCase();
 
   // List of possible proverbs
   const allProverbs = [
@@ -268,8 +272,8 @@ const ChatWithOre = () => {
                     >
                       {/* Conditionally render the user's icon on the left */}
                       {msg.role === "user" && (
-                        <div className="w-20 h-20 mr-2 flex-shrink-0 flex items-center justify-center rounded-full bg-[#0098DE] text-white font-bold text-lg">
-                          U
+                        <div className="w-20 h-20 mr-2 flex-shrink-0 flex font-bold text-3xl items-center justify-center rounded-full bg-[#0098DE] text-white font-bold text-lg">
+                          {chatLetter}
                         </div>
                       )}
 
@@ -282,7 +286,7 @@ const ChatWithOre = () => {
                       >
                         {msg.role === "assistant" && msg.content.includes("[") ? (
                           <>
-                            <span className="text-yellow-500">
+                            <span className="text-yellow-500 font-[400]">
                               {msg.content.substring(
                                 0,
                                 msg.content.indexOf("[")
@@ -310,7 +314,9 @@ const ChatWithOre = () => {
                     </div>
                   ))}
                   {loading && (
-                    <div className="text-gray-500">Ọ̀rẹ is typing...</div>
+                    <div className="text-gray-500 flex justify-end">
+                      <div className="pr-12 text-xl">Ọ̀rẹ is typing...</div>
+                    </div>
                   )}
                 </div>
 

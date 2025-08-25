@@ -23,10 +23,20 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
         usePageLanguage("userDashboard");
 
   const handleLogout = () => {
+    console.log("Logging out two...");
+    const keepChatHistory = localStorage.getItem("chat_conversations");
+    const keepChatLastResetDate = localStorage.getItem("last_reset_date");
+    const keepDailyCallsRemaining = localStorage.getItem("daily_calls_remaining");
+
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
     localStorage.clear();
+
+    localStorage.setItem("chat_conversations", keepChatHistory || "[]");
+    localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
+    localStorage.setItem("daily_calls_remaining", keepDailyCallsRemaining || "30");
+    
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     router.push("/login");
