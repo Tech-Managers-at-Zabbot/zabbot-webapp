@@ -114,7 +114,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
 
   const renderMultipleChoice = () => (
     <div
-      className="space-y-3 w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-4xl px-4"
+      className="w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-4xl px-4"
       style={{ fontFamily: "Lexend" }}
     >
       {quiz.options?.map((option: string, index: number) => (
