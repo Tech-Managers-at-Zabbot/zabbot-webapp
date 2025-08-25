@@ -6,6 +6,7 @@ import { CustomSpinner } from "../CustomSpinner";
 // import MediaComponents from "./MediaRendererComponent";
 import ProverbsContentComponent from "./contents/ProverbsContent";
 import NormalComponentComponent from "./contents/NormalContent";
+import GrammarRuleComponent from "./contents/GrammarRuleContent";
 
 interface ContentRendererProps {
   content: any;
@@ -62,6 +63,12 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
       {content?.contentType === "normal" && (
         <div className="w-full flex items-center justify-center">
           <NormalComponentComponent content={content} />
+        </div>
+      )}
+
+      {content.isGrammarRule && (
+        <div className="w-full flex items-center justify-center">
+          <GrammarRuleComponent content={content} />
         </div>
       )}
 

@@ -38,15 +38,6 @@ const NormalComponentComponent = (
               </div>
             )}
 
-            {/* Grammar Rule Indicator */}
-            {content?.isGrammarRule && (
-              <div className="bg-yellow-100 border-l-4 border-yellow-500 p-3 sm:p-4">
-                <p className="text-yellow-800 font-medium text-sm sm:text-base">
-                  📚 Grammar Rule
-                </p>
-              </div>
-            )}
-
             {/* Media Components */}
             <div className="flex items-center justify-center">
               {content?.files?.length > 0 && (
