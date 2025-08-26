@@ -55,6 +55,7 @@ export const getGoogleAuthErrorMessage = (error: string) => {
     'invalid_user_data': 'Invalid user data received.',
     'unknown_error': 'An unknown error occurred.',
     'login_successful': 'Login successful.',
+    'user_used_another_login_method': 'It looks like you registered using another method. Please try another login method'
   };
   
   return errorMessages[error] || 'An unexpected error occurred.';

@@ -23,7 +23,6 @@ const AdminNavBar = ({ showLogo = false }) => {
   const { addAlert } = useAlert();
   // const { userDetails } = useUser();
   const handleLogout = () => {
-    console.log("Logging out one...");
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);
     localStorage.removeItem("userProfile");
