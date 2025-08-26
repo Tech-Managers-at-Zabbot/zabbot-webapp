@@ -21,7 +21,7 @@ function AuthHandler() {
 
     if (token && userData) {
       try {
-          Cookies.set("userProfile", JSON.stringify(userData), {
+          Cookies.set("userProfile", userData, {
               expires: 30,
               secure: true,
               sameSite: "strict",
