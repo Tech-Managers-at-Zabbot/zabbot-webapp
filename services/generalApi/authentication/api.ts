@@ -86,7 +86,7 @@ export const resetPassword = async (formData: {
 
 export const initiateGoogleRegister = () => {
   const timezone = getUserTimezone();
-  const url = new URL("https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/register");
+  const url = new URL("https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1/users/auth/google/register");
   url.searchParams.append('timezone', timezone);
   window.location.href = url.toString();
 
@@ -98,7 +98,7 @@ export const initiateGoogleRegister = () => {
 
 export const initiateGoogleLogin = () => {
   const timezone = getUserTimezone();
-  const url = new URL("https://zabbot-backend-development-no68m.ondigitalocean.app/api/v1/users/auth/google/login");
+  const url = new URL("https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1/users/auth/google/login");
   url.searchParams.append('timezone', timezone);
   window.location.href = url.toString();
 
