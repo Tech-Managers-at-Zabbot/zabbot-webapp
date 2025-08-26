@@ -315,7 +315,7 @@ const ChatWithOre = () => {
                   ))}
                   {loading && (
                     <div className="text-gray-500 flex justify-end">
-                      <div className="pr-12 text-xl">Ọ̀rẹ is typing...</div>
+                      <div className="pr-12 text-xl">Òrẹ́ is typing...</div>
                     </div>
                   )}
                 </div>
@@ -375,7 +375,7 @@ const ChatWithOre = () => {
 
                 <div className="flex flex-col items-center ">
                   <p className="text-white-500 font-[400] text-[14px] mt-1">
-                    Ọ̀rẹ can make mistakes. Consider checking important
+                    Òrẹ́ can make mistakes. Consider checking important
                     information.
                   </p>
                 </div>
