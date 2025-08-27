@@ -8,18 +8,20 @@ import Image from "next/image";
 interface SuccessProps {
   message: string;
   title: string;
+  redirectLink:string;
   buttonText?:string;
 }
 
 const SuccessComponent:React.FC<SuccessProps> = ({
   title = "Success!",
   message = "Password has been updated.",
-  buttonText = "Continue"
+  buttonText = "Continue",
+  redirectLink="login"
 }) => {
   const [loading, setLoading] = useState(false);
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen bg-[#E3EFFC] px-4"
+      className="flex flex-col items-center w-full justify-center min-h-screen bg-[#E3EFFC] px-4"
       style={{ fontFamily: "Lexend" }}
     >
       <div className="bg-white flex flex-col gap-4 rounded-[35.78px] shadow-md p-6 md:p-8 max-w-lg w-full text-center mx-auto">
@@ -43,7 +45,7 @@ const SuccessComponent:React.FC<SuccessProps> = ({
         </div>
 
         {/* Home Button */}
-        <Link href="/login" passHref className="w-full mt-2">
+        <Link href={`/${redirectLink}`} passHref className="w-full mt-2">
           <InAppButton
             borderRadius="1192.64px"
             background="#012657"
