@@ -1,5 +1,7 @@
 {
     "success":"Success!",
-    "auth_success":"Authentication Successful, Redirecting to Dashboard...",
+    "auth_success":"Authentication Successful, Redirecting to",
+    "dashboard": "Dasboard...",
+    "login": "Login...",
     "continue":"Continue"
 }
