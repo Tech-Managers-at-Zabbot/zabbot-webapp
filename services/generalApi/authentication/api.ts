@@ -85,25 +85,20 @@ export const resetPassword = async (formData: {
 }
 
 export const initiateGoogleRegister = () => {
+const urlLink = process.env.NEXT_PUBLIC_GOOGLE_REGISTER_URL as string;
   const timezone = getUserTimezone();
-  const url = new URL("https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1/users/auth/google/register");
+  const url = new URL(urlLink);
   url.searchParams.append('timezone', timezone);
   window.location.href = url.toString();
-
-
-    // For local development:
-//   window.location.href = "http://localhost:3010/api/v1/users/auth/google/register";
 
 };
 
 export const initiateGoogleLogin = () => {
+const urlLink = process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL as string;
   const timezone = getUserTimezone();
-  const url = new URL("https://zabbot-backend-hzbq7.ondigitalocean.app/api/v1/users/auth/google/login");
+  const url = new URL(urlLink);
   url.searchParams.append('timezone', timezone);
   window.location.href = url.toString();
-
-    // For local development:
-//   window.location.href = "http://localhost:3010/api/v1/users/auth/google/login";
 
 };
 
