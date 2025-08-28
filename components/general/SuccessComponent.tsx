@@ -8,7 +8,7 @@ import Image from "next/image";
 interface SuccessProps {
   message: string;
   title: string;
-  redirectLink:string;
+  redirectLink?:string;
   buttonText?:string;
 }
 

@@ -25,7 +25,6 @@ function AuthHandler() {
     } else {
       setRedirectPath("login");
     }
-    //redirectLink
     if (token && userData) {
       try {
         Cookies.set("userProfile", userData, {
@@ -47,8 +46,8 @@ function AuthHandler() {
   useEffect(() => {
     setTimeout(() => {
       router.push(`/${redirectPath}`);
-    }, 5000);
-  }, []);
+    }, 3000);
+  }, [redirectPath]);
 
   if (isLanguageLoading) {
     return (
