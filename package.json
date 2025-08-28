@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "dotenv -e .env.development -- cross-env NODE_ENV=development next dev --turbopack",
     "staging": "dotenv -e .env.staging -- cross-env NODE_ENV=staging next dev --turbopack",
-    "start": "cross-env NODE_ENV=production next start",
-    "build": "cross-env NODE_ENV=production next build",
+    "start": "next start",
+    "build": "next build",
     "lint": "next lint"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "@tanstack/react-query": "^5.74.11",
     "animate.css": "^4.1.1",
     "axios": "^1.8.4",
+    "cross-env": "^10.0.0",
     "dotenv": "^17.2.1",
     "framer-motion": "^12.16.0",
     "js-cookie": "^3.0.5",
@@ -47,7 +48,6 @@
     "@types/node": "^20.19.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "cross-env": "^10.0.0",
     "dotenv-cli": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
