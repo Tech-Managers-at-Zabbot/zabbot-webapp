@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "dotenv -e .env.development -- cross-env NODE_ENV=development next dev --turbopack",
     "staging": "dotenv -e .env.staging -- cross-env NODE_ENV=staging next dev --turbopack",
-    "start": "cross-env NODE_ENV=production next start",
-    "build": "cross-env NODE_ENV=production next build",
+    "start": "next start",
+    "build": "next build",
     "lint": "next lint"
   },
   "dependencies": {
