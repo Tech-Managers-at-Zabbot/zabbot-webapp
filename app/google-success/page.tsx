@@ -87,7 +87,7 @@ const GoogleAuthSuccessPage = () => {
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
         <Navbar />
         <section className="w-full justify-center items-center">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div><CustomSpinner spinnerColor="#012657" /></div>}>
             <AuthHandler />
           </Suspense>
         </section>
