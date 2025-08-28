@@ -1,5 +1,7 @@
 {
-    "success":"Ìṣàkóso!",
-    "auth_success":"Ìfarahàn ṣáájú aṣeyọrí, a ń yí ọ lọ sí Dasibodu...",
-    "continue":"Tẹ̀síwájú"
+  "success": "Ìṣàkóso!",
+  "auth_success": "Ìfarahàn ṣáájú aṣeyọrí, a ń yí ọ lọ sí",
+  "dashboard": "Dasibodu...",
+  "login": "Wọlé...",
+  "continue": "Tẹ̀síwájú"
 }

@@ -3,60 +3,73 @@
 import Navbar from "@/components/general/Navbar";
 import SuccessComponent from "@/components/general/SuccessComponent";
 import Head from "next/head";
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { CustomSpinner } from "@/components/CustomSpinner";
 import Cookies from "js-cookie";
 
 function AuthHandler() {
-    const { getPageText, isPageLoading: isLanguageLoading } =
-      usePageLanguage("googleSuccess");
+  const { getPageText, isPageLoading: isLanguageLoading } =
+    usePageLanguage("googleSuccess");
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [redirectPath, setRedirectPath] = useState("");
 
   useEffect(() => {
-    const token = searchParams.get('token');
-    const userData = searchParams.get('user');
-
+    const token = searchParams.get("token");
+    const userData = searchParams.get("user");
+    const authType = searchParams.get("authType");
+    if (authType === "login") {
+      setRedirectPath("user-dashboard");
+    } else {
+      setRedirectPath("login");
+    }
     if (token && userData) {
       try {
-          Cookies.set("userProfile", userData, {
-              expires: 30,
-              secure: true,
-              sameSite: "strict",
-            });
-            Cookies.set("access_token", token, {
-              expires: 30,
-              secure: true,
-              sameSite: "strict",
-            });
+        Cookies.set("userProfile", userData, {
+          expires: 30,
+          secure: true,
+          sameSite: "strict",
+        });
+        Cookies.set("access_token", token, {
+          expires: 30,
+          secure: true,
+          sameSite: "strict",
+        });
       } catch (error) {
-        console.error('Error processing Google auth data:', error);
+        console.error("Error processing Google auth data:", error);
       }
     }
   }, [searchParams]);
 
   useEffect(() => {
     setTimeout(() => {
-      router.push(`/user-dashboard`);
-    }, 10000);
-  }, []);
+      router.push(`/${redirectPath}`);
+    }, 3000);
+  }, [redirectPath]);
 
-   if (isLanguageLoading) {
+  if (isLanguageLoading) {
     return (
       <div className="flex min-h-[90vh] justify-center items-center">
         <CustomSpinner spinnerColor="#012657" />
       </div>
-  )
+    );
   }
 
   return (
-    <SuccessComponent
-      message={getPageText("auth_success")}
-      title={getPageText("success")}
-      buttonText = {getPageText("continue")}
-    />
+    <div className="">
+      <SuccessComponent
+        message={`${getPageText("auth_success")} ${
+          redirectPath === "user-dashboard"
+            ? getPageText("dashboard")
+            : getPageText("login")
+        }`}
+        title={getPageText("success")}
+        buttonText={getPageText("continue")}
+        redirectLink={redirectPath}
+      />
+    </div>
   );
 }
 
@@ -73,7 +86,7 @@ const GoogleAuthSuccessPage = () => {
       </Head>
       <main className="flex flex-col bg-[#E3F5FF] min-h-screen relative">
         <Navbar />
-        <section className="w-full max-w-screen-2xl">
+        <section className="w-full justify-center items-center">
           <Suspense fallback={<div>Loading...</div>}>
             <AuthHandler />
           </Suspense>
