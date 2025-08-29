@@ -12,6 +12,8 @@ import SelectedPwpScreen from '@/components/premium/pwp/SelectedPwpScreen';
 import { useGetAllPronunciation } from "@/services/generalApi/pronounciations/mutation";
 import { PronunciationProps } from '@/components/premium/types';
 
+import { normalizeYorubaString } from '@/utilities/utilities';
+
 const PronounceWithPara = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedItem, setSelectedItem] = useState("");
@@ -20,10 +22,16 @@ const PronounceWithPara = () => {
     const { data: pronunciations, isLoading: isLoadingPwp } = useGetAllPronunciation();
 
     const filteredPwpItems = pronunciations?.data.filter((item: PronunciationProps) => {
-        const term = searchTerm.toLowerCase();
+        // Normalize the user's search term once
+        const normalizedTerm = normalizeYorubaString(searchTerm);
+
+        // Normalize search data fields
+        const normalizedEnglishWord = normalizeYorubaString(item.englishWord);
+        const normalizedYorubaWord = normalizeYorubaString(item.yorubaWord);
+
         return (
-            item.englishWord.toLowerCase().includes(term) ||
-            item.yorubaWord.toLowerCase().includes(term)
+            normalizedEnglishWord.includes(normalizedTerm) ||
+            normalizedYorubaWord.includes(normalizedTerm)
         );
     });
 
