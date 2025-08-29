@@ -1,3 +1,4 @@
+import { CustomSpinner } from "@/components/CustomSpinner";
 import Navbar from "@/components/general/Navbar";
 import OtpComponent from "@/components/OtpComponent";
 import Head from "next/head";
@@ -18,7 +19,7 @@ const Otp = () => {
       <main className="flex flex-col bg-[#E3EFFC] pb-30 min-h-screen relative">
         <Navbar />
         <section className="md:block max-w-screen-2xl w-full pt-20 relative">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div><CustomSpinner spinnerColor="#012657" /></div>}>
             <OtpComponent />
           </Suspense>
         </section>

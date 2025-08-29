@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import LanguageToggle from "@/components/languageToggle/LanguageToggle";
+import { CustomSpinner } from "@/components/CustomSpinner";
 
 const SignupPage = () => {
 
@@ -45,7 +46,7 @@ const SignupPage = () => {
         <section className="bg-white max-w-screen-2xl border-0 flex w-full md:w-1/2 lg:w-1/2 flex-col">
           <div className="pt-16 sm:pt-20 md:pt-8"></div>
           <div className="w-full px-6 sm:px-8 md:px-10 py-4 sm:py-6 md:py-10 flex justify-center items-center flex-1">
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div><CustomSpinner spinnerColor="#012657" /></div>}>
               <RegisterAuth />
             </Suspense>
           </div>
