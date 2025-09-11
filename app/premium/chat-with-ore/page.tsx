@@ -61,7 +61,7 @@ const ChatWithOre = () => {
     setInputValue(proverb);
   };
 
-  const sendMessage = async () => {
+  const sendMessage: any = async () => {
     if (!inputValue.trim()) return;
     if (!canMakeCall) {
       addAlert(
