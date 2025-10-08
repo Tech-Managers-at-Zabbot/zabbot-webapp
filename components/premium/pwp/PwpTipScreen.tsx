@@ -15,8 +15,8 @@ const PwpTipScreen: React.FC = () => {
                     <span className='ml-7 min-w-45'>Pronunciation Tip: </span>
                 </div>
                 <ul className='list-disc pl-6 mt-2'>
-                    <li className='leading-loose'>Low tone on “ÌLÙ” - do do - drum</li>
                     <li className='leading-loose'>Mid tone on “OMI”  - re re - water</li>
+                    <li className='leading-loose'>Low tone on “ÌLÙ” - do do - drum</li>
                     <li className='leading-loose'>High tone on “DÚDÚ” - mi mi - black</li>
                 </ul>
             </div>
