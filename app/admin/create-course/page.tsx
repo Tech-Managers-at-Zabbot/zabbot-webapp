@@ -37,10 +37,8 @@ import LessonModal from "../../../components/admin/createCourseFlow/LessonModal"
 import { useLoading } from "@/contexts/LoadingProvider";
 
 const CreateCoursePage = () => {
-  // State and hooks initialization
   const [
     languages,
-    // setLanguages
   ] = useState<Language[]>([
     {
       id: "1",

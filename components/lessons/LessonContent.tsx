@@ -62,7 +62,6 @@ const LessonContent = () => {
     );
   }
 
-  // Determine what to render based on current step
   const renderContent = () => {
     switch (currentStep) {
       case "intro":

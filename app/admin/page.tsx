@@ -22,7 +22,6 @@ const CourseManagementPage: React.FC = () => {
   const { userDetails } = useUser();
 
   const [showAddQuizModal, setShowAddQuizModal] = useState(false);
-  // Add this handler
   const handleOpenAddQuizModal = () => {
     setShowAddQuizModal(true);
   };
@@ -98,7 +97,6 @@ const CourseManagementPage: React.FC = () => {
 
   const handleDeleteCourse = (courseId: string) => {
     setCourses((prev) => prev.filter((course) => course.id !== courseId));
-    // Here you would typically make an API call to delete the course
     console.log("Deleting course:", courseId);
   };
 
@@ -106,22 +104,18 @@ const CourseManagementPage: React.FC = () => {
     setCourses((prev) =>
       prev.map((course) => (course.id === courseData.id ? courseData : course))
     );
-    // Here you would typically make an API call to save the course
     console.log("Saving course:", courseData);
   };
 
   const handleSaveLesson = (lessonData: Lesson) => {
-    // Update lesson in the mock data or make API call
     console.log("Saving lesson:", lessonData);
   };
 
   const handleDeleteLesson = (lessonId: string) => {
-    // Delete lesson from mock data or make API call
     console.log("Deleting lesson:", lessonId);
   };
 
   const handleDeleteQuiz = (quizId: string) => {
-    // Delete quiz or make API call
     console.log("Deleting quiz:", quizId);
   };
 
