@@ -8,49 +8,24 @@ import { useTheme } from "@/contexts/ThemeProvider";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const AchievementsCard = () => {
-  // const achievements = [
-  //   { name: "First Steps", isCompleted: true, icon: "👣" },
-  //   { name: "7-Day Streak", isCompleted: false, icon: "🔥" },
-  //   { name: "14-Day Streak", isCompleted: false, icon: "📆" },
-  //   { name: "30-Day Streak", isCompleted: false, icon: "🏁" },
-  //   { name: "Social Scholar", isCompleted: false, icon: "📣" },
-  //   { name: "Tone Tamer", isCompleted: false, icon: "🎵" },
-  //   { name: "Vocab Master", isCompleted: false, icon: "📖"},
-  //   { name: "Grammar Pro", isCompleted: false, icon: "🧠" },
-  //   { name: "Daily Spark", isCompleted: false, icon: "⚡" },
-  //   { name: "Word Warrior", isCompleted: false, icon: "🗡️" },
-  //   { name: "Tone Boss", isCompleted: false, icon: "🎤" },
-  //   { name: "Culture Keeper", isCompleted: false, icon: "🪘" },
-  //   { name: "Chatterbox", isCompleted: false, icon: "💬" },
-  //   { name: "Audio Ace", isCompleted: false, icon: "🎧" },
-  //   { name: "Story Seeker", isCompleted: false, icon: "📚" },
-  //   { name: "Phrase Crafter", isCompleted: false, icon: "✍️" },
-  //   { name: "Sound Sensei", isCompleted: false, icon: "🧘" },
-  //   { name: "Flashcard Fan", isCompleted: false, icon: "🃏" },
-  //   { name: "Quiz King/Queen", isCompleted: false, icon: "👑" },
-  //   { name: "Consistency Champ", isCompleted: false, icon: "⏰" },
-  //   { name: "Voice Verified", isCompleted: false, icon: "🗣️" },
-  //   { name: "Language Guardian", isCompleted: false, icon: "🤝" },
-  //   { name: "Zabbot Star", isCompleted: false, icon: "🌟" },
-  // ];
 
+  const { getPageText } = usePageLanguage("userDashboard");
 
-    const { getPageText } =
-        usePageLanguage("userDashboard");
+  const { getPageText: badgesText } = usePageLanguage("badges");
 
-    const achievements = [
-      { name: "First Steps", isCompleted: true },
-    { name: "7-Day Streak", isCompleted: false },
-    { name: "14-Day Streak", isCompleted: false },
-    { name: "30-Day Streak", isCompleted: false },
-    { name: "Social Scholar", isCompleted: false },
-    { name: "Tone Tamer", isCompleted: false },
-    { name: "Vocab Master", isCompleted: false },
-    { name: "Grammar Pro", isCompleted: false },
-    { name: "Daily Spark", isCompleted: false },
-    { name: "Word Warrior", isCompleted: false },
-    { name: "Tone Boss", isCompleted: false },
-    { name: "Culture Keeper", isCompleted: false },
+  const achievements = [
+    { name: badgesText('first_steps'), isCompleted: true },
+    { name: badgesText('7_day_streak'), isCompleted: false },
+    { name: badgesText('14_Day_streak'), isCompleted: false },
+    { name: badgesText('30_day_streak'), isCompleted: false },
+    { name: badgesText('social_scholar'), isCompleted: false },
+    { name: badgesText('tone_tamer'), isCompleted: false },
+    { name: badgesText('vocab_master'), isCompleted: false },
+    { name: badgesText('grammar_pro'), isCompleted: false },
+    { name: badgesText('daily_spark'), isCompleted: false },
+    { name: badgesText('word_warrior'), isCompleted: false },
+    { name: badgesText('tone_boss'), isCompleted: false },
+    { name: badgesText('culture_keeper'), isCompleted: false },
     { name: "Chatterbox", isCompleted: false },
     { name: "Audio Ace", isCompleted: false },
     { name: "Story Seeker", isCompleted: false },
@@ -64,7 +39,6 @@ const AchievementsCard = () => {
     { name: "Zabbot Star", isCompleted: false },
   ];
 
-
   const { theme } = useTheme();
 
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -74,7 +48,7 @@ const AchievementsCard = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState<"left" | "right" | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  
+
   // Modal hook
   const { isOpen: isModalOpen, openModal, closeModal } = useModal();
 
@@ -83,11 +57,11 @@ const AchievementsCard = () => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768); // md breakpoint
     };
-    
+
     checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    
-    return () => window.removeEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   const startScrolling = (direction: "left" | "right") => {
@@ -149,7 +123,9 @@ const AchievementsCard = () => {
     return (
       <>
         <div
-          className={`relative flex flex-col gap-4 z-1 ${theme === 'dark' ? 'bg-[#1E375A]' : 'bg-white'} items-center justify-between p-6 rounded-lg w-full`}
+          className={`relative flex flex-col gap-4 z-1 ${
+            theme === "dark" ? "bg-[#1E375A]" : "bg-white"
+          } items-center justify-between p-6 rounded-lg w-full`}
           style={{
             fontFamily: "Lexend",
             boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)",
@@ -159,8 +135,12 @@ const AchievementsCard = () => {
           <section className="flex-shrink-0">
             <div className="flex flex-col gap-[14px]">
               <div className="text-[#737477] flex flex-col gap-2 text-center font-[400] text-[14px] leading-[100%]">
-                <span className="whitespace-nowrap">{getPageText("achievements")}</span>
-                <span className="whitespace-nowrap text-[#F96129]">{getPageText("unlocked")} 1/23</span>
+                <span className="whitespace-nowrap">
+                  {getPageText("achievements")}
+                </span>
+                <span className="whitespace-nowrap text-[#F96129]">
+                  {getPageText("unlocked")} 1/23
+                </span>
               </div>
               {/* <div className="font-bold text-center text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
                 RANK #12 / 90
@@ -209,15 +189,15 @@ const AchievementsCard = () => {
                         {item.icon}
                       </div>
                     ) : ( */}
-                      <div className="relative w-[24px] h-[24px]">
-                        <Image
-                          src="/userDashboard/dashboard-streak-badge.svg"
-                          alt="Badge"
-                          fill
-                          priority
-                          className="object-contain"
-                        />
-                      </div>
+                    <div className="relative w-[24px] h-[24px]">
+                      <Image
+                        src="/userDashboard/dashboard-streak-badge.svg"
+                        alt="Badge"
+                        fill
+                        priority
+                        className="object-contain"
+                      />
+                    </div>
                     {/* )} */}
                   </div>
                   <div
@@ -238,7 +218,9 @@ const AchievementsCard = () => {
   // Desktop render (original layout)
   return (
     <div
-      className={`relative flex z-1 ${theme === 'dark' ? 'bg-[#1E375A]' : 'bg-white'} items-center p-6 rounded-lg gap-10 w-full overflow-hidden`}
+      className={`relative flex z-1 ${
+        theme === "dark" ? "bg-[#1E375A]" : "bg-white"
+      } items-center p-6 rounded-lg gap-10 w-full overflow-hidden`}
       style={{
         fontFamily: "Lexend",
         boxShadow: "-8px 8px 20px rgba(0, 0, 0, 0.15)",
@@ -248,8 +230,12 @@ const AchievementsCard = () => {
       <section className="min-w-[100px] flex-shrink-0">
         <div className="flex flex-col gap-[14px]">
           <div className="text-[#737477] flex flex-col gap-2 font-[700] text-[14px] leading-[100%]">
-                       <span className="whitespace-nowrap">{getPageText("achievements")}</span>
-                <span className="whitespace-nowrap text-[#F96129]">{getPageText("unlocked")} 1/23</span>
+            <span className="whitespace-nowrap">
+              {getPageText("achievements")}
+            </span>
+            <span className="whitespace-nowrap text-[#F96129]">
+              {getPageText("unlocked")} 1/23
+            </span>
           </div>
           {/* <div className="font-bold text-[#ED2DA0] text-[18px] leading-[100%] whitespace-nowrap">
             RANK #12 / 90
@@ -301,20 +287,27 @@ const AchievementsCard = () => {
                   {item.icon}
                 </div>
               ) : ( */}
-                <div className="relative w-[24px] h-[24px]">
-                  <Image
-                    src="/userDashboard/dashboard-streak-badge.svg"
-                    alt="Badge"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div>
+              <div className="relative w-[24px] h-[24px]">
+                <Image
+                  src="/userDashboard/dashboard-streak-badge.svg"
+                  alt="Badge"
+                  fill
+                  priority
+                  className="object-contain"
+                />
+              </div>
               {/* )} */}
             </div>
             <div
               className="text-[14px] font-[400] leading-[145%] whitespace-nowrap text-center"
-              style={{ color: item.isCompleted && theme === 'dark' ? '#F0F0F0' : item.isCompleted && theme === 'light' ? "#333333" : "#CCCCCC" }}
+              style={{
+                color:
+                  item.isCompleted && theme === "dark"
+                    ? "#F0F0F0"
+                    : item.isCompleted && theme === "light"
+                    ? "#333333"
+                    : "#CCCCCC",
+              }}
             >
               {item.name}
             </div>

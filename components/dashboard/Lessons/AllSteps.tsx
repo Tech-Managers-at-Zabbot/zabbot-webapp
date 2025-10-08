@@ -228,7 +228,7 @@ const AllSteps = () => {
                   >
                     <StepsCard
                       data={lessonProgressData}
-                      isClickable={lessonProgressData?.title === "Say Hello"}
+                      isClickable={index === 0 || index === 1}
                     />
                   </div>
                 )
