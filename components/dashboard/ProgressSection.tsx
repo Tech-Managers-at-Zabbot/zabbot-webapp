@@ -84,7 +84,7 @@ const ProgressSection = () => {
                           ? lessonData.imagePath
                           : "/userDashboard/yoruba/coming-soon.svg"
                       }
-                      isClickable={index === 0}
+                      isClickable={index === 0 || index === 1}
                     />
                   </div>
                 )
