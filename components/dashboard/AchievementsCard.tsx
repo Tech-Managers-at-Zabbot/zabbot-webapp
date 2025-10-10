@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { ScrollArrow } from "../ScrollArrow";
+// import { ScrollArrow } from "../ScrollArrow";
 import { Modal, useModal } from "../general/Modal"; // Adjust path as needed
 import InAppButton from "../InAppButton"; // Adjust path as needed
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -26,17 +27,17 @@ const AchievementsCard = () => {
     { name: badgesText('word_warrior'), isCompleted: false },
     { name: badgesText('tone_boss'), isCompleted: false },
     { name: badgesText('culture_keeper'), isCompleted: false },
-    { name: "Chatterbox", isCompleted: false },
-    { name: "Audio Ace", isCompleted: false },
-    { name: "Story Seeker", isCompleted: false },
-    { name: "Phrase Crafter", isCompleted: false },
-    { name: "Sound Sensei", isCompleted: false },
-    { name: "Flashcard Fan", isCompleted: false },
-    { name: "Quiz King/Queen", isCompleted: false },
-    { name: "Consistency Champ", isCompleted: false },
-    { name: "Voice Verified", isCompleted: false },
-    { name: "Language Guardian", isCompleted: false },
-    { name: "Zabbot Star", isCompleted: false },
+    // { name: "Chatterbox", isCompleted: false },
+    // { name: "Audio Ace", isCompleted: false },
+    // { name: "Story Seeker", isCompleted: false },
+    // { name: "Phrase Crafter", isCompleted: false },
+    // { name: "Sound Sensei", isCompleted: false },
+    // { name: "Flashcard Fan", isCompleted: false },
+    // { name: "Quiz King/Queen", isCompleted: false },
+    // { name: "Consistency Champ", isCompleted: false },
+    // { name: "Voice Verified", isCompleted: false },
+    // { name: "Language Guardian", isCompleted: false },
+    // { name: "Zabbot Star", isCompleted: false },
   ];
 
   const { theme } = useTheme();
@@ -244,7 +245,7 @@ const AchievementsCard = () => {
       </section>
 
       {/* Scroll Arrows */}
-      {showLeftArrow && (
+      {/* {showLeftArrow && (
         <div className="absolute z-1 left-45 top-1/2">
           <ScrollArrow
             direction="left"
@@ -267,7 +268,7 @@ const AchievementsCard = () => {
             onTouchEnd={stopScrolling}
           />
         </div>
-      )}
+      )} */}
 
       {/* Achievements Section */}
       <section ref={scrollRef} className="flex overflow-x-auto scroll-hidden">

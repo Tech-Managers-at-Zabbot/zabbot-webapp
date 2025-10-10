@@ -1,5 +1,5 @@
 import React from "react";
-// import MediaComponents from "./MediaRendererComponent";
+import MediaComponents from "./MediaRendererComponent";
 
 const LessonCompleteComponent = () => {
   return (
@@ -7,16 +7,29 @@ const LessonCompleteComponent = () => {
       <section>
         <div className="text-center mb-8">
           <div className="mb-6">
-            <div className="p-4 flex flex-col gap-5">
-              <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-[#EBEBEB]">
+            <div className="p-2 flex flex-col gap-5">
+              <p className="text-2xl sm:text-3xl md:text-3xl lg:text-3xl font-semibold mt-4 leading-tight text-[#EBEBEB]">
                 O parí
               </p>
-              <p className="flex rounded-lg bg-black/30 p-2 text-lg sm:text-xl md:text-2xl lg:text-3xl font-[400] leading-tight items-center justify-center text-center text-[#EBEBEB]">
+              <p className="flex rounded-lg bg-black/30 p-2 text-lg sm:text-xl md:text-2xl lg:text-xl font-[400] leading-tight items-center justify-center text-center text-[#EBEBEB]">
                 Re Re Mi
               </p>
               <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal leading-tight text-[#EBEBEB]">
                 The End
               </p>
+            </div>
+            <div className="w-full flex items-center justify-center">
+              <MediaComponents
+                files={[
+                  {
+                    contentId: "1",
+                    filePath: "/assets/audio/opari.wav",
+                    contentType: "audio",
+                    id: "1",
+                    description: "Lesson complete audio",
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>
