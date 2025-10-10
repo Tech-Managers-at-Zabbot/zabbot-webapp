@@ -34,6 +34,7 @@ const LessonContent = () => {
     isLastQuiz,
     currentStep,
     submitQuizAnswer,
+    goToContent,
   } = useLessonContext();
 
   // Handle quiz submission
@@ -82,7 +83,10 @@ const LessonContent = () => {
             canGoBack={!isFirstContent}
             isLastContent={isLastContent && quizzes.length === 0}
             lessonTitle={lesson?.title}
-            onComplete={()=> {completeLesson(); navigateToCompletion()}}
+            onComplete={() => {
+              completeLesson();
+              navigateToCompletion();
+            }}
           />
         );
 
@@ -100,6 +104,14 @@ const LessonContent = () => {
             <section className="mt-6 w-full flex items-center justify-center">
               <LessonCompleteComponent />
             </section>
+            {!isFirstContent && (
+              <div
+                className="text-[#F15B29] hover:cursor-pointer hover:text-[#5A2E10]"
+                onClick={() => goToContent(0)}
+              >
+                Go back to the beginning
+              </div>
+            )}
             <section className="z-10 mt-6 flex-col md:flex-row gap-2 md:gap-0 flex w-full max-w-[800px] justify-between items-center">
               <InAppButton
                 onClick={previousContent}
@@ -116,8 +128,8 @@ const LessonContent = () => {
                   if (quizzes.length > 0) {
                     startQuizPhase();
                   } else {
-                  completeLesson(); 
-                   navigateToCompletion()
+                    completeLesson();
+                    navigateToCompletion();
                   }
                 }}
                 background={`#5A2E10`}
@@ -138,7 +150,10 @@ const LessonContent = () => {
             canGoBack={!isFirstQuiz || contents.length > 0}
             isLastQuiz={isLastQuiz}
             lessonTitle={lesson?.title}
-            onComplete={()=> {completeLesson(); navigateToCompletion()}}
+            onComplete={() => {
+              completeLesson();
+              navigateToCompletion();
+            }}
             onQuizSubmit={handleQuizSubmit}
           />
         );
@@ -147,7 +162,7 @@ const LessonContent = () => {
         // You can create a LessonCompleted component or navigate directly
         return (
           <div className="text-center">
-           <CustomSpinner title="Saving Progress..." spinnerColor="#5A2E10"/>
+            <CustomSpinner title="Saving Progress..." spinnerColor="#5A2E10" />
           </div>
         );
 

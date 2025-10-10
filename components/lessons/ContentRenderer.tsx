@@ -7,6 +7,7 @@ import { CustomSpinner } from "../CustomSpinner";
 import ProverbsContentComponent from "./contents/ProverbsContent";
 import NormalComponentComponent from "./contents/NormalContent";
 import GrammarRuleComponent from "./contents/GrammarRuleContent";
+import { useLessonContext } from "@/contexts/LessonContext";
 
 interface ContentRendererProps {
   content: any;
@@ -29,10 +30,11 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
 }) => {
   const [completeLoading, setCompleteLoading] = useState(false);
 
+  const { goToContent } = useLessonContext();
+
   if (!content) return null;
 
-// Clean HTML content (remove inline styles for better control)
-
+  // Clean HTML content (remove inline styles for better control)
 
   const handleNext = () => {
     if (isLastContent) {
@@ -72,6 +74,15 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
         </div>
       )}
 
+      {canGoBack && (
+        <div
+          className="text-[#F15B29] mt-4 hover:cursor-pointer hover:text-[#5A2E10]"
+          onClick={() => goToContent(0)}
+        >
+          Go back to the beginning
+        </div>
+      )}
+
       <div className="border-t-1 h-[0.5px] mt-6 border-[#FCD2C2] w-full"></div>
 
       {/* Navigation Buttons */}
@@ -104,7 +115,6 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
           </div>
         </InAppButton>
       </div>
-
     </div>
   );
 };
