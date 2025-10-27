@@ -57,7 +57,7 @@ const Dashboard = () => {
     isLoading: isUserCompletedCoursesCountLoading,
   } = useGetUserCompletedCourses(userDetails.languageId, true);
 
-    const userCoursesCount = userCompletedCoursesCount?.data || 0;
+  const userCoursesCount = userCompletedCoursesCount?.data || 0;
 
   const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
 
@@ -81,9 +81,7 @@ const Dashboard = () => {
     {
       title: getPageText("completed_courses"),
       value: `${userCoursesCount} ${
-        userCoursesCount === 1
-          ? getPageText("step")
-          : getPageText("steps")
+        userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
       }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
@@ -94,9 +92,7 @@ const Dashboard = () => {
         userGoalsLoading ||
         userCountLoading ||
         isUserCompletedCoursesCountLoading,
-      isEmpty:
-        !userCoursesCount &&
-        userCoursesCount !== 0,
+      isEmpty: !userCoursesCount && userCoursesCount !== 0,
     },
 
     {
