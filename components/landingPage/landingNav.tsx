@@ -3,6 +3,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import InAppButton from "../InAppButton";
+import { MdOutlineFeaturedPlayList } from "react-icons/md";
+import { SiFramework } from "react-icons/si";
+import { GiPriceTag } from "react-icons/gi";
+import { LiaComments } from "react-icons/lia";
+import { RiTeamLine } from "react-icons/ri";
 
 const LandingPageNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,11 +25,11 @@ const LandingPageNavbar = () => {
   }, [isMobileMenuOpen]);
 
   const navigationItems = [
-    { name: "Features", href: "#features" },
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "Team", href: "#team" },
+    { name: "Features", href: "#features", icon: <MdOutlineFeaturedPlayList /> },
+    { name: "How It Works", href: "#how-it-works", icon: <SiFramework /> },
+    { name: "Pricing", href: "#pricing", icon: <GiPriceTag /> },
+    { name: "Testimonials", href: "#testimonials", icon: <LiaComments /> },
+    { name: "Team", href: "#team", icon: <RiTeamLine /> },
   ];
 
   return (
@@ -113,21 +118,26 @@ const LandingPageNavbar = () => {
                     key={index}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block w-full px-4 py-3 text-left text-[#E4DBDB] font-[600] hover:bg-[#207EC5] hover:text-white transition-colors"
+                    className="flex items-center justify-left text-lg lg:text-xl gap-4 w-full px-4 py-3 text-left text-[#E4DBDB] font-[600] hover:bg-[#207EC5] hover:text-white transition-colors"
                     style={{ fontFamily: "Lexend" }}
                   >
-                    {item.name}
+                    <div>{item.icon}</div>
+                    <div>{item.name}</div>
                   </a>
                 ))}
 
                 {/* Login & Start Free Trial in Mobile Menu */}
                 <div className="border-t border-[#207EC5] mt-2 pt-2 px-4 pb-4 space-y-3">
-                  <button
-                    className="w-full text-center text-[#FFFFFF] font-[400] py-3 hover:text-[#F9C10F] transition-colors"
-                    style={{ fontFamily: "Lexend" }}
+                  <InAppButton
+                    color="#FFFFFF"
+                    background="transparent"
+                    borderRadius="9px"
+                    width="100%"
+                    border="2px solid #FFFFFF"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Login
-                  </button>
+                  </InAppButton>
                   <Link
                     href="/signup"
                     style={{ textDecoration: "none" }}
