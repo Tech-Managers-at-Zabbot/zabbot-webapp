@@ -26,8 +26,10 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const handleLogout = () => {
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
-    const keepDailyCallsRemaining = localStorage.getItem("daily_calls_remaining");
-    
+    const keepDailyCallsRemaining = localStorage.getItem(
+      "daily_calls_remaining"
+    );
+
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
@@ -37,7 +39,10 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
 
     localStorage.setItem("chat_conversations", keepChatHistory || "[]");
     localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
-    localStorage.setItem("daily_calls_remaining", keepDailyCallsRemaining || "30");
+    localStorage.setItem(
+      "daily_calls_remaining",
+      keepDailyCallsRemaining || "30"
+    );
 
     setLoading(true);
     router.push("/login");
