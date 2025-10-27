@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -187,7 +186,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
     try {
-
       setIsLoading(true);
 
       const response = await getLessonWithContents(lessonId);
