@@ -33,6 +33,7 @@ const SuccessPage = () => {
               message={getPageText("password_update_success")}
               title={getPageText("success")}
               buttonText={getPageText("continue")}
+              redirectLink="login"
             />
           )}
         </section>

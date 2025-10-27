@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
@@ -60,7 +61,7 @@ const ChatWithOre = () => {
     setInputValue(proverb);
   };
 
-  const sendMessage = async () => {
+  const sendMessage: any = async () => {
     if (!inputValue.trim()) return;
     if (!canMakeCall) {
       addAlert(

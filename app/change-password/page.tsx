@@ -1,4 +1,5 @@
 import ChangePasswordComponent from "@/components/changePasswordFlow/ChangePasswordComponent";
+import { CustomSpinner } from "@/components/CustomSpinner";
 import Navbar from "@/components/general/Navbar";
 import Head from "next/head";
 import { Suspense } from 'react';
@@ -17,7 +18,7 @@ const ChangePassword = () => {
       <main className="flex flex-col bg-[#E3EFFC] min-h-screen relative">
         <Navbar />
         <section className="w-full max-w-screen-2xl pt-20">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div><CustomSpinner spinnerColor="#012657" /></div>}>
           <ChangePasswordComponent />
           </Suspense>
         </section>

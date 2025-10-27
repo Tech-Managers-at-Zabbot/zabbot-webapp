@@ -15,16 +15,16 @@ const PwpTipScreen: React.FC = () => {
                     <span className='ml-7 min-w-45'>Pronunciation Tip: </span>
                 </div>
                 <ul className='list-disc pl-6 mt-2'>
-                    <li>Start by mastering the three words below.</li>
-                    <li>Each is an example of low, mid and high tones.</li>
-                    <li>Sound each out by humming and use DO RE MI on keyboard.</li>
+                    <li className='leading-loose'>Low tone on “ÌLÙ” - do do - drum</li>
+                    <li className='leading-loose'>Mid tone on “OMI”  - re re - water</li>
+                    <li className='leading-loose'>High tone on “DÚDÚ” - mi mi - black</li>
                 </ul>
             </div>
             <div className='mt-4'>
                 <ul className='list-disc pl-6 mt-2'>
-                    <li className='leading-loose'>Low tone on “ÌLÙ” - do do - drum</li>
-                    <li className='leading-loose'>Mid tone on “OMI”  - re re - water</li>
-                    <li className='leading-loose'>High tone on “DÚDÚ” - mi mi - black</li>
+                    <li>Start by mastering these three words.</li>
+                    <li>Each is an example of low, mid and high tones.</li>
+                    <li>Sound each out by humming and use DO RE MI on keyboard.</li>
                 </ul>
             </div>
         </section>

@@ -165,6 +165,15 @@ export function removeYorubaDiacritics(text: string): string {
   return result;
 }
 
+export function normalizeYorubaString(str: string): string {
+  const result = str
+    .normalize('NFD') // Decompose combined characters into base characters and diacritics
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (the tone marks)
+    .toLowerCase(); // Convert to lowercase for case-insensitive matching
+
+  return result;
+}
+
 
 
 // export function removeYorubaDiacriticsAlternative(text: string): string {

@@ -108,22 +108,33 @@ const AllCourseLessons = () => {
   return (
     <div
       className="z-2 shadow-lg gap-4 md:gap-6 lg:gap-10 flex flex-col rounded-lg w-full max-w-full overflow-hidden"
-      style={{ fontFamily: "Lexend", color: "#162B6E", padding: "16px", background: theme === "dark" ? "#012657" : "white", }}
+      style={{
+        fontFamily: "Lexend",
+        color: "#162B6E",
+        padding: "16px",
+        background: theme === "dark" ? "#012657" : "white",
+      }}
     >
       {/* Header Section - Made fully responsive */}
       <header className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
         <section className="min-w-0 flex-1">
-          <span className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]"
-          style={{ color: theme === "dark" ? "white" : "#162B6E" }}
+          <span
+            className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]"
+            style={{ color: theme === "dark" ? "white" : "#162B6E" }}
           >
             {/* Immersing you in Yorùbá, one step at a time */}
-            {lessonsLoading ? "Loading course details..." : course?.title || "Course Title"}
+            {lessonsLoading
+              ? "Loading course details..."
+              : course?.title || "Course Title"}
           </span>
-          <span className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
-          style={{ color: "#207EC5" }}
+          <span
+            className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
+            style={{ color: "#207EC5" }}
           >
             {/* Building fluency through culture, sound, and everyday moments. */}
-            {lessonsLoading ? null : course?.description || "Course Description"}
+            {lessonsLoading
+              ? null
+              : course?.description || "Course Description"}
           </span>
         </section>
 
@@ -217,7 +228,7 @@ const AllCourseLessons = () => {
                     <div className="w-full max-w-[278px]">
                       <LessonsCard2
                         data={lessonProgressData}
-                        isClickable={index === 0}
+                        isClickable={index === 0 || index === 1}
                       />
                     </div>
                   </div>
