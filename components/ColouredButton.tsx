@@ -15,6 +15,7 @@ export interface ButtonProps {
   padding?: string;
   boxShadow?: string;
   color?: string;
+  border?: string;
   onClick?: () => void;
 }
 
@@ -28,6 +29,7 @@ const ColouredButton: React.FC<ButtonProps> = ({
   paddingLeft,
   paddingRight,
   padding,
+  border,
   color="white",
   boxShadow = "0 4px 0 0 rgba(0, 0, 0, 0.2)",
   backgroundColor='#333333',
@@ -54,8 +56,9 @@ const ColouredButton: React.FC<ButtonProps> = ({
         width,
         color,
         padding,
+        border,
         backgroundColor,
-        boxShadow,
+        boxShadow : border ? 'none' : boxShadow,
         fontFamily: 'Lexend'
       }}
     >

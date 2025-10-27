@@ -1,27 +1,43 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Dropdown from "./landingDropDown";
-// import device from "@/constants/breakpoints";
-// import { useMatchMediaQuery } from "@/hooks/viewPorts";
 import Link from "next/link";
-import { appColors } from "@/constants/colors";
-import ColouredButton from "../ColouredButton";
+import InAppButton from "../InAppButton";
+import { MdOutlineFeaturedPlayList } from "react-icons/md";
+import { SiFramework } from "react-icons/si";
+import { GiPriceTag } from "react-icons/gi";
+import { LiaComments } from "react-icons/lia";
+import { RiTeamLine } from "react-icons/ri";
 
 const LandingPageNavbar = () => {
-  //   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  //   const isTabletOrBelow = useMatchMediaQuery(device.tablet);
-  // const isLaptopOrBelow = useMatchMediaQuery(device.laptopWide);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Show mobile menu on tablet and below, or when explicitly toggled
-  //   const showMobileMenu = isTabletOrBelow || mobileMenuOpen;
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  const navigationItems = [
+    { name: "Features", href: "#features", icon: <MdOutlineFeaturedPlayList /> },
+    { name: "How It Works", href: "#how-it-works", icon: <SiFramework /> },
+    { name: "Pricing", href: "#pricing", icon: <GiPriceTag /> },
+    { name: "Testimonials", href: "#testimonials", icon: <LiaComments /> },
+    { name: "Team", href: "#team", icon: <RiTeamLine /> },
+  ];
 
   return (
-    <nav className="bg-[#24A5EE] px-[112px] h-16 md:h-20 lg:h-[120px] w-full">
+    <nav className="bg-[#122258] px-4 sm:px-8 md:px-16 lg:px-[112px] h-16 md:h-20 lg:h-[120px] w-full relative z-50">
       {/* Main Navbar Content */}
       <div className="flex items-center justify-between h-full w-full">
         {/* Logo Section */}
-        <div className="flex items-center">
+        <div className="flex items-center z-50">
           <div className="relative h-8 w-28 sm:h-10 sm:w-36 lg:h-[48.85px] lg:w-[172px]">
             <Image
               src="/general/zabbot-logo-white.svg"
@@ -33,109 +49,123 @@ const LandingPageNavbar = () => {
           </div>
         </div>
 
+        {/* Desktop Navigation Menu */}
         <div
-          className={`flex text-[${appColors.officeBrown100}] font-[600] bg-[#207EC5] gap-8 py-4 px-10 rounded-[40px]`}
-          style={{fontFamily: "Lexend"}}
+          className="hidden xl:flex text-[#E4DBDB] font-[600] bg-[#207EC5] gap-8 py-4 px-10 rounded-[40px]"
+          style={{ fontFamily: "Lexend" }}
         >
-          <div className="hover:cursor-pointer">
-            <Dropdown options={[]} placeholder="Use Cases" />
-          </div>
-          {/* <div>
-                <Dropdown options={[]} placeholder="Resources" />
-              </div> */}
-          <div className="flex items-center justify-center">
-            <div>Help</div>
-          </div>
-          <div className="flex items-center justify-center">
-            <div>Pricing</div>
-          </div>
-          <div className="flex items-center justify-center">
-            <div>About Us</div>
-          </div>
+          {navigationItems.map((item, index) => (
+            <a
+              key={index}
+              href={item.href}
+              className="hover:cursor-pointer hover:text-white transition-colors"
+            >
+              {item.name}
+            </a>
+          ))}
         </div>
 
-        {/* <div className="flex justify-center items-center ml-4">
-            <Link
-            href="/waiting-list-auth"
-            style={{ textDecoration: "none", color: "#eb512f" }}
+        {/* Desktop CTA Section */}
+        <div className="hidden lg:flex justify-between min-w-[246px] items-center ml-4">
+          <div
+            className="flex text-[#FFFFFF] font-[400] hover:cursor-pointer hover:text-[#F9C10F] transition-colors items-center justify-center"
+            style={{ fontFamily: "Lexend" }}
           >
-              <button className="py-4 px-6 rounded-lg font-[600] hover:cursor-pointer bg-[#E0E1E6] w-full h-[55px] flex justify-center items-center text-black hover:bg-transparent hover:border hover:text-[#E0E1E6] hover:border-[#E0E1E6] transition-colors duration-200">
-                Stay Updated...
-              </button>
-              </Link>
-            </div> */}
-
-        <div className="flex justify-center items-center ml-4">
+            <div>Login</div>
+          </div>
           <Link
             href="/signup"
             style={{ textDecoration: "none", color: "#eb512f" }}
           >
-            <ColouredButton
-              boxShadow="0"
+            <InAppButton
               color="#000000"
-              backgroundColor="#F9C10F"
-              borderRadius="48px"
-              padding="16px 24px"
-              height=""
+              background="#F9C10F"
+              borderRadius="9px"
               width="167px"
             >
-              Get Started
-            </ColouredButton>
+              Start Free Trial
+            </InAppButton>
           </Link>
         </div>
 
-        {/* Mobile Menu Button (shown on laptop and below) */}
-        {/* {isLaptopOrBelow && (
-          <div className="flex items-center">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-white focus:outline-none"
+        {/* Mobile/Tablet Menu Button */}
+        <section className="lg:hidden flex items-center z-50">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="flex items-center gap-2 text-white hover:text-[#F9C10F] transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {mobileMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
-        )} */}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+
+          {/* Mobile Dropdown Menu */}
+          {isMobileMenuOpen && (
+            <div className="absolute top-full min-w-[250px] max-w-[300px] right-4 mt-2 bg-[#122258] rounded-lg shadow-lg border border-[#207EC5] z-50 max-h-[80vh] overflow-y-auto">
+              <div className="py-2">
+                {navigationItems.map((item, index) => (
+                  <a
+                    key={index}
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-left text-lg lg:text-xl gap-4 w-full px-4 py-3 text-left text-[#E4DBDB] font-[600] hover:bg-[#207EC5] hover:text-white transition-colors"
+                    style={{ fontFamily: "Lexend" }}
+                  >
+                    <div>{item.icon}</div>
+                    <div>{item.name}</div>
+                  </a>
+                ))}
+
+                {/* Login & Start Free Trial in Mobile Menu */}
+                <div className="border-t border-[#207EC5] mt-2 pt-2 px-4 pb-4 space-y-3">
+                  <InAppButton
+                    color="#FFFFFF"
+                    background="transparent"
+                    borderRadius="9px"
+                    width="100%"
+                    border="2px solid #FFFFFF"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Login
+                  </InAppButton>
+                  <Link
+                    href="/signup"
+                    style={{ textDecoration: "none" }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <InAppButton
+                      color="#122258"
+                      background="#F9C10F"
+                      borderRadius="9px"
+                      width="100%"
+                    >
+                      Start Free Trial
+                    </InAppButton>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
       </div>
 
-      {/* Mobile Menu (shown on laptop and below when toggled) */}
-      {/* {isLaptopOrBelow && showMobileMenu && (
-        <div className="bg-[#292424] py-4 px-6 rounded-lg mt-2">
-          <div className="flex flex-col space-y-4 text-[#E4DBDB] font-[600]">
-            <div>
-              <Dropdown options={[]} placeholder="Use Cases" mobile />
-            </div>
-            <div>
-              <Dropdown options={[]} placeholder="Resources" mobile />
-            </div>
-            <div className="py-2 px-4">Pricing</div>
-            <div className="py-2 px-4">About Us</div>
-            <button className="py-3 px-4 rounded-lg hover:cursor-pointer bg-[#E0E1E6] text-black hover:bg-opacity-90 transition-colors duration-200">
-              Get Started
-            </button>
-          </div>
-        </div>
-      )} */}
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="xl:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
     </nav>
   );
 };
