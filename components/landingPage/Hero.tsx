@@ -9,26 +9,26 @@ import { HiOutlinePlay } from "react-icons/hi2";
 const HeroSection = () => {
   return (
     <div
-      className="text-[#000000] min-h-screen lg:px-[112px]"
+      className="text-[#000000] min-h-screen px-4 sm:px-8 md:px-16 lg:px-[112px] py-10 lg:py-20 flex items-center justify-center"
       style={{ fontFamily: "Lexend", backgroundColor: appColors.primaryBlue }}
     >
       <main className="flex flex-col lg:flex-row gap-10">
         {/* Text Content Section */}
         <section className="flex flex-col justify-center gap-6 md:gap-[50px] lg:w-[55%]">
-          <div
-            className="text-center w-fit text-[20px] font-[400] leading-[145%]"
-            style={{ color: appColors.primaryGrayNormal }}
-          >
-            Ready to improve your Language today?
+          <div className="flex items-center gap-4 md:gap-6 lg:gap-8">
+            <div className="text-center bg-[#D5F0FF] rounded-4xl text-[#162B6E] py-2 px-4 text-[16px] font-[400] leading-[24px]">
+              The spark that powers language & culture.
+            </div>
+            <div className="bg-[#00C950] shadow-xl text-[#FFFFFF] font-[500] text-[16px] leading-[24px] rounded-4xl py-2 px-4 text-cennter">
+              Perfect tone! ✨
+            </div>
           </div>
 
           <div className="text-[62px] text-[#162B6E] font-[700] leading-[76px]">
             Learn your heritage <br /> language through AI-powered conversations
           </div>
 
-          <div
-            className="text-lg sm:text-xl md:text-[25px] leading-[28px] font-[400] text-[#364153]"
-          >
+          <div className="text-lg sm:text-xl md:text-[25px] leading-[28px] font-[400] text-[#364153]">
             Zabbot blends conversational AI, storytelling, and community to help
             you speak Yoruba with confidence and cultural understanding.
           </div>
@@ -68,10 +68,7 @@ const HeroSection = () => {
                   Watch Demo
                 </div>
                 <div>
-                  <HiOutlinePlay
-                    size={30}
-                    color="#162B6E"
-                  />
+                  <HiOutlinePlay size={30} color="#162B6E" />
                 </div>
               </main>
             </ColouredButton>
@@ -79,7 +76,7 @@ const HeroSection = () => {
         </section>
 
         <section>
-          <div className="w-full xl:mt-2 flex items-center justify-center order-2 lg:order-2 pb-8 lg:pb-0">
+          <div className="w-full flex items-center justify-center order-2 lg:order-2 pb-8 lg:pb-0">
             <MascotComponent />
           </div>
         </section>

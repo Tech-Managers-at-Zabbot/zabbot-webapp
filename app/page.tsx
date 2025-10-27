@@ -2,13 +2,13 @@ import React from "react";
 import Head from "next/head";
 import LandingPageNavbar from "@/components/landingPage/landingNav";
 import HeroSection from "@/components/landingPage/Hero";
-import FeaturesSection from "@/components/landingPage/Features";
-import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
-import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
-import Testimonial from "@/components/landingPage/Testimonial";
-import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
-import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
-import QuestionsSection from "@/components/landingPage/QuestionsSection";
+// import FeaturesSection from "@/components/landingPage/Features";
+// import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
+// import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
+// import Testimonial from "@/components/landingPage/Testimonial";
+// import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
+// import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
+// import QuestionsSection from "@/components/landingPage/QuestionsSection";
 
 const Home = () => {
   return (
@@ -24,13 +24,13 @@ const Home = () => {
       <main className="bg-white">
         <LandingPageNavbar />
         <HeroSection />
-        <FeaturesSection />
+        {/* <FeaturesSection />
         <WhyZabbotComponent />
         <GlobalCommunityComponent />
         <Testimonial />
         <AILanguageComponent />
         <UseCaseComponent />
-        <QuestionsSection />
+        <QuestionsSection /> */}
       </main>
     </div>
   );
