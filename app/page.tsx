@@ -2,6 +2,7 @@ import React from "react";
 import Head from "next/head";
 import LandingPageNavbar from "@/components/landingPage/landingNav";
 import HeroSection from "@/components/landingPage/Hero";
+import ZabbotApproach from "@/components/landingPage/ZabbotApproach";
 // import FeaturesSection from "@/components/landingPage/Features";
 // import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
 // import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
@@ -24,6 +25,7 @@ const Home = () => {
       <main className="bg-white">
         <LandingPageNavbar />
         <HeroSection />
+        <ZabbotApproach />
         {/* <FeaturesSection />
         <WhyZabbotComponent />
         <GlobalCommunityComponent />

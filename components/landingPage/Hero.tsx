@@ -9,74 +9,77 @@ import { HiOutlinePlay } from "react-icons/hi2";
 const HeroSection = () => {
   return (
     <div
-      className="text-[#000000] min-h-screen px-4 sm:px-8 md:px-16 lg:px-[112px] py-10 lg:py-20 flex items-center justify-center"
+      className="text-[#000000] min-h-screen px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[112px] py-8 sm:py-12 lg:py-20 flex items-center justify-center"
       style={{ fontFamily: "Lexend", backgroundColor: appColors.primaryBlue }}
     >
-      <main className="flex flex-col lg:flex-row gap-10">
+      <main className="flex flex-col lg:flex-row gap-8 sm:gap-10 lg:gap-12 max-w-[1400px] w-full">
         {/* Text Content Section */}
-        <section className="flex flex-col justify-center gap-6 md:gap-[50px] lg:w-[55%]">
-          <div className="flex items-center gap-4 md:gap-6 lg:gap-8">
-            <div className="text-center bg-[#D5F0FF] rounded-4xl text-[#162B6E] py-2 px-4 text-[16px] font-[400] leading-[24px]">
+        <section className="flex flex-col justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-[50px] lg:w-[55%]">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="text-center bg-[#D5F0FF] rounded-3xl text-[#162B6E] py-1.5 px-3 sm:py-2 sm:px-4 text-[13px] sm:text-[14px] md:text-[16px] font-[400] leading-[1.5]">
               The spark that powers language & culture.
             </div>
-            <div className="bg-[#00C950] shadow-xl text-[#FFFFFF] font-[500] text-[16px] leading-[24px] rounded-4xl py-2 px-4 text-cennter">
+            <div className="bg-[#00C950] shadow-xl text-[#FFFFFF] font-[500] text-[13px] sm:text-[14px] md:text-[16px] leading-[1.5] rounded-3xl py-1.5 px-3 sm:py-2 sm:px-4 text-center whitespace-nowrap">
               Perfect tone! ✨
             </div>
           </div>
 
-          <div className="text-[62px] text-[#162B6E] font-[700] leading-[76px]">
-            Learn your heritage <br /> language through AI-powered conversations
-          </div>
-
-          <div className="text-lg sm:text-xl md:text-[25px] leading-[28px] font-[400] text-[#364153]">
+          <h1 className="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[56px] xl:text-[62px] text-[#162B6E] font-[700] leading-[1.2] sm:leading-[1.23]">
+            Learn your heritage <br className="hidden sm:block" /> language
+            through AI-powered cultural immersion
+          </h1>
+          <p className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[23px] xl:text-[25px] leading-[1.4] sm:leading-[1.3] font-[400] text-[#364153]">
             Zabbot blends conversational AI, storytelling, and community to help
             you speak Yoruba with confidence and cultural understanding.
-          </div>
+          </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-[18px] items-start sm:items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-[18px] items-stretch sm:items-center">
             <ColouredButton
-              paddingBottom="16.31px"
-              paddingLeft="16.31px"
-              paddingRight="16.31px"
-              paddingTop="16.31px"
+              paddingBottom="14px"
+              paddingLeft="14px"
+              paddingRight="14px"
+              paddingTop="14px"
               backgroundColor="#162B6E"
               color="#FFFFFF"
               boxShadow=""
             >
-              <main className="flex gap-[10.19px] items-center justify-center">
-                <div className="font-[600] text-[16px] sm:text-[20px] leading-[145%]">
-                  Start Learning
+              <main className="flex gap-[10px] items-center justify-center">
+                <div className="font-[600] text-[16px] sm:text-[18px] md:text-[20px] leading-[145%]">
+                  Login
                 </div>
               </main>
             </ColouredButton>
 
             <ColouredButton
-              paddingBottom="16.31px"
-              paddingLeft="21px"
-              paddingRight="21px"
-              paddingTop="16.31px"
+              paddingBottom="14px"
+              paddingLeft="14px"
+              paddingRight="14px"
+              paddingTop="14px"
               backgroundColor="#FFFFFF"
               color="#162B6E"
-              width="266"
               border="1px solid #012657"
             >
-              <main className="flex gap-[10px] items-center justify-center">
+              <main className="flex gap-[8px] sm:gap-[10px] items-center justify-center">
                 <div
-                  className="font-[600] text-[16px] sm:text-[20px] leading-[145%]"
+                  className="font-[600] text-[16px] sm:text-[18px] md:text-[20px] leading-[145%]"
                   style={{ fontFamily: "Inter" }}
                 >
                   Watch Demo
                 </div>
                 <div>
-                  <HiOutlinePlay size={30} color="#162B6E" />
+                  <HiOutlinePlay
+                    size={24}
+                    color="#162B6E"
+                    className="sm:w-7 sm:h-7"
+                  />
                 </div>
               </main>
             </ColouredButton>
           </div>
         </section>
 
-        <section>
-          <div className="w-full flex items-center justify-center order-2 lg:order-2 pb-8 lg:pb-0">
+        <section className="lg:w-[45%] flex items-center justify-center">
+          <div className="w-full flex items-center justify-center">
             <MascotComponent />
           </div>
         </section>
