@@ -8,7 +8,7 @@ import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
 import ZabbotWorkings from "@/components/landingPage/ZabbotWorkings";
 import Creators from "@/components/landingPage/Creators";
 import LandingPageFooter from "@/components/landingPage/LandingPageFooter";
-// import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
+import NewsLetterComponent from "@/components/landingPage/NewsLetterComponent";
 // import QuestionsSection from "@/components/landingPage/QuestionsSection";
 
 const Home = () => {
@@ -26,13 +26,12 @@ const Home = () => {
         <LandingPageNavbar />
         <HeroSection />
         <ZabbotApproach />
-         <FeaturesSection />
+        <FeaturesSection />
         <SubscriptionSection />
         <ZabbotWorkings />
         <Creators />
         <LandingPageFooter />
-        {/*<UseCaseComponent />
-        <QuestionsSection /> */}
+        <NewsLetterComponent />
       </main>
     </div>
   );

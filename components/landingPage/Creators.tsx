@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Image from "next/image";
 
@@ -47,10 +46,7 @@ const Creators = () => {
       <section>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {creatorsDataArray.map((item, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center text-center"
-            >
+            <div key={index} className="flex flex-col items-center text-center">
               {/* Image Container */}
               <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
                 <Image

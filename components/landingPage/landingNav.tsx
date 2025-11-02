@@ -25,7 +25,11 @@ const LandingPageNavbar = () => {
   }, [isMobileMenuOpen]);
 
   const navigationItems = [
-    { name: "Features", href: "#features", icon: <MdOutlineFeaturedPlayList /> },
+    {
+      name: "Features",
+      href: "#features",
+      icon: <MdOutlineFeaturedPlayList />,
+    },
     { name: "How It Works", href: "#how-it-works", icon: <SiFramework /> },
     { name: "Pricing", href: "#pricing", icon: <GiPriceTag /> },
     // { name: "Testimonials", href: "#testimonials", icon: <LiaComments /> },
