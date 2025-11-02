@@ -130,7 +130,7 @@ const LandingPageNavbar = () => {
                   </a>
                 ))}
 
-                {/* Login & Start Free Trial in Mobile Menu */}
+                {/* Login & Subscribe in Mobile Menu */}
                 <div className="border-t border-[#207EC5] mt-2 pt-2 px-4 pb-4 space-y-3">
                   <InAppButton
                     color="#FFFFFF"
@@ -153,7 +153,7 @@ const LandingPageNavbar = () => {
                       borderRadius="9px"
                       width="100%"
                     >
-                      Start Free Trial
+                      Subscribe
                     </InAppButton>
                   </Link>
                 </div>
