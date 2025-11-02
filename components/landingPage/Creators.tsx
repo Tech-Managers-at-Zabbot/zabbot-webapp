@@ -7,21 +7,25 @@ const Creators = () => {
       name: "Bola Agbonile",
       imageSrc: "/creators/mrs-bola.svg",
       designation: "Founder & Product Lead",
+      loadingEager: true,
     },
     {
       name: "Erete Charles",
       imageSrc: "/creators/mr-erete.png",
       designation: "Dev Manager",
+      loadingEager: false,
     },
     {
       name: "Iniobong Ekpenyong",
       imageSrc: "/creators/mr-iniobong.svg",
       designation: "UI/UX Lead",
+      loadingEager: false,
     },
     {
       name: "Akemini Ndaobong",
       imageSrc: "/creators/akem-main2.jpeg",
       designation: "Lead Software Engineer",
+      loadingEager: false,
     },
   ];
 
@@ -57,6 +61,7 @@ const Creators = () => {
                          (max-width: 1200px) 50vw,
                          25vw"
                   className="object-cover"
+                  loading={item.loadingEager ? "eager" : "lazy"}
                 />
               </div>
 
