@@ -2,12 +2,13 @@ import React from "react";
 import Head from "next/head";
 import LandingPageNavbar from "@/components/landingPage/landingNav";
 import HeroSection from "@/components/landingPage/Hero";
-// import FeaturesSection from "@/components/landingPage/Features";
-// import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
-// import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
-// import Testimonial from "@/components/landingPage/Testimonial";
-// import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
-// import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
+import ZabbotApproach from "@/components/landingPage/ZabbotApproach";
+import FeaturesSection from "@/components/landingPage/Features";
+import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
+import ZabbotWorkings from "@/components/landingPage/ZabbotWorkings";
+import Creators from "@/components/landingPage/Creators";
+import LandingPageFooter from "@/components/landingPage/LandingPageFooter";
+import NewsLetterComponent from "@/components/landingPage/NewsLetterComponent";
 // import QuestionsSection from "@/components/landingPage/QuestionsSection";
 
 const Home = () => {
@@ -24,13 +25,13 @@ const Home = () => {
       <main className="bg-white">
         <LandingPageNavbar />
         <HeroSection />
-        {/* <FeaturesSection />
-        <WhyZabbotComponent />
-        <GlobalCommunityComponent />
-        <Testimonial />
-        <AILanguageComponent />
-        <UseCaseComponent />
-        <QuestionsSection /> */}
+        <ZabbotApproach />
+        <FeaturesSection />
+        <SubscriptionSection />
+        <ZabbotWorkings />
+        <Creators />
+        <LandingPageFooter />
+        <NewsLetterComponent />
       </main>
     </div>
   );

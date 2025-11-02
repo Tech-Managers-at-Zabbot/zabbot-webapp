@@ -6,7 +6,7 @@ import InAppButton from "../InAppButton";
 import { MdOutlineFeaturedPlayList } from "react-icons/md";
 import { SiFramework } from "react-icons/si";
 import { GiPriceTag } from "react-icons/gi";
-import { LiaComments } from "react-icons/lia";
+// import { LiaComments } from "react-icons/lia";
 import { RiTeamLine } from "react-icons/ri";
 
 const LandingPageNavbar = () => {
@@ -25,15 +25,19 @@ const LandingPageNavbar = () => {
   }, [isMobileMenuOpen]);
 
   const navigationItems = [
-    { name: "Features", href: "#features", icon: <MdOutlineFeaturedPlayList /> },
+    {
+      name: "Features",
+      href: "#features",
+      icon: <MdOutlineFeaturedPlayList />,
+    },
     { name: "How It Works", href: "#how-it-works", icon: <SiFramework /> },
     { name: "Pricing", href: "#pricing", icon: <GiPriceTag /> },
-    { name: "Testimonials", href: "#testimonials", icon: <LiaComments /> },
+    // { name: "Testimonials", href: "#testimonials", icon: <LiaComments /> },
     { name: "Team", href: "#team", icon: <RiTeamLine /> },
   ];
 
   return (
-    <nav className="bg-[#122258] px-4 sm:px-8 md:px-16 lg:px-[112px] h-16 md:h-20 lg:h-[120px] w-full relative z-50">
+    <nav className="bg-[#122258] px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[112px] h-16 md:h-20 lg:h-[120px] w-full relative z-50">
       {/* Main Navbar Content */}
       <div className="flex items-center justify-between h-full w-full">
         {/* Logo Section */}
@@ -83,7 +87,7 @@ const LandingPageNavbar = () => {
               borderRadius="9px"
               width="167px"
             >
-              Start Free Trial
+              Subscribe
             </InAppButton>
           </Link>
         </div>

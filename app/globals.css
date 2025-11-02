@@ -65,3 +65,7 @@ body {
 .no-scrollbar {
   -webkit-overflow-scrolling: touch;
 }
+
+.list-green-tick {
+  list-style-image: url('/landingPage/green-tick.svg');
+}
