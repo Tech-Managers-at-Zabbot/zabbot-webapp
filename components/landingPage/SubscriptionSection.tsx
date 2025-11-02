@@ -82,7 +82,7 @@ const SubscriptionSection = () => {
                       </p>
                     )}
 
-                    <p
+                    <div
                       className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[46px] leading-tight sm:leading-[56px] md:leading-[64px] mb-2 break-words text-center sm:text-left"
                       style={{ color: option.costColor }}
                     >
@@ -97,7 +97,7 @@ const SubscriptionSection = () => {
                           </span>
                         </div>
                       )}
-                    </p>
+                    </div>
                   </div>
 
                   <div className="flex justify-start items-start mt-4">
