@@ -3,8 +3,8 @@ import Head from "next/head";
 import LandingPageNavbar from "@/components/landingPage/landingNav";
 import HeroSection from "@/components/landingPage/Hero";
 import ZabbotApproach from "@/components/landingPage/ZabbotApproach";
-// import FeaturesSection from "@/components/landingPage/Features";
-// import WhyZabbotComponent from "@/components/landingPage/WhyZabbot";
+import FeaturesSection from "@/components/landingPage/Features";
+import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
 // import GlobalCommunityComponent from "@/components/landingPage/GlobalCommunity";
 // import Testimonial from "@/components/landingPage/Testimonial";
 // import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
@@ -26,9 +26,9 @@ const Home = () => {
         <LandingPageNavbar />
         <HeroSection />
         <ZabbotApproach />
-        {/* <FeaturesSection />
-        <WhyZabbotComponent />
-        <GlobalCommunityComponent />
+         <FeaturesSection />
+        <SubscriptionSection />
+        {/*<GlobalCommunityComponent />
         <Testimonial />
         <AILanguageComponent />
         <UseCaseComponent />

@@ -33,7 +33,7 @@ const LandingPageNavbar = () => {
   ];
 
   return (
-    <nav className="bg-[#122258] px-4 sm:px-8 md:px-16 lg:px-[112px] h-16 md:h-20 lg:h-[120px] w-full relative z-50">
+    <nav className="bg-[#122258] px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[112px] h-16 md:h-20 lg:h-[120px] w-full relative z-50">
       {/* Main Navbar Content */}
       <div className="flex items-center justify-between h-full w-full">
         {/* Logo Section */}

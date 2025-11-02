@@ -26,7 +26,7 @@ const HeroSection = () => {
 
           <h1 className="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[56px] xl:text-[62px] text-[#162B6E] font-[700] leading-[1.2] sm:leading-[1.23]">
             Learn your heritage <br className="hidden sm:block" /> language
-            through AI-powered cultural immersion
+            through AI powered cultural immersion
           </h1>
           <p className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[23px] xl:text-[25px] leading-[1.4] sm:leading-[1.3] font-[400] text-[#364153]">
             Zabbot blends conversational AI, storytelling, and community to help

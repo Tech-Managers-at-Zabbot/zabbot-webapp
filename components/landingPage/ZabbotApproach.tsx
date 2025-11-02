@@ -5,7 +5,7 @@ import { X, CheckCircle } from "lucide-react";
 const ZabbotApproach = () => {
   return (
     <div
-      className="min-h-screen bg-white flex justify-center px-4 sm:px-6 md:px-8 lg:px-20 xl:px-36 py-12 sm:py-16 md:py-20 lg:pt-[87px] lg:pb-[72px]"
+      className="min-h-screen bg-white flex justify-center px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[112px] py-12 sm:py-16 md:py-20 lg:pt-[87px] lg:pb-[72px]"
       style={{ fontFamily: "Lexend, sans-serif" }}
     >
       <div className="w-full max-w-7xl">
