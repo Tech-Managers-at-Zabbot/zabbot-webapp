@@ -32,25 +32,27 @@ const FeaturesSection = () => {
         <div className="text-[#FFFFFF] font-[600] text-3xl sm:text-4xl md:text-5xl leading-normal lg:leading-[19.86px]">
           Key Features
         </div>
-        <div className="text-sm lg:text-[30px] text-center leading-[28px] lg:leading-[45.78px]">
+        <div className="lg:text-[30px] text-center leading-[28px] lg:leading-[45.78px]">
           Built for heritage language learners who want more than just
           vocabulary drills.
         </div>
       </section>
 
       {/* Images Section */}
-      <section className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8 w-full py-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
         {imageArray.map((image, index) => (
           <div
             key={index}
-            className="relative w-full sm:w-[calc(50%-12px)] md:w-[calc(50%-16px)] lg:w-[calc(25%-40px)] min-h-[300px] sm:min-h-[350px] md:min-h-[400px]"
+            className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
           >
             <Image
               src={image.src}
               alt={image.alt}
               fill
-              className="object-contain"
-              priority={index < 2} // Only prioritize first two images
+              sizes="(max-width: 768px) 100vw,
+                         (max-width: 1200px) 50vw,
+                         25vw"
+              className="object-cover"
             />
           </div>
         ))}

@@ -36,7 +36,7 @@ const ZabbotWorkings = () => {
       style={{ fontFamily: "Lexend" }}
     >
       {/* Right-side Image (fixed on right across all screens) */}
-      <div className="hidden md:block absolute top-0 right-0 w-[180px] lg:w-[250px] h-full overflow-hidden">
+      <div className="hidden md:block absolute top-0 right-0 w-[180px] lg:w-[200px] h-full overflow-hidden">
         <Image
           src="/landingPage/zabbotWorkings-right-border.svg"
           alt="Decorative border"
