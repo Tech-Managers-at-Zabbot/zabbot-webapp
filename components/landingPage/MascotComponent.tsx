@@ -2,14 +2,8 @@
 import React from 'react';
 import Image from "next/image";
 import { motion, easeInOut } from "framer-motion";
-// import InAppButton from "../InAppButton";
-// import { appColors } from "@/constants/colors";
-// import { useRouter } from "next/navigation";
-// import { CustomSpinner } from "@/components/CustomSpinner";
 
 const MascotComponent = () => {
-    // const [isSignupRedirectLoading, setIsSignupRedirectLoading] = useState(false);
-    // const router = useRouter();
 
     const item = {
         hidden: { opacity: 0, y: 20 },
@@ -62,7 +56,7 @@ const MascotComponent = () => {
                 className="relative mt-6"
               >
                 <Image
-                  src="/landingPage/landing-mascot-group.svg"
+                  src="/landingPage/landing-mascot.svg"
                   alt="Language Learning Mascot"
                   width={750}
                   height={1000}

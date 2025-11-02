@@ -1,0 +1,117 @@
+import React from "react";
+import ColouredButton from "../ColouredButton";
+import { BsStars } from "react-icons/bs";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { FiMail } from "react-icons/fi";
+
+const NewsLetterComponent = () => {
+  return (
+    <div style={{ fontFamily: "Lexend" }}>
+      <main className="flex flex-col justify-center items-center gap-10 xl:gap-24 py-12 xl:py-32 px-4 sm:px-8 md:px-16 lg:px-28 bg-[url('/landingPage/landing-newsletter-background.svg')] bg-no-repeat bg-cover min-h-screen">
+        {/* Section 1 - Headline */}
+        <section className="text-center px-2 sm:px-4 z-10">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-[400] leading-tight md:leading-[64px] text-white">
+              Ready to <span className="text-[#F9C10F]">reconnect</span> with your heritage?
+            </h1>
+            <p className="font-[400] leading-relaxed text-base sm:text-lg md:text-xl text-[#E3F5FF]">
+              Join learners speaking, learning, and celebrating language together.
+            </p>
+          </div>
+        </section>
+
+        {/* Section 2 - Buttons */}
+        <section className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8">
+          <ColouredButton
+            paddingBottom="10px"
+            paddingLeft="10px"
+            paddingRight="10px"
+            paddingTop="10px"
+            backgroundColor="#F9C10F"
+            color="#122158"
+            borderRadius="30px"
+          >
+            <main className="flex gap-2 sm:gap-3 items-center justify-center">
+              <BsStars size={20} />
+              <div className="font-[600] text-sm sm:text-base md:text-lg">Start Yorùbá</div>
+              <FaArrowRightLong size={20} />
+            </main>
+          </ColouredButton>
+
+          <ColouredButton
+            paddingBottom="10px"
+            paddingLeft="10px"
+            paddingRight="10px"
+            paddingTop="10px"
+            backgroundColor="#FFFFFF"
+            color="#122158"
+            borderRadius="30px"
+          >
+            <main className="flex gap-2 sm:gap-3 items-center justify-center">
+              <div className="font-[600] text-sm sm:text-base md:text-lg">Watch Demo</div>
+            </main>
+          </ColouredButton>
+        </section>
+
+        {/* Section 3 - Newsletter Signup */}
+        <section className="w-full flex justify-center items-center px-2 sm:px-6">
+          <div
+            className="flex flex-col items-center w-full sm:w-[90%] md:w-[90%] lg:w-[70%] xl:w-[60%] shadow-[0_41.841px_83.682px_-20.084px_rgba(0,0,0,0.25)] py-10 sm:py-12 md:py-16 px-6 sm:px-10 md:px-16 gap-6 sm:gap-8"
+            style={{
+              border: "2.678px solid rgba(255, 255, 255, 0.20)",
+              borderRadius: "40.167px",
+            }}
+          >
+            <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+              <MdOutlineMailOutline size={40} color="#F9C10F" />
+              <h1 className="font-[400] text-xl md:text-xl leading-tight text-white">
+                Get Cultural Content & Updates
+              </h1>
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full gap-4 sm:gap-6 justify-center items-center">
+              <div className="w-full sm:flex-1">
+                <div className="flex items-center border border-white/50 rounded-xl px-4 py-3 bg-white">
+                  <FiMail className="text-[#99A1AF] text-xl mr-3 flex-shrink-0" />
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full font-[400] bg-transparent text-[#6A7282] focus:outline-none text-base sm:text-lg"
+                  />
+                </div>
+              </div>
+
+              <div className="w-full sm:w-auto">
+                <ColouredButton
+                  paddingBottom="8px"
+                  paddingLeft="10px"
+                  paddingRight="10px"
+                  paddingTop="8px"
+                  backgroundColor="#F9C10F"
+                  color="#122158"
+                  borderRadius="20px"
+                  height="auto"
+                  width="100%"
+                  boxShadow="0 16.736px 25.105px -5.021px rgba(0, 0, 0, 0.10), 0 6.695px 10.042px -6.695px rgba(0, 0, 0, 0.10)"
+                >
+                  <main className="flex items-center justify-center py-2">
+                    <div className="font-[400] text-base sm:text-lg md:text-xl leading-[145%]">
+                      Subscribe
+                    </div>
+                  </main>
+                </ColouredButton>
+              </div>
+            </div>
+
+            <p className="font-[400] text-base sm:text-lg md:text-xl text-center text-white leading-relaxed">
+              Learnings, riddles, cultural stories, prizes and updates.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+};
+
+export default NewsLetterComponent;
