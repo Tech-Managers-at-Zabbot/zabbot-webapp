@@ -7,7 +7,7 @@ import FeaturesSection from "@/components/landingPage/Features";
 import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
 import ZabbotWorkings from "@/components/landingPage/ZabbotWorkings";
 import Creators from "@/components/landingPage/Creators";
-// import AILanguageComponent from "@/components/landingPage/AILanguageComponent";
+import LandingPageFooter from "@/components/landingPage/LandingPageFooter";
 // import UseCaseComponent from "@/components/landingPage/UseCaseComponent";
 // import QuestionsSection from "@/components/landingPage/QuestionsSection";
 
@@ -30,8 +30,8 @@ const Home = () => {
         <SubscriptionSection />
         <ZabbotWorkings />
         <Creators />
-        {/*<AILanguageComponent />
-        <UseCaseComponent />
+        <LandingPageFooter />
+        {/*<UseCaseComponent />
         <QuestionsSection /> */}
       </main>
     </div>
