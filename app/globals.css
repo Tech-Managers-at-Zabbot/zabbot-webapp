@@ -69,3 +69,11 @@ body {
 .list-green-tick {
   list-style-image: url('/landingPage/green-tick.svg');
 }
+
+.list-blue-tick {
+  list-style-image: url('/landingPage/blue-tick.svg');
+}
+
+html {
+  scroll-behavior: smooth;
+}
