@@ -8,9 +8,21 @@ import { SiFramework } from "react-icons/si";
 import { GiPriceTag } from "react-icons/gi";
 // import { LiaComments } from "react-icons/lia";
 import { RiTeamLine } from "react-icons/ri";
+import { CustomSpinner } from "../CustomSpinner";
 
-const LandingPageNavbar = () => {
+interface LandingPageNavbarProps {
+  heroLoginRedirect?:boolean;
+  heroWatchDemoRedirect?:boolean;
+}
+
+const LandingPageNavbar: React.FC<LandingPageNavbarProps> = ({
+  heroLoginRedirect,
+  heroWatchDemoRedirect,
+}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [loginRedirectLoading, setLoginRedirectLoading] = useState(false);
+  const [subscribeRedirectLoading, setSubscribeRedirectLoading] =
+    useState(false);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -71,23 +83,101 @@ const LandingPageNavbar = () => {
 
         {/* Desktop CTA Section */}
         <div className="hidden lg:flex justify-between min-w-[246px] items-center ml-4">
-          <div
-            className="flex text-[#FFFFFF] font-[400] hover:cursor-pointer hover:text-[#F9C10F] transition-colors items-center justify-center"
-            style={{ fontFamily: "Lexend" }}
-          >
-            <div>Login</div>
-          </div>
           <Link
-            href="/signup"
-            style={{ textDecoration: "none", color: "#eb512f" }}
+            href={
+              heroWatchDemoRedirect ||
+              heroLoginRedirect ||
+              loginRedirectLoading ||
+              subscribeRedirectLoading
+                ? "#"
+                : "/login"
+            }
+            style={{
+              textDecoration: "none",
+              color: loginRedirectLoading ? "#999" : "#eb512f",
+              pointerEvents:
+                heroWatchDemoRedirect ||
+                heroLoginRedirect ||
+                loginRedirectLoading ||
+                subscribeRedirectLoading
+                  ? "none"
+                  : "auto",
+            }}
+            onClick={() => {
+              if (!loginRedirectLoading) setLoginRedirectLoading(true);
+            }}
+          >
+            <div
+              className={`flex ${
+                loginRedirectLoading || subscribeRedirectLoading
+                  ? "text-[#999]"
+                  : "text-[#FFFFFF]"
+              } font-[400] hover:cursor-pointer hover:text-[#F9C10F] transition-colors items-center justify-center`}
+              style={{ fontFamily: "Lexend" }}
+            >
+              <div>
+                {loginRedirectLoading ? (
+                  <CustomSpinner
+                    title=""
+                    spinnerHeight="30px"
+                    spinnerWidth="30px"
+                    spinnerColor="#F9C10F"
+                  />
+                ) : (
+                  "Login"
+                )}
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href={
+              heroWatchDemoRedirect ||
+              heroLoginRedirect ||
+              loginRedirectLoading ||
+              subscribeRedirectLoading
+                ? "#"
+                : "/signup"
+            }
+            style={{
+              textDecoration: "none",
+              color: loginRedirectLoading ? "#999" : "#eb512f",
+              pointerEvents:
+                heroWatchDemoRedirect ||
+                heroLoginRedirect ||
+                loginRedirectLoading ||
+                subscribeRedirectLoading
+                  ? "none"
+                  : "auto",
+            }}
+            onClick={() => {
+              if (!subscribeRedirectLoading) setSubscribeRedirectLoading(true);
+            }}
           >
             <InAppButton
-              color="#000000"
+              color="#122258"
               background="#F9C10F"
               borderRadius="9px"
               width="167px"
+              disabled={
+                heroWatchDemoRedirect ||
+                heroLoginRedirect ||
+                subscribeRedirectLoading ||
+                loginRedirectLoading
+              }
             >
-              Subscribe
+              <div>
+                {subscribeRedirectLoading ? (
+                  <CustomSpinner
+                    title=""
+                    spinnerHeight="30px"
+                    spinnerWidth="30px"
+                    spinnerColor="#122258"
+                  />
+                ) : (
+                  "Subscribe"
+                )}
+              </div>
             </InAppButton>
           </Link>
         </div>
@@ -131,29 +221,79 @@ const LandingPageNavbar = () => {
                 ))}
 
                 {/* Login & Subscribe in Mobile Menu */}
-                <div className="border-t border-[#207EC5] mt-2 pt-2 px-4 pb-4 space-y-3">
-                  <InAppButton
-                    color="#FFFFFF"
-                    background="transparent"
-                    borderRadius="9px"
-                    width="100%"
-                    border="2px solid #FFFFFF"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Login
-                  </InAppButton>
+                <div className="flex flex-col gap-4 border-t border-[#207EC5] mt-2 pt-2 px-4 pb-4 mb-2 space-y-3">
                   <Link
-                    href="/signup"
+                    href={
+                      heroWatchDemoRedirect ||
+                      heroLoginRedirect ||
+                      loginRedirectLoading ||
+                      subscribeRedirectLoading
+                        ? "#"
+                        : "/login"
+                    }
+                    style={{ textDecoration: "none", marginBottom: "8px" }}
+                    onClick={() => setLoginRedirectLoading(true)}
+                  >
+                    <InAppButton
+                      color="#FFFFFF"
+                      background="transparent"
+                      borderRadius="9px"
+                      width="100%"
+                      border="2px solid #FFFFFF"
+                      // onClick={() => setIsMobileMenuOpen(false)}
+                      disabled={
+                        heroWatchDemoRedirect ||
+                        heroLoginRedirect ||
+                        subscribeRedirectLoading ||
+                        loginRedirectLoading
+                      }
+                    >
+                      {loginRedirectLoading ? (
+                        <CustomSpinner
+                          title=""
+                          spinnerHeight="30px"
+                          spinnerWidth="30px"
+                          spinnerColor="#F9C10F"
+                        />
+                      ) : (
+                        "Login"
+                      )}
+                    </InAppButton>
+                  </Link>
+                  <Link
+                    href={
+                      heroWatchDemoRedirect ||
+                      heroLoginRedirect ||
+                      loginRedirectLoading ||
+                      subscribeRedirectLoading
+                        ? "#"
+                        : "/signup"
+                    }
                     style={{ textDecoration: "none" }}
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => setSubscribeRedirectLoading(true)}
                   >
                     <InAppButton
                       color="#122258"
                       background="#F9C10F"
                       borderRadius="9px"
                       width="100%"
+                      disabled={
+                        heroWatchDemoRedirect ||
+                        heroLoginRedirect ||
+                        subscribeRedirectLoading ||
+                        loginRedirectLoading
+                      }
                     >
-                      Subscribe
+                      {subscribeRedirectLoading ? (
+                        <CustomSpinner
+                          title=""
+                          spinnerHeight="30px"
+                          spinnerWidth="30px"
+                          spinnerColor="#122258"
+                        />
+                      ) : (
+                        "Subscribe"
+                      )}
                     </InAppButton>
                   </Link>
                 </div>
