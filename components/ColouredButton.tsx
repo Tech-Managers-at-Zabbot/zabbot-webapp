@@ -11,7 +11,9 @@ export interface ButtonProps {
   paddingRight?: string;
   hoverEffect?: boolean;
   backgroundColor?: string;
+  disabledColor?: string;
   width?: string;
+  disabled?: boolean;
   padding?: string;
   boxShadow?: string;
   color?: string;
@@ -29,18 +31,25 @@ const ColouredButton: React.FC<ButtonProps> = ({
   paddingLeft,
   paddingRight,
   padding,
+  disabled,
   border,
   color="white",
   boxShadow = "0 4px 0 0 rgba(0, 0, 0, 0.2)",
   backgroundColor='#333333',
+  disabledColor = "#E0E1E6",
   width = "230px",
 
   onClick,
 }) => {
   return (
     <button
-      className={`hover:cursor-pointer
-  hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]
+      className={`${!disabled ? "hover:cursor-pointer" : ""}
+   ${
+        !disabled ? "hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]" : ""
+      }
+  ${!disabled ? "hover:translate-y-0.5" : ""}
+  ${!disabled ? "active:shadow-none" : ""}
+  ${!disabled ? "active:translate-y-1" : ""}
   hover:translate-y-0.5
   active:shadow-none
   active:translate-y-1
@@ -57,10 +66,12 @@ const ColouredButton: React.FC<ButtonProps> = ({
         color,
         padding,
         border,
-        backgroundColor,
+        backgroundColor: !disabled ? backgroundColor : disabledColor,
+        // background: !disabled ? background : disabledColor,
         boxShadow : border ? 'none' : boxShadow,
         fontFamily: 'Lexend'
       }}
+      disabled={disabled}
     >
       {children || title}
     </button>
