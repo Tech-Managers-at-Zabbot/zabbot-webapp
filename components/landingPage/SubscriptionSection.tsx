@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import { motion, Variants } from "framer-motion";
 
 const SubscriptionSection = () => {
   const subscriptionOptionsData = [
@@ -11,6 +13,7 @@ const SubscriptionSection = () => {
       backgroundColor: "#DCFFE7",
       border: "1.419px solid #0F973D",
       costColor: "#0F973D",
+      amount: 159.99,
     },
     {
       title: "Annual Subscription",
@@ -21,6 +24,7 @@ const SubscriptionSection = () => {
       border: "1.419px solid #F3A218",
       costColor: "#EE9705",
       costFrequency: "year",
+      amount: 69.99,
     },
     {
       title: "Monthly",
@@ -31,8 +35,26 @@ const SubscriptionSection = () => {
       border: "1.419px solid #0089C8",
       costColor: "#0089C8",
       costFrequency: "month",
+      amount: 9.99,
     },
   ];
+
+  // Parent container variants for staggering children
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15, // delay each card slightly
+      },
+    },
+  };
+
+  // Individual card variants
+  const cardVariants:Variants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: "easeOut" } },
+    exit: { opacity: 0, y: 50, transition: { duration: 0.4, ease: "easeIn" } },
+  };
 
   return (
     <div className="relative bg-white" style={{ fontFamily: "Lexend" }}>
@@ -53,16 +75,39 @@ const SubscriptionSection = () => {
         </section>
 
         {/* Subscription Cards Section */}
-        <section className="w-full mt-4 sm:mt-6 md:mt-8">
+        <motion.section
+          className="w-full mt-4 sm:mt-6 md:mt-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.2 }} // trigger every time in view
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {subscriptionOptionsData.map((option, index) => (
-              <div
+              <motion.div
                 key={index}
+                variants={cardVariants}
+                className="py-6 px-6 rounded-2xl sm:rounded-3xl relative flex flex-col 
+                           hover:scale-105 hover:-translate-y-2 hover:shadow-2xl 
+                           transition-transform duration-300 ease-out cursor-pointer"
                 style={{
                   backgroundColor: option.backgroundColor,
                   border: option.border,
                 }}
-                className="py-6 px-6 rounded-2xl sm:rounded-3xl relative flex flex-col"
+                onMouseEnter={(e) => {
+                  const card = e.currentTarget;
+                  if (option.backgroundColor === "#DCFFE7") {
+                    card.style.backgroundColor = "#C8FFDA";
+                  } else if (option.backgroundColor === "#FEF4E4") {
+                    card.style.backgroundColor = "#FFEDC9";
+                  } else if (option.backgroundColor === "#E4F4FC") {
+                    card.style.backgroundColor = "#D1EDFF";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor =
+                    option.backgroundColor;
+                }}
               >
                 {option.isMostPopular && (
                   <div className="absolute -top-3 sm:-top-4 md:-top-5 left-1/2 -translate-x-1/2 bg-[#F56630] rounded-lg text-white px-3 py-1 sm:py-2 text-xs sm:text-sm font-semibold whitespace-nowrap">
@@ -83,7 +128,7 @@ const SubscriptionSection = () => {
                     )}
 
                     <div
-                      className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[46px] leading-tight sm:leading-[56px] md:leading-[64px] mb-2 break-words text-center sm:text-left"
+                      className="font-bold text-lg sm:text-xl md:text-2xl lg:text-[35px] leading-tight sm:leading-[56px] md:leading-[64px] mb-2 break-words text-center sm:text-left"
                       style={{ color: option.costColor }}
                     >
                       {option.cost}
@@ -106,10 +151,10 @@ const SubscriptionSection = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Footer Section */}
         <section>
