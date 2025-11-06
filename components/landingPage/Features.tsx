@@ -16,12 +16,12 @@ const FeaturesSection = () => {
     visible: { 
       rotateY: 0, 
       opacity: 1, 
-      transition: { duration: 0.8, ease: "easeOut" } // ✅ valid easing value
+      transition: { duration: 1.5, ease: "easeOut" }
     },
     exit: { 
       rotateY: 180, 
       opacity: 0, 
-      transition: { duration: 0.6, ease: "easeIn" } // ✅ valid easing value
+      transition: { duration: 0.6, ease: "easeIn" }
     },
   };
 
