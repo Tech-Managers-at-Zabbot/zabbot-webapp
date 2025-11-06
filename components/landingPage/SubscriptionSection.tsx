@@ -52,7 +52,7 @@ const SubscriptionSection = () => {
   // Individual card variants
   const cardVariants:Variants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: "easeOut" } },
     exit: { opacity: 0, y: 50, transition: { duration: 0.4, ease: "easeIn" } },
   };
 
