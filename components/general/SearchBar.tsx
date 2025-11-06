@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -8,6 +8,7 @@ interface SearchBarProps {
   icon?: React.ReactNode;
   className?: string;
   disabled?: boolean;
+  background?: string;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -17,7 +18,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onSubmit,
   icon,
   className = "",
-  disabled = false
+  disabled = false,
+  background
 }) => {
   const [searchValue, setSearchValue] = React.useState(value);
 
@@ -29,23 +31,35 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit?.(searchValue);
+    if (!disabled) onSubmit?.(searchValue);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter" && !disabled) {
+      e.preventDefault();
       onSubmit?.(searchValue);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`relative ${className}`}>
-      <div className="relative">
+    <form onSubmit={handleSubmit} className={`w-full z-20 ${className}`}>
+      <div
+        className={`
+          flex z-20 items-center bg-white border border-gray-300 rounded-full 
+          px-4 py-2 shadow-sm
+          focus-within:ring-2 focus-within:ring-blue-500 
+          transition-all duration-200
+          ${disabled ? "opacity-70 cursor-not-allowed bg-gray-100" : ""}
+        `}
+        style={{
+          background,
+          fontFamily: "Lexend"
+        }}
+      >
         {icon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-            {icon}
-          </div>
+          <div className="text-gray-500 mr-2 flex-shrink-0">{icon}</div>
         )}
+
         <input
           type="text"
           value={searchValue}
@@ -54,11 +68,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           className={`
-            w-full px-4 py-2 rounded-full border border-gray-300 
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-            disabled:bg-gray-100 disabled:cursor-not-allowed
-            ${icon ? 'pl-10' : 'pl-4'}
-            transition-all duration-200
+            flex-grow bg-transparent outline-none text-gray-700
+            placeholder-gray-400 z-20
           `}
         />
       </div>

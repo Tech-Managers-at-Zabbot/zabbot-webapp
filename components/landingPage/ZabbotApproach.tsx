@@ -15,7 +15,6 @@ const ZabbotApproach = () => {
             accuracy and cultural context.
           </h1>
         </section>
-
         <section>
           <div className="mt-8 sm:mt-10 flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-10 w-full justify-center items-stretch">
             <ApproachCard

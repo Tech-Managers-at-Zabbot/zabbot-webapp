@@ -592,7 +592,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
 
   return (
     <div
-      className={`flex flex-col h-full min-h-[350px] gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full`}
+      className={`flex flex-col h-full min-h-[350px] gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full z-10`}
       style={{
         fontFamily: "Lexend",
         maxWidth,

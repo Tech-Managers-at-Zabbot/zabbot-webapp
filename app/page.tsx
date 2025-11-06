@@ -10,11 +10,15 @@ import ZabbotWorkings from "@/components/landingPage/ZabbotWorkings";
 import Creators from "@/components/landingPage/Creators";
 import LandingPageFooter from "@/components/landingPage/LandingPageFooter";
 import NewsLetterComponent from "@/components/landingPage/NewsLetterComponent";
+import { Modal } from "@/components/general/Modal";
 // import QuestionsSection from "@/components/landingPage/QuestionsSection";
 
 const Home = () => {
   const [heroLoginRedirect, setHeroLoginRedirect] = useState(false);
   const [heroWatchDemoRedirect, setHeroWatchDemoRedirect] = useState(false);
+  const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
+
+  const openSubscriptionModal = () => setSubScriptionModalOpen(true);
 
   return (
     <div className="bg-white">
@@ -31,6 +35,7 @@ const Home = () => {
           <LandingPageNavbar
             heroLoginRedirect={heroLoginRedirect}
             heroWatchDemoRedirect={heroWatchDemoRedirect}
+            showSubscriptionModal={openSubscriptionModal}
           />
         </div>
         <div id="hero">
@@ -61,6 +66,21 @@ const Home = () => {
           <NewsLetterComponent />
         </div>
       </main>
+
+      <section className="w-full">
+        <Modal
+          isOpen={subscriptionModalOpen}
+          onClose={() => setSubScriptionModalOpen(false)}
+          // title={modalTitle}
+          size="full"
+          containerClassName="w-full"
+          // disableClose={saveQuizLoading || createQuizLoading}
+        >
+          <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
+            <SubscriptionSection />
+          </div>
+        </Modal>
+      </section>
     </div>
   );
 };

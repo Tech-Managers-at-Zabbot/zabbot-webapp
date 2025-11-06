@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import UserLessonDataComponent, {
   LessonProgressCard,
 } from "./UserLessonDataComponent";
-import { DailyGoals, WordForTheDay } from "./UserGoals";
+// import { DailyGoals, WordForTheDay } from "./UserGoals";
 import { useUser } from "@/contexts/UserContext";
 import { useGetCoursesWithLessons } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
@@ -43,7 +43,7 @@ const ProgressSection = () => {
   }, [courseLessons, shuffledImages]);
 
   return (
-    <div className="flex flex-col xl:flex-row gap-[20px] w-full">
+    <div className="flex flex-col xl:flex-row gap-[20px] w-full z-10">
       <section className="flex-1 xl:w-[58%] w-full">
         <UserLessonDataComponent
           title={getPageText("immersion_tagline")}
@@ -94,7 +94,7 @@ const ProgressSection = () => {
         </UserLessonDataComponent>
       </section>
 
-      <section className="flex-shrink-0 xl:w-[40%] w-full">
+      {/* <section className="flex-shrink-0 xl:w-[40%] w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
           <div className="h-full">
             <DailyGoals />
@@ -103,7 +103,7 @@ const ProgressSection = () => {
             <WordForTheDay />
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };
