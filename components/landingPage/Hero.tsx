@@ -8,6 +8,8 @@ import MascotComponent from "./MascotComponent";
 import { HiOutlinePlay } from "react-icons/hi2";
 import { useState } from "react";
 import { CustomSpinner } from "../CustomSpinner";
+import { useRouter } from "next/navigation";
+
 
 interface HeroSectionProps {
   setHeroLoginRedirect: (value: boolean) => void;
@@ -21,10 +23,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const [loginLoading, setLoginLoading] = useState(false);
   const [watchDemoLoading, setWatchDemoLoading] = useState(false);
 
+  const router = useRouter();
+
   const handleLoginClick = () => {
     if (!loginLoading && !watchDemoLoading) {
       setLoginLoading(true);
       setHeroLoginRedirect(true);
+      router.push("/login");
     }
   };
 
@@ -48,7 +53,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               The spark that powers language & culture.
             </div>
             <div className="bg-[#00C950] shadow-xl text-[#FFFFFF] font-[500] text-[13px] sm:text-[14px] md:text-[16px] leading-[1.5] rounded-3xl py-1.5 px-3 sm:py-2 sm:px-4 text-center whitespace-nowrap">
-              Learn Yorùbá ✨{/* Perfect tone! ✨ */}
+              Learn Yorùbá {/* Perfect tone! ✨ */}
             </div>
           </div>
 
