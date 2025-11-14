@@ -17,6 +17,8 @@ import { MdOutlinePublishedWithChanges } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
 import { Modal } from "@/components/general/Modal";
+import { SlBell } from "react-icons/sl";
+import NotificationsSettingsCard from "@/components/userProfile/notifications/NotificationsSettingsCard";
 
 interface MenuItemsData {
   title: string;
@@ -25,9 +27,9 @@ interface MenuItemsData {
 }
 const UserSettings = () => {
   const [menuKeyword, setMenukeyword] = useState("profile");
-    const openSubscriptionModal = () => setSubScriptionModalOpen(true);
-      const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
-    
+  const openSubscriptionModal = () => setSubScriptionModalOpen(true);
+  const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
+
   const [subscriptionType, setSubscriptionType] = useState("monthly");
 
   const columns = [
@@ -179,74 +181,69 @@ const UserSettings = () => {
 
           {menuKeyword === "payment" && (
             <section className="flex pt-10 pb-20 flex-col gap-16">
-
               <div className="w-full">
                 {subscriptionType === "monthly" && (
-                  <div className="hover:cursor-pointer"
+                  <div
+                    className="hover:cursor-pointer"
                     onClick={() => setSubscriptionType("annual")}
                   >
                     <SubscriptionMonthly />
                   </div>
                 )}
                 {subscriptionType === "annual" && (
-                  <div className="hover:cursor-pointer"
+                  <div
+                    className="hover:cursor-pointer"
                     onClick={() => setSubscriptionType("lifetime")}
                   >
-                  <SubscriptionAnnual />
+                    <SubscriptionAnnual />
                   </div>
                 )}
-                  {subscriptionType === "lifetime" && (
-                   <div className="hover:cursor-pointer"
+                {subscriptionType === "lifetime" && (
+                  <div
+                    className="hover:cursor-pointer"
                     onClick={() => setSubscriptionType("monthly")}
                   >
-                  <SubscriptionLifetime />
+                    <SubscriptionLifetime />
                   </div>
                 )}
-               
               </div>
 
               <div className="flex gap-6">
+                <div>
+                  <InAppButton
+                    background="#1671D9"
+                    color="#FFFFFF"
+                    borderRadius="8px"
+                    padding="12px 24px"
+                    onClick={openSubscriptionModal}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <div>
+                        <MdOutlinePublishedWithChanges size={20} />
+                      </div>
+                      <div>Change Plan</div>
+                    </div>
+                  </InAppButton>
+                </div>
 
                 <div>
-                <InAppButton
-                  background="#1671D9"
-                  color="#FFFFFF"
-                  borderRadius="8px"
-                  padding="12px 24px"
-                  onClick={openSubscriptionModal}
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <div>
-                      <MdOutlinePublishedWithChanges size={20} />
+                  <InAppButton
+                    background="#FFF"
+                    color="#FFFFFF"
+                    borderRadius="8px"
+                    padding="12px 24px"
+                    width="300px"
+                    border="1px solid #D42620"
+                    onClick={() => {}}
+                  >
+                    <div className="flex text-[#D42620] items-center gap-2 justify-center">
+                      <div>
+                        <IoMdClose size={25} />
+                      </div>
+                      <div>Cancel Subscription</div>
                     </div>
-                    <div>
-                    Change Plan
-                    </div>
-                  </div>
-                </InAppButton>
+                  </InAppButton>
                 </div>
-
-               <div>
-                <InAppButton
-                  background="#FFF"
-                  color="#FFFFFF"
-                  borderRadius="8px"
-                  padding="12px 24px"
-                  width="300px"
-                  border="1px solid #D42620"
-                  onClick={() => {}}
-                >
-                   <div className="flex text-[#D42620] items-center gap-2 justify-center">
-                    <div>
-                      <IoMdClose size={25} />
-                    </div>
-                    <div>
-                    Cancel Subscription
-                    </div>
-                  </div>
-                </InAppButton>
-                </div>
-
               </div>
 
               <div className="p-6 shadow-lg border-[#FEF3C6] border flex flex-col gap-12 rounded-2xl">
@@ -262,30 +259,35 @@ const UserSettings = () => {
                   <Table columns={columns} data={myData} />
                 </div>
               </div>
-
             </section>
           )}
 
           {menuKeyword === "notifications" && (
-            <section className="flex flex-col gap-5">
+            <section className="flex min-h-screen flex-col gap-6">
               <div>
-                <UserProfileDetailsComponent />
+                <NotificationsSettingsCard />
               </div>
-              <div>
-                <UserAnalytics />
-              </div>
-              <div>
-                <EditProfileCard />
-              </div>
-              <div>
-                <ChangePasswordCard />
+              <div className="px-6 py-6 bg-gradient-to-r from-[#FFFBEB] to-[#FFF7ED] justify-start items-center border-[#FEE685] border rounded-2xl flex gap-6">
+                <div className="rounded-xl bg-[#FE9A00] p-2">
+                  <SlBell  size={20}/>
+                </div>
+                <div>
+                  <p className="text-[#101828] text-base font-[400] leading-[150%]">
+                    Email Notifications
+                  </p>
+                  <p className="text-[#101828] font-normal text-base leading-[150%]">
+                    All notifications will be sent to
+                    adewale.ogunleye@example.com. You can update your email
+                    address in the Profile section.
+                  </p>
+                </div>
               </div>
             </section>
           )}
         </section>
       </div>
 
-            <section className="w-full">
+      <section className="w-full">
         <Modal
           isOpen={subscriptionModalOpen}
           onClose={() => setSubScriptionModalOpen(false)}
@@ -295,9 +297,9 @@ const UserSettings = () => {
           // disableClose={saveQuizLoading || createQuizLoading}
         >
           <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
-            <SubscriptionSection 
-        setSubscriptionType={setSubscriptionType}
-        onCloseModal={() => setSubScriptionModalOpen(false)}
+            <SubscriptionSection
+              setSubscriptionType={setSubscriptionType}
+              onCloseModal={() => setSubScriptionModalOpen(false)}
             />
           </div>
         </Modal>
