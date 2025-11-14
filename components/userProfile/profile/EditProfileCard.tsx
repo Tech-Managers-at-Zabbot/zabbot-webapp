@@ -1,14 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import Image from "next/image";
-import InAppButton from "../InAppButton";
+import InAppButton from "../../InAppButton";
 import { FaRegEdit } from "react-icons/fa";
-import NormalInputField from "../NormalInputField";
+import NormalInputField from "../../NormalInputField";
 import { MdOutlineCancel } from "react-icons/md";
 import { LuSave } from "react-icons/lu";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { Upload, Camera, Image as ImageIcon, X } from "lucide-react";
-import { Modal, useModal } from "../general/Modal";
+import { Modal, useModal } from "../../general/Modal";
 
 const EditProfileCard = () => {
   const [isEditing, setIsEditing] = React.useState(false);
@@ -84,11 +84,9 @@ const EditProfileCard = () => {
                 >
                   <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
                     <div>
-                      <MdOutlineCancel size={20} color="#D42620"/>
+                      <MdOutlineCancel size={20} color="#D42620" />
                     </div>
-                    <div className="text-[#D42620]">
-                    Cancel
-                    </div>
+                    <div className="text-[#D42620]">Cancel</div>
                   </div>
                 </InAppButton>
                 <InAppButton
@@ -101,11 +99,9 @@ const EditProfileCard = () => {
                 >
                   <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
                     <div>
-                      <LuSave size={20} color="#FFFFFF"/>
+                      <LuSave size={20} color="#FFFFFF" />
                     </div>
-                     <div className="text-[#FFFFFF]">
-                    Save Changes
-                     </div>
+                    <div className="text-[#FFFFFF]">Save Changes</div>
                   </div>
                 </InAppButton>
               </>
@@ -135,11 +131,11 @@ const EditProfileCard = () => {
                 width="auto"
                 onClick={openModal}
               >
-               <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
-                    <div>
-                      <MdOutlineFileUpload size={20} color="#ACB6C5"/>
-                    </div>
-                    <div className="text-[#333]">Change profile photo</div>
+                <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
+                  <div>
+                    <MdOutlineFileUpload size={20} color="#ACB6C5" />
+                  </div>
+                  <div className="text-[#333]">Change profile photo</div>
                 </div>
               </InAppButton>
             )}
@@ -224,9 +220,7 @@ const EditProfileCard = () => {
             <p className="text-sm text-[#374151] mb-1">
               Click to upload or drag and drop
             </p>
-            <p className="text-xs text-[#6B7280]">
-              PNG, JPG or GIF (max 5MB)
-            </p>
+            <p className="text-xs text-[#6B7280]">PNG, JPG or GIF (max 5MB)</p>
             <button className="hover:cursor-pointer mt-4 flex items-center justify-center gap-2 mx-auto bg-white border border-[#D1D5DB] text-[#374151] px-4 py-2 rounded-lg font-[400] text-sm hover:bg-gray-50 transition-colors">
               <Upload size={16} />
               Select Image

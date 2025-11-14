@@ -1,6 +1,6 @@
 import React from "react";
-import InAppButton from "../InAppButton";
-import NormalInputField from "../NormalInputField";
+import InAppButton from "../../InAppButton";
+import NormalInputField from "../../NormalInputField";
 
 const ChangePasswordCard = () => {
   const [formData, setFormData] = React.useState({
