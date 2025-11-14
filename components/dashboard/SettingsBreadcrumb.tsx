@@ -10,6 +10,7 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
 import { usePageLanguage } from "@/contexts/LanguageContext";
+import { useLoading } from "@/contexts/LoadingProvider";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
@@ -18,15 +19,17 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
+  const { setLoading } = useLoading();
 
-  const { getPageText } =
-        usePageLanguage("userDashboard");
+  const { getPageText } = usePageLanguage("userDashboard");
 
   const handleLogout = () => {
     console.log("Logging out two...");
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
-    const keepDailyCallsRemaining = localStorage.getItem("daily_calls_remaining");
+    const keepDailyCallsRemaining = localStorage.getItem(
+      "daily_calls_remaining"
+    );
 
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
@@ -35,8 +38,11 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
     localStorage.setItem("chat_conversations", keepChatHistory || "[]");
     localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
-    localStorage.setItem("daily_calls_remaining", keepDailyCallsRemaining || "30");
-    
+    localStorage.setItem(
+      "daily_calls_remaining",
+      keepDailyCallsRemaining || "30"
+    );
+
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     router.push("/login");
@@ -60,8 +66,11 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
     {
       name: getPageText("settings"),
       icon: "/userDashboard/settings.svg",
-      action: () => "",
-      isActive: false,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      isActive: true,
     },
     {
       name: getPageText("profile"),

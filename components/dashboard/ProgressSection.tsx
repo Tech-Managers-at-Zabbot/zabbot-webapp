@@ -17,8 +17,7 @@ const imagePathsArr: string[] = ["/userDashboard/say-hello.svg"];
 const ProgressSection = () => {
   const { userDetails } = useUser();
 
-    const { getPageText } =
-        usePageLanguage("userDashboard");
+  const { getPageText } = usePageLanguage("userDashboard");
 
   const { data: coursesWithLessons, isLoading: lessonsLoading } =
     useGetCoursesWithLessons(userDetails?.languageId);
@@ -47,13 +46,7 @@ const ProgressSection = () => {
       <section className="flex-1 xl:w-[58%] w-full">
         <UserLessonDataComponent
           title={getPageText("immersion_tagline")}
-          subtitle={
-            courseLessons?.length && courseLessons?.length > 0
-              ? `${getPageText("almost_there")} ${getPageText("just")} ${courseLessons?.length} ${getPageText("more")} ${
-                  courseLessons?.length === 1 ? getPageText("step") : getPageText("steps")
-                } ${getPageText("in_your_journey")}`
-              : "No data yet"
-          }
+          subtitle={"Empowering you to learn, speak, and belong—authentically."}
           maxWidth="100%"
         >
           <section className="flex gap-[15px] min-w-max">

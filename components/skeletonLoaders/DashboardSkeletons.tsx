@@ -130,7 +130,7 @@ export const WordForTheDaySkeleton = () => {
 export const DashboardMetricCardSkeleton = () => {
 return (
   <div
-    className="bg-white w-full border border-gray-200 flex flex-col gap-[24px] rounded-lg p-4 sm:p-6 shadow-sm animate-pulse"
+    className="bg-white w-full border border-gray-200 w-full flex flex-col gap-[24px] rounded-lg p-4 sm:p-6 shadow-sm animate-pulse"
     style={{ fontFamily: "Lexend" }}
   >
     <div className="flex justify-start items-center mb-2 sm:mb-4">
