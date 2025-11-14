@@ -14,21 +14,21 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     "#"
   );
 
-useEffect(() => {
-  const currentTime = new Date();
-  const hours = currentTime.getHours();
+  useEffect(() => {
+    const currentTime = new Date();
+    const hours = currentTime.getHours();
 
-  if (hours >= 1 && hours < 12) {
-    // Morning: 1 AM to 12 PM
-    setTimeSunMoonLink("/userDashboard/morning-sun.svg");
-  } else if (hours >= 12 && hours < 18) {
-    // Afternoon: 12 PM to 6 PM
-    setTimeSunMoonLink("/userDashboard/afternoon-sun.svg");
-  } else {
-    // Night: 6 PM to 1 AM
-    setTimeSunMoonLink("/userDashboard/moon.svg");
-  }
-}, []);
+    if (hours >= 1 && hours < 12) {
+      // Morning: 1 AM to 12 PM
+      setTimeSunMoonLink("/userDashboard/morning-sun.svg");
+    } else if (hours >= 12 && hours < 18) {
+      // Afternoon: 12 PM to 6 PM
+      setTimeSunMoonLink("/userDashboard/afternoon-sun.svg");
+    } else {
+      // Night: 6 PM to 1 AM
+      setTimeSunMoonLink("/userDashboard/moon.svg");
+    }
+  }, []);
 
   return (
     <AuthGuard isAdmin={false}>
@@ -42,8 +42,8 @@ useEffect(() => {
                   className="
         absolute top-[80px] 
         md:top-[100px]
-        left-6       // default: small screens
-        sm:left-6    // small screens
+        right-6       // default: small screens
+        sm:right-6    // small screens
         md:left-auto md:right-16  // medium screens
         lg:right-20               // large screens
         max-w-screen-2xl

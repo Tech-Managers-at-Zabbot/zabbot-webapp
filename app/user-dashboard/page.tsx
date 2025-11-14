@@ -168,71 +168,117 @@ const Dashboard = () => {
               style={{ backgroundImage: `url(${cloudsUrl})` }}
             ></div>
 
-            <div className="relative flex w-full justify-between items-center py-[20px] z-40">
-              <div className="flex flex-shrink-0 items-center gap-6 z-20">
-                {/* Bird logo */}
-                <div className="relative w-[36px] h-[30px] sm:w-[46px] sm:h-[36px] md:w-[70px] md:h-[76.91px]">
-                  <Image
-                    src="/userDashboard/bird-logo.png"
-                    alt="Centralized rounded parrot mascot"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
+            <div
+              className="
+    relative 
+    w-full 
+    py-[20px] 
+    z-40
+    flex 
+    flex-col 
+    lg:flex-row 
+    lg:items-center 
+    lg:justify-between 
+    gap-4
+  "
+            >
+              {/* ---- ROW 1: Logos + Settings (mobile) ---- */}
+              <div className="flex w-full items-center justify-between lg:justify-start lg:gap-6">
+                {/* Logos group */}
+                <div className="flex items-center gap-4 flex-shrink-0">
+                  {/* Bird logo */}
+                  <div className="relative w-[36px] h-[30px] sm:w-[46px] sm:h-[36px] md:w-[70px] md:h-[76.91px]">
+                    <Image
+                      src="/userDashboard/bird-logo.png"
+                      alt="Centralized rounded parrot mascot"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
+
+                  {/* Zabbot logo */}
+                  <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
+                    <Image
+                      src={logoUrl}
+                      alt="Zabbot Logo"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
 
-                {/* Zabbot logo */}
-                <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
-                  <Image
-                    src={logoUrl}
-                    alt="Zabbot Logo"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
+                {/* Settings → visible on mobile here, hidden on desktop */}
+                <div className="flex lg:hidden">
+                  <SettingsBreadcrumb isDark={theme === "dark"} />
                 </div>
               </div>
 
-              <div className="w-[50%] z-10">
-                <SearchBar
-                  placeholder="Search sparks, journeys, flashcards, and more..."
-                  icon={<IoSearchOutline />}
-                  background={"#BBE1E1"}
-                  className="z-20"
-                />
-              </div>
-
-              <div className="flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 flex-shrink-0 items-start">
-                {/* Text section */}
-                <div className="flex flex-col gap-[4px] sm:gap-[6px] md:gap-[8px] text-right z-10">
+              {/* ---- ROW 2: Greeting text (mobile centered, desktop right-aligned) ---- */}
+              <div className="flex w-full justify-start lg:justify-end lg:order-none z-20">
+                <div className="flex flex-col text-left lg:text-right gap-1 z-20">
                   <span
-                    className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
+                    className="
+          font-bold 
+          text-[18px] z-20 sm:text-[24px] md:text-[28px] lg:text-[35.53px]
+          leading-[100%]
+          break-words
+        "
                     style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
                   >
-                    <span className="text-[10px] sm:text-[18px] md:text-[20px] lg:text-[28px]">
+                    <span className="text-[12px] sm:text-[18px] md:text-[20px] lg:text-[28px]">
                       {greeting}
                     </span>{" "}
                     {userDetails?.firstName || "User"}
                   </span>
+
                   <span
-                    className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
+                    className="
+          font-[400] 
+          text-[11px] sm:text-[12px] md:text-[13px] 
+          leading-[145%] 
+          max-w-[260px] z-20
+        "
                     style={{ color: theme === "dark" ? "#FFFAEB" : "#333333" }}
                   >
                     {getPageText("learn_speak_belong")}
                   </span>
                 </div>
+              </div>
 
-                {/* Settings */}
-                <div className="hidden lg:flex mt-1">
-                  <SettingsBreadcrumb isDark={theme === "dark"} />
-                </div>
+              {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
+              <div className="w-full lg:w-[50%] z-10">
+                <SearchBar
+                  placeholder="Search sparks, journeys, flashcards, and more..."
+                  icon={<IoSearchOutline />}
+                  background={"#BBE1E1"}
+                  className="w-full"
+                />
+              </div>
+
+              {/* Settings on desktop */}
+              <div className="hidden lg:flex mt-1">
+                <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
           </section>
 
           <div className="flex gap-6">
             {/* Left Section ==> Totay's Word, Flash Cards, Leader Board */}
-            <section className="flex flex-col xl:w-[23%] w-auto flex-shrink-0 py-[40px] gap-6">
+            <section
+              className="
+    flex 
+    flex-col 
+    gap-6
+    py-[40px]
+
+    w-full                /* mobile: full width (stacks) */
+    lg:w-[40%]            /* large: take ~40% */
+    xl:w-[23%]            /* xl: desktop size */
+    flex-shrink-0
+  "
+            >
               <div className="z-30">
                 <WordForTheDay />
               </div>
@@ -244,8 +290,8 @@ const Dashboard = () => {
                 <Leaderboard />
               </div>
             </section>
-            
-             <section className="flex flex-col flex-grow xl:w-[77%] py-[40px] gap-10 overflow-x-hidden">
+
+            <section className="flex flex-col w-full lg:w-[60%] xl:w-[77%] py-[40px] gap-10 overflow-x-hidden">
               <div className="z-10">
                 <ProgressSection />
               </div>
@@ -264,7 +310,6 @@ const Dashboard = () => {
                 ))}
               </div>
             </section>
-
           </div>
         </main>
       </div>

@@ -20,56 +20,46 @@ const EditProfileCard = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelClick = () => {
-    setIsEditing(false);
-  };
-
-  const handleSaveClick = () => {
-    // Add your save logic here
-    console.log("Saving:", formData);
-    setIsEditing(false);
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   return (
-    <div>
+    <div style={{ fontFamily: "Lexend" }}>
       <main
-        className="flex flex-col gap-10 justify-between px-6 py-14 rounded-2xl border-[0.8px] border-[#FEF3C6] bg-white shadow-lg"
-        style={{ fontFamily: "Lexend" }}
+        className="
+          flex flex-col gap-10 px-4 sm:px-6 py-10 sm:py-14 
+          rounded-2xl border border-[#FEF3C6] bg-white shadow-lg
+        "
       >
-        <section className="flex items-center justify-between">
-          <div className="flex flex-col gap-4">
-            <h1 className="text-[#101828] text-lg font-[400] leading-[150%]">
+        {/* HEADER */}
+        <section
+          className="
+            flex flex-col md:flex-row justify-between md:items-start 
+            gap-6
+          "
+        >
+          {/* Title */}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-[#101828] text-lg sm:text-xl font-medium">
               Personal Information
             </h1>
-            <p className="text-base text-[#4A5565] font-[400] leading-[150%]">
+            <p className="text-sm sm:text-base text-[#4A5565]">
               Update your profile details and avatar
             </p>
           </div>
-          <div className="flex gap-3">
+
+          {/* Edit / Save / Cancel Buttons */}
+          <div className="flex gap-3 flex-wrap">
             {!isEditing ? (
               <InAppButton
                 background="#0089C8"
                 borderRadius="8px"
-                padding="10px"
-                height="auto"
-                width="auto"
-                onClick={handleEditClick}
+                padding="10px 14px"
+                onClick={() => setIsEditing(true)}
               >
-                <div className="flex font-[400] leading-[143%] justify-between items-center gap-4">
-                  <div>
-                    <FaRegEdit size={20} />
-                  </div>
-                  <div>Edit Profile</div>
+                <div className="flex items-center justify-center gap-2 text-white">
+                  <FaRegEdit size={18} />
+                  <span>Edit Profile</span>
                 </div>
               </InAppButton>
             ) : (
@@ -77,31 +67,27 @@ const EditProfileCard = () => {
                 <InAppButton
                   border="1px solid #D42620"
                   borderRadius="8px"
-                  padding="10px"
-                  height="auto"
-                  width="auto"
-                  onClick={handleCancelClick}
+                  padding="10px 14px"
+                  onClick={() => setIsEditing(false)}
                 >
-                  <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
-                    <div>
-                      <MdOutlineCancel size={20} color="#D42620" />
-                    </div>
-                    <div className="text-[#D42620]">Cancel</div>
+                  <div className="flex justify-center items-center gap-2 text-[#D42620]">
+                    <MdOutlineCancel size={18} />
+                    <span>Cancel</span>
                   </div>
                 </InAppButton>
+
                 <InAppButton
                   background="#01875C"
                   borderRadius="8px"
-                  padding="10px"
-                  height="auto"
-                  width="auto"
-                  onClick={handleSaveClick}
+                  padding="10px 14px"
+                  onClick={() => {
+                    console.log("Saving:", formData);
+                    setIsEditing(false);
+                  }}
                 >
-                  <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
-                    <div>
-                      <LuSave size={20} color="#FFFFFF" />
-                    </div>
-                    <div className="text-[#FFFFFF]">Save Changes</div>
+                  <div className="flex justify-center items-center gap-2 text-white">
+                    <LuSave size={18} />
+                    <span>Save Changes</span>
                   </div>
                 </InAppButton>
               </>
@@ -109,127 +95,119 @@ const EditProfileCard = () => {
           </div>
         </section>
 
-        <section className="flex flex-col gap-4">
-          <div className="text-[#364153] font-[400] leading-[100%] text-sm">
+        {/* PROFILE PICTURE */}
+        <section className="flex flex-col gap-3">
+          <span className="text-[#364153] text-sm font-medium">
             Profile Picture
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="relative w-[96px] h-[96px] aspect-[3/4] border-5 border-[#D0D5DD] rounded-full overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+          </span>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="relative w-24 h-24 rounded-full overflow-hidden shadow-sm border">
               <Image
                 src={"/creators/mr-iniobong.svg"}
-                alt={""}
+                alt="Profile"
                 fill
                 className="object-cover"
               />
             </div>
+
             {isEditing && (
               <InAppButton
                 border="1px solid #ACB6C5"
                 borderRadius="8px"
                 padding="10px 16px"
-                height="auto"
-                width="auto"
                 onClick={openModal}
               >
-                <div className="flex font-[400] leading-[143%] text-[#374151] justify-between items-center gap-2 px-2">
-                  <div>
-                    <MdOutlineFileUpload size={20} color="#ACB6C5" />
-                  </div>
-                  <div className="text-[#333]">Change profile photo</div>
+                <div className="flex justify-center items-center gap-2 text-[#333]">
+                  <MdOutlineFileUpload size={18} />
+                  <span>Change profile photo</span>
                 </div>
               </InAppButton>
             )}
           </div>
         </section>
 
-        <section>
-          <div>
-            <label className="text-[#364153] text-sm font-[400] leading-[100%]">
-              Full Name
-            </label>
-          </div>
-          <div>
-            <NormalInputField
-              id={"fullName"}
-              value={formData.fullName}
-              onChange={handleInputChange}
-              placeholder={"Iniobong Ekpenyong"}
-              type={"text"}
-              disabled={!isEditing}
-              backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
-              border={isEditing ? "1px solid #0089C8" : "1px solid #84D8FF"}
-              color={isEditing ? "#000000" : "#101828"}
-            />
-          </div>
+        {/* FULL NAME FIELD */}
+        <section className="flex flex-col gap-2">
+          <label className="text-[#364153] text-sm font-medium">
+            Full Name
+          </label>
+          <NormalInputField
+            id="fullName"
+            value={formData.fullName}
+            onChange={handleInputChange}
+            placeholder="Iniobong Ekpenyong"
+            type="text"
+            disabled={!isEditing}
+            backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
+            border={isEditing ? "1px solid #0089C8" : "1px solid #84D8FF"}
+            color={isEditing ? "#000000" : "#101828"}
+          />
         </section>
 
-        <section>
-          <div>
-            <label className="text-[#364153] text-sm font-[400] leading-[100%]">
-              Email Address
-            </label>
-          </div>
-          <div>
-            <NormalInputField
-              id={"email"}
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder={"adewale.ogunleye@example.com"}
-              type={"email"}
-              disabled={!isEditing}
-              backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
-              border={isEditing ? "1px solid #0089C8" : "1px solid #84D8FF"}
-              color={isEditing ? "#000000" : "#101828"}
-            />
-          </div>
+        {/* EMAIL FIELD */}
+        <section className="flex flex-col gap-2">
+          <label className="text-[#364153] text-sm font-medium">
+            Email Address
+          </label>
+          <NormalInputField
+            id="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="adewale.ogunleye@example.com"
+            type="email"
+            disabled={!isEditing}
+            backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
+            border={isEditing ? "1px solid #0089C8" : "1px solid #84D8FF"}
+            color={isEditing ? "#000000" : "#101828"}
+          />
         </section>
       </main>
 
-      {/* Change Profile Picture Modal */}
+      {/* MODAL */}
       <Modal isOpen={isOpen} onClose={closeModal} size="md">
         <div className="p-6">
-          {/* Modal Header */}
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-[#252525] mb-2">
-              Change Profile Picture
-            </h2>
-            <p className="text-sm text-[#6B7280]">
-              Choose how you'd like to update your profile picture
-            </p>
-          </div>
+          {/* Header */}
+          <h2 className="text-xl font-semibold mb-1">Change Profile Picture</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Choose how you'd like to update your profile picture
+          </p>
 
           {/* Upload Options */}
-          <div className="flex gap-3 mb-6">
-            <button className="hover:cursor-pointer flex items-center justify-center gap-2 bg-[#0089C8] text-white px-6 py-3 rounded-full font-[400] text-sm hover:bg-[#007AB5] transition-colors">
-              <Upload size={18} />
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <button className="flex justify-center items-center gap-2 bg-[#0089C8] text-white px-5 py-3 rounded-full text-sm hover:bg-[#007AB5] transition">
+              <Upload size={16} />
               Upload from device
             </button>
-            <button className="hover:cursor-pointer flex items-center justify-center gap-2 bg-white border border-[#D1D5DB] text-[#374151] px-6 py-3 rounded-full font-[400] text-sm hover:bg-gray-50 transition-colors">
-              <Camera size={18} />
+
+            <button className="flex justify-center items-center gap-2 bg-white border border-gray-300 text-gray-700 px-5 py-3 rounded-full text-sm hover:bg-gray-50 transition">
+              <Camera size={16} />
               Upload from camera
             </button>
           </div>
 
-          {/* Drag and Drop Area */}
-          <div className="border-2 border-dashed border-[#D1D5DB] rounded-2xl p-12 mb-4 text-center bg-[#F9FAFB] hover:border-[#0089C8] transition-colors cursor-pointer">
-            <div className="flex justify-center mb-4">
-              <div className="bg-[#E5E7EB] p-4 rounded-lg">
-                <ImageIcon size={32} className="text-[#9CA3AF]" />
+          {/* Drag & Drop */}
+          <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center bg-gray-50 hover:border-[#0089C8] transition cursor-pointer mb-6">
+            <div className="flex justify-center mb-3">
+              <div className="bg-gray-200 p-4 rounded-lg">
+                <ImageIcon size={28} className="text-gray-400" />
               </div>
             </div>
-            <p className="text-sm text-[#374151] mb-1">
-              Click to upload or drag and drop
+
+            <p className="text-sm text-gray-700">
+              Click to upload or drag & drop
             </p>
-            <p className="text-xs text-[#6B7280]">PNG, JPG or GIF (max 5MB)</p>
-            <button className="hover:cursor-pointer mt-4 flex items-center justify-center gap-2 mx-auto bg-white border border-[#D1D5DB] text-[#374151] px-4 py-2 rounded-lg font-[400] text-sm hover:bg-gray-50 transition-colors">
-              <Upload size={16} />
+            <p className="text-xs text-gray-500">PNG, JPG, GIF (max 5MB)</p>
+
+            <button className="mt-4 flex items-center justify-center gap-2 mx-auto bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-100 transition">
+              <Upload size={14} />
               Select Image
             </button>
           </div>
 
-          {/* Remove Avatar Button */}
-          <button className="hover:cursor-pointer border border-[#0000001A] w-full flex items-center justify-center gap-2 text-[#DC2626] py-3 rounded-lg font-[400] text-sm hover:bg-[#FEE2E2] transition-colors">
-            <X size={18} />
+          {/* Remove Button */}
+          <button className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border text-red-600 border-red-300 hover:bg-red-50 transition text-sm">
+            <X size={16} />
             Remove Current Avatar
           </button>
         </div>
@@ -237,4 +215,5 @@ const EditProfileCard = () => {
     </div>
   );
 };
+
 export default EditProfileCard;

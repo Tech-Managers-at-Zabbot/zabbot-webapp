@@ -563,6 +563,7 @@ interface UserLessonDataComponentProps {
   visibleItems?: number;
   background?: string;
   maxWidth?: string;
+  showViewCourseButton?: boolean;
 }
 
 const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
@@ -573,6 +574,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
   padding = "24px",
   maxWidth = "100%",
   background = "white",
+  showViewCourseButton = false,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState<"left" | "right" | null>(null);
@@ -658,6 +660,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
         </div>
 
         <div className="flex gap-4">
+          {showViewCourseButton && (
           <div>
             <InAppButton
               paddingLeft="17px"
@@ -672,6 +675,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
               </div>
             </InAppButton>
           </div>
+          )}
           <div className="flex gap-[16px] flex-shrink-0">
             <TfiArrowCircleLeft
               size={32}

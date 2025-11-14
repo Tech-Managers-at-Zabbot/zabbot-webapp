@@ -209,8 +209,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-2xl">
+    <div className="w-full flex justify-center">
+      <div className="max-w-2xl w-full">
         <div className="bg-[#d3ebeb] backdrop-blur-sm rounded-3xl p-8 shadow-lg">
           <h1 className="text-4xl font-bold text-teal-700 mb-6">Leaderboard</h1>
 

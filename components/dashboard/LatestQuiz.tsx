@@ -165,15 +165,13 @@ const LatestQuiz = () => {
           title={"Latest Quiz"}
           subtitle={"Top Yorùbá courses learners love!"}
           maxWidth="100%"
+          showViewCourseButton={true}
         >
           <section className="flex gap-[15px] min-w-max">
             {quizzesToMap.map(
               (lessonProgressData: Record<string, any>, index: number) => (
                 <div key={index}>
-                  <QuizCard
-                    data={lessonProgressData}
-                    isClickable={true}
-                  />
+                  <QuizCard data={lessonProgressData} isClickable={true} />
                 </div>
               )
             )}
@@ -228,19 +226,19 @@ export const QuizCard = ({
 
       <section className="absolute text-[#FFFF] top-30 flex flex-col px-[10px] font-[500] text-[11px] sm:text-[12px] leading-[133.333%]">
         <div className="flex">
-        <div
-          className={`px-[12px] py-[6px] rounded-full`}
-          style={{
-            background:
-              data.level === "easy"
-                ? "#029856"
-                : data.level === "medium"
-                ? "#EAB308"
-                : "#EF4444",
-          }}
-        >
-          {data?.level}
-        </div>
+          <div
+            className={`px-[12px] py-[6px] rounded-full`}
+            style={{
+              background:
+                data.level === "easy"
+                  ? "#029856"
+                  : data.level === "medium"
+                  ? "#EAB308"
+                  : "#EF4444",
+            }}
+          >
+            {data?.level}
+          </div>
         </div>
         {/* <div>
           <h3 className="font-[600] text-white text-[12px] sm:text-[16px] leading-[150%]">
@@ -253,13 +251,13 @@ export const QuizCard = ({
 
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
-             <div>
-          <h3 className="font-[600] text-[#162B6E] text-[12px] sm:text-[16px] leading-[150%]">
-            {data?.title?.length > 50
-              ? data?.title.slice(0, 50) + "..."
-              : data?.title}
-          </h3>
-        </div>
+          <div>
+            <h3 className="font-[600] text-[#162B6E] text-[12px] sm:text-[16px] leading-[150%]">
+              {data?.title?.length > 50
+                ? data?.title.slice(0, 50) + "..."
+                : data?.title}
+            </h3>
+          </div>
           <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
             {data?.description?.length > 50
               ? data?.description.slice(0, 50) + "..."

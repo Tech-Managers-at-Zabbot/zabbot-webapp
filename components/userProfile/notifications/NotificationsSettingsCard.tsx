@@ -10,7 +10,7 @@ import InAppButton from "@/components/InAppButton";
 import { RiSaveLine } from "react-icons/ri";
 
 const NotificationsSettingsCard = () => {
-    const [enabledSettings, setEnabledSettings] = React.useState<number[]>([1, 3]);
+  const [enabledSettings, setEnabledSettings] = React.useState<number[]>([1, 3]);
 
   const toggleSetting = (id: number) => {
     if (enabledSettings.includes(id)) {
@@ -19,8 +19,6 @@ const NotificationsSettingsCard = () => {
       setEnabledSettings([...enabledSettings, id]);
     }
   };
-
-
 
   const settingsItemsArray = [
     {
@@ -55,48 +53,49 @@ const NotificationsSettingsCard = () => {
 
   return (
     <div
-      className="bg-[white] border shadow-lg flex flex-col border-[#FEF3C6] rounded-2xl px-6 py-10"
+      className="bg-white border shadow-lg flex flex-col border-[#FEF3C6] rounded-2xl px-4 sm:px-6 py-6 sm:py-10"
       style={{ fontFamily: "Lexend" }}
     >
-      <div className="justify-start items-center flex gap-6">
-        <div className="rounded-2xl bg-[#1671D9] p-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
+        <div className="rounded-2xl bg-[#1671D9] p-3 sm:p-4 flex-shrink-0">
           <SlBell size={25} />
         </div>
         <div>
-          <p className="text-[#101828] text-base font-[400] leading-[170%]">
+          <p className="text-[#101828] text-base sm:text-lg font-[400] leading-snug sm:leading-[170%]">
             Notification Preferences
           </p>
-          <p className="text-[#4A5565] font-normal text-sm leading-[170%]">
+          <p className="text-[#4A5565] font-normal text-sm sm:text-base leading-snug sm:leading-[170%]">
             Manage how you receive updates from Zabbot
           </p>
         </div>
       </div>
 
-      <div className="flex flex-col justify-between gap-8">
-      <div>
+      {/* Settings Items */}
+      <div className="flex flex-col gap-4 sm:gap-8 mb-6">
         {settingsItemsArray.map((item) => (
           <div
             key={item.id}
-            className="flex justify-between py-1 border-b border-[#FEF3C6] items-center mt-6"
+            className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[#FEF3C6] py-2 sm:py-4"
           >
-            <div className="flex p-2 gap-4 items-center">
+            <div className="flex gap-4 items-start sm:items-center w-full">
               <div
-                className="p-4 rounded-[14px]"
+                className="p-3 sm:p-4 rounded-[14px] flex-shrink-0"
                 style={{ backgroundColor: item.iconBackground }}
               >
                 {item.icon}
               </div>
-              <div>
-                <p className="text-[#101828] text-base font-[400] leading-[88%]">
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <p className="text-[#101828] text-sm sm:text-base font-[400] leading-tight sm:leading-[88%]">
                   {item.label}
                 </p>
-                <p className="text-[#4A5565] font-normal text-sm leading-[170%]">
+                <p className="text-[#4A5565] font-normal text-xs sm:text-sm leading-snug sm:leading-[170%]">
                   {item.subLabel}
                 </p>
               </div>
             </div>
             <div
-              className="cursor-pointer translate-0.5"
+              className="cursor-pointer mt-2 sm:mt-0"
               onClick={() => toggleSetting(item.id)}
             >
               {enabledSettings.includes(item.id) ? (
@@ -109,20 +108,15 @@ const NotificationsSettingsCard = () => {
         ))}
       </div>
 
-      <div className="w-full">
-        <InAppButton
-        background="#1671D9"
-        width="100%"
-        borderRadius="8px"
-        >
-            <div className="flex items-center justify-center gap-6 w-full">
-                <div><RiSaveLine size={24} /></div>
-                <div >Save Changes</div>
-            </div>
+      {/* Save Button */}
+      <div className="w-full mt-4">
+        <InAppButton background="#1671D9" width="100%" borderRadius="8px">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 w-full">
+            <RiSaveLine size={24} />
+            <div>Save Changes</div>
+          </div>
         </InAppButton>
       </div>
-      </div>
-
     </div>
   );
 };
