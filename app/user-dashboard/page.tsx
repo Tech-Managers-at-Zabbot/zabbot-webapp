@@ -162,6 +162,7 @@ const Dashboard = () => {
         className="min-h-screen"
       >
         <main className="px-[5%]">
+
           <section className="">
             <div
               className="absolute bg-cover inset-0 top-0 h-40 bg-center"
@@ -215,6 +216,16 @@ const Dashboard = () => {
                 </div>
               </div>
 
+                            {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
+              <div className="w-full z-10">
+                <SearchBar
+                  placeholder="Search sparks, journeys, flashcards, and more..."
+                  icon={<IoSearchOutline />}
+                  background={"#BBE1E1"}
+                  className="w-full"
+                />
+              </div>
+
               {/* ---- ROW 2: Greeting text (mobile centered, desktop right-aligned) ---- */}
               <div className="flex w-full justify-start lg:justify-end lg:order-none z-20">
                 <div className="flex flex-col text-left lg:text-right gap-1 z-20">
@@ -238,23 +249,13 @@ const Dashboard = () => {
           font-[400] 
           text-[11px] sm:text-[12px] md:text-[13px] 
           leading-[145%] 
-          max-w-[260px] z-20
+          max-w-[300px] z-20
         "
                     style={{ color: theme === "dark" ? "#FFFAEB" : "#333333" }}
                   >
                     {getPageText("learn_speak_belong")}
                   </span>
                 </div>
-              </div>
-
-              {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
-              <div className="w-full lg:w-[50%] z-10">
-                <SearchBar
-                  placeholder="Search sparks, journeys, flashcards, and more..."
-                  icon={<IoSearchOutline />}
-                  background={"#BBE1E1"}
-                  className="w-full"
-                />
               </div>
 
               {/* Settings on desktop */}
