@@ -59,11 +59,11 @@ const Home = () => {
         <div id="team">
           <Creators />
         </div>
-        <div id="footer">
-          <LandingPageFooter />
-        </div>
         <div id="newsletter">
           <NewsLetterComponent />
+        </div>
+        <div id="footer">
+          <LandingPageFooter />
         </div>
       </main>
 

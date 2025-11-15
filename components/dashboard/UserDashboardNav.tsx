@@ -178,9 +178,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       route: "#",
       iconPath: "/userDashboard/settings.svg",
       isActiveIconPath: "#",
-      action: () => "",
-      useAction: false,
-      disabled: true,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      useAction: true,
+      disabled: false,
     },
     {
       name: "Profile",

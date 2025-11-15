@@ -19,7 +19,7 @@ const ProverbsComponent = () => {
         fontFamily: "Lexend",
       }}
     >
-      <div className="flex-1 absolute gap-2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:top-40 lg:left-20 xl:top-40 xl:left-25 2xl:left-45 lg:transform-none flex justify-center items-center flex-col w-full">
+      <div className="flex-1 absolute gap-1 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:top-40 lg:left-20 xl:top-40 xl:left-25 2xl:left-30 lg:transform-none flex justify-center items-center flex-col w-full">
         <div className="font-bold text-center text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl leading-tight text-white">
           <h3>{getPageText("proverbs")},</h3>
           <h3>{getPageText("history")} {getPageText("and")}</h3>

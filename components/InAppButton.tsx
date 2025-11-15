@@ -22,6 +22,7 @@ export interface ButtonProps {
   isShadowShow?: boolean;
   onClick?: (e: unknown) => void;
   background?: string;
+  padding?:string;
 }
 
 const InAppButton: React.FC<ButtonProps> = ({
@@ -33,6 +34,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   paddingBottom,
   paddingLeft,
   paddingRight,
+  padding,
   width = "230px",
   disabled,
   border,
@@ -73,6 +75,7 @@ const InAppButton: React.FC<ButtonProps> = ({
         fontFamily,
         backgroundColor: !disabled ? backgroundColor : disabledColor,
         background: !disabled ? background : disabledColor,
+        padding
       }}
       disabled={disabled}
       type={type}

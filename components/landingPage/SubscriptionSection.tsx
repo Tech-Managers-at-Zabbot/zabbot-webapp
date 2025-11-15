@@ -1,8 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from "react";
 import { motion, Variants } from "framer-motion";
 
-const SubscriptionSection = () => {
+interface SubscriptionSectionProps {
+  setSubscriptionType?: (type: string) => void;
+  onCloseModal?: () => void;
+}
+
+const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
+  setSubscriptionType,
+  onCloseModal,
+}) => {
   const subscriptionOptionsData = [
     {
       title: "Lifetime Access",
@@ -14,6 +23,7 @@ const SubscriptionSection = () => {
       border: "1.419px solid #0F973D",
       costColor: "#0F973D",
       amount: 159.99,
+      type: "lifetime",
     },
     {
       title: "Annual Subscription",
@@ -25,6 +35,7 @@ const SubscriptionSection = () => {
       costColor: "#EE9705",
       costFrequency: "year",
       amount: 69.99,
+      type: "annual",
     },
     {
       title: "Monthly",
@@ -36,6 +47,7 @@ const SubscriptionSection = () => {
       costColor: "#0089C8",
       costFrequency: "month",
       amount: 9.99,
+      type: "monthly",
     },
   ];
 
@@ -50,10 +62,20 @@ const SubscriptionSection = () => {
   };
 
   // Individual card variants
-  const cardVariants:Variants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 1.5, ease: "easeOut" },
+    },
     exit: { opacity: 0, y: 50, transition: { duration: 0.4, ease: "easeIn" } },
+  };
+
+  const handleSubscriptionSelect = (subscriptionType: any): any => {
+    if (!setSubscriptionType || !onCloseModal) return;
+    setSubscriptionType(subscriptionType);
+    onCloseModal();
   };
 
   return (
@@ -94,6 +116,7 @@ const SubscriptionSection = () => {
                   backgroundColor: option.backgroundColor,
                   border: option.border,
                 }}
+                onClick={() => handleSubscriptionSelect(option.type)}
                 onMouseEnter={(e) => {
                   const card = e.currentTarget;
                   if (option.backgroundColor === "#DCFFE7") {
