@@ -8,7 +8,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
-import { usePageLanguage } from "@/contexts/LanguageContext";
+// import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const PopularCourses = () => {
   const { userDetails } = useUser();
@@ -16,8 +16,8 @@ const PopularCourses = () => {
     userDetails?.languageId
   );
 
-   const { getPageText } =
-        usePageLanguage("userDashboard");
+  //  const { getPageText } =
+  //       usePageLanguage("userDashboard");
 
   const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
@@ -36,114 +36,133 @@ const PopularCourses = () => {
       title: "Colors, Shapes, Descriptions",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/yoruba-family.png",
       title: "Family & Social Interactions",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/stop-watch.png",
       title: "Numbers, Time & Daily Activities",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/golden-heart.png",
       title: "Politeness & Respect",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/big-baby.png",
       title: "Emotions & Expressions",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/food.png",
       title: "Food & Market Culture",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/mat.png",
       title: "Clothing & Self-Presentation",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "foundation"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/chores.png",
       title: "Home & Housing",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/health.png",
       title: "Health & Well-being",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/map-of-nigeria.png",
       title: "Travel & Places",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/travel.png",
       title: "Transport & Getting Around",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/sunset.svg",
       title: "Weather, Nature & Spirituality",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/reading.svg",
       title: "Work, School & Aspirations",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/dialogue-art.png",
       title: "Conflict Resolution & Apologies",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "builder"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/culture.png",
       title: "Proverbs & Everyday Wisdom",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "explorer"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/talking-drums.png",
       title: "Music, Dance & Pop Culture",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "explorer"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/festival-drums.png",
       title: "Festivals & Traditions",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "explorer"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/customer-care.png",
       title: "Technology & Modern Life",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "explorer"
     },
     {
       thumbnailImage: "/userDashboard/yoruba/nigeria-flag-and-woman.png",
       title: "News, Politics & Community Issues",
       estimatedDuration: 20,
       totalLessons: 10,
+      level: "explorer"
     },
   ];
 
@@ -151,9 +170,10 @@ const PopularCourses = () => {
     <div className="flex gap-[30px]">
       <section className="flex-1 xl:max-w-[100%] w-full">
         <UserLessonDataComponent
-          title={getPageText("journey_hub")}
-          subtitle={getPageText("learning_tagline")}
+          title={"Journey into Yorùbá language & life."}
+          subtitle={"Your journey grows with every lesson you finish."}
           maxWidth="100%"
+          background="#FFF8C7"
         >
           {coursesLoading ? (
             <div className="flex gap-[15px] min-w-max">

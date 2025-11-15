@@ -14,6 +14,7 @@ interface NormalInputProps {
   backgroundColor?: string;
   border?: string;
   icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const NormalInputField: React.FC<NormalInputProps> = ({
@@ -23,6 +24,7 @@ const NormalInputField: React.FC<NormalInputProps> = ({
   required,
   placeholder,
   type,
+  disabled,
   error,
   errorMessage,
   color = '#80838D',
@@ -39,6 +41,7 @@ const NormalInputField: React.FC<NormalInputProps> = ({
           value={value}
           onChange={onChange}
           required={required}
+          disabled={disabled}
           placeholder={placeholder}
           className={`mt-1 font-[500] block text-[15px] leading-[20px] w-full px-3 h-[56px] py-2 rounded-md shadow-sm placeholder:text-[#98A2B3] ${
             icon ? 'pr-10' : ''
