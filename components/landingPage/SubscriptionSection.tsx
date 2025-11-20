@@ -2,16 +2,23 @@
 "use client";
 import React from "react";
 import { motion, Variants } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useLoading } from "@/contexts/LoadingProvider";
 
 interface SubscriptionSectionProps {
   setSubscriptionType?: (type: string) => void;
   onCloseModal?: () => void;
+  showTitle?: boolean;
 }
 
 const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
   setSubscriptionType,
   onCloseModal,
+  showTitle = true,
 }) => {
+  const router = useRouter();
+  const { setLoading } = useLoading();
+
   const subscriptionOptionsData = [
     {
       title: "Lifetime Access",
@@ -72,10 +79,23 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
     exit: { opacity: 0, y: 50, transition: { duration: 0.4, ease: "easeIn" } },
   };
 
+  //  const handleSubscriptionSelect = (subscriptionType: any): any => {
+  //   console.log("Clicked and Selected Subscription Type:", subscriptionType);
+  //   if (setSubscriptionType && onCloseModal) {
+  //     setSubscriptionType(subscriptionType);
+  //     router.push("/payment-page");
+  //     onCloseModal();
+  //   }
+  // };
+
   const handleSubscriptionSelect = (subscriptionType: any): any => {
-    if (!setSubscriptionType || !onCloseModal) return;
-    setSubscriptionType(subscriptionType);
-    onCloseModal();
+    setLoading(true)
+    console.log("Clicked and Selected Subscription Type:", subscriptionType);
+    if (setSubscriptionType && onCloseModal) {
+      setSubscriptionType(subscriptionType);
+      onCloseModal();
+    }
+    router.push("/payment-page");
   };
 
   return (
@@ -83,12 +103,16 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
       <main className="flex flex-col gap-6 sm:gap-8 md:gap-12 text-[#000000] py-10 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-[112px]">
         {/* Header Section */}
         <section className="flex flex-col gap-3 sm:gap-4">
+        {showTitle && (
+          <div>
           <h1 className="text-center font-bold leading-[1.2] sm:leading-[1.3] md:leading-[90px] text-3xl sm:text-4xl md:text-5xl lg:text-[60px] text-[#0089C8]">
             Choose Your Learning Path
           </h1>
           <p className="font-normal leading-relaxed sm:leading-[33px] text-lg sm:text-xl md:text-[23px] text-center text-[#4A5565]">
             Start your journey to speaking Yorùbá fluently today!
           </p>
+          </div>
+          )}
           <p className="font-normal leading-relaxed sm:leading-[33px] text-lg sm:text-xl md:text-[23px] text-center text-[#4A5565]">
             Everyone starts with a{" "}
             <span className="text-[#0C99FF] font-bold">7-day free</span>{" "}
@@ -102,7 +126,7 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }} // trigger every time in view
+          viewport={{ once: false, amount: 0.2 }}
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {subscriptionOptionsData.map((option, index) => (

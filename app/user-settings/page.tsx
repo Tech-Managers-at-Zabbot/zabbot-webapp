@@ -117,7 +117,7 @@ const UserSettings = () => {
   ];
 
   return (
-    <div className="min-h-screen font-[Lexend]">
+    <div className="min-h-screen font-[Lexend] z-50">
       <Head>
         <title>User Dashboard</title>
         <meta
@@ -127,8 +127,8 @@ const UserSettings = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      {/* MAIN CONTAINER */}
-      <div className="flex flex-col min-h-screen px-4 sm:px-6 md:px-10 py-6 bg-[#F9FAFB] gap-6">
+      {/* MAIN CONTAINER px-4 sm:px-6 md:px-10 */}
+      <div className="flex flex-col z-20 min-h-screen px-[5%] py-6 bg-[#F9FAFB] gap-6">
         {/* PAGE HEADER */}
         <section>
           <h1 className="text-[#0A0A0A] text-xl sm:text-2xl font-[500]">

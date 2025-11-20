@@ -563,7 +563,7 @@ interface UserLessonDataComponentProps {
   visibleItems?: number;
   background?: string;
   maxWidth?: string;
-  showViewCourseButton?: boolean;
+  showViewQuizBtn?: boolean;
 }
 
 const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
@@ -574,7 +574,7 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
   padding = "24px",
   maxWidth = "100%",
   background = "white",
-  showViewCourseButton = false,
+  showViewQuizBtn = false,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState<"left" | "right" | null>(null);
@@ -650,68 +650,67 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
       }}
     >
       <section className="flex justify-between items-start flex-wrap gap-4">
-        <div className="min-w-0 flex-1 flex flex-col gap-2">
-          <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
-            {title}
-          </h3>
-          <span className="font-semibold text-[13px] sm:text-[15px] leading-[100%] text-[#207EC5]">
-            {subtitle}
-          </span>
-        </div>
 
-        <div className="flex gap-4">
-          {showViewCourseButton && (
-          <div>
-            <InAppButton
-              paddingLeft="17px"
-              paddingRight="17px"
-              borderRadius="6px"
-              border="1px solid #E2E8F0"
-              height="40px"
-              width="170px"
-            >
-              <div className="text-[#0F172A] text-[14px] font-[500] leading-[143%] text-center">
-                View All Quizzes
-              </div>
-            </InAppButton>
+  {/* LEFT SIDE */}
+  <div className="min-w-0 flex-1 flex flex-col gap-2">
+    <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
+      {title}
+    </h3>
+    <span className="font-semibold text-[13px] sm:text-[15px] leading-[100%] text-[#207EC5]">
+      {subtitle}
+    </span>
+  </div>
+
+  {/* RIGHT SIDE (Fix applied here) */}
+  <div className="flex gap-4 flex-wrap items-center justify-end w-full sm:w-auto">
+
+    {showViewQuizBtn && (
+      <div className="w-full sm:w-auto">
+        <InAppButton
+          paddingLeft="17px"
+          paddingRight="17px"
+          borderRadius="6px"
+          border="1px solid #E2E8F0"
+          height="40px"
+          width="100%"     // allows full width on small screens
+        >
+          <div className="text-[#0F172A] text-[14px] font-[500] leading-[143%] text-center">
+            View All Quizzes
           </div>
-          )}
-          <div className="flex gap-[16px] flex-shrink-0">
-            <TfiArrowCircleLeft
-              size={32}
-              color={showLeftArrow ? "#737477" : "#cccccc"}
-              className={`select-none ${
-                showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
-              }`}
-              onMouseDown={
-                showLeftArrow ? () => startScrolling("left") : undefined
-              }
-              onMouseUp={stopScrolling}
-              onMouseLeave={stopScrolling}
-              onTouchStart={
-                showLeftArrow ? () => startScrolling("left") : undefined
-              }
-              onTouchEnd={stopScrolling}
-            />
-            <TfiArrowCircleRight
-              size={32}
-              color={showRightArrow ? "#737477" : "#cccccc"}
-              className={`select-none ${
-                showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
-              }`}
-              onMouseDown={
-                showRightArrow ? () => startScrolling("right") : undefined
-              }
-              onMouseUp={stopScrolling}
-              onMouseLeave={stopScrolling}
-              onTouchStart={
-                showRightArrow ? () => startScrolling("right") : undefined
-              }
-              onTouchEnd={stopScrolling}
-            />
-          </div>
-        </div>
-      </section>
+        </InAppButton>
+      </div>
+    )}
+
+    {/* Arrow Controls */}
+    <div className="flex gap-[16px] flex-shrink-0">
+      <TfiArrowCircleLeft
+        size={32}
+        color={showLeftArrow ? "#737477" : "#cccccc"}
+        className={`select-none ${
+          showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+        }`}
+        onMouseDown={showLeftArrow ? () => startScrolling("left") : undefined}
+        onMouseUp={stopScrolling}
+        onMouseLeave={stopScrolling}
+        onTouchStart={showLeftArrow ? () => startScrolling("left") : undefined}
+        onTouchEnd={stopScrolling}
+      />
+      <TfiArrowCircleRight
+        size={32}
+        color={showRightArrow ? "#737477" : "#cccccc"}
+        className={`select-none ${
+          showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+        }`}
+        onMouseDown={showRightArrow ? () => startScrolling("right") : undefined}
+        onMouseUp={stopScrolling}
+        onMouseLeave={stopScrolling}
+        onTouchStart={showRightArrow ? () => startScrolling("right") : undefined}
+        onTouchEnd={stopScrolling}
+      />
+    </div>
+  </div>
+</section>
+
       <section
         className="overflow-x-auto scrollbar-hide"
         ref={scrollRef}

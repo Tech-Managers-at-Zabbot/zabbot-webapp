@@ -54,8 +54,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     return "";
   };
 
-  return (
-    <div className="space-y-1">
+return (
+  <div className="overflow-x-auto">
+    <div className="min-w-[360px] space-y-1">
       {entries.map((entry) => (
         <div
           key={entry.id}
@@ -64,13 +65,15 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
             entry.color
           )} transition-all hover:shadow`}
         >
-          <div className="flex items-center gap-2 flex-1">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
             <div className="flex items-center justify-center w-6 text-xl font-bold text-gray-600">
               {renderIcon ? renderIcon(entry.rank) : getDefaultIcon(entry.rank)}
             </div>
+
             <div className="border-[0.5px] border-black/20 rounded-full p-1 flex-shrink-0">
               {renderAvatar ? renderAvatar(entry) : getDefaultAvatar(entry)}
             </div>
+
             <span
               className="font-semibold text-[13px] text-gray-800 truncate max-w-[100px]"
               title={entry.name}
@@ -78,13 +81,15 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
               {entry.name}
             </span>
           </div>
-          <div className="flex items-center gap-4">
+
+          <div className="flex items-center gap-4 flex-shrink-0">
             <div className="text-right">
               <span className="text-[13px] font-bold text-gray-800">
                 {entry.points}
               </span>
               <span className="text-sm text-gray-500 ml-1">pts</span>
             </div>
+
             <div className="text-sm text-gray-500 w-12 text-right">
               {entry.time}
             </div>
@@ -92,7 +97,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
         </div>
       ))}
     </div>
-  );
+  </div>
+);
+
 };
 
 // Main Leaderboard Component
@@ -212,10 +219,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     <div className="w-full flex justify-center">
       <div className="max-w-2xl w-full">
         <div className="bg-[#d3ebeb] backdrop-blur-sm rounded-3xl p-8 shadow-lg">
-          <h1 className="text-4xl font-bold text-teal-700 mb-6">Leaderboard</h1>
+          <h1 className="text-4xl sm:text-4xl md:text-3xl font-bold text-teal-700 mb-6">Leaderboard</h1>
 
           {/* Tab Navigation */}
-          <div className="flex gap-2 mb-6 bg-teal-100/50 rounded-xl p-1">
+          <div className="flex gap-2 mb-6 bg-teal-100/50 rounded-xl p-1 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.key}

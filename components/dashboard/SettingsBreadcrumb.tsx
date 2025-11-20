@@ -75,14 +75,20 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
     {
       name: getPageText("profile"),
       icon: "/userDashboard/profile.svg",
-      action: () => "",
-      isActive: false,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      isActive: true,
     },
     {
       name: getPageText("notifications"),
       icon: "/userDashboard/notifications.svg",
-      action: () => "",
-      isActive: false,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      isActive: true,
     },
     {
       name: getPageText("logout"),

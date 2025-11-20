@@ -265,7 +265,7 @@ const Dashboard = () => {
             </div>
           </section>
 
-          <div className="flex gap-6">
+          <div className="flex gap-6 flex-col lg:flex-row lg:items-start lg:justify-between">
             {/* Left Section ==> Totay's Word, Flash Cards, Leader Board */}
             <section
               className="
@@ -292,7 +292,7 @@ const Dashboard = () => {
               </div>
             </section>
 
-            <section className="flex flex-col w-full lg:w-[60%] xl:w-[77%] py-[40px] gap-10 overflow-x-hidden">
+            <section className="flex flex-col w-full lg:w-[60%] xl:w-[77%] py-[40px] gap-10">
               <div className="z-10">
                 <ProgressSection />
               </div>
