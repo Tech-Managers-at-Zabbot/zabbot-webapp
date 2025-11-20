@@ -236,6 +236,19 @@ const WordForTheDay = () => {
                 : getPageText("uncompleted_daily_goal_tag")}
             </span>
           </section>
+          <section>
+             <div className="font-bold text-[#000000CC] text-center text-[20px] sm:text-[18px] md:text-[20px] leading-[100%] my-2 sm:my-4">
+              {dailyWordData?.languageText}
+            </div>
+            <div className="flex flex-col gap-[12px] sm:gap-[16px] md:gap-[20px] w-full">
+              <h3 className="font-[400] text-center text-[20px] sm:text-[18px] md:text-[20px] leading-[120%] text-[#666666]">
+                ({dailyWordData?.pronunciationNote})
+              </h3>
+              <h3 className="font-[400] text-center text-[14px] sm:text-[20px] md:text-[30px] leading-[120%] text-[#666666]">
+                {dailyWordData?.englishText}
+              </h3>
+            </div>
+          </section>
           <section className="flex h-full justify-center items-center my-2 sm:my-4">
             <Box position="relative" display="inline-flex">
               <CircularProgress

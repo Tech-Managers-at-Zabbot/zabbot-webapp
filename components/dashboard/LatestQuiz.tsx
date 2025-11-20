@@ -165,7 +165,7 @@ const LatestQuiz = () => {
           title={"Latest Quiz"}
           subtitle={"Top Yorùbá courses learners love!"}
           maxWidth="100%"
-          showViewCourseButton={true}
+          showViewQuizBtn={true}
         >
           <section className="flex gap-[15px] min-w-max">
             {quizzesToMap.map(
