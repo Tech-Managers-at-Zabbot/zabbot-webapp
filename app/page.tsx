@@ -77,7 +77,11 @@ const Home = () => {
           // disableClose={saveQuizLoading || createQuizLoading}
         >
           <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
-            <SubscriptionSection />
+            <SubscriptionSection
+              setSubscriptionType={() => console.log("Set Subscription Type")}
+              onCloseModal={() => {}}
+              showTitle={false}
+            />
           </div>
         </Modal>
       </section>
