@@ -7,11 +7,12 @@ import { IoMdNotificationsOutline, IoMdClose } from "react-icons/io";
 import { LuWallet } from "react-icons/lu";
 import { MdOutlinePublishedWithChanges } from "react-icons/md";
 import { SlBell } from "react-icons/sl";
-
+import { useSearchParams } from "next/navigation";
 import UserProfileDetailsComponent from "@/components/userProfile/profile/UserProfileDetailsCard";
 import UserAnalytics from "@/components/userProfile/profile/UserAnalytics";
 import EditProfileCard from "@/components/userProfile/profile/EditProfileCard";
 import ChangePasswordCard from "@/components/userProfile/profile/ChangePasswordCard";
+import { useRouter } from "next/navigation";
 
 import Table from "@/components/general/Table";
 
@@ -31,7 +32,11 @@ interface MenuItemsData {
 }
 
 const UserSettings = () => {
-  const [menuKeyword, setMenukeyword] = useState("profile");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const defaultTab = searchParams.get("tab") || "profile";
+
+  const [menuKeyword, setMenukeyword] = useState(defaultTab);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
   const [subscriptionType, setSubscriptionType] = useState("monthly");
 
@@ -141,46 +146,49 @@ const UserSettings = () => {
         </section>
 
         {/* MENU TABS */}
-   <section className="relative">
-  <div className="flex overflow-x-auto no-scrollbar shadow-lg bg-white rounded-2xl gap-4 p-2">
-    {menuItemsArray.map((item, index) => (
-      <div
-        key={index}
-        className={`flex-shrink-0 hover:cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base
+        <section className="relative">
+          <div className="flex overflow-x-auto no-scrollbar shadow-lg bg-white rounded-2xl gap-4 p-2">
+            {menuItemsArray.map((item, index) => (
+              <div
+                key={index}
+                className={`flex-shrink-0 hover:cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base
           ${
             menuKeyword === item.keyword
               ? "text-white bg-[#1671D9]"
               : "text-[#1A1A1A] hover:border hover:border-[#1671D9]"
           }`}
-        onClick={() => setMenukeyword(item.keyword)}
-      >
-        {item.icon}
-        <span>{item.title}</span>
-      </div>
-    ))}
-  </div>
-  
-  {/* Scroll indicator - only visible on small screens */}
-  <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white/90 to-transparent pointer-events-none flex items-center justify-end pr-2 sm:hidden rounded-r-2xl">
-    <div className="animate-pulse">
-      <svg 
-        width="20" 
-        height="20" 
-        viewBox="0 0 20 20" 
-        fill="none" 
-        className="text-[#1671D9]"
-      >
-        <path 
-          d="M7 4L13 10L7 16" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  </div>
-</section>
+                onClick={() => {
+  setMenukeyword(item.keyword);
+  router.push(`/user-settings?tab=${item.keyword}`);
+}}
+              >
+                {item.icon}
+                <span>{item.title}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Scroll indicator - only visible on small screens */}
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white/90 to-transparent pointer-events-none flex items-center justify-end pr-2 sm:hidden rounded-r-2xl">
+            <div className="animate-pulse">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                className="text-[#1671D9]"
+              >
+                <path
+                  d="M7 4L13 10L7 16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </section>
 
         {/* PROFILE SECTION */}
         <section className="mt-4">

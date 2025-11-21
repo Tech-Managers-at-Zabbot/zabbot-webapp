@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import PaymentFailure from "@/components/paymentPage/PaymentFailureComponent";
 import PaymentPage from "@/components/paymentPage/PaymentOptions";
@@ -9,11 +9,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 export default function Page() {
   const params = useSearchParams();
   const planType = params.get("type");
-  const [failureModalOpen, setFailureModalOpen] = React.useState(true);
+  const [failureModalOpen, setFailureModalOpen] = useState(true);
   const router = useRouter();
 
   const handleCancel = () => {
-    router.push("/user-settings");
+    router.push("/user-settings?tab=payment");
     setFailureModalOpen(false);
   };
 

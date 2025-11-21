@@ -77,7 +77,7 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       icon: "/userDashboard/profile.svg",
       action: () => {
         setLoading(true);
-        router.push("/user-settings");
+        router.push("/user-settings?tab=profile");
       },
       isActive: true,
     },
@@ -86,7 +86,7 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       icon: "/userDashboard/notifications.svg",
       action: () => {
         setLoading(true);
-        router.push("/user-settings");
+        router.push("/user-settings?tab=notifications");
       },
       isActive: true,
     },
