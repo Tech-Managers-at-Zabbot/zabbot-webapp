@@ -42,7 +42,7 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
       costColor: "#EE9705",
       costFrequency: "year",
       amount: 69.99,
-      type: "annual",
+      type: "annual"
     },
     {
       title: "Monthly",
@@ -90,12 +90,11 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
 
   const handleSubscriptionSelect = (subscriptionType: any): any => {
     setLoading(true)
-    console.log("Clicked and Selected Subscription Type:", subscriptionType);
     if (setSubscriptionType && onCloseModal) {
       setSubscriptionType(subscriptionType);
       onCloseModal();
     }
-    router.push("/payment-page");
+    router.push(`/payment-page?type=${subscriptionType}`);
   };
 
   return (
