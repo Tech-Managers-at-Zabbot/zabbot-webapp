@@ -9,22 +9,30 @@ import {
   Lock,
   CheckCircle2,
 } from "lucide-react";
+import { useCreateCheckoutSession } from "@/services/payment/stripe/tanstack";
 
 interface PaymentPageProps {
   subscriptionType: string;
-  amount: number;
+  amount?: number;
   onBack?: () => void;
 }
 
 const PaymentPage: React.FC<PaymentPageProps> = ({
-  subscriptionType = "monthly",
-  amount = 9.99,
+  subscriptionType,
+  amount,
   onBack,
 }) => {
   const [selectedMethod, setSelectedMethod] = useState<
     "card" | "paypal" | null
   >(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+
+  const subscriptionAMount = {
+    lifetime: 159.99,
+    annual: 69.99,
+    monthly: 9.99,
+  };
+
+  amount = subscriptionAMount[subscriptionType as keyof typeof subscriptionAMount] || 9.99;
 
   // Get subscription details based on type
   const getSubscriptionDetails = () => {
@@ -42,20 +50,37 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
     setSelectedMethod(method);
   };
 
+  const { mutate, isPending } = useCreateCheckoutSession();
+
   const handleProceedToPayment = () => {
     if (!selectedMethod) return;
-
-    setIsProcessing(true);
 
     // Simulate API call - Replace with actual payment processor integration
     setTimeout(() => {
       if (selectedMethod === "card") {
         // Redirect to Stripe Checkout or your card payment page
-        window.location.href = `/payment/card?amount=${amount}&type=${subscriptionType}`;
+      mutate(
+        {  
+          subscriptionType  
+        }, {
+        onSuccess: (data) => {
+          if (data && data.data.sessionUrl) {
+            window.location.href = data.data.sessionUrl;
+          } else {
+            console.error("Checkout failed, please try again.");
+          }
+        },
+        onError: (error) => {
+          console.error("Error creating checkout session:", error);
+        }
+      }
+      );
+        // window.location.href = `/payment/card?amount=${amount}&type=${subscriptionType}`;
       } else if (selectedMethod === "paypal") {
         // Redirect to PayPal
         window.location.href = `/payment/paypal?amount=${amount}&type=${subscriptionType}`;
       }
+      
     }, 1000);
   };
 
@@ -244,14 +269,14 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
               whileHover={{ scale: selectedMethod ? 1.02 : 1 }}
               whileTap={{ scale: selectedMethod ? 0.98 : 1 }}
               onClick={handleProceedToPayment}
-              disabled={!selectedMethod || isProcessing}
+              disabled={!selectedMethod || isPending}
               className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${
-                selectedMethod && !isProcessing
+                selectedMethod && !isPending
                   ? "bg-[#0089C8] text-white hover:bg-[#006B9E] shadow-lg hover:shadow-xl"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }`}
             >
-              {isProcessing ? (
+              {isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                   <span>Processing...</span>
