@@ -11,6 +11,7 @@ import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { useLoading } from "@/contexts/LoadingProvider";
+import { MdOutlinePayments } from "react-icons/md";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
@@ -96,6 +97,16 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       action: () => setShowLogoutModal(true),
       isActive: true,
     },
+     {
+      name: "Payment",
+      icon: <MdOutlinePayments size={25} /> as unknown as string,
+       action: () => {
+        setLoading(true);
+        router.push("/user-settings?tab=payment");
+      },
+      isReactIcon: true,
+      isActive: true,
+    },
   ];
   return (
     <div className="flex p-0 z-20 relative">
@@ -124,12 +135,23 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
                   setIsBreadcrumbOpen(false);
                 }}
               >
-                <Image
-                  src={option.icon}
-                  alt={option.name}
-                  width={window.innerWidth < 640 ? 20 : 25}
-                  height={window.innerWidth < 640 ? 20 : 25}
-                />
+                {!option.isReactIcon && (
+                  <Image
+                    src={option.icon}
+                    alt={option.name}
+                    width={window.innerWidth < 640 ? 20 : 25}
+                    height={window.innerWidth < 640 ? 20 : 25}
+                  />
+                )}
+                {option.isReactIcon && (
+                  <span
+                    className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${
+                      !option.isActive ? "text-[#666666]" : "text-[#162B6E]"
+                    }`}
+                  >
+                    {option.icon}
+                  </span>
+                )}
                 <span
                   className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${
                     !option.isActive ? "text-[#666666]" : "text-[#162B6E]"
