@@ -23,8 +23,9 @@ import { BsPeople } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useGetUserCompletedCourses } from "@/services/generalApi/lessons/mutation";
 import { useLoading } from "@/contexts/LoadingProvider";
-import { useGetUserCount } from "@/services/generalApi/users/query";
-import LatestQuiz from "@/components/dashboard/LatestQuiz";
+import { useGetUserCount } from "@/services/generalApi/users/mutation";
+// import LatestQuiz from "@/components/dashboard/LatestQuiz";
+import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 
 const Dashboard = () => {
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
@@ -162,7 +163,6 @@ const Dashboard = () => {
         className="min-h-screen"
       >
         <main className="px-[5%]">
-
           <section className="">
             <div
               className="absolute bg-cover inset-0 top-0 h-40 bg-center"
@@ -216,7 +216,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-                            {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
+              {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
               <div className="w-full z-10">
                 <SearchBar
                   placeholder="Search sparks, journeys, flashcards, and more..."
@@ -300,7 +300,8 @@ const Dashboard = () => {
                 <PopularCourses />
               </div>
               <div className="w-full">
-                <LatestQuiz />
+                {/* <LatestQuiz /> */}
+                <PremiumFeaturesComponents />
               </div>
               <div>
                 <Advert />

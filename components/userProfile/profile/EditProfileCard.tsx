@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import Image from "next/image";
@@ -9,18 +11,61 @@ import { LuSave } from "react-icons/lu";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { Upload, Camera, Image as ImageIcon, X } from "lucide-react";
 import { Modal, useModal } from "../../general/Modal";
+import { useUser } from "@/contexts/UserContext";
+import { useAlert } from "next-alert";
+import { CustomSpinner } from "@/components/CustomSpinner";
+import ChangeProfileImageCard from "./ChangeProfileImageCard";
+import { CgProfile } from "react-icons/cg";
+import { useChangeUserNames, useGetSingleUserData } from "@/services/generalApi/users/mutation";
 
 const EditProfileCard = () => {
   const [isEditing, setIsEditing] = React.useState(false);
+  const { addAlert } = useAlert();
   const { isOpen, openModal, closeModal } = useModal();
+  // const { userProfile } = useUser();
+    const { data: userProfile, isLoading: userDataLoading } = useGetSingleUserData();
+
   const [formData, setFormData] = React.useState({
-    fullName: "",
-    email: "",
+    firstName: "",
+    lastName: "",
   });
+
+  const isSaveDisabled =
+    formData.firstName.trim() === "" && formData.lastName.trim() === "";
+
+  const { mutate: changeNames, isPending: isChangingNames } =
+    useChangeUserNames();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
+  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const dataToSend = Object.fromEntries(
+        Object.entries(formData).filter(([_, value]) => value.trim() !== "")
+      );
+
+      changeNames(dataToSend, {
+        onSuccess: () => {
+          setIsEditing(false);
+          addAlert("Success", "Change Successful", "success");
+          formData.firstName = "";
+          formData.lastName = "";
+        },
+        onError: (error: any) => {
+          addAlert(
+            "Error",
+            error?.response?.data?.message ||
+              "An error occurred, please try again",
+            "error"
+          );
+        },
+      });
+    } catch (error: any) {
+      console.log("error", error.message);
+    }
   };
 
   return (
@@ -56,6 +101,7 @@ const EditProfileCard = () => {
                 borderRadius="8px"
                 padding="10px 14px"
                 onClick={() => setIsEditing(true)}
+                disabled={isChangingNames}
               >
                 <div className="flex items-center justify-center gap-2 text-white">
                   <FaRegEdit size={18} />
@@ -69,6 +115,7 @@ const EditProfileCard = () => {
                   borderRadius="8px"
                   padding="10px 14px"
                   onClick={() => setIsEditing(false)}
+                  disabled={isChangingNames}
                 >
                   <div className="flex justify-center items-center gap-2 text-[#D42620]">
                     <MdOutlineCancel size={18} />
@@ -80,14 +127,18 @@ const EditProfileCard = () => {
                   background="#01875C"
                   borderRadius="8px"
                   padding="10px 14px"
-                  onClick={() => {
-                    console.log("Saving:", formData);
-                    setIsEditing(false);
-                  }}
+                  onClick={(event: any) => handleSubmit(event)}
+                  disabled={isSaveDisabled || isChangingNames}
                 >
-                  <div className="flex justify-center items-center gap-2 text-white">
-                    <LuSave size={18} />
-                    <span>Save Changes</span>
+                  <div>
+                    {isChangingNames ? (
+                      <div>{<CustomSpinner />}</div>
+                    ) : (
+                      <div className="flex justify-center items-center gap-2 text-white">
+                        <LuSave size={18} />
+                        <span>Save Changes</span>
+                      </div>
+                    )}
                   </div>
                 </InAppButton>
               </>
@@ -103,12 +154,18 @@ const EditProfileCard = () => {
 
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <div className="relative w-24 h-24 rounded-full overflow-hidden shadow-sm border">
-              <Image
-                src={"/creators/mr-iniobong.svg"}
-                alt="Profile"
-                fill
-                className="object-cover"
-              />
+              {userProfile?.data?.profilePicture ? (
+                <Image
+                  src={`${userProfile?.data?.profilePicture}`}
+                  alt="Profile Image"
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex justify-center items-center">
+                  <CgProfile size={"100%"} />
+                </div>
+              )}
             </div>
 
             {isEditing && (
@@ -117,10 +174,11 @@ const EditProfileCard = () => {
                 borderRadius="8px"
                 padding="10px 16px"
                 onClick={openModal}
+                disabled={isChangingNames}
               >
                 <div className="flex justify-center items-center gap-2 text-[#333]">
                   <MdOutlineFileUpload size={18} />
-                  <span>Change profile photo</span>
+                  <span>Change photo</span>
                 </div>
               </InAppButton>
             )}
@@ -130,13 +188,30 @@ const EditProfileCard = () => {
         {/* FULL NAME FIELD */}
         <section className="flex flex-col gap-2">
           <label className="text-[#364153] text-sm font-medium">
-            Full Name
+            First Name
           </label>
           <NormalInputField
-            id="fullName"
-            value={formData.fullName}
+            id="firstName"
+            value={formData.firstName}
             onChange={handleInputChange}
-            placeholder="Iniobong Ekpenyong"
+            placeholder={isEditing ? "" : userDataLoading ? "loading..." : `${userProfile?.data?.firstName}`}
+            type="text"
+            disabled={!isEditing}
+            backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
+            border={isEditing ? "1px solid #0089C8" : "1px solid #84D8FF"}
+            color={isEditing ? "#000000" : "#101828"}
+          />
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <label className="text-[#364153] text-sm font-medium">
+            Last Name
+          </label>
+          <NormalInputField
+            id="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            placeholder={isEditing ? "" : userDataLoading ? "loading..." : `${userProfile?.data?.lastName}`}
             type="text"
             disabled={!isEditing}
             backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
@@ -152,66 +227,21 @@ const EditProfileCard = () => {
           </label>
           <NormalInputField
             id="email"
-            value={formData.email}
+            value={""}
             onChange={handleInputChange}
-            placeholder="adewale.ogunleye@example.com"
+            placeholder={userDataLoading ? "loading..." : userProfile?.data?.email}
             type="email"
-            disabled={!isEditing}
-            backgroundColor={isEditing ? "#FFFFFF" : "#EDF9FF"}
-            border={isEditing ? "1px solid #0089C8" : "1px solid #84D8FF"}
-            color={isEditing ? "#000000" : "#101828"}
+            disabled={true}
+            backgroundColor={"#EDF9FF"}
+            border={"1px solid #84D8FF"}
+            color={"#101828"}
           />
         </section>
       </main>
 
-      {/* MODAL */}
-      <Modal isOpen={isOpen} onClose={closeModal} size="md">
-        <div className="p-6">
-          {/* Header */}
-          <h2 className="text-xl font-semibold mb-1">Change Profile Picture</h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Choose how you'd like to update your profile picture
-          </p>
-
-          {/* Upload Options */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <button className="flex justify-center items-center gap-2 bg-[#0089C8] text-white px-5 py-3 rounded-full text-sm hover:bg-[#007AB5] transition">
-              <Upload size={16} />
-              Upload from device
-            </button>
-
-            <button className="flex justify-center items-center gap-2 bg-white border border-gray-300 text-gray-700 px-5 py-3 rounded-full text-sm hover:bg-gray-50 transition">
-              <Camera size={16} />
-              Upload from camera
-            </button>
-          </div>
-
-          {/* Drag & Drop */}
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center bg-gray-50 hover:border-[#0089C8] transition cursor-pointer mb-6">
-            <div className="flex justify-center mb-3">
-              <div className="bg-gray-200 p-4 rounded-lg">
-                <ImageIcon size={28} className="text-gray-400" />
-              </div>
-            </div>
-
-            <p className="text-sm text-gray-700">
-              Click to upload or drag & drop
-            </p>
-            <p className="text-xs text-gray-500">PNG, JPG, GIF (max 5MB)</p>
-
-            <button className="mt-4 flex items-center justify-center gap-2 mx-auto bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-100 transition">
-              <Upload size={14} />
-              Select Image
-            </button>
-          </div>
-
-          {/* Remove Button */}
-          <button className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border text-red-600 border-red-300 hover:bg-red-50 transition text-sm">
-            <X size={16} />
-            Remove Current Avatar
-          </button>
-        </div>
-      </Modal>
+      <div>
+        <ChangeProfileImageCard isOpen={isOpen} onClose={closeModal} />
+      </div>
     </div>
   );
 };
