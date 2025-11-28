@@ -16,7 +16,7 @@ import PopularCourses from "@/components/dashboard/PopularCourses";
 import Advert from "@/components/dashboard/Advert";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard2";
-import { useGetUserCount } from "@/services/generalApi/users/query";
+import { useGetUserCount } from "@/services/generalApi/users/mutation";
 import { HiOutlineTrophy } from "react-icons/hi2";
 import { useUser } from "@/contexts/UserContext";
 import { useTheme } from "@/contexts/ThemeProvider";
@@ -195,10 +195,10 @@ const Dashboard = () => {
             </div>
 
             <div className="w-[50%]">
-              <SearchBar 
-              placeholder="Search sparks, journeys, flashcards, and more..."
-              icon={<IoSearchOutline />}
-              background={"#BBE1E1"}
+              <SearchBar
+                placeholder="Search sparks, journeys, flashcards, and more..."
+                icon={<IoSearchOutline />}
+                background={"#BBE1E1"}
               />
             </div>
 
@@ -229,13 +229,13 @@ const Dashboard = () => {
             </div>
           </section>
           {/* <section className="relative"> */}
-            {/* <div
+          {/* <div
               className="absolute min-h-20 inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${cloudsUrl})` }}
             ></div> */}
-            {/* <div className="flex relative z-10 mt-4 sm:mt-6 md:mt-10 justify-between items-start"> */}
-              {/* Parrot - Hidden on small screens, shown on medium+ */}
-              {/* <div className="hidden lg:block absolute top-[60px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 order-2">
+          {/* <div className="flex relative z-10 mt-4 sm:mt-6 md:mt-10 justify-between items-start"> */}
+          {/* Parrot - Hidden on small screens, shown on medium+ */}
+          {/* <div className="hidden lg:block absolute top-[60px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 order-2">
                 <div className="w-[113px] h-[137px]">
                   <Image
                     src="/userDashboard/parrot-head.svg"
@@ -250,69 +250,67 @@ const Dashboard = () => {
           {/* </section> */}
 
           <main className="flex gap-10">
-            <div className="bg-red-900">
-              Hi there
-            </div>
+            <div className="bg-red-900">Hi there</div>
 
             <div>
-                        {/* <section className="relative flex lg:hidden"> */}
-          <section className="relative flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
-            {/* Parrot - Hidden on large screens, shown on small+ */}
-            <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
-              <div className="w-[80px] h-[80px]">
-                <Image
-                  src="/userDashboard/parrot-head.svg"
-                  alt="Centralized rounded parrot mascot"
-                  fill
-                  priority
-                  className="object-contain"
-                />
-              </div>
-            </div>
-          </section>
-          {/* </section> */}
+              {/* <section className="relative flex lg:hidden"> */}
+              <section className="relative flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
+                {/* Parrot - Hidden on large screens, shown on small+ */}
+                <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
+                  <div className="w-[80px] h-[80px]">
+                    <Image
+                      src="/userDashboard/parrot-head.svg"
+                      alt="Centralized rounded parrot mascot"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              </section>
+              {/* </section> */}
 
-          <section className="mt-20">
-            <AchievementsCard />
-          </section>
+              <section className="mt-20">
+                <AchievementsCard />
+              </section>
 
-           <section
-            className={`transition-all duration-300 ease-in-out ${
-              goPremium
-                ? "opacity-100 max-h-96 mb-6"
-                : "opacity-0 max-h-0 mb-0 overflow-hidden"
-            }`}
-          >
-            <GoPremiumCard onClose={handleClosePremiumTag} />
-          </section> 
-            {/* 
+              <section
+                className={`transition-all duration-300 ease-in-out ${
+                  goPremium
+                    ? "opacity-100 max-h-96 mb-6"
+                    : "opacity-0 max-h-0 mb-0 overflow-hidden"
+                }`}
+              >
+                <GoPremiumCard onClose={handleClosePremiumTag} />
+              </section>
+              {/* 
           <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
             {metricsData.map((metric, index) => (
               <DashboardMetricCard key={index} data={metric} />
             ))}
           </section> */}
 
-          <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
-            {dashboardMetricData?.map((metric, index) => (
-              <DashboardMetricCard2 key={index} data={metric} />
-            ))}
-          </section>
+              <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
+                {dashboardMetricData?.map((metric, index) => (
+                  <DashboardMetricCard2 key={index} data={metric} />
+                ))}
+              </section>
 
-          <section className="mt-10">
-            <PremiumFeaturesComponents />
-          </section>
+              <section className="mt-10">
+                <PremiumFeaturesComponents />
+              </section>
 
-          <section className="mt-20 z-10">
-            <ProgressSection />
-          </section>
+              <section className="mt-20 z-10">
+                <ProgressSection />
+              </section>
 
-          <section className="mt-6">
-            <PopularCourses />
-          </section>
+              <section className="mt-6">
+                <PopularCourses />
+              </section>
 
-          <section className="mt-6">
-            <Advert />
-          </section>
+              <section className="mt-6">
+                <Advert />
+              </section>
             </div>
           </main>
         </div>

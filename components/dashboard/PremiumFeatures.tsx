@@ -42,7 +42,7 @@ const { getPageText } =
           paddingLeft="24px"
           paddingRight="24px"
           borderRadius="35.13px"
-          width=""
+          width="100px"
           onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
@@ -102,7 +102,7 @@ const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
           paddingLeft="16px"
           paddingRight="16px"
           borderRadius="35.13px"
-          width=""
+           width="100px"
           onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">
@@ -160,7 +160,7 @@ const PremiumFeaturesOwe = ({ handleClick }: { handleClick: () => void }) => {
           paddingLeft="16px"
           paddingRight="16px"
           borderRadius="35.13px"
-          width=""
+           width="100px"
           onClick={handleClick}
         >
           <div className="text-white font-[700] text-[12px] sm:text-[14px] leading-[100%]">

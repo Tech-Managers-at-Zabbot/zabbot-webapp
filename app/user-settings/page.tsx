@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import Head from "next/head";
 import { GoPerson } from "react-icons/go";
 import { IoMdNotificationsOutline, IoMdClose } from "react-icons/io";
@@ -23,7 +24,11 @@ import SubscriptionMonthly from "@/components/userProfile/paymentHistory/Monthly
 import InAppButton from "@/components/InAppButton";
 import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
 import { Modal } from "@/components/general/Modal";
-import NotificationsSettingsCard from "@/components/userProfile/notifications/NotificationsSettingsCard";
+// import NotificationsSettingsCard from "@/components/userProfile/notifications/NotificationsSettingsCard";
+import NewNotificationsSettingsCard from "@/components/userProfile/notifications/NewNotificationsSettingsCard";
+// import { useUser } from "@/contexts/UserContext";
+import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
+import { useGetUserPaymentHistory } from "@/services/payment/transactions/tanstack";
 
 interface MenuItemsData {
   title: string;
@@ -35,10 +40,19 @@ const UserSettings = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const defaultTab = searchParams.get("tab") || "profile";
+  // const { userDetails } = useUser();
+
+  const {
+    data: userProfile,
+    // isLoading: userDataLoading
+  } = useGetSingleUserData();
+  const { data: userPaymentHistory, isLoading: paymentHistoryLoading } =
+    useGetUserPaymentHistory();
 
   const [menuKeyword, setMenukeyword] = useState(defaultTab);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
-  const [subscriptionType, setSubscriptionType] = useState("monthly");
+  const [paymentHistory, setPaymentHistory] = useState([]);
+  const [currentPlan, setCurrentPlan] = useState("");
 
   const openSubscriptionModal = () => setSubScriptionModalOpen(true);
 
@@ -74,38 +88,27 @@ const UserSettings = () => {
     },
   ];
 
-  const myData = [
-    {
-      date: "Nov 1, 2025",
-      planType: "Annual Plan",
-      amount: "US$69.99",
-      status: "Paid",
-    },
-    {
-      date: "Nov 1, 2024",
-      planType: "Annual Plan",
-      amount: "US$69.99",
-      status: "Paid",
-    },
-    {
-      date: "Oct 1, 2024",
-      planType: "Annual Plan",
-      amount: "US$69.99",
-      status: "Paid",
-    },
-    {
-      date: "Sep 1, 2024",
-      planType: "Annual Plan",
-      amount: "US$69.99",
-      status: "Paid",
-    },
-    {
-      date: "Aug 1, 2024",
-      planType: "Annual Plan",
-      amount: "US$69.99",
-      status: "Paid",
-    },
-  ];
+  useEffect(() => {
+    if (userPaymentHistory?.data?.allUserTransactions) {
+      const formatted = userPaymentHistory?.data?.allUserTransactions.map(
+        (item: any) => ({
+          date: new Date(item.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+          planType: item.planType,
+          amount: `US$${item.amount}`,
+          status: item.status,
+        })
+      );
+
+      setPaymentHistory(formatted);
+    }
+    if (userPaymentHistory?.data?.userCurrentPlan) {
+      setCurrentPlan(userPaymentHistory?.data?.userCurrentPlan);
+    }
+  }, [userPaymentHistory]);
 
   const menuItemsArray: MenuItemsData[] = [
     { title: "My Profile", icon: <GoPerson size={20} />, keyword: "profile" },
@@ -158,9 +161,9 @@ const UserSettings = () => {
               : "text-[#1A1A1A] hover:border hover:border-[#1671D9]"
           }`}
                 onClick={() => {
-  setMenukeyword(item.keyword);
-  router.push(`/user-settings?tab=${item.keyword}`);
-}}
+                  setMenukeyword(item.keyword);
+                  router.push(`/user-settings?tab=${item.keyword}`);
+                }}
               >
                 {item.icon}
                 <span>{item.title}</span>
@@ -204,29 +207,19 @@ const UserSettings = () => {
           {/* PAYMENT SECTION */}
           {menuKeyword === "payment" && (
             <section className="flex flex-col gap-12 pt-6 pb-20">
-              {/* Subscription Cycle */}
               <div className="w-full mx-auto">
-                {subscriptionType === "monthly" && (
-                  <div
-                    className="hover:cursor-pointer"
-                    onClick={() => setSubscriptionType("annual")}
-                  >
+                {currentPlan === "monthly" && (
+                  <div>
                     <SubscriptionMonthly />
                   </div>
                 )}
-                {subscriptionType === "annual" && (
-                  <div
-                    className="hover:cursor-pointer"
-                    onClick={() => setSubscriptionType("lifetime")}
-                  >
+                {currentPlan === "annual" && (
+                  <div>
                     <SubscriptionAnnual />
                   </div>
                 )}
-                {subscriptionType === "lifetime" && (
-                  <div
-                    className="hover:cursor-pointer"
-                    onClick={() => setSubscriptionType("monthly")}
-                  >
+                {currentPlan === "lifetime" && (
+                  <div>
                     <SubscriptionLifetime />
                   </div>
                 )}
@@ -278,9 +271,15 @@ const UserSettings = () => {
                   </p>
                 </div>
 
-                <div className="w-full overflow-x-auto">
-                  <Table columns={columns} data={myData} />
-                </div>
+                {paymentHistoryLoading ? (
+                  <div className="text-[#101828]">
+                    Loading Payment History...
+                  </div>
+                ) : (
+                  <div className="w-full overflow-x-auto">
+                    <Table columns={columns} data={paymentHistory} />
+                  </div>
+                )}
               </div>
             </section>
           )}
@@ -288,8 +287,6 @@ const UserSettings = () => {
           {/* NOTIFICATIONS SECTION */}
           {menuKeyword === "notifications" && (
             <section className="flex flex-col gap-6">
-              <NotificationsSettingsCard />
-
               <div className="px-4 py-6 bg-gradient-to-r from-[#FFFBEB] to-[#FFF7ED] border border-[#FEE685] rounded-2xl flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
                 <div className="rounded-xl bg-[#FE9A00] p-2">
                   <SlBell size={20} />
@@ -300,11 +297,16 @@ const UserSettings = () => {
                     Email Notifications
                   </p>
                   <p className="text-sm text-[#4A5565]">
-                    Notifications will be sent to adewale.ogunleye@example.com.
-                    You can update your email in the Profile section.
+                    Notifications will be sent to{" "}
+                    <span className="text-[#FE9A00] font-[700]">
+                      {userProfile?.email}
+                    </span>
+                    . You can update your email by sending an email to
+                    info@zabbot.com.
                   </p>
                 </div>
               </div>
+              <NewNotificationsSettingsCard />
             </section>
           )}
         </section>
@@ -319,7 +321,7 @@ const UserSettings = () => {
       >
         <div className="p-6 w-full font-[Lexend]">
           <SubscriptionSection
-            setSubscriptionType={setSubscriptionType}
+            setSubscriptionType={setCurrentPlan}
             onCloseModal={() => setSubScriptionModalOpen(false)}
           />
         </div>

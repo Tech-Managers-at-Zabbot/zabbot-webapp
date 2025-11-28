@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   disableClose= false,
   // closeOnOverlayClick = true,
-  closeOnEscape = true,
+  // closeOnEscape = true,
   showCloseButton = true,
   size = 'md',
   zIndex = 100,
@@ -48,72 +48,94 @@ const Modal: React.FC<ModalProps> = ({
   closeButtonClassName = '',
   preventBodyScroll = true
 }) => {
-  // Handle ESC key press
-  const handleEscapeKey = useCallback((event: KeyboardEvent) => {
-    if (event.key === 'Escape' && closeOnEscape && isOpen) {
-      onClose();
-    }
-  }, [closeOnEscape, isOpen, onClose]);
-
-  // Handle overlay click
-  // const handleOverlayClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-  //   if (event.target === event.currentTarget && closeOnOverlayClick) {
+  // // Handle ESC key press
+  // const handleEscapeKey = useCallback((event: KeyboardEvent) => {
+  //   if (event.key === 'Escape' && closeOnEscape && isOpen) {
   //     onClose();
   //   }
-  // }, [closeOnOverlayClick, onClose]);
+  // }, [closeOnEscape, isOpen, onClose]);
 
-  // Body scroll management and ESC key listener
-  useEffect(() => {
-    if (isOpen) {
-      // Prevent body scroll
-      if (preventBodyScroll) {
-        document.body.style.overflow = 'hidden';
-              document.body.style.touchAction = 'none';
+  // // Handle overlay click
+  // // const handleOverlayClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+  // //   if (event.target === event.currentTarget && closeOnOverlayClick) {
+  // //     onClose();
+  // //   }
+  // // }, [closeOnOverlayClick, onClose]);
+
+  // // Body scroll management and ESC key listener
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     // Prevent body scroll
+  //     if (preventBodyScroll) {
+  //       document.body.style.overflow = 'hidden';
+  //             document.body.style.touchAction = 'none';
+  //     document.body.style.position = 'fixed';
+  //     document.body.style.width = '100%';
+  //     }
+      
+  //     // Add ESC key listener
+  //     if (closeOnEscape) {
+  //       document.addEventListener('keydown', handleEscapeKey);
+  //     }
+      
+  //     // Focus trap - focus the modal container
+  //     const modalElement = document.querySelector('[data-modal-container]') as HTMLElement;
+  //     if (modalElement) {
+  //       modalElement.focus();
+  //     }
+  //   }
+
+  //   return () => {
+  //     // Restore body scroll
+  //     if (preventBodyScroll) {
+  //       document.body.style.overflow = 'unset';
+  //       document.body.style.touchAction = ''; // Add this line
+  //     document.body.style.position = ''; // Add this line
+  //     }
+      
+  //     // Remove ESC key listener
+  //     if (closeOnEscape) {
+  //       document.removeEventListener('keydown', handleEscapeKey);
+  //     }
+  //   };
+  // }, [isOpen, closeOnEscape, handleEscapeKey, preventBodyScroll]);
+
+useEffect(() => {
+  let scrollY = 0;
+
+  if (isOpen) {
+    if (preventBodyScroll) {
+      scrollY = window.scrollY;
+      document.body.dataset.scrollY = String(scrollY); // store temporarily
+
       document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
-      }
-      
-      // Add ESC key listener
-      if (closeOnEscape) {
-        document.addEventListener('keydown', handleEscapeKey);
-      }
-      
-      // Focus trap - focus the modal container
-      const modalElement = document.querySelector('[data-modal-container]') as HTMLElement;
-      if (modalElement) {
-        modalElement.focus();
-      }
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     }
+  }
 
-    return () => {
-      // Restore body scroll
-      if (preventBodyScroll) {
-        document.body.style.overflow = 'unset';
-        document.body.style.touchAction = ''; // Add this line
-      document.body.style.position = ''; // Add this line
-      }
-      
-      // Remove ESC key listener
-      if (closeOnEscape) {
-        document.removeEventListener('keydown', handleEscapeKey);
-      }
-    };
-  }, [isOpen, closeOnEscape, handleEscapeKey, preventBodyScroll]);
+  return () => {
+    if (preventBodyScroll) {
+      const storedY = document.body.dataset.scrollY;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+      window.scrollTo(0, storedY ? Number(storedY) : 0);
+      delete document.body.dataset.scrollY;
+    }
+  };
+}, [isOpen, preventBodyScroll]);
 
-  // Size classes mapping
-  // const sizeClasses = {
-  //   sm: 'max-w-md',
-  //   md: 'max-w-lg',
-  //   lg: 'max-w-2xl',
-  //   xl: 'max-w-4xl',
-  //   full: 'max-w-[95vw] max-h-[95vh]'
-  // };
 
 const sizeClasses = {
   sm: 'max-w-md',
   md: 'max-w-lg',
-  lg: 'max-w-3xl',  // Changed from max-w-2xl to max-w-3xl
-  xl: 'max-w-5xl',  // Changed from max-w-4xl to max-w-5xl
+  lg: 'max-w-3xl',
+  xl: 'max-w-5xl',
   full: 'max-w-[95vw] max-h-[95vh]'
 };
 

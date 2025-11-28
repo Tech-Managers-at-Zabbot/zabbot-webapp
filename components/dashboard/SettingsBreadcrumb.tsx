@@ -65,15 +65,6 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
   const dropdownOptions = [
     {
-      name: getPageText("settings"),
-      icon: "/userDashboard/settings.svg",
-      action: () => {
-        setLoading(true);
-        router.push("/user-settings");
-      },
-      isActive: true,
-    },
-    {
       name: getPageText("profile"),
       icon: "/userDashboard/profile.svg",
       action: () => {
@@ -82,7 +73,17 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       },
       isActive: true,
     },
-    {
+         {
+      name: "Payment",
+      icon: <MdOutlinePayments size={25} color="#4d4f56"/> as unknown as string,
+       action: () => {
+        setLoading(true);
+        router.push("/user-settings?tab=payment");
+      },
+      isReactIcon: true,
+      isActive: true,
+    },
+        {
       name: getPageText("notifications"),
       icon: "/userDashboard/notifications.svg",
       action: () => {
@@ -92,21 +93,22 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       isActive: true,
     },
     {
+      name: getPageText("settings"),
+      icon: "/userDashboard/settings.svg",
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      isActive: true,
+    },
+
+    {
       name: getPageText("logout"),
       icon: "/userDashboard/logout.svg",
       action: () => setShowLogoutModal(true),
       isActive: true,
     },
-     {
-      name: "Payment",
-      icon: <MdOutlinePayments size={25} /> as unknown as string,
-       action: () => {
-        setLoading(true);
-        router.push("/user-settings?tab=payment");
-      },
-      isReactIcon: true,
-      isActive: true,
-    },
+
   ];
   return (
     <div className="flex p-0 z-20 relative">
