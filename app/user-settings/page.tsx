@@ -29,6 +29,7 @@ import NewNotificationsSettingsCard from "@/components/userProfile/notifications
 // import { useUser } from "@/contexts/UserContext";
 import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
 import { useGetUserPaymentHistory } from "@/services/payment/transactions/tanstack";
+import NoSubscription from "@/components/userProfile/paymentHistory/NoSubscription";
 
 interface MenuItemsData {
   title: string;
@@ -52,7 +53,7 @@ const UserSettings = () => {
   const [menuKeyword, setMenukeyword] = useState(defaultTab);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState([]);
-  const [currentPlan, setCurrentPlan] = useState("");
+  const [currentPlan, setCurrentPlan] = useState("no-subscription");
 
   const openSubscriptionModal = () => setSubScriptionModalOpen(true);
 
@@ -208,6 +209,11 @@ const UserSettings = () => {
           {menuKeyword === "payment" && (
             <section className="flex flex-col gap-12 pt-6 pb-20">
               <div className="w-full mx-auto">
+                {currentPlan === "no-subscription" && (
+                  <div>
+                    <NoSubscription />
+                  </div>
+                )}
                 {currentPlan === "monthly" && (
                   <div>
                     <SubscriptionMonthly />
@@ -236,28 +242,36 @@ const UserSettings = () => {
                     width="100%"
                     onClick={openSubscriptionModal}
                   >
-                    <div className="flex items-center justify-center gap-2">
-                      <MdOutlinePublishedWithChanges size={20} />
-                      <span>Change Plan</span>
+                    <div>
+                      {currentPlan !== "no-subscription" ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <MdOutlinePublishedWithChanges size={20} />
+                          <span>Change Plan</span>
+                        </div>
+                      ) : (
+                        <div>Subscribe</div>
+                      )}
                     </div>
                   </InAppButton>
                 </div>
 
-                <div className="max-w-[320px] w-full">
-                  <InAppButton
-                    background="#FFF"
-                    border="1px solid #D42620"
-                    borderRadius="8px"
-                    padding="12px 24px"
-                    width="100%"
-                    onClick={() => {}}
-                  >
-                    <div className="flex items-center justify-center gap-2 text-[#D42620]">
-                      <IoMdClose size={20} />
-                      <span>Cancel Subscription</span>
-                    </div>
-                  </InAppButton>
-                </div>
+                {currentPlan !== "no-subscription" && (
+                  <div className="max-w-[320px] w-full">
+                    <InAppButton
+                      background="#FFF"
+                      border="1px solid #D42620"
+                      borderRadius="8px"
+                      padding="12px 24px"
+                      width="100%"
+                      onClick={() => {}}
+                    >
+                      <div className="flex items-center justify-center gap-2 text-[#D42620]">
+                        <IoMdClose size={20} />
+                        <span>Cancel Subscription</span>
+                      </div>
+                    </InAppButton>
+                  </div>
+                )}
               </div>
 
               {/* Payment Table */}
@@ -275,6 +289,9 @@ const UserSettings = () => {
                   <div className="text-[#101828]">
                     Loading Payment History...
                   </div>
+                ) : !userPaymentHistory?.data?.allUserTransactions ||
+                  userPaymentHistory?.data?.allUserTransactions.length === 0 ? (
+                  <div className="text-[#101828]">No payment History Yet</div>
                 ) : (
                   <div className="w-full overflow-x-auto">
                     <Table columns={columns} data={paymentHistory} />
@@ -319,7 +336,7 @@ const UserSettings = () => {
         size="full"
         containerClassName="w-full"
       >
-        <div className="p-6 w-full font-[Lexend]">
+        <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
           <SubscriptionSection
             setSubscriptionType={setCurrentPlan}
             onCloseModal={() => setSubScriptionModalOpen(false)}
