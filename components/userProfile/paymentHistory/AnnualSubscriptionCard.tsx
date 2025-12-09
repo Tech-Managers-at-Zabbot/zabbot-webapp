@@ -39,11 +39,11 @@ const SubscriptionAnnual: React.FC<SubscriptionAnnualProps> = ({
         </div>
 
         {/* Right Section */}
-        <div className="mt-2 sm:mt-0 flex-shrink-0">
+        {/* <div className="mt-2 sm:mt-0 flex-shrink-0">
           <div className="bg-[#F3A218] text-center leading-snug sm:leading-[143%] text-white text-xs sm:text-sm md:text-[22px] font-normal px-2 sm:px-3 md:px-4 py-1 rounded-xl inline-block">
             Save 35%
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -33,11 +33,11 @@ const SubscriptionMonthly: React.FC<SubscriptionMonthlyProps> = ({
         </div>
 
         {/* Right section */}
-        <div>
+        {/* <div>
           <div className="bg-[#0F973D] text-center leading-snug sm:leading-[143%] text-white text-sm sm:text-[22px] font-normal px-3 sm:px-4 py-1 rounded-xl inline-block mt-2 sm:mt-0">
             Save 35%
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

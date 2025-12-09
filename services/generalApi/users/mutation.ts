@@ -5,7 +5,9 @@ import {
   changeUserProfileImage,
   getAllUserCount,
   getSingleUser,
+  getUserNotificationSettings,
   updateUserNames,
+  updateUserNotificationSettings,
 } from "./api";
 
 export function useGetUserCount() {
@@ -67,6 +69,31 @@ export function useChangeUserProfileImage() {
     },
     onError: (error: any) => {
       console.error("Error uploading profile picture:", error);
+    },
+  });
+}
+
+export function useGetUserNotificationSettings () {
+return useQuery({
+    queryKey: ["getUserNotifcationSettings"],
+    queryFn: getUserNotificationSettings,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    //   onError: (error) => {
+    //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
+    //   },
+  });
+}
+
+export function useUpdateUserNotification() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateUserNotificationSettings,
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["getUserNotifcationSettings"] });
+    },
+    onError: (error: any) => {
+      console.error("Error changing notification settings:", error);
     },
   });
 }

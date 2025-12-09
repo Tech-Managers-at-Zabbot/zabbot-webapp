@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from "../../axiosInstance";
 
 export const getAllUserCount = async () => {
@@ -38,10 +39,10 @@ export const updateUserNames = async (formData: {
   return response.data;
 };
 
-export const getSingleUser = async() => {
-      const response = await axiosInstance.get("/users/auth/single-user");
+export const getSingleUser = async () => {
+  const response = await axiosInstance.get("/users/auth/single-user");
   return response.data;
-}
+};
 
 export const changeUserProfileImage = async (formData: FormData) => {
   return axiosInstance.post("/users/users/change-profile-picture", formData, {
@@ -49,6 +50,28 @@ export const changeUserProfileImage = async (formData: FormData) => {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+export const getUserNotificationSettings = async () => {
+  const response = await axiosInstance.get(
+    "/users/user-notifications/get-user-notification"
+  );
+  return response.data;
+};
+
+export const updateUserNotificationSettings = async (
+  frequency: Record<string, any>
+) => {
+  const response = await axiosInstance.put(
+    "/users/user-notifications/change-user-notification",
+    frequency,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
 };
 
 // export const completeUserDailyGoal = async (
