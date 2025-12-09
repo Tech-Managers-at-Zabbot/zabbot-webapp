@@ -1,4 +1,6 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+import React, { useEffect, useState } from "react";
 import { SlBell } from "react-icons/sl";
 import { IoToggleOutline } from "react-icons/io5";
 import { LiaToggleOffSolid } from "react-icons/lia";
@@ -7,51 +9,128 @@ import { RiSaveLine } from "react-icons/ri";
 import { LuSun } from "react-icons/lu";
 import { TbCalendarWeek, TbCalendarRepeat } from "react-icons/tb";
 import { IoNotificationsOffOutline } from "react-icons/io5";
+import {
+  useGetUserNotificationSettings,
+  useUpdateUserNotification,
+} from "@/services/generalApi/users/mutation";
+import { useAlert } from "next-alert";
+import NewNotificationsSettingsCardSkeleton from "@/components/loadingComponent/NotificationCardLoader";
 
 const NewNotificationsSettingsCard = () => {
-  const [selectedSetting, setSelectedSetting] = React.useState<number | null>(1);
+  const [selectedSetting, setSelectedSetting] = useState<number | null | any>(
+    null
+  );
+  const { addAlert } = useAlert();
+  const [userNotificationsSettings, setUserNotificationSettings] = useState<
+    number | null
+  >(null);
+
+  const { data: notification, isPending } = useGetUserNotificationSettings();
+
+  const {
+    mutate: changeUserNotificationSettings,
+    isPending: userNotificationChangeLoading,
+  } = useUpdateUserNotification();
+
+  useEffect(() => {
+    if (notification?.data?.notification?.frequency) {
+      const freq = notification.data.notification.frequency;
+
+      const freqToIdMap: Record<string, number> = {
+        daily: 1,
+        weekly: 2,
+        biweekly: 3,
+        never: 4,
+      };
+
+      setSelectedSetting(freqToIdMap[freq] ?? null);
+    }
+  }, [notification?.data]);
+
+  useEffect(() => {
+    if (notification?.data?.notification?.frequency) {
+      const freq = notification.data.notification.frequency;
+      const freqToIdMap: Record<string, number> = {
+        daily: 1,
+        weekly: 2,
+        biweekly: 3,
+        never: 4,
+      };
+      setUserNotificationSettings(freqToIdMap[freq] ?? null);
+    }
+  }, [notification?.data]);
+
+  const handleSubmit = async () => {
+    const freqToIdMap: Record<number, string> = {
+      1: "daily",
+      2: "weekly",
+      3: "biweekly",
+      4: "never",
+    };
+
+    const newFrequency = freqToIdMap[selectedSetting];
+
+    changeUserNotificationSettings(
+      {
+      frequency: newFrequency,
+      },
+      {
+        onSuccess: () => {
+          addAlert("Success", "Notification Updated successfully", "success");
+        },
+        onError: (error: any) => {
+          addAlert(
+            "Error",
+            error?.response?.data?.message ||
+              "An error occurred, please try again",
+            "error"
+          );
+        },
+      }
+    );
+  };
 
   const toggleSetting = (id: number) => {
     if (selectedSetting === id) {
-      setSelectedSetting(null);
+      setSelectedSetting(2);
     } else {
       setSelectedSetting(id);
     }
   };
 
+  const settingsItemsArray = [
+    {
+      id: 1,
+      label: "Daily Reminders",
+      subLabel:
+        "Get reminders every day to stay consistent with your Yoruba learning.",
+      icon: <LuSun size={20} color="#155DFC" />,
+      iconBackground: "#EFF6FF",
+    },
+    {
+      id: 2,
+      label: "Weekly Reminders",
+      subLabel: "Receive updates once every week.",
+      icon: <TbCalendarWeek size={20} color="#9810FA" />,
+      iconBackground: "#FAF5FF",
+    },
+    {
+      id: 3,
+      label: "Bi-Weekly Reminders",
+      subLabel: "Receive updates every two weeks.",
+      icon: <TbCalendarRepeat size={20} color="#009966" />,
+      iconBackground: "#ECFDF5",
+    },
+    {
+      id: 4,
+      label: "Never",
+      subLabel: "Turn off all reminders and notifications",
+      icon: <IoNotificationsOffOutline size={20} color="#E17100" />,
+      iconBackground: "#FFFBEB",
+    },
+  ];
 
-const settingsItemsArray = [
-  {
-    id: 1,
-    label: "Daily Reminders",
-    subLabel: "Manage how you receive updates from Zabbot",
-    icon: <LuSun size={20} color="#155DFC" />,
-    iconBackground: "#EFF6FF",
-  },
-  {
-    id: 2,
-    label: "Weekly Reminders",
-    subLabel: "Receive updates once every week.",
-    icon: <TbCalendarWeek size={20} color="#9810FA" />,
-    iconBackground: "#FAF5FF",
-  },
-  {
-    id: 3,
-    label: "Bi-Weekly Reminders",
-    subLabel: "Receive updates every two weeks.",
-    icon: <TbCalendarRepeat size={20} color="#009966" />,
-    iconBackground: "#ECFDF5",
-  },
-  {
-    id: 4,
-    label: "Never",
-    subLabel: "Turn off all reminders and notifications",
-    icon: <IoNotificationsOffOutline size={20} color="#E17100" />,
-    iconBackground: "#FFFBEB",
-  },
-];
-
-
+  if (isPending) return <NewNotificationsSettingsCardSkeleton />;
 
   return (
     <div
@@ -74,6 +153,7 @@ const settingsItemsArray = [
       </div>
 
       {/* Settings Items */}
+      <div>
       <div className="flex flex-col gap-4 sm:gap-8 mb-6">
         {settingsItemsArray.map((item) => (
           <div
@@ -112,12 +192,24 @@ const settingsItemsArray = [
 
       {/* Save Button */}
       <div className="w-full mt-4">
-        <InAppButton background="#1671D9" width="100%" borderRadius="8px">
+        <InAppButton
+          background="#1671D9"
+          width="100%"
+          borderRadius="8px"
+          disabled={
+            isPending ||
+            userNotificationChangeLoading ||
+            selectedSetting === userNotificationsSettings ||
+            selectedSetting === null
+          }
+          onClick={handleSubmit}
+        >
           <div className="flex items-center justify-center gap-4 sm:gap-6 w-full">
             <RiSaveLine size={24} />
             <div>Save Changes</div>
           </div>
         </InAppButton>
+      </div>
       </div>
     </div>
   );
