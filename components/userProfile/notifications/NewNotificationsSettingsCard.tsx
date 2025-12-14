@@ -103,7 +103,7 @@ const NewNotificationsSettingsCard = () => {
       id: 1,
       label: "Daily Reminders",
       subLabel:
-        "Get reminders every day to stay consistent with your Yoruba learning.",
+        "Get reminders every day to stay consistent with your Yorùbá learning.",
       icon: <LuSun size={20} color="#155DFC" />,
       iconBackground: "#EFF6FF",
     },
