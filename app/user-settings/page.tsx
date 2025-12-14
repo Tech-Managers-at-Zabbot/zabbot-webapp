@@ -315,11 +315,13 @@ const UserSettings = () => {
                   </p>
                   <p className="text-sm text-[#4A5565]">
                     Notifications will be sent to{" "}
+                    {userProfile?.data.email ?
                     <span className="text-[#FE9A00] font-[700]">
-                      {userProfile?.email}
+                      {userProfile?.data.email}
                     </span>
+                    : "your email"}
                     . You can update your email by sending an email to
-                    info@zabbot.com.
+                    hello@zabbot.com.
                   </p>
                 </div>
               </div>
