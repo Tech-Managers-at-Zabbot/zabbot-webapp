@@ -15,6 +15,7 @@ import {
   getUserCourse,
   updateUserCourse,
   getUserCompletedCourses,
+  updateCourseImage,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -256,5 +257,28 @@ export function useGetUserCompletedCourses(
     refetchOnMount: true,
     enabled: !!langugageId,
     refetchOnWindowFocus: false,
+  });
+}
+
+
+export function useChangeCourseImage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      courseId,
+      data,
+      // languageId,
+}: {
+  courseId: string;
+  data: FormData;
+  languageId:string;
+}) => updateCourseImage(courseId, data),
+
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["getAllCourses", variables?.languageId] });
+    },
+    onError: (error: any) => {
+      console.error("Error uploading course image:", error);
+    },
   });
 }

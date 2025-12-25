@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Search, Play, Pause, Check } from 'lucide-react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+import React, { useEffect, useState } from "react";
+import { Search, Play, Pause, Check } from "lucide-react";
+import { useGetAllRecordings } from "@/services/generalApi/ededun/tanstack";
 
 interface EdedunPhrase {
   id: string;
@@ -15,88 +18,41 @@ interface EdedunModalProps {
   onSelect: (phrases: EdedunPhrase[]) => void;
 }
 
-// Mock data for Ededun phrases
-const mockEdedunPhrases: EdedunPhrase[] = [
-  {
-    id: '1',
-    yorubaText: 'Báwo ni?',
-    englishTranslation: 'How are you?',
-    audioUrl: '/audio/bawo-ni.mp3',
-    category: 'Greetings'
-  },
-  {
-    id: '2',
-    yorubaText: 'Ẹ kú àárọ̀',
-    englishTranslation: 'Good morning',
-    audioUrl: '/audio/eku-aaro.mp3',
-    category: 'Greetings'
-  },
-  {
-    id: '3',
-    yorubaText: 'Mo fẹ́ jeun',
-    englishTranslation: 'I want to eat',
-    audioUrl: '/audio/mo-fe-jeun.mp3',
-    category: 'Food'
-  },
-  {
-    id: '4',
-    yorubaText: 'Orúkọ mi ni...',
-    englishTranslation: 'My name is...',
-    audioUrl: '/audio/oruko-mi-ni.mp3',
-    category: 'Introduction'
-  },
-  {
-    id: '5',
-    yorubaText: 'Ṣé o gbọ́ mi?',
-    englishTranslation: 'Do you hear me?',
-    audioUrl: '/audio/se-o-gbo-mi.mp3',
-    category: 'Communication'
-  },
-  {
-    id: '6',
-    yorubaText: 'Àárẹ̀',
-    englishTranslation: 'Thank you',
-    audioUrl: '/audio/aare.mp3',
-    category: 'Gratitude'
-  },
-  {
-    id: '7',
-    yorubaText: 'Níbo ni ilé ìwé wà?',
-    englishTranslation: 'Where is the school?',
-    audioUrl: '/audio/nibo-ni-ile-iwe-wa.mp3',
-    category: 'Directions'
-  },
-  {
-    id: '8',
-    yorubaText: 'Mo nífẹ̀ẹ́ sí ọ',
-    englishTranslation: 'I love you',
-    audioUrl: '/audio/mo-nife-si-o.mp3',
-    category: 'Emotions'
-  }
-];
-
-const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+const EdedunModal: React.FC<EdedunModalProps> = ({
+  isOpen,
+  onClose,
+  onSelect,
+}) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedPhrases, setSelectedPhrases] = useState<EdedunPhrase[]>([]);
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
+  const [allPhrases, setAllPhrases] = useState<any>([]);
+  const [page, setPage] = useState(1);
+
+  const { data: ededunRecordings, isPending: ededunRecordingsLoading } =
+    useGetAllRecordings(page, searchTerm);
+
+  useEffect(() => {
+    setAllPhrases(ededunRecordings?.data?.data || []);
+  }, [ededunRecordingsLoading, ededunRecordings?.data?.data]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   if (!isOpen) return null;
 
-  const categories = ['All', ...Array.from(new Set(mockEdedunPhrases.map(phrase => phrase.category)))];
-
-  const filteredPhrases = mockEdedunPhrases.filter(phrase => {
-    const matchesSearch = phrase.yorubaText.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         phrase.englishTranslation.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || phrase.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const categories = [
+    "All",
+    ...Array.from(new Set(allPhrases?.map((phrase: any) => phrase.category))),
+  ];
 
   const togglePhraseSelection = (phrase: EdedunPhrase) => {
-    setSelectedPhrases(prev => {
-      const isSelected = prev.some(p => p.id === phrase.id);
+    setSelectedPhrases((prev) => {
+      const isSelected = prev.some((p) => p.id === phrase.id);
       if (isSelected) {
-        return prev.filter(p => p.id !== phrase.id);
+        return prev.filter((p) => p.id !== phrase.id);
       } else {
         return [...prev, phrase];
       }
@@ -104,18 +60,53 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
   };
 
   const playAudio = (audioUrl: string, phraseId: string) => {
-    // In a real app, you would play the actual audio file
+    // Stop any currently playing audio
+    if (playingAudio) {
+      const currentAudio = document.getElementById(
+        `audio-${playingAudio}`
+      ) as HTMLAudioElement;
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+    }
+
     setPlayingAudio(phraseId);
-    // Simulate audio playing for 2 seconds
-    setTimeout(() => setPlayingAudio(null), 2000);
+
+    // Create or get audio element
+    let audio = document.getElementById(
+      `audio-${phraseId}`
+    ) as HTMLAudioElement;
+
+    if (!audio) {
+      audio = new Audio(audioUrl);
+      audio.id = `audio-${phraseId}`;
+    }
+
+    // Play the audio
+    audio.play().catch((error) => {
+      console.error("Error playing audio:", error);
+      setPlayingAudio(null);
+    });
+
+    // Reset playing state when audio ends
+    audio.onended = () => {
+      setPlayingAudio(null);
+    };
+
+    // Also handle errors
+    audio.onerror = () => {
+      console.error("Error loading audio file");
+      setPlayingAudio(null);
+    };
   };
 
   const handleSelect = () => {
     onSelect(selectedPhrases);
     onClose();
     setSelectedPhrases([]);
-    setSearchTerm('');
-    setSelectedCategory('All');
+    setSearchTerm("");
+    setSelectedCategory("All");
   };
 
   return (
@@ -123,7 +114,9 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[80vh] overflow-hidden">
         <div className="p-6 border-b">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-[#012657]">Select from Ededun Database</h2>
+            <h2 className="text-xl font-semibold text-[#012657]">
+              Select from Ededun Database
+            </h2>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -135,7 +128,10 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
           {/* Search and Filter */}
           <div className="flex gap-4 mb-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#012657]" size={16} />
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#012657]"
+                size={16}
+              />
               <input
                 type="text"
                 placeholder="Search phrases..."
@@ -149,8 +145,10 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="px-4 py-2 border text-[#012657] border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {categories.map(category => (
-                <option key={category} value={category}>{category}</option>
+              {categories.map((category: any) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
               ))}
             </select>
           </div>
@@ -158,7 +156,8 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
           {selectedPhrases.length > 0 && (
             <div className="mb-4 p-3 bg-blue-50 rounded-md">
               <p className="text-sm text-blue-800">
-                {selectedPhrases.length} phrase{selectedPhrases.length !== 1 ? 's' : ''} selected
+                {selectedPhrases.length} phrase
+                {selectedPhrases.length !== 1 ? "s" : ""} selected
               </p>
             </div>
           )}
@@ -167,15 +166,19 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
         {/* Phrases List */}
         <div className="p-6 max-h-96 overflow-y-auto">
           <div className="grid gap-3">
-            {filteredPhrases.map(phrase => {
-              const isSelected = selectedPhrases.some(p => p.id === phrase.id);
+            {allPhrases.map((phrase: any) => {
+              const isSelected = selectedPhrases.some(
+                (p) => p.id === phrase.id
+              );
               const isPlaying = playingAudio === phrase.id;
-              
+
               return (
                 <div
                   key={phrase.id}
                   className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                    isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                    isSelected
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
                   }`}
                   onClick={() => togglePhraseSelection(phrase)}
                 >
@@ -183,13 +186,17 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
                         <div className="flex-1">
-                          <h3 className="font-medium text-lg text-gray-900">{phrase.yorubaText}</h3>
-                          <p className="text-gray-600 text-sm">{phrase.englishTranslation}</p>
+                          <h3 className="font-medium text-lg text-gray-900">
+                            {phrase.yorubaText}
+                          </h3>
+                          <p className="text-gray-600 text-sm">
+                            {phrase.englishTranslation}
+                          </p>
                           <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full mt-1">
                             {phrase.category}
                           </span>
                         </div>
-                        
+
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -200,7 +207,7 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
                         >
                           {isPlaying ? <Pause size={20} /> : <Play size={20} />}
                         </button>
-                        
+
                         {isSelected && (
                           <div className="p-1 bg-blue-600 text-white rounded-full">
                             <Check size={16} />
@@ -214,11 +221,41 @@ const EdedunModal: React.FC<EdedunModalProps> = ({ isOpen, onClose, onSelect }) 
             })}
           </div>
 
-          {filteredPhrases.length === 0 && (
+          {allPhrases.length === 0 && (
             <div className="text-center py-8 text-gray-500">
               No phrases found matching your search criteria.
             </div>
           )}
+        </div>
+        <div className="p-6 flex justify-between items-center mt-4">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+            className={`px-3 ${
+              page !== 1
+                ? "hover:cursor-pointer hover:bg-white hover:text-[#012657] hover:border-[#012657]"
+                : ""
+            } bg-[#012657] py-1 border rounded disabled:opacity-50`}
+          >
+            Previous
+          </button>
+
+          <span className="text-sm text-gray-600">
+            Page {ededunRecordings?.data?.pagination?.currentPage} of{" "}
+            {ededunRecordings?.data?.pagination?.totalPages}
+          </span>
+
+          <button
+            disabled={page === ededunRecordings?.data?.pagination?.totalPages}
+            onClick={() => setPage((p) => p + 1)}
+            className={`px-3 ${
+              page !== ededunRecordings?.data?.pagination?.totalPages
+                ? "hover:cursor-pointer hover:bg-white hover:text-[#012657] hover:border-[#012657]"
+                : ""
+            } bg-[#012657] py-1 border rounded disabled:opacity-50`}
+          >
+            Next
+          </button>
         </div>
 
         {/* Footer */}

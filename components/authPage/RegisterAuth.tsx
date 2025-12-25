@@ -279,8 +279,7 @@ useEffect(() => {
       };
 
       await registerUser(userData, {
-        onSuccess: (data) => {
-          console.log("Registration successful:", data);
+        onSuccess: () => {
           addAlert(
             "Success!",
             "Signup successful! An email has been sent to you for account verification",

@@ -29,13 +29,11 @@ const CourseManagementPage: React.FC = () => {
   const { data: allCoursesData, isLoading: allCoursesLoading } =
     useGetAllCourses(userDetails?.languageId);
 
-  const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
+  // const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
   const allCoursesWithThumbnails = Array.isArray(allCoursesData?.data)
-    ? allCoursesData?.data.map((step: Record<string, any>, index: number) => ({
-        ...step,
-        thumbnailImage:
-          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
+    ? allCoursesData?.data.map((step: Record<string, any>) => ({
+        ...step
       }))
     : [];
 
