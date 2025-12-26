@@ -170,3 +170,35 @@ export async function getLanguageContents(languageId?: string) {
 //   const response = await axiosInstance.post("/language-contents", contentData);
 //   return response.data;
 // }
+
+
+
+export async function updateCourseImage(
+  courseId: string,
+  updateData: FormData
+) {
+  const response = await axiosInstance.put(
+    `/lessons/courses/change-course-image/${courseId}`,
+    updateData,{
+     headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+  );
+  return response.data;
+}
+
+export async function updateLessonImage(
+  lessonId: string,
+  updateData: FormData
+) {
+  const response = await axiosInstance.put(
+    `/lessons/lessons/change-lesson-image/${lessonId}`,
+    updateData,{
+     headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+  );
+  return response.data;
+}

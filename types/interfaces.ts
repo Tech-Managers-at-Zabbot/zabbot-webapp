@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ContentDataType, ContentSourceType, Level } from "./enums";
 
 
@@ -57,10 +58,12 @@ export interface Lesson {
   description: string;
   orderNumber: number;
   contents: Content[];
-  headlineTag?: string;
-  estimatedTime?: number;
+  headLineTag?: string;
+  languageId?:string;
+  estimatedDuration?: number | any;
   outcomes?: string;
   objectives?: string;
+  lessonImg?:string;
 }
 
 export interface Course {
