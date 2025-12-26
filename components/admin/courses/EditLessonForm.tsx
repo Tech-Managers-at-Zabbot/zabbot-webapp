@@ -54,6 +54,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
             "image/png",
             "image/jpg",
             "image/webp",
+            "image/svg+xml"
           ];
           if (!allowedTypes.includes(imageFile.type)) {
             return addAlert("Error", "Invalid file type", "error");

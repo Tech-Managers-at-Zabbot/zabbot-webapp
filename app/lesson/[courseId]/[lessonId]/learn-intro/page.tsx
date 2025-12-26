@@ -167,7 +167,7 @@ const LessonDescriptionComponent = ({
             {/* Image Container */}
             <div className="relative mb-4 rounded-xl overflow-hidden">
               <img
-                src="/userDashboard/say-hello.svg"
+                src={lesson?.lessonImg || "/lessons/yoruba.png"}
                 // "/lessons/yoruba.png"
                 alt="Yoruba Culture"
                 className="w-full h-[200px] md:h-[250px] lg:h-[300px] object-cover object-top rounded-lg"
