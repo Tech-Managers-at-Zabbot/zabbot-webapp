@@ -16,6 +16,7 @@ import {
   updateUserCourse,
   getUserCompletedCourses,
   updateCourseImage,
+  updateLessonImage,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -279,6 +280,28 @@ export function useChangeCourseImage() {
     },
     onError: (error: any) => {
       console.error("Error uploading course image:", error);
+    },
+  });
+}
+
+export function useChangeLessonImage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      lessonId,
+      data,
+      // languageId,
+}: {
+  lessonId: string;
+  data: FormData;
+  languageId:string;
+}) => updateLessonImage(lessonId, data),
+
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["getAllCourses", variables?.languageId] });
+    },
+    onError: (error: any) => {
+      console.error("Error uploading lesson image:", error);
     },
   });
 }

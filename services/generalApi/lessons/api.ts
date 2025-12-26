@@ -187,3 +187,18 @@ export async function updateCourseImage(
   );
   return response.data;
 }
+
+export async function updateLessonImage(
+  lessonId: string,
+  updateData: FormData
+) {
+  const response = await axiosInstance.put(
+    `/lessons/lessons/change-lesson-image/${lessonId}`,
+    updateData,{
+     headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+  );
+  return response.data;
+}

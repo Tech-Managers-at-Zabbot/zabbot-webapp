@@ -57,10 +57,12 @@ export interface Lesson {
   description: string;
   orderNumber: number;
   contents: Content[];
-  headlineTag?: string;
-  estimatedTime?: number;
+  headLineTag?: string;
+  languageId?:string;
+  estimatedDuration?: number;
   outcomes?: string;
   objectives?: string;
+  lessonImg?:string;
 }
 
 export interface Course {

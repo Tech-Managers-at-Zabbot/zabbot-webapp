@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
@@ -62,7 +63,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
           onClick={() => {
             /* Add new lesson logic */
           }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
+          className="px-4 hover:cursor-pointer py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
         >
           <Plus size={16} className="mr-2" />
           Add Lesson
@@ -93,11 +94,23 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
                     className="mr-2"
                   >
                     {expandedLessons.has(lesson.id!) ? (
-                      <ChevronDown size={20} className="text-gray-500" />
+                      <ChevronDown size={20} className="text-gray-500 hover:cursor-pointer" />
                     ) : (
-                      <ChevronRight size={20} className="text-gray-500" />
+                      <ChevronRight size={20} className="text-gray-500 hover:cursor-pointer" />
                     )}
                   </button>
+                  <div className="flex items-center gap-4">
+                    <div>
+                        {lesson?.lessonImg && (
+                            <div>
+                              <img
+                                src={lesson?.lessonImg}
+                                className="w-40 h-40 object-cover rounded-md"
+                                alt="Lesson Image"
+                              />
+                            </div>
+                          )}
+                    </div>
                   <div className="flex-1">
                     <h4 className="font-semibold text-gray-900">
                       Lesson {lesson.orderNumber}: {lesson.title}
@@ -105,6 +118,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
                     <p className="text-sm text-gray-600">
                       {lesson.description}
                     </p>
+                  </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
