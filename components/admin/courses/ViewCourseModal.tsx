@@ -253,22 +253,33 @@ const ViewCourseModal: React.FC<ViewCourseModalProps> = ({
                       <div className="flex items-center">
                         {expandedLessons.has(lesson.id!) ? (
                           <ChevronDown
-                            size={20}
+                            size={40}
                             className="text-gray-500 mr-2"
                           />
                         ) : (
                           <ChevronRight
-                            size={20}
+                            size={40}
                             className="text-gray-500 mr-2"
                           />
                         )}
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            Lesson {lesson.orderNumber}: {lesson.title}
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            {lesson.description}
-                          </p>
+                        <div className="flex items-center gap-3">
+                          {lesson?.lessonImg && (
+                            <div>
+                              <img
+                                src={lesson?.lessonImg}
+                                className="w-80 h-24 object-cover rounded-md"
+                                alt="Lesson Image"
+                              />
+                            </div>
+                          )}
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900">
+                              Lesson {lesson.orderNumber}: {lesson.title}
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              {lesson.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">

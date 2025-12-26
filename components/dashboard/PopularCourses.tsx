@@ -19,13 +19,9 @@ const PopularCourses = () => {
   //  const { getPageText } =
   //       usePageLanguage("userDashboard");
 
-  const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
-
   const allCoursesWithThumbnails = Array.isArray(allCourses?.data)
-    ? allCourses?.data.map((step: Record<string, any>, index: number) => ({
-        ...step,
-        thumbnailImage:
-          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
+    ? allCourses?.data.map((step: Record<string, any>) => ({
+        ...step
       }))
     : [];
 

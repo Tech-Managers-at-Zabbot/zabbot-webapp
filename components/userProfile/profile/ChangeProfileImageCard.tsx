@@ -4,9 +4,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Camera, Upload, ImageIcon,
-  //  X 
-  } from "lucide-react";
+import {
+  Camera,
+  Upload,
+  ImageIcon,
+  //  X
+} from "lucide-react";
 import { Modal } from "@/components/general/Modal";
 import { useAlert } from "next-alert";
 import { useChangeUserProfileImage } from "@/services/generalApi/users/mutation";
@@ -26,7 +29,7 @@ const ChangeProfileImageCard = ({ isOpen, onClose }: any) => {
   const { mutate: uploadUserImage, isPending: uploadUserImageLoading } =
     useChangeUserProfileImage();
 
-        // const { data: userProfile, isLoading: userDataLoading } = useGetSingleUserData();
+  // const { data: userProfile, isLoading: userDataLoading } = useGetSingleUserData();
 
   const openCamera = async () => {
     try {
@@ -99,7 +102,13 @@ const ChangeProfileImageCard = ({ isOpen, onClose }: any) => {
 
   const prepareImageForUpload = (file: File) => {
     // Optional: Validate file
-    const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "image/webp",
+      "image/svg+xml",
+    ];
     if (!allowedTypes.includes(file.type)) {
       throw new Error("Invalid file type");
     }

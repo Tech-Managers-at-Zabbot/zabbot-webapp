@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   CreditCard,
-  Wallet,
+  // Wallet,
   ArrowLeft,
   Lock,
   CheckCircle2,
 } from "lucide-react";
 import { useCreateCheckoutSession } from "@/services/payment/stripe/tanstack";
+import PaypalButtonsComponent from "../PaypalButtonsComponent";
 
 interface PaymentPageProps {
   subscriptionType: string;
@@ -32,7 +33,9 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
     monthly: 9.99,
   };
 
-  amount = subscriptionAMount[subscriptionType as keyof typeof subscriptionAMount] || 9.99;
+  amount =
+    subscriptionAMount[subscriptionType as keyof typeof subscriptionAMount] ||
+    9.99;
 
   // Get subscription details based on type
   const getSubscriptionDetails = () => {
@@ -59,28 +62,28 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
     setTimeout(() => {
       if (selectedMethod === "card") {
         // Redirect to Stripe Checkout or your card payment page
-      mutate(
-        {  
-          subscriptionType  
-        }, {
-        onSuccess: (data) => {
-          if (data && data.data.sessionUrl) {
-            window.location.href = data.data.sessionUrl;
-          } else {
-            console.error("Checkout failed, please try again.");
+        mutate(
+          {
+            subscriptionType,
+          },
+          {
+            onSuccess: (data) => {
+              if (data && data.data.sessionUrl) {
+                window.location.href = data.data.sessionUrl;
+              } else {
+                console.error("Checkout failed, please try again.");
+              }
+            },
+            onError: (error) => {
+              console.error("Error creating checkout session:", error);
+            },
           }
-        },
-        onError: (error) => {
-          console.error("Error creating checkout session:", error);
-        }
-      }
-      );
+        );
         // window.location.href = `/payment/card?amount=${amount}&type=${subscriptionType}`;
       } else if (selectedMethod === "paypal") {
         // Redirect to PayPal
         window.location.href = `/payment/paypal?amount=${amount}&type=${subscriptionType}`;
       }
-      
     }, 1000);
   };
 
@@ -218,11 +221,8 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                   </div>
                 </motion.button>
 
-                {/* PayPal */}
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handlePaymentMethodSelect("paypal")}
+                {/* PayPal Button */}
+                <motion.div
                   className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
                     selectedMethod === "paypal"
                       ? "border-[#0089C8] bg-blue-50 shadow-lg"
@@ -234,24 +234,8 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                       <CheckCircle2 className="text-[#0089C8]" size={24} />
                     </div>
                   )}
-                  <div className="flex flex-col items-center gap-3">
-                    <div
-                      className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                        selectedMethod === "paypal"
-                          ? "bg-[#0089C8]"
-                          : "bg-gray-100"
-                      }`}
-                    >
-                      <Wallet
-                        className={
-                          selectedMethod === "paypal"
-                            ? "text-white"
-                            : "text-gray-600"
-                        }
-                        size={32}
-                      />
-                    </div>
-                    <div className="text-center">
+                  <div className="flex flex-col gap-3">
+                    <div className="text-center mb-3">
                       <h3 className="font-semibold text-gray-800 text-lg">
                         PayPal
                       </h3>
@@ -259,8 +243,30 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                         Fast & secure
                       </p>
                     </div>
+
+                    {selectedMethod === "paypal" && (
+                      <PaypalButtonsComponent
+                        subscriptionType={subscriptionType}
+                        amount={amount}
+                        onSuccess={() => {
+                          console.log("Payment successful!");
+                        }}
+                        onError={(error) => {
+                          console.error("Payment error:", error);
+                        }}
+                      />
+                    )}
+
+                    {selectedMethod !== "paypal" && (
+                      <button
+                        onClick={() => handlePaymentMethodSelect("paypal")}
+                        className="w-full py-2 px-4 bg-[#0089C8] text-white rounded-lg hover:bg-[#006B9E] transition-colors"
+                      >
+                        Select PayPal
+                      </button>
+                    )}
                   </div>
-                </motion.button>
+                </motion.div>
               </div>
             </div>
 

@@ -59,8 +59,8 @@ const LessonsList: React.FC<LessonsListProps> = ({
                   <div className="flex gap-4 mt-2 text-sm text-gray-500">
                     <span>Order: {lesson.orderNumber}</span>
                     <span>Contents: {lesson.contents.length}</span>
-                    {lesson.estimatedTime && (
-                      <span>Estimated Time: {lesson.estimatedTime} mins</span>
+                    {lesson.estimatedDuration && (
+                      <span>Estimated Time: {lesson.estimatedDuration} mins</span>
                     )}
                   </div>
                 </div>

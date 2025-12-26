@@ -85,8 +85,8 @@ const CreateCoursePage = () => {
     description: "",
     orderNumber: 1,
     contents: [],
-    headlineTag: "",
-    estimatedTime: undefined,
+    headLineTag: "",
+    estimatedDuration: undefined,
     outcomes: "",
     objectives: "",
   });
@@ -388,8 +388,8 @@ const CreateCoursePage = () => {
       description: "",
       orderNumber: lessons.length + 1,
       contents: [],
-      headlineTag: "",
-      estimatedTime: undefined,
+      headLineTag: "",
+      estimatedDuration: undefined,
       outcomes: "",
       objectives: "",
     });

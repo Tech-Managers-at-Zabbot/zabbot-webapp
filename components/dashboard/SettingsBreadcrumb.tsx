@@ -25,7 +25,6 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const { getPageText } = usePageLanguage("userDashboard");
 
   const handleLogout = () => {
-    console.log("Logging out two...");
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
     const keepDailyCallsRemaining = localStorage.getItem(
