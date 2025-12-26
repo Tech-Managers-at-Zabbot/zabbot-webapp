@@ -137,9 +137,9 @@ const LessonModal: React.FC<LessonModalProps> = ({
               </label>
               <NormalInputField
                 id="lessonHeadlineTag"
-                value={currentLesson.headlineTag || ""}
+                value={currentLesson.headLineTag || ""}
                 onChange={(e) =>
-                  handleLessonChange("headlineTag", e.target.value)
+                  handleLessonChange("headLineTag", e.target.value)
                 }
                 placeholder="Enter a short headline tag for this lesson"
                 type="text"
@@ -155,10 +155,10 @@ const LessonModal: React.FC<LessonModalProps> = ({
               </label>
               <NormalInputField
                 id="lessonEstimatedTime"
-                value={currentLesson.estimatedTime?.toString() || ""}
+                value={currentLesson.estimatedDuration?.toString() || ""}
                 onChange={(e) =>
                   handleLessonChange(
-                    "estimatedTime",
+                    "estimatedDuration",
                     parseInt(e.target.value) || undefined
                   )
                 }
