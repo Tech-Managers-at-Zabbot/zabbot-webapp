@@ -84,8 +84,7 @@ const LessonDescriptionComponent = ({
             //     ? "cursor-not-allowed"
             //     : "cursor-pointer"
             // }
-            `
-          }
+            `}
             // onClick={() => {
             //   if (startLoading || dashboardLoading) return;
             //   setDashboardLoading(true);
