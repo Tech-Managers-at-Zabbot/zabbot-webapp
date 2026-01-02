@@ -16,22 +16,25 @@ import { usePronunciationFeedback } from "@/services/generalApi/pronounciations/
 // const simulateFeedbackAPI = async (formData: FormData): Promise<any> => { ... }
 
 const ScoreBar = ({ finalScore }: { finalScore: number }) => {
-  const getScoreColor = (finalScore: number) => {
+  const getScoreColor = (score: number) => {
     return "#9FDEBC";
   };
 
   const getScoreLabel = (score: number) => {
-    if (score * 100 >= 80) return "Excellent!";
-    if (score * 100 >= 60) return "Good";
-    if (score * 100 >= 40) return "Fair";
+    const roundedScore = Math.round(score * 100);
+    if (roundedScore >= 80) return "Excellent!";
+    if (roundedScore >= 60) return "Good";
+    if (roundedScore >= 40) return "Fair";
     return "Needs improvement — listen and try again.";
   };
+
+  const roundedPercentage = Math.round(finalScore * 100);
 
   return (
     <div className="w-full max-w-md" style={{ fontFamily: "Lexend" }}>
       <div className="flex justify-center mb-2 w-full text-center">
         <span className="text-[#FFDAB6] text-xl md:text-4xl font-bold">
-          {finalScore * 100 > 100 ? 100 : finalScore * 100}%
+          {roundedPercentage > 100 ? 100 : roundedPercentage}%
         </span>
       </div>
       <div className="text-center mt-2">
@@ -45,6 +48,7 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
     </div>
   );
 };
+
 
 interface InLessonRecordWithParaProps {
   onClose: () => void;
@@ -243,7 +247,7 @@ const InLessonRecordWithPara = ({
           </button>
         </div>
 
-        <div className="p-8 md:p-12">
+        <div className="p-8 md:p-20">
           <div className="flex flex-col items-center text-center">
             <div className="">
               <h2 className="text-white text-xl md:text-2xl font-bold">
