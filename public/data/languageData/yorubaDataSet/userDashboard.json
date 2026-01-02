@@ -15,7 +15,8 @@
   "chat_ore": "Bá Ọ̀rẹ́ Sọ̀rọ̀",
   "ai_powered": "Ìbànújẹ̀pọ̀ tí AI ń ṣàkóso fún ìtúmọ̀ àti ìjíròrò.",
   "get_started": "Bẹ̀rẹ̀",
-  "pronounce_with_para": "Ṣe Ìtúpalẹ̀ Ohùn Pẹ̀lú Pàrà",
+  "pronounce": "Ṣe Ìtúpalẹ̀ Ohùn",
+  "with_para": "Pẹ̀lú Pàrà",
   "listen_with_owe": "Gbọ́ Pẹ̀lú Òwe",
   "immersion_tagline": "Kọ́ Èdè Yorùbá, díẹ̀ díẹ̀",
   "almost_there": "A fẹrẹ dé!",
@@ -50,5 +51,5 @@
   "logout": "Jádé",
   "get_in_touch": "Bá Wa Sọ̀rọ̀",
   "uncompleted_daily_goal_tag": "Gbọ́. Sọ. Dìmù. Lò pẹ̀lú ìgboyà.",
-  "completed_daily_goal_tag":"O ṣe! O gbọ́, o sì ṣe àdánwò – Ìmólẹ̀ rẹ ń ga si."
+  "completed_daily_goal_tag": "O ṣe! O gbọ́, o sì ṣe àdánwò – Ìmólẹ̀ rẹ ń ga si."
 }
