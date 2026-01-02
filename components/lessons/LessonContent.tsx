@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useLessonContext } from "@/contexts/LessonContext";
 import LessonIntro from "./LessonIntro";
@@ -8,6 +9,14 @@ import { EmptyStateCard } from "../general/EmptyState";
 import LessonCompleteComponent from "./LessonComplete";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
+import { useRouter } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa6";
+import { useState } from "react";
+import { FiHeart } from "react-icons/fi";
+import LanguageToggle from "../languageToggle/LanguageToggle";
+import LessonProgress from "./LessonProgressTracker";
+import { Modal } from "../general/Modal";
+import { useLoading } from "@/contexts/LoadingProvider";
 // import { CustomSpinner } from "../CustomSpinner";
 
 const LessonContent = () => {
@@ -26,7 +35,7 @@ const LessonContent = () => {
     startQuizPhase,
     completeLesson,
     startLesson,
-    // currentContentIndex,
+    currentContentIndex,
     // currentQuizIndex,
     isFirstContent,
     isLastContent,
@@ -45,7 +54,20 @@ const LessonContent = () => {
   ) => {
     submitQuizAnswer(quizId, userAnswer, isCorrect);
   };
+  const { setLoading } = useLoading();
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+  const [ homeModal, setHomeModal ] = useState(false)
+  const [ homeLoading, setHomeLoading ] = useState(false)
 
+  const router = useRouter();
+
+  const handleRedirectHome = () => {
+     setLoading(true);
+     setHomeLoading(true)
+     setDashboardLoading(true)
+    router.push("/user-dashboard");
+  }
+  
   if (isLoading) {
     return <Loader />;
   }
@@ -83,6 +105,7 @@ const LessonContent = () => {
             canGoBack={!isFirstContent}
             isLastContent={isLastContent && quizzes.length === 0}
             lessonTitle={lesson?.title}
+            lessonImg={lesson?.lessonImg}
             onComplete={() => {
               completeLesson();
               navigateToCompletion();
@@ -173,10 +196,84 @@ const LessonContent = () => {
 
   return (
     <div
-      className="bg-[#fef7d0] py-10 flex flex-col relative justify-center min-h-screen w-full"
+      className="bg-[#fef7d0] flex flex-col pt-10 relative min-h-screen w-full"
       style={{ fontFamily: "Lexend" }}
     >
-      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-bottom bg-no-repeat min-h-[150px]"></header>
+      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-bottom bg-no-repeat min-h-[250px]"></header>
+
+      <div className="flex px-[5%] justify-between relative items-center">
+        <div className="flex relative items-center gap-3 sm:gap-4">
+          <button
+            className={`cursor-pointer ${
+              dashboardLoading ? "cursor-not-allowed" : "cursor-pointer"
+            } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
+            onClick={() => {
+              setHomeModal(true)
+            }}
+            disabled={dashboardLoading}
+          >
+            <FaArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+          </button>
+
+          <button className="cursor-pointer p-2 sm:p-3 rounded-full hover:bg-white/10 transition"
+          onClick={() => {
+              setHomeModal(true)
+            }}
+            disabled={dashboardLoading}
+          >
+            <img
+              src="/lessons/lessons-home.svg"
+              alt="home"
+              className="w-8 h-8 sm:w-10 sm:h-10 md:w-[55px] md:h-[55px]"
+            />
+          </button>
+        </div>
+
+        {currentStep !== "intro" &&
+          currentStep !== "lesson-completed" &&
+          currentStep !== "completed" && (
+            <div className="flex gap-2 sm:gap-4 items-center">
+              <div className="bg-[#FBCCBD] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2">
+                <img
+                  src="/lessons/fire.svg"
+                  alt="fire"
+                  className="w-4 h-4 sm:w-6 sm:h-6"
+                />
+                <span className="text-[#CC400C] font-semibold text-sm sm:text-lg md:text-xl">
+                  7
+                </span>
+              </div>
+
+              <div
+                className={`bg-[#EB5017] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2 
+                             //   startLoading || dashboardLoading
+                             //     ? "cursor-not-allowed"
+                             //     : "cursor-pointer"
+                             // }
+                             `}
+                // onClick={() => {
+                //   if (startLoading || dashboardLoading) return;
+                //   setDashboardLoading(true);
+                //   router.push("/user-dashboard");
+                // }}
+              >
+                <FiHeart className="w-4 h-4 sm:w-6 sm:h-6" fill="#FEEFEA" />
+                <span className="text-[#FEEFEA] font-semibold text-sm sm:text-lg md:text-xl">
+                  5
+                </span>
+              </div>
+
+              <div>
+                <LanguageToggle
+                  backgroundColor="#064a00"
+                  color="#FFFFFF"
+                  borderColor="#D9F3FF"
+                  dropDownBgColor="#064a00"
+                />
+              </div>
+            </div>
+          )}
+      </div>
 
       {/* Progress Bar */}
       {/* <section className="bg-red-900 h-10 w-full absolute top-0">
@@ -185,11 +282,51 @@ const LessonContent = () => {
         </div>
       </section> */}
 
-      <section className="flex z-10 flex-col justify-center w-full items-center">
+      <section className="flex z-10 flex-col gap-10 justify-center w-full items-center">
+        {currentStep === "content" && (
+          <LessonProgress
+            lessonNumber={lesson?.orderNumber}
+            lessonTitle={lesson?.title}
+            totalSteps={lesson?.totalContents}
+            currentStep={currentContentIndex + 1}
+          />
+        )}
         {renderContent()}
       </section>
 
       <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[100px] z-0"></footer>
+
+            {homeModal && (
+        <Modal
+          isOpen={homeModal}
+          onClose={() => setHomeModal(false)}
+          title="Are you sure you?"
+          showCloseButton={false}
+        >
+          <div className="p-6 text-center">
+            <p className="text-lg leading-[30px] text-[#252525] font-[400] mb-6">
+              Your progress is automatically saved, so you can pick up right where you left off. Feel free to exit at any time everything will be here when you return.
+            </p>
+            <div className="flex justify-center gap-4">
+              <InAppButton
+                background="#EBEBEB"
+                onClick={() => setHomeModal(false)}
+                disabled={homeLoading}
+              >
+                <div className="text-[#252424]">Stay</div>
+              </InAppButton>
+              <InAppButton
+                background="#5A2E10"
+                color="#FFFFFF"
+                onClick={handleRedirectHome}
+                disabled={homeLoading}
+              >
+                {homeLoading ? <CustomSpinner /> : "Exit"}
+              </InAppButton>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

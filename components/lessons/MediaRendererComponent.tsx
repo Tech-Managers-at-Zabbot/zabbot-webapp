@@ -53,7 +53,7 @@ const AudioPlayer: React.FC<{ audioFiles: FileItem[] }> = ({ audioFiles }) => {
   }, []);
 
 return (
-  <div className="text-center bg-[url('/lessons/play-content.svg')] bg-contain bg-center bg-no-repeat p-4 sm:p-6 md:p-8">
+  <div className="text-center hover:cursor-pointer bg-[url('/lessons/play-content.svg')] bg-contain bg-center bg-no-repeat p-4">
     <button 
       onClick={playRandomAudio}
       className="text-white hover:cursor-pointer px-5 py-3 sm:px-6 sm:py-3 md:px-8 md:py-4 rounded-full font-medium transition-colors duration-200"

@@ -10,7 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useCreateCheckoutSession } from "@/services/payment/stripe/tanstack";
-import PaypalButtonsComponent from "../PaypalButtonsComponent";
+// import PaypalButtonsComponent from "../PaypalButtonsComponent";
 
 interface PaymentPageProps {
   subscriptionType: string;
@@ -243,7 +243,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                         Fast & secure
                       </p>
                     </div>
-
+{/* 
                     {selectedMethod === "paypal" && (
                       <PaypalButtonsComponent
                         subscriptionType={subscriptionType}
@@ -255,7 +255,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                           console.error("Payment error:", error);
                         }}
                       />
-                    )}
+                    )} */}
 
                     {selectedMethod !== "paypal" && (
                       <button

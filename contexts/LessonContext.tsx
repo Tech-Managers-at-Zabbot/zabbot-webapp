@@ -54,6 +54,7 @@ interface Lesson {
   orderNumber: number;
   estimatedDuration: number;
   totalContents: number;
+  lessonImg?:string;
 }
 
 interface UserCourse {
