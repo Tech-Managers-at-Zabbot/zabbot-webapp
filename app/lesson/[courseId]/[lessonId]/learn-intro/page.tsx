@@ -3,7 +3,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InAppButton from "@/components/InAppButton";
 import LanguageToggle from "@/components/languageToggle/LanguageToggle";
 import { FaArrowRight } from "react-icons/fa6";
@@ -13,6 +13,8 @@ import { CustomSpinner } from "@/components/CustomSpinner";
 import { LuAudioWaveform } from "react-icons/lu";
 import { TalkingDrumIcon } from "@/constants/SvgPaths";
 import { useGetLessonWithContents } from "@/services/generalApi/lessons/mutation";
+import { FaArrowLeft } from "react-icons/fa6";
+import { FiHeart } from "react-icons/fi";
 
 const LessonDescriptionComponent = ({
   lesson,
@@ -30,33 +32,97 @@ const LessonDescriptionComponent = ({
       style={{ fontFamily: "Lexend" }}
     >
       {/* Language Toggle */}
-      <section className="flex px-[3%] md:px-[5%] justify-end pt-6 md:pt-10 items-center">
+      {/* <section className="flex px-[3%] md:px-[5%] justify-end pt-6 md:pt-10 items-center">
         <LanguageToggle
           backgroundColor="#162B6E"
           color="#FFFFFF"
           dropDownBgColor="#162B6E"
         />
-      </section>
-
+      </section> */}
+      <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-bottom bg-no-repeat min-h-[250px]"></header>
       {/* Main Content */}
-      <section className="px-[3%] md:px-[5%] mt-6 md:mt-10 flex flex-col lg:flex-row justify-between items-center gap-8 lg:gap-4 pb-24 md:pb-32">
+      <div className="relative flex flex-wrap sm:flex-nowrap justify-between items-center gap-4 px-4 sm:px-[5%] mt-4 sm:mt-10">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div
+            className={`cursor-pointer ${
+              startLoading || dashboardLoading
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
+            onClick={() => {
+              if (startLoading || dashboardLoading) return;
+              setDashboardLoading(true);
+              router.push("/user-dashboard");
+            }}
+          >
+            <FaArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
+          </div>
+
+          <div className="cursor-pointer p-2 sm:p-3 rounded-full hover:bg-white/10 transition">
+            <img
+              src="/lessons/lessons-home.svg"
+              alt="home"
+              className="w-8 h-8 sm:w-10 sm:h-10 md:w-[55px] md:h-[55px]"
+            />
+          </div>
+        </div>
+        <div className="flex gap-2 sm:gap-4">
+          <div className="bg-[#FBCCBD] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2">
+            <img
+              src="/lessons/fire.svg"
+              alt="fire"
+              className="w-4 h-4 sm:w-6 sm:h-6"
+            />
+            <span className="text-[#CC400C] font-semibold text-sm sm:text-lg md:text-xl">
+              7
+            </span>
+          </div>
+
+          <div
+            className={`bg-[#EB5017] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2 
+            //   startLoading || dashboardLoading
+            //     ? "cursor-not-allowed"
+            //     : "cursor-pointer"
+            // }
+            `
+          }
+            // onClick={() => {
+            //   if (startLoading || dashboardLoading) return;
+            //   setDashboardLoading(true);
+            //   router.push("/user-dashboard");
+            // }}
+          >
+            <FiHeart className="w-4 h-4 sm:w-6 sm:h-6" fill="#FEEFEA" />
+            <span className="text-[#FEEFEA] font-semibold text-sm sm:text-lg md:text-xl">
+              5
+            </span>
+          </div>
+        </div>
+      </div>
+      <section className="relative px-[3%] md:px-[5%] mt-6 md:mt-10 flex flex-col lg:flex-row justify-between items-center gap-8 lg:gap-4 pb-24 md:pb-32">
         {/* Left Side - Text Content */}
         <div className="w-full lg:w-1/2 order-2 lg:order-1">
           {/* Badge */}
-          <div className="text-[#B6822E] font-medium text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] bg-[#FBF1E1] p-3 md:p-[10px] max-w-full md:max-w-[380px] rounded-2xl text-center md:text-left">
-            {lesson?.headLineTag}
+          <div className="flex mb-6">
+            <div className="bg-[#CF0A5C] font-[500] leading-[100%] text-[14px] p-5 rounded-lg">
+              {lesson?.totalContents} Steps
+            </div>
+          </div>
+          <div className="text-[#B6822E] flex flex-col gap-2 font-medium text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] max-w-full md:max-w-[380px] rounded-2xl text-center md:text-left">
+            <div className="text-[#AA0000]">SPARK {lesson?.orderNumber}</div>
+
+            <div className="text-[#620000] font-[600] text-[40px] leading-[110%]">
+              {lesson?.title}
+            </div>
           </div>
 
           {/* Main Heading */}
-          <div className="text-[#242424] font-bold text-[32px] sm:text-[40px] md:text-[48px] lg:text-[60px] leading-[1.2] mt-4 md:mt-6 text-center md:text-left">
-            <h4>
-              Learn <span className="text-[#F76C1D]">Yorùbá</span>
-            </h4>
-            <h4>with Confidence</h4>
+          <div className="text-[#EB5017] font-bold text-[26px] sm:text-[26px] md:text-[28px] lg:text-[30px] leading-[1.2] mt-4 md:mt-6 text-center md:text-left">
+            <h4>{lesson?.headLineTag}</h4>
           </div>
 
           {/* Description */}
-          <div className="text-[#667185] font-medium text-[16px] md:text-[18px] lg:text-[20px] leading-[1.6] mt-4 md:mt-6 text-center md:text-left">
+          <div className="text-[#667185] font-medium text-[16px] md:text-[16px] lg:text-[16px] leading-[1.6] mt-4 md:mt-6 text-center md:text-left">
             {lesson?.description}
           </div>
 
@@ -142,74 +208,46 @@ const LessonDescriptionComponent = ({
         </div>
 
         {/* Right Side - Lesson Card */}
-        <div className="w-full lg:w-1/2 order-1 lg:order-2 flex justify-center items-center relative p-4 md:p-8 lg:p-20">
-          {/* SAY HELLO Button - Floating */}
-          <div className="absolute top-2 md:top-8 lg:top-24 left-1/2 transform -translate-x-1/2 rotate-2 md:rotate-4 z-10">
-            <InAppButton
-              borderRadius="6px"
-              background="linear-gradient(to right, #EF4642, #F87118)"
-              disabledColor="linear-gradient(to right, #EF4642, #F87118)"
-              width="160px"
-              height="48px"
-              disabled={true}
-            >
-              <div className="flex items-center gap-2 justify-center text-white font-medium text-[14px] md:text-[16px]">
-                {lesson?.title}
-              </div>
-            </InAppButton>
-          </div>
-
-          {/* Tilted Lesson Card */}
+        <div className="w-full lg:w-1/2 order-1 lg:order-2 flex justify-center relative p-4 md:p-8 lg:p-20">
           <div
-            className="bg-white rounded-2xl w-full max-w-[400px] md:max-w-[500px] lg:w-[70%] p-4 md:p-6 shadow-lg transform rotate-1 md:rotate-2 lg:rotate-3 mt-8 md:mt-12"
+            className="rounded-2xl w-full max-w-[400px] md:max-w-[500px] shadow-lg rotate-1 sm:rotate-2 lg:rotate-3 mt-6"
             style={{ transformOrigin: "center" }}
           >
             {/* Image Container */}
-            <div className="relative mb-4 rounded-xl overflow-hidden">
+            <div className="relative rounded-xl overflow-hidden">
               <img
                 src={lesson?.lessonImg || "/lessons/yoruba.png"}
                 // "/lessons/yoruba.png"
                 alt="Yoruba Culture"
-                className="w-full h-[200px] md:h-[250px] lg:h-[300px] object-cover object-top rounded-lg"
+                className="w-full h-[180px] sm:h-[220px] md:h-[250px] lg:h-[300px] object-cover"
               />
             </div>
-
-            {/* Card Content */}
-            <div className="space-y-3">
-              <h3 className="text-[#333333] font-bold text-[20px] md:text-[22px] lg:text-[24px]">
-                {lesson?.title}
-              </h3>
-              <p className="text-[#666666] text-[13px] md:text-[14px] leading-relaxed">
-                {lesson?.headLineTag}
-              </p>
-
-              {/* Duration and Stats */}
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-[#999999] text-[11px] md:text-[12px] font-medium">
-                  {lesson?.estimatedDuration} minutes
-                </span>
-                {/* <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <div className="w-4 h-4 bg-orange-400 rounded-full flex items-center justify-center">
-                      <span className="text-white text-[10px] font-bold">
-                        ⚡
-                      </span>
-                    </div>
-                    <span className="text-[#333333] text-[11px] md:text-[12px] font-medium">
-                      7
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-4 h-4 bg-red-400 rounded-full flex items-center justify-center">
-                      <span className="text-white text-[10px]">❤</span>
-                    </div>
-                    <span className="text-[#333333] text-[11px] md:text-[12px] font-medium">
-                      5
-                    </span>
-                  </div>
-                </div> */}
-              </div>
-            </div>
+          </div>
+          <div
+            className={`
+  ${
+    startLoading || dashboardLoading
+      ? "cursor-not-allowed bg-[#E0E1E6]"
+      : "cursor-pointer bg-[#EB5017]"
+  }
+  absolute
+  bottom-4 sm:bottom-0
+  right-4 sm:right-10 md:right-20 lg:right-40
+  p-4 sm:p-6 md:p-10
+  rounded-full
+  border-[10px] border-white
+`}
+            onClick={() => {
+              if (startLoading || dashboardLoading) return;
+              setStartLoading(true);
+              router.push(`/lesson/${lesson?.courseId}/${lesson?.id}`);
+            }}
+          >
+            {startLoading ? (
+              <CustomSpinner spinnerColor="#FFFFFF" isShowTitle={false} />
+            ) : (
+              <FaArrowRight className="w-6 h-6 sm:w-8 sm:h-8" />
+            )}
           </div>
         </div>
       </section>
@@ -220,16 +258,21 @@ const LessonDescriptionComponent = ({
   );
 };
 
-const LessonPreviewComponent= ({ lesson }: {lesson:Record<string, any>}) => {
+const LessonPreviewComponent = ({
+  lesson,
+}: {
+  lesson: Record<string, any>;
+}) => {
+  const bulletPoints = lesson?.objectives
+    .split(/\(\d+\)\s*/)
+    .filter((item: any) => item.trim() !== "");
 
-  const bulletPoints = lesson?.objectives.split(/\(\d+\)\s*/).filter((item:any) => item.trim() !== '');
-
-  const lines = lesson?.outcomes.split('\n');
-// const title = lines[0];
-const lessonOutcomes = lines.slice(1)
+  const lines = lesson?.outcomes.split("\n");
+  // const title = lines[0];
+  const lessonOutcomes = lines.slice(1);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-900 via-amber-800 to-yellow-900 p-6 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-amber-900 via-amber-800 to-yellow-900 px-6 flex items-center justify-center">
       <div className="max-w-7xl w-full">
         {/* Header */}
         <div className="text-center mb-12">
@@ -263,7 +306,9 @@ const lessonOutcomes = lines.slice(1)
             <div className="flex items-center gap-6 mb-6">
               <div className="flex items-center gap-2 text-gray-600">
                 <Clock className="w-5 h-5" />
-                <span className="font-medium">{lesson?.estimatedDuration} minutes</span>
+                <span className="font-medium">
+                  {lesson?.estimatedDuration} minutes
+                </span>
               </div>
               {/* {hasAudio && (
                 <div className="flex items-center gap-2 text-gray-600">
@@ -284,7 +329,7 @@ const lessonOutcomes = lines.slice(1)
                 You'll Learn:
               </h3>
               <ul className="space-y-3">
-                {bulletPoints.map((point:string, index:number) => (
+                {bulletPoints.map((point: string, index: number) => (
                   <li key={index} className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
                     <span className="text-gray-700 leading-relaxed">
@@ -318,13 +363,13 @@ const lessonOutcomes = lines.slice(1)
 
               {/* Outcomes List */}
               <ul className="space-y-4 mb-8">
-                {lessonOutcomes.map((outcome:any, index:number) => (
+                {lessonOutcomes.map((outcome: any, index: number) => (
                   <li key={index} className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <div className="w-2 h-2 bg-green-600 rounded-full"></div>
                     </div>
                     <span className="text-gray-700 leading-relaxed text-lg">
-                    {outcome.replace('✅', '').trim()}
+                      {outcome.replace("✅", "").trim()}
                     </span>
                   </li>
                 ))}
@@ -399,7 +444,9 @@ const Page = () => {
               </div>
             </div>
             <div className="text-center space-y-2">
-              <h2 className={`text-2xl text-[#012657] font-bold`}>Data is Loading...</h2>
+              <h2 className={`text-2xl text-[#012657] font-bold`}>
+                Data is Loading...
+              </h2>
               {/* <p>Gathering your language experience…</p> */}
             </div>
           </div>
@@ -409,7 +456,9 @@ const Page = () => {
           <section className="flex justify-end items-center">
             <LessonDescriptionComponent lesson={lesson} />
           </section>
-          <section><LessonPreviewComponent lesson={lesson} /></section>
+          <section>
+            <LessonPreviewComponent lesson={lesson} />
+          </section>
         </section>
       )}
     </div>

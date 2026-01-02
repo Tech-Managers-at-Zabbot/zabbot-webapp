@@ -1,52 +1,168 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-import MediaComponents from '../MediaRendererComponent';
+import React, { useEffect, useState } from "react";
+import MediaComponents from "../MediaRendererComponent";
+import Image from "next/image";
+import ToneModal from "./TonalModal";
+import InAppButton from "@/components/InAppButton";
+import { FaArrowRight } from "react-icons/fa6";
+import InLessonRecordWithPara from "./InLessonRecordWithPara";
 
-
-
-const NormalComponentComponent = (
-    {
+const NormalComponentComponent = ({
   content,
+  lessonImg,
 }: {
   content: Record<string, any>;
-}
-) => {
+  lessonImg: string;
+}) => {
+  const cleanContent = content.customText?.replace(/<[^>]*>/g, "") || "";
+  const [ contentData, setContentData ] = useState([])
+  const [showPronunciationModal, setShowPronunciationModal] = useState(false);
 
-      const cleanContent = content.customText?.replace(/<[^>]*>/g, "") || "";
+  useEffect(()=> {
+    if(cleanContent?.length){
+      setContentData(cleanContent.split("–"))
+    }
+  },[cleanContent])
 
-    return (
-         <div className="bg-[url('/lessons/questionFrame.svg')] min-h-[300px] sm:min-h-[400px] w-full max-w-[90%] sm:max-w-[400px] md:max-w-[500px] flex flex-col justify-center items-center bg-center bg-contain bg-no-repeat p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
-          <div className="w-[80%] px-2 sm:px-4 flex flex-col justify-center items-center text-center">
-            {/* Main Content */}
-            <div className="text-base sm:text-xl md:text-2xl font-medium leading-relaxed">
-              {cleanContent.split("–").map((part: string, index: number) => (
-                <div
-                  key={index}
-                  className={index > 0 ? "block mt-2" : "inline"}
-                >
-                  {part.trim()}
-                </div>
-              ))}
-            </div>
+  const [selectedTone, setSelectedTone] = useState<string | null>(null);
 
-            {/* Translation */}
-            {content?.translation && (
-              <div className="text-[#EBEBEB] flex justify-center items-center text-sm sm:text-base p-3">
-                <div className="flex rounded-lg bg-black/30 p-2">
-                  {content.translation}
-                </div>
-              </div>
-            )}
+  function splitTones(text: string): string[] {
+    return text.trim().split(/\s+/);
+  }
 
-            {/* Media Components */}
-            <div className="flex items-center justify-center">
+  const TONE_INFO: Record<
+    string,
+    { title: string; description: string; audioFile: string }
+  > = {
+    Re: {
+      title: "RE",
+      description: "Represents a high pitch in Yoruba pronunciation.",
+      audioFile: "",
+    },
+    Mi: {
+      title: "MI",
+      description: "Represents a mid-level pitch in Yoruba pronunciation.",
+      audioFile: "",
+    },
+    Do: {
+      title: "DO",
+      description: "Represents a low pitch in Yoruba pronunciation.",
+      audioFile: "",
+    },
+  };
+
+  return (
+    <div className="w-full flex flex-col justify-center items-center mb-2 px-4"
+    style={{fontFamily: "Lexend"}}
+    >
+      <div className="w-full max-w-[90%] sm:max-w-[500px] md:max-w-[700px] lg:max-w-[600px] flex flex-col justify-center items-center">
+        {/* Image Container */}
+        {lessonImg && (
+          <div className="w-full mb-6 sm:mb-8">
+            <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[10/4] mx-auto">
+              <Image
+                src={lessonImg}
+                alt="Lesson Image"
+                fill
+                priority
+                className="object-fill rounded-[20px] sm:rounded-[30px]"
+                sizes="(max-width: 640px) 90vw, (max-width: 768px) 500px, (max-width: 1024px) 400px, 400px"
+              />
+
+              {/* Media Components - Positioned at bottom center of image */}
               {content?.files?.length > 0 && (
-                <MediaComponents files={content.files} />
+                <div className="absolute bottom-[-20] left-1/2 -translate-x-1/2 z-10">
+                  <MediaComponents files={content.files} />
+                </div>
               )}
             </div>
           </div>
+        )}
+
+        {/* Media Components - Show below if no image */}
+        {!lessonImg && content?.files?.length > 0 && (
+          <div className="w-full flex justify-center mb-6">
+            <MediaComponents files={content.files} />
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div className="w-full flex flex-col text-center text-base sm:text-xl md:text-2xl font-medium">
+          <div className="text-[#975945] text-[18px] font-normal uppercase">
+          {contentData[0]}
+          </div>
+
+          <div className="text-[#F15B29] text-[60px] font-[700]">
+          {contentData[1]}
+          </div>
         </div>
-    )
-}
+
+        {/* Translation */}
+        {content?.translation && (
+          <div className="w-full flex flex-col justify-center text-center items-center">
+            <div className="inline-flex flex-wrap gap-2 rounded-lg px-4">
+              {splitTones(content.translation).map((tone, index) => (
+                <button
+                  key={`${tone}-${index}`}
+                  className="text-[#E3A261] text-sm sm:text-base font-medium 
+                     px-2 py-1 rounded-md
+                     hover:cursor-pointer transition hover:text-[#F15B29]"
+                  onClick={() => setSelectedTone(tone)}
+                >
+                  {tone}
+                </button>
+              ))}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 mb-2 mt-6 w-full items-center justify-center">
+              <div>
+              <InAppButton
+              background="#EB5017"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <div><FaArrowRight /></div>
+                  <div>Listen with Owe</div>
+                </div>
+              </InAppButton>
+              </div>
+              <div>
+              <InAppButton
+              background="#EB5017"
+              onClick={() => setShowPronunciationModal(true)}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <div><FaArrowRight /></div>
+                  <div>
+                  Record with Para
+                  </div>
+                </div>
+              </InAppButton>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      {selectedTone && (
+        <ToneModal
+          tone={""}
+          title={TONE_INFO[selectedTone]?.title || selectedTone}
+          description={
+            TONE_INFO[selectedTone]?.description || "No description available."
+          }
+          onClose={() => setSelectedTone(null)}
+        />
+      )}
+{showPronunciationModal && (
+  <InLessonRecordWithPara
+    isOpen={showPronunciationModal}
+    onClose={() => setShowPronunciationModal(false)}
+    word={contentData[1]}
+    files={content.files}
+    // pronunciationId={"12345"} 
+    />
+)}
+    </div>
+  );
+};
 
 export default NormalComponentComponent;
