@@ -86,10 +86,10 @@ const PremiumFeaturesPara = ({ handleClick }: { handleClick: () => void }) => {
           {/* Title Section */}
           <div className="flex flex-col space-y-1 sm:space-y-2 md:space-y-3 mb-4 sm:mb-6 lg:mb-8">
               <h3 
-                className="text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
+                className="text-xl flex sm:text-lg md:text-2xl lg:text-3xl font-bold break-words"
                 style={{color: '#101828'}}
               >
-                {getPageText('pronounce_with_para')}
+                {getPageText('pronounce')} {getPageText('with_para')}
               </h3>
           </div>
 
