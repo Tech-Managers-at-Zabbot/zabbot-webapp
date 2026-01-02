@@ -21,9 +21,9 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
   };
 
   const getScoreLabel = (score: number) => {
-    if (score >= 80) return "Excellent!";
-    if (score >= 60) return "Good";
-    if (score >= 40) return "Fair";
+    if (score * 100 >= 80) return "Excellent!";
+    if (score * 100 >= 60) return "Good";
+    if (score * 100 >= 40) return "Fair";
     return "Needs improvement — listen and try again.";
   };
 
@@ -31,7 +31,7 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
     <div className="w-full max-w-md" style={{ fontFamily: "Lexend" }}>
       <div className="flex justify-center mb-2 w-full text-center">
         <span className="text-[#FFDAB6] text-xl md:text-4xl font-bold">
-          {finalScore}%
+          {finalScore * 100 > 100 ? 100 : finalScore * 100}%
         </span>
       </div>
       <div className="text-center mt-2">
