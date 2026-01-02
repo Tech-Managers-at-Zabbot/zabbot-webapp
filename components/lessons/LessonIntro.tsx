@@ -6,6 +6,7 @@ import InAppButton from "@/components/InAppButton";
 import { numberToWords } from "@/utilities/utilities";
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import Image from "next/image";
 
 const LessonOneIntro = ({
   onClick,
@@ -27,7 +28,7 @@ const LessonOneIntro = ({
   return (
     <div
       style={{ fontFamily: "Lexend" }}
-      className="bg-[#fef7d0] min-h-screen w-full flex flex-col items-center justify-center gap-8 md:gap-12 lg:gap-12 px-4 md:px-6 py-8"
+      className="bg-[#fef7d0] w-full flex flex-col items-center justify-center gap-8 md:gap-12 lg:gap-12 px-4 md:px-6 py-8"
     >
       {activeIntro === "1" && (
         <div className="flex flex-col items-center gap-4 md:gap-6 lg:gap-8 w-full max-w-[800px]">
@@ -70,12 +71,13 @@ const LessonOneIntro = ({
       {activeIntro === "2" && (
         <div className="flex flex-col items-center gap-4 md:gap-6 lg:gap-8 w-full max-w-[800px]">
           {/* Mascot Image */}
-          <div className="flex-shrink-0">
-            <img
-              src={"/userDashboard/say-hello.svg"}
+          <div className="relative w-full max-w-[600px] mx-auto aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9]">
+            <Image
+              src="/userDashboard/say-hello.svg"
               alt="Lesson Intro"
-              style={{ borderRadius: "30px" }}
-              className="w-[250px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[350px] lg:w-[350px] lg:h-[250px] xl:h-[400] object-cover"
+              fill
+              priority
+              className="object-cover object-top rounded-[30px]"
             />
           </div>
 

@@ -1,6 +1,6 @@
 "use client";
 // import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
-import UserDashboardNav from "@/components/dashboard/UserDashboardNav";
+// import UserDashboardNav from "@/components/dashboard/UserDashboardNav";
 import AuthGuard from "@/components/security/AuthGuard";
 import React, { 
   // useEffect, 
@@ -41,7 +41,7 @@ const Layout = ({
       <Providers>
         <div className="flex flex-col min-h-screen">
           <div className={`flex-1 min-h-screen`}>
-            <UserDashboardNav />
+            {/* <UserDashboardNav /> */}
             <main style={{ flex: 1 }} className="relative">
               <div className="relative">
                 {/* <section
