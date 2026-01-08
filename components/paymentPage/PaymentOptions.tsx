@@ -172,11 +172,11 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
 
             {/* Payment Methods */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              {/* <h2 className="text-xl font-semibold text-gray-800 mb-4">
                 Select Payment Method
-              </h2>
+              </h2> */}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 {/* Card Payment */}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -215,14 +215,14 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                         Credit/Debit Card
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
-                        Visa, Mastercard, Amex
+                        Visa, Mastercard
                       </p>
                     </div>
                   </div>
                 </motion.button>
 
                 {/* PayPal Button */}
-                <motion.div
+                {/* <motion.div
                   className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
                     selectedMethod === "paypal"
                       ? "border-[#0089C8] bg-blue-50 shadow-lg"
@@ -242,7 +242,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                       <p className="text-sm text-gray-500 mt-1">
                         Fast & secure
                       </p>
-                    </div>
+                    </div> */}
 {/* 
                     {selectedMethod === "paypal" && (
                       <PaypalButtonsComponent
@@ -257,7 +257,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                       />
                     )} */}
 
-                    {selectedMethod !== "paypal" && (
+                    {/* {selectedMethod !== "paypal" && (
                       <button
                         onClick={() => handlePaymentMethodSelect("paypal")}
                         className="w-full py-2 px-4 bg-[#0089C8] text-white rounded-lg hover:bg-[#006B9E] transition-colors"
@@ -266,7 +266,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                       </button>
                     )}
                   </div>
-                </motion.div>
+                </motion.div> */}
               </div>
             </div>
 
