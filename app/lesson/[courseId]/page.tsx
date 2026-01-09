@@ -8,6 +8,7 @@ import { useTheme } from "@/contexts/ThemeProvider";
 import AllCourseLessons from "@/components/lessons/AllCourseLessons";
 import GetInTouch from "@/components/dashboard/GetInTouch";
 import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
+import UserDashboardNavbar from "@/components/dashboard/UserDashboardNav";
 
 const Lessons = () => {
   const [greeting, setGreeting] = useState("Kàbọ̀");
@@ -60,6 +61,7 @@ const Lessons = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
+      <UserDashboardNavbar />
       <div
         className="min-h-screen relative pb-50 px-[5%] overflow-x-hidden"
         style={{

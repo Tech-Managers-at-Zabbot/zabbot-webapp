@@ -530,7 +530,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   ]);
 
   const navigateToCompletion = useCallback(async () => {
-    router.push(`/lesson/${courseId}/completed`);
+    router.push(`/lesson/${courseId}/${lessonId}/completed`);
   }, [router, courseId]);
 
   // Load data on mount
