@@ -53,9 +53,9 @@ const ToneModal = ({ tone, title, description, onClose }: ToneModalProps) => {
             {description}
           </p>
 
-          <div className="cursor-pointer hover:text-[#FFDAB6] text-center">
+          {/* <div className="cursor-pointer hover:text-[#FFDAB6] text-center">
             <HiOutlineSpeakerWave size={40} />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

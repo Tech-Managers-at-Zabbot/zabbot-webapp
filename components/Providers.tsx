@@ -7,7 +7,7 @@ import { LoadingProvider } from "@/contexts/LoadingProvider";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { UserProvider } from "@/contexts/UserContext";
 // import { PayPalScriptProvider } from "@paypal/react-paypal-js"
-// import { LessonProvider } from "@/contexts/LessonContext";
+import { LessonProvider } from "@/contexts/LessonContext";
 
 const queryClient = new QueryClient();
 
@@ -25,9 +25,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
           options={payPalOptions}
           > */}
           <UserProvider>
+          <LessonProvider>
             <LanguageProvider>
               <LoadingProvider>{children}</LoadingProvider>
             </LanguageProvider>
+          </LessonProvider>
           </UserProvider>
           {/* </PayPalScriptProvider> */}
         </ThemeProvider>

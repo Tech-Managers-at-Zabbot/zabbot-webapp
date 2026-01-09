@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import SearchBar from "@/components/general/SearchBar";
-// import MainDropdown from "@/components/MainDropdown";
-import React from "react"; // useState
-// import { IoSearchOutline } from "react-icons/io5";
-// import { MdOutlineFilterList } from "react-icons/md";
-// import { lessonProgressData } from "@/constants/data-to-populate/dashboardData";
+import React from "react";
 import {
-  // useGetAllCourses,
   useGetCoursesWithLessons,
 } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
@@ -14,12 +8,8 @@ import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/Dashbo
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { LessonsCard2 } from "../dashboard/UserLessonDataComponent";
 import { useTheme } from "@/contexts/ThemeProvider";
-// import Pagination from "../dashboard/Pagination";
 
 const AllCourseLessons = () => {
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 12;
-
   const { userDetails } = useUser();
 
   const { theme } = useTheme();
@@ -30,80 +20,6 @@ const AllCourseLessons = () => {
   const courseLessons = coursesWithLessons?.data?.lessons;
 
   const course = coursesWithLessons?.data?.course;
-
-  const apiThumbnails = ["/userDashboard/say-hello.svg"];
-
-  const allStepsWithThumbnails = Array.isArray(courseLessons)
-    ? courseLessons.map((lesson, index) => ({
-        ...lesson,
-        thumbnailImage:
-          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
-      }))
-    : [];
-
-  const stepsToMap = [...allStepsWithThumbnails];
-
-  // Calculate total pages based on your data
-  // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
-
-  // Get current page data
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
-
-  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-
-  // const handleFilterClick = (filterName: string) => {
-  //   setSelectedFilters((prev) =>
-  //     prev.includes(filterName)
-  //       ? prev.filter((f) => f !== filterName)
-  //       : [...prev, filterName]
-  //   );
-  // };
-
-  // const handlePageChange = (page: number) => {
-  //   setCurrentPage(page);
-  //   // Here you would typically make an API call to fetch the new page data
-  //   // For now, we're just updating the local state
-  // };
-
-  // const dropdownOptions = [
-  //   {
-  //     name: "Alphabetical",
-  //     path: "",
-  //   },
-  //   {
-  //     name: "Newest",
-  //     path: "",
-  //   },
-  //   {
-  //     name: "Oldest",
-  //     path: "",
-  //   },
-  // ];
-
-  // const filterMenu = [
-  //   {
-  //     name: "Completed",
-  //     path: "",
-  //   }, ẹ
-  //   {
-  //     name: "In progress",
-  //     path: "",
-  //   },
-  //   {
-  //     name: "Explorer",
-  //     path: "",
-  //   },
-  //   {
-  //     name: "Foundation",
-  //     path: "",
-  //   },
-  //   {
-  //     name: "Builder",
-  //     path: "",
-  //   },
-  // ];
 
   return (
     <div
@@ -137,69 +53,7 @@ const AllCourseLessons = () => {
               : course?.description || "Course Description"}
           </span>
         </section>
-
-        {/* Controls Section - Responsive layout */}
-        {/* <section className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 lg:gap-6 flex-shrink-0">
-          <div className="w-full sm:w-auto sm:min-w-[200px]">
-            <SearchBar icon={<IoSearchOutline size={20} />} />
-          </div>
-
-          <div className="flex items-center justify-between sm:justify-start gap-4 lg:gap-6">
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
-                Add Filter
-              </span>
-              <span>
-                <MdOutlineFilterList
-                  className="hover:cursor-pointer"
-                  size={20}
-                  color={"#000000"}
-                />
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-[#8E8E8E] font-medium text-[12px] sm:text-[14px] leading-tight whitespace-nowrap">
-                Sort by
-              </span>
-              <div className="min-w-0">
-                <MainDropdown
-                  options={dropdownOptions}
-                  placeholder="Alphabetical"
-                  color="#3E3E3E"
-                  padding="6px 8px"
-                  backgroundColor="#DCDEDD"
-                  textHoverColor=""
-                  fontWeight="500"
-                  dropDownBackgroundColor="#8E8E8E"
-                  isSetDropdown={true}
-                  dropdownMaxWidth="180px"
-                  dropdownMinWidth="120px"
-                />
-              </div>
-            </div>
-          </div>
-        </section> */}
       </header>
-
-      {/* Filter Tags Section - Responsive */}
-      {/* <section className="w-full overflow-hidden">
-        <div className="flex flex-wrap gap-2 sm:gap-3">
-          {filterMenu.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => handleFilterClick(item.name)}
-              className={`flex items-center gap-2 px-3 py-2 border rounded-lg cursor-pointer transition-colors text-[12px] sm:text-[14px] whitespace-nowrap ${
-                selectedFilters.includes(item.name)
-                  ? "bg-[#CF0A5C] text-white border-[#CF0A5C]"
-                  : "border-[#F2F2F2] hover:bg-[#DCDEDD] bg-[#F2F2F2] text-[#8F8F8F]"
-              }`}
-            >
-              <span>{item.name}</span>
-            </div>
-          ))}
-        </div>
-      </section> */}
 
       {/* Courses Grid Section - Fully responsive grid */}
       <section className="w-full min-w-0">
@@ -219,7 +73,7 @@ const AllCourseLessons = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
-              {stepsToMap?.map(
+              {courseLessons?.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
                     key={index}

@@ -163,9 +163,9 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                   <p className="text-sm font-medium text-gray-800">
                     7-Day Free Trial Included
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  {/* <p className="text-xs text-gray-600 mt-1">
                     You won't be charged until your trial ends
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>

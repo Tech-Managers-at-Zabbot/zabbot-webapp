@@ -7,6 +7,7 @@ import ToneModal from "./TonalModal";
 import InAppButton from "@/components/InAppButton";
 import { FaArrowRight } from "react-icons/fa6";
 import InLessonRecordWithPara from "./InLessonRecordWithPara";
+import InLessonChatWithOreModal from "./InLessonChatWIthOre";
 
 const NormalComponentComponent = ({
   content,
@@ -18,6 +19,7 @@ const NormalComponentComponent = ({
   const cleanContent = content.customText?.replace(/<[^>]*>/g, "") || "";
   const [ contentData, setContentData ] = useState([])
   const [showPronunciationModal, setShowPronunciationModal] = useState(false);
+  const [showChatModal, setShowChatModal] = useState(false);
 
   useEffect(()=> {
     if(cleanContent?.length){
@@ -118,10 +120,11 @@ const NormalComponentComponent = ({
               <div>
               <InAppButton
               background="#EB5017"
+              onClick={() => setShowChatModal(true)}
               >
                 <div className="flex items-center justify-center gap-2">
                   <div><FaArrowRight /></div>
-                  <div>Listen with Owe</div>
+                  <div>Chat with Òrẹ́</div>
                 </div>
               </InAppButton>
               </div>
@@ -133,7 +136,7 @@ const NormalComponentComponent = ({
                 <div className="flex items-center justify-center gap-2">
                   <div><FaArrowRight /></div>
                   <div>
-                  Record with Para
+                  Record with Pàrà
                   </div>
                 </div>
               </InAppButton>
@@ -158,6 +161,16 @@ const NormalComponentComponent = ({
     onClose={() => setShowPronunciationModal(false)}
     word={contentData[1]}
     files={content.files}
+    // pronunciationId={"12345"} 
+    />
+)}
+
+{showChatModal && (
+  <InLessonChatWithOreModal
+    isOpen={showChatModal}
+    onClose={() => setShowChatModal(false)}
+    word={contentData[1]}
+    // files={content.files}
     // pronunciationId={"12345"} 
     />
 )}
