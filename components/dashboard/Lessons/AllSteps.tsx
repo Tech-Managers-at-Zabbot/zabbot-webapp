@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import SearchBar from "@/components/general/SearchBar";
 // import MainDropdown from "@/components/MainDropdown";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { IoSearchOutline } from "react-icons/io5";
 // import { MdOutlineFilterList } from "react-icons/md";
 import { StepsCard } from "../UserLessonDataComponent";
@@ -25,22 +25,22 @@ const AllSteps = () => {
   const { data: allLanguageSteps, isLoading: stepsLoading } =
     useGetLanguageLessons(userDetails?.languageId);
 
-  const allSteps = allLanguageSteps?.data;
+    const [ allSteps, setAllSteps ] = useState<any[]>([])
 
-  const apiThumbnails = ["/userDashboard/say-hello.svg"];
+    console.log('steps', allLanguageSteps)
 
-  const allStepsWithThumbnails = Array.isArray(allSteps)
-    ? allSteps.map((step, index) => ({
-        ...step,
-        thumbnailImage:
-          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
-      }))
-    : [];
+  // const allSteps = allLanguageSteps?.data;
 
   // const stepsToMap = [...allStepsWithThumbnails];
 
+  useEffect(()=> {
+    if(allLanguageSteps?.data){
+      setAllSteps(allLanguageSteps?.data)
+    }
+  },[allLanguageSteps])
+
   const stepsToMap = [
-    ...allStepsWithThumbnails,
+    ...allSteps,
     ...steps
   ]
   // Calculate total pages based on your data

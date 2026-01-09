@@ -267,42 +267,6 @@ export const LessonsCard = ({
         </div>
       </section>
 
-      {/* <section
-        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={() => {
-          router.push("/lesson");
-          setLoading(true);
-        }}
-      >
-        <div className="flex-shrink-0">
-          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
-            <Image
-              src="/userDashboard/hand-click-element.svg"
-              alt="A hand clicking the card"
-              fill
-              priority
-              className="object-cover rounded-l-sm"
-            />
-          </div>
-        </div>
-      </section> */}
-
-      {/* <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
-        <div
-          className={`px-[12px] py-[8px] border rounded-md`}
-          style={{
-            color:
-              data.level === "foundation"
-                ? "#D3AF37"
-                : data.level === "builder"
-                ? "#CF0A5C"
-                : "#169A9C",
-          }}
-        >
-          {data?.level}
-        </div>
-      </section> */}
-
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
           <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000]">
@@ -310,11 +274,6 @@ export const LessonsCard = ({
               ? data?.title.slice(0, 50) + "..."
               : data?.title}
           </h3>
-          {/* <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
-            {data?.description?.length > 50
-              ? data?.description.slice(0, 50) + "..."
-              : data?.description}
-          </div> */}
         </div>
 
         <div className="flex flex-col gap-[4px]">
@@ -360,7 +319,7 @@ export const LessonsCard2 = ({
       <section className="w-full p-1">
         <div className="relative w-full h-[170px]">
           <Image
-            src={data?.thumbnailImage}
+            src={data?.lessonImg ?? "/userDashboard/yoruba/coming-soon.svg"}
             alt="An image of a boy prostrating before an elderly woman in greeting"
             fill
             priority
@@ -368,42 +327,6 @@ export const LessonsCard2 = ({
           />
         </div>
       </section>
-
-      {/* <section
-        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={() => {
-          router.push("/lesson");
-          setLoading(true);
-        }}
-      >
-        <div className="flex-shrink-0">
-          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
-            <Image
-              src="/userDashboard/hand-click-element.svg"
-              alt="A hand clicking the card"
-              fill
-              priority
-              className="object-cover rounded-l-sm"
-            />
-          </div>
-        </div>
-      </section> */}
-
-      {/* <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
-        <div
-          className={`px-[12px] py-[8px] border rounded-md`}
-          style={{
-            color:
-              data.level === "foundation"
-                ? "#D3AF37"
-                : data.level === "builder"
-                ? "#CF0A5C"
-                : "#169A9C",
-          }}
-        >
-          {data?.level}
-        </div>
-      </section> */}
 
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
@@ -415,11 +338,6 @@ export const LessonsCard2 = ({
               ? data?.title.slice(0, 50) + "..."
               : data?.title}
           </h3>
-          {/* <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
-            {data?.description?.length > 50
-              ? data?.description.slice(0, 50) + "..."
-              : data?.description}
-          </div> */}
         </div>
 
         <div className="flex flex-col gap-[4px]">
@@ -473,7 +391,7 @@ export const StepsCard = ({
         <div className="relative rounded-lg w-full p-2 h-[200px]">
           <Image
             src={
-              data?.thumbnailImage || "/userDashboard/yoruba/coming-soon.svg"
+              data?.lessonImg ?? "/userDashboard/yoruba/coming-soon.svg"
             }
             alt="Course Banner Image"
             fill

@@ -74,7 +74,7 @@ const LessonContent = () => {
 
   if (!lesson || (contents.length === 0 && quizzes.length === 0)) {
     return (
-      <div className="bg-[#fef7d0] min-h-screen text-[black]">
+      <div className="bg-[#FEECBC] min-h-screen text-[black]">
         <div className="flex flex-col items-center justify-center pt-10">
           <EmptyStateCard
             title="No Data"
@@ -332,3 +332,4 @@ const LessonContent = () => {
 };
 
 export default LessonContent;
+
