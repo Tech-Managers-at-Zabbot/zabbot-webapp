@@ -83,66 +83,63 @@ const InLessonChatWithOreModal: React.FC<InLessonChatWithOreModalProps> = ({
 
   // Normalize function to remove diacritics for flexible matching
   
-  const normalizeYorubaString = (str: string): string => {
-    return str
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
-  };
+ const normalizeYorubaString = (str: string): string => {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+};
 
-  const sendMessage = async () => {
-    if (!inputValue.trim()) return;
+const sendMessage = async () => {
+  if (!inputValue.trim()) return;
 
-    // Check if the message is about the specific word
-    // Normalize both the input and the word for flexible matching
-    const normalizedInput = normalizeYorubaString(inputValue);
-    const normalizedWord = normalizeYorubaString(word);
-    
-    const isAboutWord = normalizedInput.includes(normalizedWord);
-    if (!isAboutWord) {
-      addAlert(
-        "Invalid Question",
-        `Only questions about the word "${word}" are allowed.`,
-        "error"
-      );
-      return;
-    }
+  // Normalize both strings
+  const normalizedInput = normalizeYorubaString(inputValue);
+  const normalizedWord = normalizeYorubaString(word);
+  
+  // Extract core word parts (split by spaces and check each part)
+  const wordParts = normalizedWord.split(/\s+/).filter(p => p.length > 1);
+  
+  // Check if at least one significant word part is in the input
+  const isRelated = wordParts.some(part => normalizedInput.includes(part)) ||
+                    normalizedInput === normalizedWord ||
+                    normalizedWord.includes(normalizedInput);
+  
+  if (!isRelated) {
+    addAlert(
+      "Invalid Question",
+      `Only questions about the word "${word}" are allowed.`,
+      "error"
+    );
+    return;
+  }
 
-    // if (!canMakeCall) {
-    //   addAlert(
-    //     "Notice!!!",
-    //     "You have reached your daily limit of 30 calls. Please try again tomorrow.",
-    //     "error"
-    //   );
-    //   return;
-    // }
+  const userMessage: Message = { role: "user", content: inputValue };
+  setMessages((prev) => [...prev, userMessage]);
+  setInputValue("");
+  setLoading(true);
 
-    const userMessage: Message = { role: "user", content: inputValue };
-    setMessages((prev) => [...prev, userMessage]);
-    setInputValue("");
-    setLoading(true);
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: inputValue }),
+    });
+    const data = await res.json();
+    const reply =
+      data.choices?.[0]?.message?.content || "No response received.";
 
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: inputValue }),
-      });
-      const data = await res.json();
-      const reply =
-        data.choices?.[0]?.message?.content || "No response received.";
+    const assistantMessage: Message = { role: "assistant", content: reply };
+    setMessages((prev) => [...prev, assistantMessage]);
 
-      const assistantMessage: Message = { role: "assistant", content: reply };
-      setMessages((prev) => [...prev, assistantMessage]);
-
-    //   if (reply !== "No response received.") decrementCalls();
-    } catch (err) {
-      console.error(err);
-      addAlert("Error", "Failed to send message. Please try again.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+    addAlert("Error", "Failed to send message. Please try again.", "error");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!isOpen) return null;
 
