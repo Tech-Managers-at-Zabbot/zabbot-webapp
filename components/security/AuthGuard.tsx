@@ -28,6 +28,7 @@ export default function AuthGuard({
   const [isChecking, setIsChecking] = useState(true);
   const { setLoading, loading } = useLoading();
   const { addAlert } = useAlert();
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   const [isDark, setIsDark] = useState(false);
 
@@ -43,9 +44,15 @@ export default function AuthGuard({
   }, []);
 
   useEffect(() => {
+    const pathname = window.location.pathname;
+    if (pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password') {
+    setIsChecking(false);
+    return;
+  }
     const token = Cookies.get("access_token");
-
+ if (hasRedirected) return;
     if (!token) {
+      setHasRedirected(true);
       addAlert("Error", "Session expired. Please log in again.", "error");
       localStorage.removeItem("token");
       localStorage.removeItem("access_token");
@@ -108,26 +115,26 @@ export default function AuthGuard({
     } else {
       setLoading(false);
     }
-  }, [isChecking, setLoading]);
+  }, [isChecking]);
 
   //   useEffect(() => {
   //   setLoading(isChecking);
   // }, [isChecking, setLoading]);
 
   if (isChecking) {
-    if(!loading){
-    return (
-      <>
-        <Loader isDark={isDark} />
-        {/* <Alerts
+    if (!loading) {
+      return (
+        <>
+          <Loader isDark={isDark} />
+          {/* <Alerts
           position="top-right"
           direction="right"
           timer={10000}
           className="rounded-md relative z-100 !w-80"
         /> */}
-      </>
-    );
-  }
+        </>
+      );
+    }
   }
 
   return (

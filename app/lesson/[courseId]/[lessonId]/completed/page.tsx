@@ -15,12 +15,10 @@ import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 
 const Page = () => {
-  const {
-    lesson,
-  } = useLessonContext();
+  const { lesson } = useLessonContext();
 
-    const { width = 0, height = 0 } = useWindowSize();
-    const [showConfetti, setShowConfetti] = useState(false)
+  const { width = 0, height = 0 } = useWindowSize();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const router = useRouter();
 
@@ -41,29 +39,29 @@ const Page = () => {
     router.push("/user-dashboard");
   };
 
-  useEffect(()=> {
-setShowConfetti(true)
-  },[])
+  useEffect(() => {
+    setShowConfetti(true);
+  }, []);
 
   return (
     <div
       className="bg-[#FEECBC] flex flex-col justify-start py-6 items-center min-h-screen"
       style={{ fontFamily: "Lexend" }}
     >
-          {showConfetti && (
-          <Confetti
-            width={width}
-            height={height}
-            recycle={false}
-            numberOfPieces={1000}
-            gravity={0.4}
-            tweenDuration={10000}
-            run={showConfetti}
-            style={{
-              zIndex: 9999,
-            }}
-          />
-        )}
+      {showConfetti && (
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={1000}
+          gravity={0.4}
+          tweenDuration={10000}
+          run={showConfetti}
+          style={{
+            zIndex: 9999,
+          }}
+        />
+      )}
       <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-center bg-no-repeat min-h-[200px]"></header>
       <div className="flex w-full relative items-center gap-3 sm:gap-4">
         <button
@@ -177,6 +175,17 @@ setShowConfetti(true)
       </div>
 
       <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[100px]"></footer>
+      <footer className="text-xs text-center text-gray-500 z-[9999]">
+        Icons by{" "}
+        <a
+          href="https://icons8.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline text-sm"
+        >
+          Icons8
+        </a>
+      </footer>
 
       {homeModal && (
         <Modal
