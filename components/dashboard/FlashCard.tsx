@@ -1,7 +1,17 @@
 import React from "react";
 import InAppButton from "../InAppButton";
+import { useRouter } from "next/navigation"
+import { useLoading } from "@/contexts/LoadingProvider";
 
 const FlashCard = () => {
+  const router = useRouter()
+  const { setLoading } = useLoading()
+
+  const handleRedirect = () => {
+    setLoading(true)
+    return router.push("/flashcards")
+  }
+
   return (
     <div
       className="bg-[#FFEF7E] rounded-lg shadow-lg flex flex-col gap-6 p-6 text-center"
@@ -13,7 +23,9 @@ const FlashCard = () => {
         Mastering alphabet sounds builds your Yorùbá fluency and tone precision.
       </div>
       <div>
-        <InAppButton background="#266950">
+        <InAppButton background="#266950"
+        onClick={handleRedirect}
+        >
           <div className="text-white text-[15.612px] fonnt-[700] leading-[100%]">
             Go to flashcard
           </div>
