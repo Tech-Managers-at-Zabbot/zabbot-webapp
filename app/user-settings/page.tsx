@@ -14,6 +14,7 @@ import UserAnalytics from "@/components/userProfile/profile/UserAnalytics";
 import EditProfileCard from "@/components/userProfile/profile/EditProfileCard";
 import ChangePasswordCard from "@/components/userProfile/profile/ChangePasswordCard";
 import { useRouter } from "next/navigation";
+import AchievementsCard from "@/components/dashboard/AchievementsCard";
 
 import Table from "@/components/general/Table";
 
@@ -123,6 +124,11 @@ const UserSettings = () => {
       icon: <IoMdNotificationsOutline size={20} />,
       keyword: "notifications",
     },
+    {
+      title: "Achievements",
+      icon: <IoMdNotificationsOutline size={20} />,
+      keyword: "achievemets",
+    }
   ];
 
   return (
@@ -326,6 +332,15 @@ const UserSettings = () => {
                 </div>
               </div>
               <NewNotificationsSettingsCard />
+            </section>
+          )}
+
+          {/* ACHIEVEMENTS SECTION */}
+          {menuKeyword === "achievemets" && (
+            <section className="flex flex-col gap-6">
+              <div className="p-6 bg-white border border-[#E0E0E0] rounded-2xl shadow-sm">
+                <AchievementsCard />
+              </div>
             </section>
           )}
         </section>
