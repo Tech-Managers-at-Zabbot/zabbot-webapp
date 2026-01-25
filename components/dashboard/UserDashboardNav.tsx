@@ -95,13 +95,13 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: true,
     },
     {
-      name: "Billing",
-      route: "#",
+      name: "Payment",
+      route: "/user-settings?tab=payment",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     ...(userDetails?.role === "admin"
       ? [
@@ -165,13 +165,13 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: true,
     },
     {
-      name: "Billing",
-      route: "#",
+      name: "Payment",
+      route: "/user-settings?tab=payment",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "#",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Settings",
