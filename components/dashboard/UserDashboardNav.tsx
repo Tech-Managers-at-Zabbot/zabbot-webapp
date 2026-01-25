@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import MainDropdown from "../MainDropdown";
 import LanguageToggle from "../languageToggle/LanguageToggle";
 import { Modal } from "../general/Modal";
@@ -20,6 +20,8 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("tab");
   const { addAlert } = useAlert();
   const { userDetails } = useUser();
 
@@ -27,7 +29,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
     const keepDailyCallsRemaining = localStorage.getItem(
-      "daily_calls_remaining"
+      "daily_calls_remaining",
     );
 
     setLogoutLoading(true);
@@ -41,7 +43,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
     localStorage.setItem(
       "daily_calls_remaining",
-      keepDailyCallsRemaining || "30"
+      keepDailyCallsRemaining || "30",
     );
 
     setLoading(true);
@@ -78,12 +80,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Achievements",
-      route: "#",
+      route: "/user-settings?tab=achievemets",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Marketplace",
@@ -148,12 +150,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Achievements",
-      route: "#",
+      route: "/user-settings?tab=achievemets",
       iconPath: "/userDashboard/isAchievements.svg",
-      isActiveIconPath: "#",
+      isActiveIconPath: "",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Marketplace",
@@ -245,12 +247,25 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
   ];
 
+  // const handleMenuItemClick = (route: string) => {
+  //   if (route !== "#" && pathname !== route) {
+  //     router.push(route);
+  //     setLoading(true);
+  //     setIsMobileMenuOpen(false);
+  //   }
+  // };
+
   const handleMenuItemClick = (route: string) => {
-    if (route !== "#" && pathname !== route) {
-      router.push(route);
-      setLoading(true);
-      setIsMobileMenuOpen(false);
-    }
+    if (route === "#") return;
+
+    const [path, query] = route.split("?");
+    const routeTab = new URLSearchParams(query).get("tab");
+
+    if (pathname === path && routeTab === currentTab) return;
+
+    router.push(route);
+    setLoading(true);
+    setIsMobileMenuOpen(false);
   };
 
   const mobilePremiumItemClick = (data: {
@@ -327,29 +342,40 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
               className={`flex hover:cursor-${
                 !item.disabled ? "pointer" : "not-allowed"
               } hover:text-[${
-                pathname === item.route
+                pathname === item.route.split("?")[0] &&
+                currentTab ===
+                  new URLSearchParams(item.route.split("?")[1]).get("tab")
                   ? "#162B6E"
                   : item.disabled
-                  ? ""
-                  : "#FFE933"
+                    ? ""
+                    : "#FFE933"
               }] rounded-4xl px-[16px] text-[${
-                pathname === item.route
+                pathname === item.route.split("?")[0] &&
+                currentTab ===
+                  new URLSearchParams(item.route.split("?")[1]).get("tab")
                   ? "#162B6E"
                   : item.disabled
-                  ? "#666666"
-                  : "white"
+                    ? "#666666"
+                    : "white"
               }] justify-center items-center`}
               key={index}
               onClick={() =>
                 item.useAction ? item.action() : handleMenuItemClick(item.route)
               }
               style={{
-                backgroundColor: pathname === item.route ? "#FFE933" : "",
+                backgroundColor:
+                  pathname === item.route.split("?")[0] &&
+                  currentTab ===
+                    new URLSearchParams(item.route.split("?")[1]).get("tab")
+                    ? "#FFE933"
+                    : "",
               }}
             >
               <Image
                 src={
-                  pathname === item.route
+                  pathname === item.route.split("?")[0] &&
+                  currentTab ===
+                    new URLSearchParams(item.route.split("?")[1]).get("tab")
                     ? item.isActiveIconPath
                     : item.iconPath
                 }
@@ -412,16 +438,22 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                         : handleMenuItemClick(item.route)
                     }
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${
-                      pathname === item.route
+                      pathname === item.route.split("?")[0] &&
+                      currentTab ===
+                        new URLSearchParams(item.route.split("?")[1]).get("tab")
                         ? "bg-[#FFE933] text-[#162B6E]"
                         : item.disabled
-                        ? "text-[#666666]"
-                        : "text-[#FFFFFF]"
+                          ? "text-[#666666]"
+                          : "text-[#FFFFFF]"
                     }`}
                   >
                     <Image
                       src={
-                        pathname === item.route
+                        pathname === item.route.split("?")[0] &&
+                        currentTab ===
+                          new URLSearchParams(item.route.split("?")[1]).get(
+                            "tab",
+                          )
                           ? item.isActiveIconPath
                           : item.iconPath
                       }
