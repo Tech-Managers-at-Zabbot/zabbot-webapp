@@ -50,24 +50,26 @@ const LessonContent = () => {
   const handleQuizSubmit = (
     quizId: string,
     userAnswer: string,
-    isCorrect: boolean
+    isCorrect: boolean,
+    attemptNumber: number,
+    scoreEarned: number
   ) => {
-    submitQuizAnswer(quizId, userAnswer, isCorrect);
+    submitQuizAnswer(quizId, userAnswer, isCorrect, attemptNumber, scoreEarned);
   };
   const { setLoading } = useLoading();
   const [dashboardLoading, setDashboardLoading] = useState(false);
-  const [ homeModal, setHomeModal ] = useState(false)
-  const [ homeLoading, setHomeLoading ] = useState(false)
+  const [homeModal, setHomeModal] = useState(false);
+  const [homeLoading, setHomeLoading] = useState(false);
 
   const router = useRouter();
 
   const handleRedirectHome = () => {
-     setLoading(true);
-     setHomeLoading(true)
-     setDashboardLoading(true)
+    setLoading(true);
+    setHomeLoading(true);
+    setDashboardLoading(true);
     router.push("/user-dashboard");
-  }
-  
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -208,16 +210,17 @@ const LessonContent = () => {
               dashboardLoading ? "cursor-not-allowed" : "cursor-pointer"
             } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
             onClick={() => {
-              setHomeModal(true)
+              setHomeModal(true);
             }}
             disabled={dashboardLoading}
           >
             <FaArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
           </button>
 
-          <button className="cursor-pointer p-2 sm:p-3 rounded-full hover:bg-white/10 transition"
-          onClick={() => {
-              setHomeModal(true)
+          <button
+            className="cursor-pointer p-2 sm:p-3 rounded-full hover:bg-white/10 transition"
+            onClick={() => {
+              setHomeModal(true);
             }}
             disabled={dashboardLoading}
           >
@@ -296,7 +299,7 @@ const LessonContent = () => {
 
       <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[100px] z-0"></footer>
 
-            {homeModal && (
+      {homeModal && (
         <Modal
           isOpen={homeModal}
           onClose={() => setHomeModal(false)}
@@ -305,7 +308,9 @@ const LessonContent = () => {
         >
           <div className="p-6 text-center">
             <p className="text-lg leading-[30px] text-[#252525] font-[400] mb-6">
-              Your progress is automatically saved, so you can pick up right where you left off. Feel free to exit at any time everything will be here when you return.
+              Your progress is automatically saved, so you can pick up right
+              where you left off. Feel free to exit at any time everything will
+              be here when you return.
             </p>
             <div className="flex justify-center gap-4">
               <InAppButton
@@ -332,4 +337,3 @@ const LessonContent = () => {
 };
 
 export default LessonContent;
-

@@ -19,6 +19,7 @@ import {
   useCreateUserCourse,
   useUpdateUserCourse,
 } from "@/services/generalApi/lessons/mutation";
+import { useUpdateUserLeaderboard } from "@/services/generalApi/leaderboard/tanstack";
 
 interface Content {
   id: string;
@@ -54,7 +55,7 @@ interface Lesson {
   orderNumber: number;
   estimatedDuration: number;
   totalContents: number;
-  lessonImg?:string;
+  lessonImg?: string;
 }
 
 interface UserCourse {
@@ -71,6 +72,8 @@ interface QuizResult {
   quizId: string;
   userAnswer: string;
   isCorrect: boolean;
+  attemptNumber: number;
+  scoreEarned: number;
   timestamp: string;
 }
 
@@ -111,10 +114,14 @@ interface LessonContextType {
   previousQuiz: () => void;
   goToQuiz: (index: number) => void;
   startQuizPhase: () => void;
+  totalScore: number;
+  currentLessonScore: number;
   submitQuizAnswer: (
     quizId: string,
     userAnswer: string,
-    isCorrect: boolean
+    isCorrect: boolean,
+    attemptNumber: number,
+    scoreEarned: number,
   ) => void;
   completeQuizPhase: () => void;
 
@@ -124,6 +131,7 @@ interface LessonContextType {
   isLastContent: boolean;
   isFirstQuiz: boolean;
   isLastQuiz: boolean;
+  quizSuccessPercentage: number;
 }
 
 const LessonContext = createContext<LessonContextType | undefined>(undefined);
@@ -153,6 +161,9 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     // isPending: userCourseUpdateLoading
   } = useUpdateUserCourse();
 
+  const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
+    useUpdateUserLeaderboard();
+
   const { courseId, lessonId } = params;
 
   // State
@@ -162,6 +173,8 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const [currentContentIndex, setCurrentContentIndex] = useState(-1);
   const [userCourse, setUserCourse] = useState<UserCourse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [totalScore, setTotalScore] = useState(0);
+  const [currentLessonScore, setCurrentLessonScore] = useState(0);
 
   const { userDetails } = useUser();
 
@@ -201,11 +214,11 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       if (savedProgress) {
         const { contentIndex, quizIndex, step } = JSON.parse(savedProgress);
         setCurrentContentIndex(
-          Math.min(contentIndex, data.contents.length - 1)
+          Math.min(contentIndex, data.contents.length - 1),
         );
         if (quizIndex !== undefined) {
           setCurrentQuizIndex(
-            Math.min(quizIndex, (data.lessonQuizzes || []).length - 1)
+            Math.min(quizIndex, (data.lessonQuizzes || []).length - 1),
           );
         }
         if (step) {
@@ -242,7 +255,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         const response = await getUserCourse(
           userDetails.languageId,
           courseId,
-          lessonId
+          lessonId,
         );
         userCourse = response.data;
       } catch (error: any) {
@@ -279,7 +292,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       quizIndex: number = -1,
       step: LessonStep,
       contentId?: string,
-      sendToBackend: boolean = false
+      sendToBackend: boolean = false,
     ) => {
       const progressData = {
         contentIndex,
@@ -332,7 +345,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
               onError: (error: any) => {
                 console.log("failedCompletion", error);
               },
-            }
+            },
           );
         }
       }
@@ -344,7 +357,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       userCourseUpdate,
       userDetails.languageId,
       courseId,
-    ]
+    ],
   );
 
   // Content Actions
@@ -356,7 +369,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         newIndex,
         currentQuizIndex,
         "content",
-        contents[newIndex]?.id
+        contents[newIndex]?.id,
       );
     } else if (currentContentIndex === contents.length - 1) {
       setCurrentStep("lesson-completed");
@@ -385,7 +398,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         newIndex,
         currentQuizIndex,
         "content",
-        contents[newIndex]?.id
+        contents[newIndex]?.id,
       );
     }
   }, [currentContentIndex, currentQuizIndex, contents, saveProgress]);
@@ -398,7 +411,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         saveProgress(index, currentQuizIndex, "content", contents[index]?.id);
       }
     },
-    [contents, currentQuizIndex, saveProgress]
+    [contents, currentQuizIndex, saveProgress],
   );
 
   const startLesson = useCallback(() => {
@@ -447,7 +460,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         saveProgress(currentContentIndex, index, "quiz");
       }
     },
-    [quizzes.length, currentContentIndex, saveProgress]
+    [quizzes.length, currentContentIndex, saveProgress],
   );
 
   const startQuizPhase = useCallback(() => {
@@ -462,25 +475,61 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     }
   }, [quizzes.length, currentContentIndex, saveProgress]);
 
+  // In LessonContext - RESTORE THIS
   const submitQuizAnswer = useCallback(
-    (quizId: string, userAnswer: string, isCorrect: boolean) => {
+    (
+      quizId: string,
+      userAnswer: string,
+      isCorrect: boolean,
+      attemptNumber: number,
+      scoreEarned: number,
+    ) => {
       const quizResult: QuizResult = {
         quizId,
         userAnswer,
         isCorrect,
+        attemptNumber,
+        scoreEarned,
         timestamp: new Date().toISOString(),
       };
 
+      // Keep in state AND localStorage for session persistence
       setQuizResults((prev) => {
         const updated = [
           ...prev.filter((r) => r.quizId !== quizId),
           quizResult,
         ];
+        // KEEP THIS - needed for page navigation
         localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
         return updated;
       });
+
+      if (isCorrect && scoreEarned > 0) {
+        setCurrentLessonScore((prev) => prev + scoreEarned);
+        setTotalScore((prev) => prev + scoreEarned);
+        console.log('earn', scoreEarned)
+
+        updateLeaderboard({
+          formData: {
+            scoreToAdd: scoreEarned,
+            quizCompleted: true,
+            quizCorrect: true,
+          },
+        });
+      } else if (!isCorrect && attemptNumber >= 3) {
+        updateLeaderboard({
+          formData: {
+            scoreToAdd: 0,
+            quizCompleted: true,
+            quizCorrect: false,
+          },
+        });
+      }
     },
-    []
+    [
+      updateLeaderboard,
+      // userDetails.id,
+    ],
   );
 
   const completeQuizPhase = useCallback(() => {
@@ -507,9 +556,12 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       setUserCourse(completedUserCourse);
       localStorage.setItem(
         USER_COURSE_KEY,
-        JSON.stringify(completedUserCourse)
+        JSON.stringify(completedUserCourse),
       );
       localStorage.removeItem(LESSON_PROGRESS_KEY);
+      // Clear quiz results after lesson completion
+      localStorage.removeItem(QUIZ_RESULTS_KEY); // ADD THIS
+
       saveProgress(
         contents.length - 1,
         quizzes.length - 1,
@@ -517,7 +569,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         quizzes.length > 0
           ? quizzes[quizzes.length - 1].id
           : contents[contents.length - 1].id,
-        true
+        true,
       );
     }
   }, [
@@ -527,6 +579,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     quizzes,
     LESSON_PROGRESS_KEY,
     USER_COURSE_KEY,
+    QUIZ_RESULTS_KEY,
   ]);
 
   const navigateToCompletion = useCallback(async () => {
@@ -553,7 +606,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           currentContentIndex,
           currentQuizIndex,
           "content",
-          currentContent.id
+          currentContent.id,
         );
       }
     } else if (
@@ -581,16 +634,16 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const totalItems = contents.length + quizzes.length;
   const completedContentItems = Math.max(
     0,
-    currentContentIndex + (currentStep === "content" ? 1 : 0)
+    currentContentIndex + (currentStep === "content" ? 1 : 0),
   );
   const completedQuizItems = Math.max(
     0,
-    currentQuizIndex + (currentStep === "quiz" ? 1 : 0)
+    currentQuizIndex + (currentStep === "quiz" ? 1 : 0),
   );
   const progressPercentage =
     totalItems > 0
       ? Math.round(
-          ((completedContentItems + completedQuizItems) / totalItems) * 100
+          ((completedContentItems + completedQuizItems) / totalItems) * 100,
         )
       : 0;
 
@@ -638,6 +691,15 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     isLastContent,
     isFirstQuiz,
     isLastQuiz,
+    totalScore,
+    currentLessonScore,
+    quizSuccessPercentage:
+      quizzes.length > 0
+        ? Math.round(
+            (quizResults.filter((r) => r.isCorrect).length / quizzes.length) *
+              100,
+          )
+        : 0,
   };
 
   useEffect(() => {
@@ -655,17 +717,17 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         const totalItems = contents.length + quizzes.length;
         const completedContentItems = Math.max(
           0,
-          currentContentIndex + (currentStep === "content" ? 1 : 0)
+          currentContentIndex + (currentStep === "content" ? 1 : 0),
         );
         const completedQuizItems = Math.max(
           0,
-          currentQuizIndex + (currentStep === "quiz" ? 1 : 0)
+          currentQuizIndex + (currentStep === "quiz" ? 1 : 0),
         );
         const progressPercentage =
           totalItems > 0
             ? Math.round(
                 ((completedContentItems + completedQuizItems) / totalItems) *
-                  100
+                  100,
               )
             : 0;
         userCourseUpdate({
