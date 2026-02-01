@@ -13,9 +13,11 @@ import { BiHomeAlt2 } from "react-icons/bi";
 import InLessonPackages from "@/components/lessons/contents/InLessonPackages";
 import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
+import { useGetUserLeaderBoard } from "@/services/generalApi/leaderboard/tanstack";
+import CompletionLoader from "@/components/loadingComponent/CompletedPageLoader";
 
 const Page = () => {
-  const { lesson } = useLessonContext();
+  const { lesson, quizSuccessPercentage } = useLessonContext();
 
   const { width = 0, height = 0 } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
@@ -32,6 +34,11 @@ const Page = () => {
   const [homeModal, setHomeModal] = useState(false);
   const [homeLoading, setHomeLoading] = useState(false);
 
+  const { data: userLeaderboard, isLoading: leaderboardLoading } =
+    useGetUserLeaderBoard();
+
+  const userPosition = userLeaderboard?.data;
+
   const handleRedirectHome = () => {
     setLoading(true);
     setHomeLoading(true);
@@ -39,9 +46,31 @@ const Page = () => {
     router.push("/user-dashboard");
   };
 
+  function formatOrdinal(rank?: number | null) {
+    if (!rank || !Number.isFinite(rank)) return "--";
+
+    const mod10 = rank % 10;
+    const mod100 = rank % 100;
+
+    if (mod100 >= 11 && mod100 <= 13) return `${rank}th`;
+
+    switch (mod10) {
+      case 1:
+        return `${rank}st`;
+      case 2:
+        return `${rank}nd`;
+      case 3:
+        return `${rank}rd`;
+      default:
+        return `${rank}th`;
+    }
+  }
+
   useEffect(() => {
     setShowConfetti(true);
   }, []);
+
+  if (leaderboardLoading) return <CompletionLoader />;
 
   return (
     <div
@@ -112,7 +141,11 @@ const Page = () => {
               POSITION ON LEADERBOARD
             </div>
             <div className="text-[#EB5017] font-[600] text-[36px] sm:text-[48px] leading-[100%]">
-              20th
+              {leaderboardLoading ? (
+                <CustomSpinner />
+              ) : (
+                formatOrdinal(userPosition?.dailyRank)
+              )}
             </div>
           </div>
 
@@ -128,7 +161,11 @@ const Page = () => {
           {/* Right Stat */}
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-center">
             <div className="text-[#EB5017] font-[600] text-[36px] sm:text-[48px] leading-[100%]">
-              85%
+              {leaderboardLoading ? (
+                <CustomSpinner />
+              ) : (
+                `${quizSuccessPercentage}%`
+              )}
             </div>
             <div className="text-[#AA0000] font-[400] text-[14px] sm:text-[18px] leading-[110%]">
               OVERALL SCORE

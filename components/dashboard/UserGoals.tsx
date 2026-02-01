@@ -15,6 +15,7 @@ import { EmptyStateCard } from "../general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import InAppButton from "../InAppButton";
+import { useUpdateUserLeaderboard } from "@/services/generalApi/leaderboard/tanstack";
 
 // const DailyGoals = () => {
 //   const { userDailyGoal, goalLoading } = useUser();
@@ -103,6 +104,9 @@ const WordForTheDay = () => {
   const { theme } = useTheme();
   const [showDailyGoalCard, setShowDailyGoalCard] = useState(false);
 
+const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
+    useUpdateUserLeaderboard();
+
   const { getPageText } = usePageLanguage("userDashboard");
 
   const {
@@ -128,7 +132,7 @@ const WordForTheDay = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const { data: dailyWord, isLoading: dailyWordLoading } = useGetDailyWord(
-    userDetails?.languageId
+    userDetails?.languageId,
   );
 
   const completeUserGoal = () => {
@@ -136,10 +140,16 @@ const WordForTheDay = () => {
       completeGoal(
         () => {
           setShowCongrats(true);
+          updateLeaderboard({
+          formData: {
+            scoreToAdd: 10,
+            dailyWordsListened: 1,
+          },
+        });
         },
         (error: any) => {
           console.error("Failed to complete goal:", error);
-        }
+        },
       );
     }
   };
@@ -163,7 +173,7 @@ const WordForTheDay = () => {
     setAudioPlayerLoading(true);
 
     const randomIndex = Math.floor(
-      Math.random() * dailyWordData?.audioUrls?.length
+      Math.random() * dailyWordData?.audioUrls?.length,
     );
     const audio = new Audio(dailyWordData?.audioUrls[randomIndex]);
 
@@ -217,7 +227,7 @@ const WordForTheDay = () => {
 
   return (
     <>
-      {dailyWordLoading || goalLoading ? (
+      {dailyWordLoading || goalLoading || updateUserLeaderBoardLoading ? (
         <WordForTheDaySkeleton />
       ) : !dailyWord ? (
         <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
@@ -237,7 +247,7 @@ const WordForTheDay = () => {
             </span>
           </section>
           <section>
-             <div className="font-bold text-[#000000CC] text-center text-[20px] sm:text-[18px] md:text-[20px] leading-[100%] my-2 sm:my-4">
+            <div className="font-bold text-[#000000CC] text-center text-[20px] sm:text-[18px] md:text-[20px] leading-[100%] my-2 sm:my-4">
               {dailyWordData?.languageText}
             </div>
             <div className="flex flex-col gap-[12px] sm:gap-[16px] md:gap-[20px] w-full">

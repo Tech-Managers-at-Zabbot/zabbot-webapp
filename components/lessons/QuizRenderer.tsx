@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, 
+{ 
+  // useEffect, 
+  useState 
+} from "react";
 import InAppButton from "../InAppButton";
 import { CustomSpinner } from "../CustomSpinner";
 import QuizSuccessModal from "./QuizSuccessModal";
@@ -7,6 +11,7 @@ import QuizFailureModal from "./QuizFailureModal";
 import { FaKeyboard } from "react-icons/fa6";
 import { IoIosSend } from "react-icons/io";
 import { removeYorubaDiacritics } from "@/utilities/utilities";
+import { useAlert } from "next-alert";
 
 enum QuizType {
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
@@ -24,7 +29,9 @@ interface QuizRendererProps {
   onQuizSubmit?: (
     quizId: string,
     userAnswer: string,
-    isCorrect: boolean
+    isCorrect: boolean,
+    newAttemptCount: number,
+    scoreEarned: number
   ) => void;
 }
 
@@ -44,18 +51,81 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [completeLoading, setCompleteLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+  const [attemptCount, setAttemptCount] = useState<number>(0);
+  const [maxAttempts] = useState<number>(3);
+
+  const { addAlert } = useAlert();
+  // const [attemptHistory, setAttemptHistory] = useState<
+  //   {
+  //     quizId: string;
+  //     attempts: number;
+  //   }[]
+  // >([]);
+
+  // useEffect(() => {
+  //   if (quiz?.id) {
+  //     const savedAttempts = localStorage.getItem(`quiz_attempts_${quiz.id}`);
+  //     if (savedAttempts) {
+  //       const parsed = JSON.parse(savedAttempts);
+  //       setAttemptCount(parsed.attempts || 0);
+  //       setHasSubmitted(parsed.hasSubmitted || false);
+  //       setIsCorrect(parsed.isCorrect || false);
+  //       setShowResult(parsed.hasSubmitted || false);
+  //     } else {
+  //       setAttemptCount(0);
+  //       setHasSubmitted(false);
+  //       setIsCorrect(false);
+  //       setShowResult(false);
+  //       setSelectedAnswer("");
+  //       setFillInAnswer("");
+  //     }
+  //   }
+  // }, [quiz?.id]);
 
   if (!quiz) return null;
 
   const handleOptionSelect = (option: string) => {
+    if (attemptCount >= maxAttempts) {
+      return addAlert(
+        "Error",
+        "You have exhausted your attempts for this question",
+        "error"
+      );
+    }
     setSelectedAnswer(option);
     const correct = option === quiz.correctOption;
+    const newAttemptCount = attemptCount + 1;
+    setAttemptCount(newAttemptCount);
+
+    // Save attempt count
+    // localStorage.setItem(
+    //   `quiz_attempts_${quiz.id}`,
+    //   JSON.stringify({
+    //     attempts: newAttemptCount,
+    //     hasSubmitted: correct || newAttemptCount >= maxAttempts,
+    //     isCorrect: correct,
+    //     lastAttempt: new Date().toISOString(),
+    //   })
+    // );
     setIsCorrect(correct);
     setShowResult(true);
-    setHasSubmitted(correct);
 
-    if (onQuizSubmit) {
-      onQuizSubmit(quiz.id, option, correct);
+    if (correct) {
+      setHasSubmitted(correct);
+      const scoreEarned =
+        newAttemptCount === 1
+          ? 10 + 5 // Base score + first attempt bonus
+          : 10; // Base score only
+
+      if (onQuizSubmit) {
+        onQuizSubmit(quiz.id, option, correct, newAttemptCount, scoreEarned);
+      }
+    } else if (newAttemptCount >= maxAttempts) {
+      // Out of attempts
+      setHasSubmitted(true);
+      if (onQuizSubmit) {
+        onQuizSubmit(quiz.id, option, false, newAttemptCount, 0);
+      }
     }
   };
 
@@ -66,6 +136,13 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
   };
 
   const handleSubmitAnswer = () => {
+    if (attemptCount >= maxAttempts) {
+      return addAlert(
+        "Error",
+        "You have exhausted your attempts for this question",
+        "error"
+      );
+    }
     let userAnswer = "";
     let correct = false;
 
@@ -79,12 +156,43 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
         removeYorubaDiacritics(quiz.correctAnswer)?.toLowerCase();
     }
 
+    const newAttemptCount = attemptCount + 1;
+    setAttemptCount(newAttemptCount);
+
+    // localStorage.setItem(
+    //   `quiz_attempts_${quiz.id}`,
+    //   JSON.stringify({
+    //     attempts: newAttemptCount,
+    //     hasSubmitted: correct || newAttemptCount >= maxAttempts,
+    //     isCorrect: correct,
+    //     lastAttempt: new Date().toISOString(),
+    //   })
+    // );
+
     setIsCorrect(correct);
     setShowResult(true);
-    setHasSubmitted(correct);
 
-    if (onQuizSubmit) {
-      onQuizSubmit(quiz.id, userAnswer, correct);
+    if (correct) {
+      setHasSubmitted(true);
+      const scoreEarned =
+        newAttemptCount === 1
+          ? 10 + 5 // Base score + first attempt bonus
+          : 10; // Base score only
+
+      if (onQuizSubmit) {
+        onQuizSubmit(
+          quiz.id,
+          userAnswer,
+          correct,
+          newAttemptCount,
+          scoreEarned
+        );
+      }
+    } else if (newAttemptCount >= maxAttempts) {
+      setHasSubmitted(true);
+      if (onQuizSubmit) {
+        onQuizSubmit(quiz.id, userAnswer, false, newAttemptCount, 0);
+      }
     }
   };
 
@@ -98,6 +206,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
       setShowResult(false);
       setIsCorrect(false);
       setHasSubmitted(false);
+      setAttemptCount(0);
       onNext();
     }
   };
@@ -202,6 +311,37 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
         </h2>
       </div>
 
+      {/* ATTEMPT INDICATOR UI */}
+      <div className="mb-4 sm:mb-6 text-center">
+        <div className="inline-flex items-center gap-2 bg-white/80 px-4 py-2 rounded-full shadow-sm">
+          <span className="text-sm font-medium text-gray-700">Attempts:</span>
+          {[...Array(maxAttempts)].map((_, i) => (
+            <div
+              key={i}
+              className={`w-3 h-3 rounded-full transition-all ${
+                i < attemptCount
+                  ? isCorrect && i === attemptCount - 1
+                    ? "bg-green-500"
+                    : "bg-red-500"
+                  : "bg-gray-300"
+              }`}
+            />
+          ))}
+        </div>
+        {attemptCount > 0 && !isCorrect && attemptCount < maxAttempts && (
+          <p className="text-sm text-orange-600 mt-2 font-medium">
+            {maxAttempts - attemptCount} attempt
+            {maxAttempts - attemptCount !== 1 ? "s" : ""} remaining
+          </p>
+        )}
+        {attemptCount >= maxAttempts && !isCorrect && (
+          <p className="text-sm text-red-600 mt-2 font-medium">
+            No attempts remaining. Correct answer:{" "}
+            {quiz.correctAnswer || quiz.correctOption}
+          </p>
+        )}
+      </div>
+
       <section className="flex gap-4 sm:gap-6 w-full justify-center">
         <div className="bg-[url('/lessons/questionFrame.svg')] min-h-[300px] sm:min-h-[400px] w-full max-w-[300px] sm:max-w-[400px] flex flex-col justify-center items-center bg-center bg-contain bg-no-repeat p-4 sm:p-8 mb-4 sm:mb-6">
           <div className="w-[80%] px-2 sm:px-4 flex flex-col items-center">
@@ -245,7 +385,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
       <div className="border-t-1 h-[0.5px] mt-4 sm:mt-6 border-[#FCD2C2] w-full"></div>
 
       {/* Navigation Buttons */}
-      <div className="px-2 sm:px-[5%] z-10 mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 w-full justify-between items-center">
+      <div className="px-2 sm:px-[5%] z-10 mt-4 sm:mt-6 mb-10 flex flex-col sm:flex-row gap-2 w-full justify-between items-center">
         <InAppButton
           onClick={onPrevious}
           disabled={!canGoBack || completeLoading}
@@ -263,7 +403,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
         <InAppButton
           onClick={handleNext}
           background={`#5A2E10`}
-          disabled={!(hasSubmitted && isCorrect) || completeLoading}
+          disabled={!hasSubmitted || completeLoading}
           disabledColor="#C98F5DCC"
           // className="w-full sm:w-auto mt-2 sm:mt-0"
         >
@@ -281,9 +421,16 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
 
       {showResult &&
         (isCorrect ? (
-          <QuizSuccessModal onClose={() => setShowResult(false)} />
+          <QuizSuccessModal
+            onNext={handleNext}
+            onClose={() => setShowResult(false)}
+          />
         ) : (
-          <QuizFailureModal onClose={() => setShowResult(false)} />
+          <QuizFailureModal
+            onNext={handleNext}
+            isAttemptExhausted={attemptCount >= maxAttempts}
+            onClose={() => setShowResult(false)}
+          />
         ))}
     </div>
   );
