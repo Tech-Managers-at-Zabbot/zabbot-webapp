@@ -9,24 +9,21 @@ import { HiOutlinePlay } from "react-icons/hi2";
 import { useState } from "react";
 import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
-
+import WatchDemoModal from "./WatchDemoModal";
 
 interface HeroSectionProps {
   setHeroLoginRedirect: (value: boolean) => void;
   setHeroWatchDemoRedirect: (value: boolean) => void;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({
-  setHeroLoginRedirect,
-  setHeroWatchDemoRedirect,
-}) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ setHeroLoginRedirect }) => {
   const [loginLoading, setLoginLoading] = useState(false);
-  const [watchDemoLoading, setWatchDemoLoading] = useState(false);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   const router = useRouter();
 
   const handleLoginClick = () => {
-    if (!loginLoading && !watchDemoLoading) {
+    if (!loginLoading) {
       setLoginLoading(true);
       setHeroLoginRedirect(true);
       router.push("/login");
@@ -34,9 +31,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   const handleWatchDemoClick = () => {
-    if (!loginLoading && !watchDemoLoading) {
-      setWatchDemoLoading(true);
-      setHeroWatchDemoRedirect(true);
+    if (!loginLoading) {
+      setIsDemoOpen(true);
     }
   };
 
@@ -76,7 +72,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               color="#FFFFFF"
               boxShadow=""
               onClick={handleLoginClick}
-              disabled={loginLoading || watchDemoLoading}
+              disabled={loginLoading}
             >
               {loginLoading ? (
                 <CustomSpinner
@@ -101,33 +97,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               color="#162B6E"
               border="1px solid #012657"
               onClick={handleWatchDemoClick}
-              disabled={loginLoading || watchDemoLoading}
+              disabled={loginLoading}
             >
               <main className="flex gap-[8px] sm:gap-[10px] items-center justify-center">
-                {watchDemoLoading ? (
-                  <CustomSpinner
-                    title=""
-                    spinnerHeight="30px"
-                    spinnerWidth="30px"
-                    spinnerColor="#162B6E"
+                <div
+                  className="font-[600] text-[16px] sm:text-[18px] md:text-[20px] leading-[145%]"
+                  style={{ fontFamily: "Inter" }}
+                >
+                  Watch Demo
+                </div>
+                <div>
+                  <HiOutlinePlay
+                    size={24}
+                    color="#162B6E"
+                    className="sm:w-7 sm:h-7"
                   />
-                ) : (
-                  <>
-                    <div
-                      className="font-[600] text-[16px] sm:text-[18px] md:text-[20px] leading-[145%]"
-                      style={{ fontFamily: "Inter" }}
-                    >
-                      Watch Demo
-                    </div>
-                    <div>
-                      <HiOutlinePlay
-                        size={24}
-                        color="#162B6E"
-                        className="sm:w-7 sm:h-7"
-                      />
-                    </div>
-                  </>
-                )}
+                </div>
               </main>
             </ColouredButton>
           </div>
@@ -139,6 +124,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </section>
       </main>
+
+      <WatchDemoModal
+        isOpen={isDemoOpen}
+        onClose={() => setIsDemoOpen(false)}
+        youtubeUrl="https://youtu.be/E6588DlZW-c?si=_10ADeK4QShIsshb"
+      />
     </div>
   );
 };
