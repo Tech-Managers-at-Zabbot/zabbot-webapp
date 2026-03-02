@@ -128,7 +128,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ setHeroLoginRedirect }) => {
       <WatchDemoModal
         isOpen={isDemoOpen}
         onClose={() => setIsDemoOpen(false)}
-        youtubeUrl="https://youtu.be/E6588DlZW-c?si=_10ADeK4QShIsshb"
+        youtubeUrl="https://youtu.be/mWBvbeLHVYs?si=MsZELQyh45RLpDT4"
       />
     </div>
   );
