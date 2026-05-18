@@ -140,7 +140,7 @@ export async function createLesson(lessonData: any) {
 
 export async function getCourseLessons(courseId: string) {
   const response = await axiosInstance.get(
-    `/lessons/lessons/course-lessons/${courseId}`
+    `/lessons/course-lessons/${courseId}`
   );
   return response.data;
 }
