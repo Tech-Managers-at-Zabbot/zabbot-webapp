@@ -25,6 +25,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
       const [imagePreview, setImagePreview] = useState<string | null>(null);
       const [imageFile, setImageFile] = useState<File | null>(null);
       const [isImageDirty, setIsImageDirty] = useState(false);
+      const isExistingLesson = Boolean(lesson.id);
 
       const { addAlert } = useAlert();
     
@@ -109,7 +110,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Edit Lesson
+            {isExistingLesson ? "Edit Lesson" : "Add Lesson"}
           </h3>
 
           <input
@@ -124,6 +125,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
       />
 
           <div className="space-y-4">
+                  {isExistingLesson && (
                   <div className="flex items-center gap-6">
                     {(imagePreview || lesson?.lessonImg) && (
                       <div>
@@ -180,6 +182,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
                       </div>
                     )}
                   </div>
+                  )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -289,7 +292,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
               className="px-4 py-2 border flex items-center rounded-md hover:bg-white bg-[#012657] text-white hover:cursor-pointer hover:text-[#012657]"
             >
               <Save size={16} className="mr-2" />
-              Save Changes
+              {isExistingLesson ? "Save Changes" : "Save Lesson"}
             </button>
           </div>
         </div>

@@ -13,6 +13,7 @@ import { EditLessonForm } from "./EditLessonForm";
 import { Lesson } from "@/types/interfaces";
 
 interface LessonsTabProps {
+  course: Record<string, any>;
   lessons: Lesson[];
   isLoading: boolean;
   onSaveLesson: (lessonData: Lesson) => void;
@@ -20,6 +21,7 @@ interface LessonsTabProps {
 }
 
 export const LessonsTab: React.FC<LessonsTabProps> = ({
+  course,
   lessons,
   isLoading,
   onSaveLesson,
@@ -42,6 +44,21 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
     setEditingLesson({ ...lesson });
   };
 
+  const handleAddLesson = () => {
+    setEditingLesson({
+      title: "",
+      description: "",
+      orderNumber: lessons.length + 1,
+      contents: [],
+      headLineTag: "",
+      estimatedDuration: undefined,
+      outcomes: "",
+      objectives: "",
+      courseId: course?.id,
+      languageId: course?.languageId,
+    } as Lesson);
+  };
+
   const handleLessonChange = (field: keyof Lesson, value: any) => {
     if (editingLesson) {
       setEditingLesson((prev) => ({ ...prev!, [field]: value }));
@@ -60,9 +77,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold text-gray-900">Course Lessons</h3>
         <button
-          onClick={() => {
-            /* Add new lesson logic */
-          }}
+          onClick={handleAddLesson}
           className="px-4 hover:cursor-pointer py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
         >
           <Plus size={16} className="mr-2" />

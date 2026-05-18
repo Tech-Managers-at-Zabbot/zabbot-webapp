@@ -128,6 +128,7 @@ const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
         {activeTab === "lessons" && (
           <LessonsTab
+            course={courseData}
             lessons={lessons}
             isLoading={lessonsLoading}
             onSaveLesson={onSaveLesson}
