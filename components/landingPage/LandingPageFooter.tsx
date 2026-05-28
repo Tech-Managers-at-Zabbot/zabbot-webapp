@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const LandingPageFooter = () => {
   return (
@@ -35,7 +36,7 @@ const LandingPageFooter = () => {
             <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">About</li>
             <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">Contact</li>
             <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">Privacy</li>
-            <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">Terms</li>
+            <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer"><Link href="/terms-of-service">Terms</Link></li>
           </ul>
         </div>
 
@@ -48,20 +49,24 @@ const LandingPageFooter = () => {
           {/* Social Icons */}
           <ul className="flex items-center gap-4">
             <li className="p-3 rounded-full bg-[#A6DFFF33] hover:bg-[#A6DFFF55] transition-colors cursor-pointer">
-              <Image
-                src="/landingPage/icons/white-linkedin-icon.svg"
-                alt="LinkedIn"
-                width={22}
-                height={22}
-              />
+              <a href="https://www.linkedin.com/company/zabbot/" target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/landingPage/icons/white-linkedin-icon.svg"
+                  alt="LinkedIn"
+                  width={22}
+                  height={22}
+                />
+              </a>
             </li>
             <li className="p-3 rounded-full bg-[#A6DFFF33] hover:bg-[#A6DFFF55] transition-colors cursor-pointer">
-              <Image
-                src="/landingPage/icons/white-instagram-icon.svg"
-                alt="Instagram"
-                width={22}
-                height={22}
-              />
+              <a href="https://www.instagram.com/zabbot_heritage/" target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/landingPage/icons/white-instagram-icon.svg"
+                  alt="Instagram"
+                  width={22}
+                  height={22}
+                />
+              </a>
             </li>
           </ul>
 

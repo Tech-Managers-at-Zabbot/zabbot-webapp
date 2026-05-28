@@ -1,13 +1,17 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion, Variants, Transition } from "framer-motion";
 import ColouredButton from "../ColouredButton";
+import Link from "next/link";
 import { BsStars } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FiMail } from "react-icons/fi";
+import WatchDemoModal from "./WatchDemoModal";
 
 const NewsLetterComponent = () => {
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
   // ✅ Type-safe spring animation variant
   const bounceIn: Variants = {
     hidden: { y: 30, opacity: 0, scale: 0.9 },
@@ -22,6 +26,10 @@ const NewsLetterComponent = () => {
         delay: 0.2,
       },
     },
+  };
+
+  const handleWatchDemoClick = () => {
+    setIsDemoOpen(true);
   };
 
   // ✅ Floating loop bounce animation (type-safe)
@@ -64,23 +72,25 @@ const NewsLetterComponent = () => {
             whileTap={{ scale: 0.95 }}
             animate={floatBounce}
           >
-            <ColouredButton
-              paddingBottom="10px"
-              paddingLeft="10px"
-              paddingRight="10px"
-              paddingTop="10px"
-              backgroundColor="#F9C10F"
-              color="#122158"
-              borderRadius="30px"
-            >
-              <main className="flex gap-2 sm:gap-3 items-center justify-center">
-                <BsStars size={20} />
-                <div className="font-[600] text-sm sm:text-base md:text-lg">
-                  Start Yorùbá
-                </div>
-                <FaArrowRightLong size={20} />
-              </main>
-            </ColouredButton>
+            <Link href="/login">
+              <ColouredButton
+                paddingBottom="10px"
+                paddingLeft="10px"
+                paddingRight="10px"
+                paddingTop="10px"
+                backgroundColor="#F9C10F"
+                color="#122158"
+                borderRadius="30px"
+              >
+                <main className="flex gap-2 sm:gap-3 items-center justify-center">
+                  <BsStars size={20} />
+                  <div className="font-[600] text-sm sm:text-base md:text-lg">
+                    Start Yorùbá
+                  </div>
+                  <FaArrowRightLong size={20} />
+                </main>
+              </ColouredButton>
+            </Link>
           </motion.div>
 
           {/* Watch Demo Button */}
@@ -98,6 +108,7 @@ const NewsLetterComponent = () => {
               backgroundColor="#FFFFFF"
               color="#122158"
               borderRadius="30px"
+              onClick={handleWatchDemoClick}
             >
               <main className="flex gap-2 sm:gap-3 items-center justify-center">
                 <div className="font-[600] text-sm sm:text-base md:text-lg">
@@ -172,6 +183,12 @@ const NewsLetterComponent = () => {
               Learnings, riddles, cultural stories, prizes and updates.
             </p>
           </motion.div>
+
+          <WatchDemoModal
+            isOpen={isDemoOpen}
+            onClose={() => setIsDemoOpen(false)}
+            youtubeUrl="https://youtu.be/mWBvbeLHVYs?si=MsZELQyh45RLpDT4"
+          />
         </section>
       </main>
     </div>

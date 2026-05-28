@@ -162,11 +162,10 @@ const UserSettings = () => {
               <div
                 key={index}
                 className={`flex-shrink-0 hover:cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base
-          ${
-            menuKeyword === item.keyword
-              ? "text-white bg-[#1671D9]"
-              : "text-[#1A1A1A] hover:border hover:border-[#1671D9]"
-          }`}
+          ${menuKeyword === item.keyword
+                    ? "text-white bg-[#1671D9]"
+                    : "text-[#1A1A1A] hover:border hover:border-[#1671D9]"
+                  }`}
                 onClick={() => {
                   setMenukeyword(item.keyword);
                   router.push(`/user-settings?tab=${item.keyword}`);
@@ -255,7 +254,7 @@ const UserSettings = () => {
                           <span>Change Plan</span>
                         </div>
                       ) : (
-                        <div>Subscribe</div>
+                        <div className="p-2">Subscribe</div>
                       )}
                     </div>
                   </InAppButton>
@@ -269,7 +268,7 @@ const UserSettings = () => {
                       borderRadius="8px"
                       padding="12px 24px"
                       width="100%"
-                      onClick={() => {}}
+                      onClick={() => { }}
                     >
                       <div className="flex items-center justify-center gap-2 text-[#D42620]">
                         <IoMdClose size={20} />
@@ -322,10 +321,10 @@ const UserSettings = () => {
                   <p className="text-sm text-[#4A5565]">
                     Notifications will be sent to{" "}
                     {userProfile?.data.email ?
-                    <span className="text-[#FE9A00] font-[700]">
-                      {userProfile?.data.email}
-                    </span>
-                    : "your email"}
+                      <span className="text-[#FE9A00] font-[700]">
+                        {userProfile?.data.email}
+                      </span>
+                      : "your email"}
                     . You can update your email by sending an email to
                     hello@zabbot.com.
                   </p>

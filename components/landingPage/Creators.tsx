@@ -16,9 +16,9 @@ const Creators = () => {
       loadingEager: false,
     },
     {
-      name: "Iniobong Ekpenyong",
-      imageSrc: "/creators/mr-iniobong.svg",
-      designation: "UI/UX Lead",
+      name: "Kemi Sobande",
+      imageSrc: "/creators/kemi-sobande.jpeg",
+      designation: "Cultural & Language content consultant",
       loadingEager: false,
     },
     {
