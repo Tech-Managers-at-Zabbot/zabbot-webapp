@@ -178,8 +178,7 @@ const BlendingCard = () => {
         />
       </div>
       <h1 className="text-[#162C6F] text-center text-lg sm:text-xl md:text-2xl lg:text-[28px] xl:text-[32px] font-normal leading-snug sm:leading-relaxed lg:leading-[42px] w-full sm:w-[95%] md:w-[90%] z-10 relative px-2 sm:px-4">
-        Zabbot blends AI, storytelling, and community to help you learn, speak,
-        and belong in your language.
+        Zabbot blends AI, storytelling, and culture to help you learn, speak, and connect through language.
       </h1>
       <div className="absolute bottom-0 left-0">
         <img
