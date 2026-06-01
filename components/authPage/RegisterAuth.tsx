@@ -13,13 +13,13 @@ import { useAlert } from "next-alert";
 import { CustomSpinner } from "../CustomSpinner";
 import { GoogleIcon } from "@/constants/SvgPaths";
 import { useRegisterUser, useGoogleAuth } from "@/services/generalApi/authentication/mutation";
-// import Image from "next/image";
+
 import { useSearchParams } from 'next/navigation';
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
 
-  const MAX_NAME_LENGTH = 100;
+const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 254;
 
 const RegisterAuth: React.FC = () => {
@@ -34,7 +34,6 @@ const RegisterAuth: React.FC = () => {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const { addAlert } = useAlert();
  const { initiateGoogleRegistration, isLoading: isGoogleLoading } = useGoogleAuth();
-  // const [loading, setLoading] = useState(false);
 
 
   // Validation schemas
@@ -90,10 +89,7 @@ const passwordSchema = z
     confirmPassword: "",
   });
 
-  // Password validation states
-  // const [passwordValidations, setPasswordValidations] = useState({
-  //   isLengthValid: false,
-  // });
+
   const searchParams = useSearchParams();
 useEffect(() => {
   const googleAuthError = searchParams.get("error");
@@ -261,13 +257,6 @@ useEffect(() => {
         );
       }
 
-      // console.log("Form is valid, proceed with registration", {
-      //   firstName,
-      //   lastName,
-      //   email,
-      //   password,
-      // });
-
       // Call the registerUser mutation
       const userData = {
         firstName: firstName.trim(),
@@ -300,8 +289,6 @@ useEffect(() => {
       });
     } catch (error: any) {
       console.error("Validation error:", error);
-      // setLoading(false);
-      // addAlert("Error", error.message, "error");
     }
   };
 
