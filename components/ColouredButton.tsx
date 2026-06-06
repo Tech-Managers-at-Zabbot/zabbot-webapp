@@ -19,6 +19,7 @@ export interface ButtonProps {
   color?: string;
   border?: string;
   onClick?: () => void;
+  type?: "button" | "submit" | "reset";
 }
 
 const ColouredButton: React.FC<ButtonProps> = ({
@@ -40,9 +41,11 @@ const ColouredButton: React.FC<ButtonProps> = ({
   width = "230px",
 
   onClick,
+  type = "button",
 }) => {
   return (
     <button
+      type={type}
       className={`${!disabled ? "hover:cursor-pointer" : ""}
    ${
         !disabled ? "hover:shadow-[0_2px_0_0_rgba(0,0,0,0.2)]" : ""

@@ -8,9 +8,15 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { FiMail } from "react-icons/fi";
 import WatchDemoModal from "./WatchDemoModal";
+import { useAlert } from "next-alert";
+import { useSubscribeUser } from "@/services/newsletterSub/mutation";
 
 const NewsLetterComponent = () => {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const { addAlert } = useAlert();
+  const { mutate: subscribeUser, isPending: isSubscribeLoading } = useSubscribeUser();
 
   // ✅ Type-safe spring animation variant
   const bounceIn: Variants = {
@@ -30,6 +36,53 @@ const NewsLetterComponent = () => {
 
   const handleWatchDemoClick = () => {
     setIsDemoOpen(true);
+  };
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setEmailError("Email is required.");
+      return;
+    }
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+    if (!valid) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+    setEmailError("");
+
+    try {
+      subscribeUser(
+        {
+          email: trimmed.toLowerCase(),
+        },
+        {
+          onSuccess: (data: Record<string, any>) => {
+
+            addAlert(
+              "Success",
+              "Newsletter subscription successful",
+              "success"
+            );
+            setEmail('');
+          },
+          onError: (error: any) => {
+
+            return addAlert(
+              "Error",
+              error?.response?.data?.message || "Newsletter subscription unsuccessful",
+              "error"
+            );
+          },
+        }
+      );
+    } catch (error: any) {
+      console.log("Login error:", error);
+      addAlert("error", "Login failed. Please try again.", "error");
+    } finally {
+
+    }
   };
 
   // ✅ Floating loop bounce animation (type-safe)
@@ -139,45 +192,65 @@ const NewsLetterComponent = () => {
               </h1>
             </div>
 
-            <div className="flex flex-col sm:flex-row w-full gap-4 sm:gap-6 justify-center items-center">
-              <div className="w-full sm:flex-1">
-                <div className="flex items-center border border-white/50 rounded-xl px-4 py-3 bg-white">
-                  <FiMail className="text-[#99A1AF] text-xl mr-3 flex-shrink-0" />
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full font-[400] bg-transparent text-[#6A7282] focus:outline-none text-base sm:text-lg"
-                  />
+            <form
+              onSubmit={handleSubscribe}
+              noValidate
+              className="flex flex-col w-full gap-2"
+            >
+              <div className="flex flex-col sm:flex-row w-full gap-4 sm:gap-6 justify-center items-start">
+                <div className="flex flex-col w-full sm:flex-1 gap-1">
+                  <div
+                    className={`flex items-center border rounded-xl px-4 py-3 bg-white ${emailError ? "border-red-400" : "border-white/50"
+                      }`}
+                  >
+                    <FiMail className="text-[#99A1AF] text-xl mr-3 flex-shrink-0" />
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (emailError) setEmailError("");
+                      }}
+                      className="w-full font-[400] bg-transparent text-[#6A7282] focus:outline-none text-base sm:text-lg"
+                    />
+                  </div>
+                  {emailError && (
+                    <p className="text-red-400 text-sm pl-1">{emailError}</p>
+                  )}
                 </div>
-              </div>
 
-              <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                animate={floatBounce}
-                transition={{ delay: 0.6 }}
-                className="w-full sm:w-auto"
-              >
-                <ColouredButton
-                  paddingBottom="8px"
-                  paddingLeft="12px"
-                  paddingRight="12px"
-                  paddingTop="8px"
-                  backgroundColor="#F9C10F"
-                  color="#122158"
-                  borderRadius="20px"
-                  height="auto"
-                  width="100%"
-                  boxShadow="0 16.736px 25.105px -5.021px rgba(0, 0, 0, 0.10), 0 6.695px 10.042px -6.695px rgba(0, 0, 0, 0.10)"
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  animate={floatBounce}
+                  transition={{ delay: 0.6 }}
+                  className="w-full sm:w-auto"
                 >
-                  <main className="flex items-center justify-center py-2">
-                    <div className="font-[400] text-base sm:text-lg md:text-xl leading-[145%]">
-                      Subscribe
-                    </div>
-                  </main>
-                </ColouredButton>
-              </motion.div>
-            </div>
+                  <ColouredButton
+                    paddingBottom="8px"
+                    paddingLeft="12px"
+                    paddingRight="12px"
+                    paddingTop="8px"
+                    backgroundColor="#F9C10F"
+                    color="#122158"
+                    borderRadius="20px"
+                    height="auto"
+                    width="100%"
+                    boxShadow="0 16.736px 25.105px -5.021px rgba(0, 0, 0, 0.10), 0 6.695px 10.042px -6.695px rgba(0, 0, 0, 0.10)"
+                    type="submit"
+                  >
+                    <main className="flex items-center justify-center py-2">
+                      <div className="font-[400] text-base sm:text-lg md:text-xl leading-[145%] style={{textDecoration: 'none',
+                      color: isSubscribeLoading ? '#9CA3AF' : appColors.normalBlue, pointerEvents:
+                      isSubscribeLoading ? 'none' : 'auto'}}">
+                        Subscribe
+                      </div>
+                    </main>
+                  </ColouredButton>
+                </motion.div>
+              </div>
+            </form>
 
             <p className="font-[400] text-base sm:text-lg md:text-xl text-center text-white leading-relaxed">
               Learnings, riddles, cultural stories, prizes and updates.
@@ -191,7 +264,7 @@ const NewsLetterComponent = () => {
           />
         </section>
       </main>
-    </div>
+    </div >
   );
 };
 
