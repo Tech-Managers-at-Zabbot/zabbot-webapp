@@ -10,6 +10,7 @@ import { FiMail } from "react-icons/fi";
 import WatchDemoModal from "./WatchDemoModal";
 import { useAlert } from "next-alert";
 import { useSubscribeUser } from "@/services/newsletterSub/mutation";
+import { appColors } from "@/constants/colors";
 
 const NewsLetterComponent = () => {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
@@ -58,7 +59,7 @@ const NewsLetterComponent = () => {
           email: trimmed.toLowerCase(),
         },
         {
-          onSuccess: (data: Record<string, any>) => {
+          onSuccess: () => {
 
             addAlert(
               "Success",
@@ -67,7 +68,7 @@ const NewsLetterComponent = () => {
             );
             setEmail('');
           },
-          onError: (error: any) => {
+          onError: (error) => {
 
             return addAlert(
               "Error",
@@ -77,11 +78,11 @@ const NewsLetterComponent = () => {
           },
         }
       );
-    } catch (error: any) {
-      console.log("Login error:", error);
+    } catch (error) {
+      console.log("Newsletter subscription:", error);
       addAlert("error", "Login failed. Please try again.", "error");
     } finally {
-
+      console.log("Newsletter subscription error:",);
     }
   };
 
@@ -241,9 +242,14 @@ const NewsLetterComponent = () => {
                     type="submit"
                   >
                     <main className="flex items-center justify-center py-2">
-                      <div className="font-[400] text-base sm:text-lg md:text-xl leading-[145%] style={{textDecoration: 'none',
-                      color: isSubscribeLoading ? '#9CA3AF' : appColors.normalBlue, pointerEvents:
-                      isSubscribeLoading ? 'none' : 'auto'}}">
+                      <div
+                        className="font-[400] text-base sm:text-lg md:text-xl leading-[145%]"
+                        style={{
+                          textDecoration: 'none',
+                          color: isSubscribeLoading ? '#9CA3AF' : appColors.normalBlue,
+                          pointerEvents: isSubscribeLoading ? 'none' : 'auto',
+                        }}
+                      >
                         Subscribe
                       </div>
                     </main>
