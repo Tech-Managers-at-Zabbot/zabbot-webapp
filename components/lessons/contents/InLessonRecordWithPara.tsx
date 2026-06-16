@@ -158,7 +158,7 @@ const InLessonRecordWithPara = ({
               payload: formData,
             },
             {
-              onError: (error:any) => {
+              onError: (error: any) => {
                 addAlert("Error", `${error.response.data.message || "Unable to get feedback, try again please"}`, "error");
               },
             }
@@ -335,11 +335,11 @@ const InLessonRecordWithPara = ({
               )}
 
               {isProcessing && (
-                  <div className="flex items-center justify-center gap-2 text-white text-lg">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Processing your recording...
-                  </div>
-                )}
+                <div className="flex items-center justify-center gap-2 text-white text-lg">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Processing your recording...
+                </div>
+              )}
 
               {!speaking && !isRecording && !isProcessing && !hasRecorded && (
                 <p className="text-[#9FDEBC] text-lg font-[700]">
@@ -368,11 +368,10 @@ const InLessonRecordWithPara = ({
               <button
                 onClick={isRecording ? stopRecording : startRecording}
                 disabled={speaking || isProcessing}
-                className={`flex-1 font-semibold px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 ${
-                  isRecording
-                    ? "bg-red-500 hover:bg-red-600"
-                    : "bg-orange-500 hover:bg-orange-600"
-                } disabled:bg-gray-500 disabled:cursor-not-allowed text-white`}
+                className={`flex-1 font-semibold px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRecording
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-orange-500 hover:bg-orange-600"
+                  } disabled:bg-gray-500 disabled:cursor-not-allowed text-white`}
               >
                 <svg
                   className="w-5 h-5"

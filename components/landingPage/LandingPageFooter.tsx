@@ -85,7 +85,7 @@ const LandingPageFooter = () => {
       {/* Bottom Section */}
       <section className="mt-6 text-center md:text-left">
         <p className="text-[#99A1AF] text-[13px] sm:text-[14px] leading-[20px] font-[400]">
-          © 2025 Zabbot LLC. All rights reserved.
+          © 2026 Zabbot LLC. All rights reserved.
         </p>
       </section>
     </footer>
