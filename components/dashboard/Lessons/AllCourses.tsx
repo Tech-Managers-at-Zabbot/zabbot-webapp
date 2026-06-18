@@ -15,7 +15,6 @@ import { useTheme } from "@/contexts/ThemeProvider";
 
 const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 12;
 
   const { userDetails } = useUser();
 
@@ -155,28 +154,8 @@ const AllCourses = () => {
     },
   ];
 
-  // Calculate total pages based on your data
-  // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
-
-  // Get current page data
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
-
-  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-
-  // const handleFilterClick = (filterName: string) => {
-  //   setSelectedFilters((prev) =>
-  //     prev.includes(filterName)
-  //       ? prev.filter((f) => f !== filterName)
-  //       : [...prev, filterName]
-  //   );
-  // };
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Here you would typically make an API call to fetch the new page data
-    // For now, we're just updating the local state
   };
 
   // const dropdownOptions = [

@@ -31,11 +31,10 @@ export const LessonProgressCard = ({
 
   return (
     <div
-      className={`bg-white flex relative transition-all duration-300 gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0 ${
-        isClickable
-          ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
-          : "opacity-60 cursor-not-allowed"
-      }`}
+      className={`bg-white flex relative transition-all duration-300 gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0 ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{ fontFamily: "Lexend" }}
       onClick={() => {
         if (isClickable) {
@@ -58,10 +57,10 @@ export const LessonProgressCard = ({
 
       <section
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        // onClick={() => {
-        //   router.push("/lesson");
-        //   setLoading(true);
-        // }}
+      // onClick={() => {
+      //   router.push("/lesson");
+      //   setLoading(true);
+      // }}
       >
         <div className="flex-shrink-0 rounded-full bg-white">
           {/* <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
@@ -132,11 +131,10 @@ export const CoursesCard = ({
 
   return (
     <div
-      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${
-        isClickable
-          ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
-          : "opacity-60 cursor-not-allowed"
-      }`}
+      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{
         fontFamily: "Lexend",
         background: theme === "dark" ? "#012657" : "#FFFFFF",
@@ -231,7 +229,7 @@ export const CoursesCard = ({
 
 export const LessonsCard = ({
   data,
-  isClickable = false,
+  isClickable = true,
 }: {
   data: any;
   isClickable?: boolean;
@@ -242,11 +240,10 @@ export const LessonsCard = ({
   return (
     <div
       // className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-lg border border-[#E1E1E1] flex-shrink-0 mx-auto"
-      className={`flex flex-col bg-white relative gap-[20px] w-full h-[300px] max-w-[278px] min-w-[300px] rounded-[14px] border border-[#254E83] ${
-        isClickable
-          ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
-          : "opacity-60 cursor-not-allowed"
-      }`}
+      className={`flex flex-col bg-white relative gap-[20px] w-full h-[300px] max-w-[278px] min-w-[300px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{ fontFamily: "Lexend" }}
       onClick={() => {
         if (isClickable) {
@@ -291,7 +288,7 @@ export const LessonsCard = ({
 
 export const LessonsCard2 = ({
   data,
-  isClickable = false,
+  isClickable = true,
 }: {
   data: any;
   isClickable?: boolean;
@@ -303,11 +300,10 @@ export const LessonsCard2 = ({
   return (
     <div
       // className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[300px] rounded-lg border border-[#E1E1E1] flex-shrink-0 mx-auto"
-      className={`flex flex-col relative gap-[20px] w-full h-[300px] rounded-[14px] border border-[#254E83] ${
-        isClickable
-          ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
-          : "opacity-60 cursor-not-allowed"
-      }`}
+      className={`flex flex-col relative gap-[20px] w-full h-[300px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{ fontFamily: "Lexend" }}
       onClick={() => {
         if (isClickable) {
@@ -371,11 +367,10 @@ export const StepsCard = ({
 
   return (
     <div
-      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${
-        isClickable
-          ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
-          : "opacity-60 cursor-not-allowed"
-      }`}
+      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{
         fontFamily: "Lexend",
         background: theme === "dark" ? "#012657" : "#FFFFFF",
@@ -569,65 +564,63 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
     >
       <section className="flex justify-between items-start flex-wrap gap-4">
 
-  {/* LEFT SIDE */}
-  <div className="min-w-0 flex-1 flex flex-col gap-2">
-    <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
-      {title}
-    </h3>
-    <span className="font-semibold text-[13px] sm:text-[15px] leading-[100%] text-[#207EC5]">
-      {subtitle}
-    </span>
-  </div>
+        {/* LEFT SIDE */}
+        <div className="min-w-0 flex-1 flex flex-col gap-2">
+          <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
+            {title}
+          </h3>
+          <span className="font-semibold text-[13px] sm:text-[15px] leading-[100%] text-[#207EC5]">
+            {subtitle}
+          </span>
+        </div>
 
-  {/* RIGHT SIDE (Fix applied here) */}
-  <div className="flex gap-4 flex-wrap items-center justify-end w-full sm:w-auto">
+        {/* RIGHT SIDE (Fix applied here) */}
+        <div className="flex gap-4 flex-wrap items-center justify-end w-full sm:w-auto">
 
-    {showViewQuizBtn && (
-      <div className="w-full sm:w-auto">
-        <InAppButton
-          paddingLeft="17px"
-          paddingRight="17px"
-          borderRadius="6px"
-          border="1px solid #E2E8F0"
-          height="40px"
-          width="100%"     // allows full width on small screens
-        >
-          <div className="text-[#0F172A] text-[14px] font-[500] leading-[143%] text-center">
-            View All Quizzes
+          {showViewQuizBtn && (
+            <div className="w-full sm:w-auto">
+              <InAppButton
+                paddingLeft="17px"
+                paddingRight="17px"
+                borderRadius="6px"
+                border="1px solid #E2E8F0"
+                height="40px"
+                width="100%"     // allows full width on small screens
+              >
+                <div className="text-[#0F172A] text-[14px] font-[500] leading-[143%] text-center">
+                  View All Quizzes
+                </div>
+              </InAppButton>
+            </div>
+          )}
+
+          {/* Arrow Controls */}
+          <div className="flex gap-[16px] flex-shrink-0">
+            <TfiArrowCircleLeft
+              size={32}
+              color={showLeftArrow ? "#737477" : "#cccccc"}
+              className={`select-none ${showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+                }`}
+              onMouseDown={showLeftArrow ? () => startScrolling("left") : undefined}
+              onMouseUp={stopScrolling}
+              onMouseLeave={stopScrolling}
+              onTouchStart={showLeftArrow ? () => startScrolling("left") : undefined}
+              onTouchEnd={stopScrolling}
+            />
+            <TfiArrowCircleRight
+              size={32}
+              color={showRightArrow ? "#737477" : "#cccccc"}
+              className={`select-none ${showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+                }`}
+              onMouseDown={showRightArrow ? () => startScrolling("right") : undefined}
+              onMouseUp={stopScrolling}
+              onMouseLeave={stopScrolling}
+              onTouchStart={showRightArrow ? () => startScrolling("right") : undefined}
+              onTouchEnd={stopScrolling}
+            />
           </div>
-        </InAppButton>
-      </div>
-    )}
-
-    {/* Arrow Controls */}
-    <div className="flex gap-[16px] flex-shrink-0">
-      <TfiArrowCircleLeft
-        size={32}
-        color={showLeftArrow ? "#737477" : "#cccccc"}
-        className={`select-none ${
-          showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
-        }`}
-        onMouseDown={showLeftArrow ? () => startScrolling("left") : undefined}
-        onMouseUp={stopScrolling}
-        onMouseLeave={stopScrolling}
-        onTouchStart={showLeftArrow ? () => startScrolling("left") : undefined}
-        onTouchEnd={stopScrolling}
-      />
-      <TfiArrowCircleRight
-        size={32}
-        color={showRightArrow ? "#737477" : "#cccccc"}
-        className={`select-none ${
-          showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
-        }`}
-        onMouseDown={showRightArrow ? () => startScrolling("right") : undefined}
-        onMouseUp={stopScrolling}
-        onMouseLeave={stopScrolling}
-        onTouchStart={showRightArrow ? () => startScrolling("right") : undefined}
-        onTouchEnd={stopScrolling}
-      />
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       <section
         className="overflow-x-auto scrollbar-hide"
