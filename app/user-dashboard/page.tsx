@@ -218,12 +218,12 @@ const Dashboard = () => {
 
               {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
               <div className="w-full z-10">
-                <SearchBar
+                {/* <SearchBar
                   placeholder="Search sparks, journeys, flashcards, and more..."
                   icon={<IoSearchOutline />}
                   background={"#BBE1E1"}
                   className="w-full"
-                />
+                /> */}
               </div>
 
               {/* ---- ROW 2: Greeting text (mobile centered, desktop right-aligned) ---- */}
