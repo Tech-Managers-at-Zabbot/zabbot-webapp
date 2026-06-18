@@ -7,7 +7,7 @@ import AchievementsCard from "@/components/dashboard/AchievementsCard";
 import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
 // import { metricsData } from "@/constants/data-to-populate/dashboardData";
 import // DashboardMetricCard,
-"@/components/dashboard/DashboardMetricCard";
+  "@/components/dashboard/DashboardMetricCard";
 import { BsPeople } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa6";
 // import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
@@ -66,9 +66,8 @@ const Dashboard = () => {
   const dashboardMetricData = [
     {
       title: getPageText("completed_daily_goals"),
-      value: `${goalsCount} ${
-        goalsCount === 1 ? getPageText("goal") : getPageText("goals")
-      }`,
+      value: `${goalsCount} ${goalsCount === 1 ? getPageText("goal") : getPageText("goals")
+        }`,
       icon: (
         <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <HiOutlineTrophy />
@@ -82,9 +81,8 @@ const Dashboard = () => {
     },
     {
       title: getPageText("completed_courses"),
-      value: `${userCoursesCount} ${
-        userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
-      }`,
+      value: `${userCoursesCount} ${userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
+        }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <FaGraduationCap />
@@ -195,11 +193,11 @@ const Dashboard = () => {
             </div>
 
             <div className="w-[50%]">
-              <SearchBar
+              {/* <SearchBar
                 placeholder="Search sparks, journeys, flashcards, and more..."
                 icon={<IoSearchOutline />}
                 background={"#BBE1E1"}
-              />
+              /> */}
             </div>
 
             {/* Right section */}
@@ -275,11 +273,10 @@ const Dashboard = () => {
               </section>
 
               <section
-                className={`transition-all duration-300 ease-in-out ${
-                  goPremium
-                    ? "opacity-100 max-h-96 mb-6"
-                    : "opacity-0 max-h-0 mb-0 overflow-hidden"
-                }`}
+                className={`transition-all duration-300 ease-in-out ${goPremium
+                  ? "opacity-100 max-h-96 mb-6"
+                  : "opacity-0 max-h-0 mb-0 overflow-hidden"
+                  }`}
               >
                 <GoPremiumCard onClose={handleClosePremiumTag} />
               </section>
