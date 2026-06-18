@@ -82,7 +82,6 @@ const AllCourseLessons = () => {
                     <div className="w-full max-w-[278px]">
                       <LessonsCard2
                         data={lessonProgressData}
-                        isClickable={index === 0 || index === 1}
                       />
                     </div>
                   </div>

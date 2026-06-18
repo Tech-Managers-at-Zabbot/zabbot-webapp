@@ -21,8 +21,8 @@ const PopularCourses = () => {
 
   const allCoursesWithThumbnails = Array.isArray(allCourses?.data)
     ? allCourses?.data.map((step: Record<string, any>) => ({
-        ...step
-      }))
+      ...step
+    }))
     : [];
 
   const coursesToMap = [
@@ -194,7 +194,6 @@ const PopularCourses = () => {
                   <div key={index}>
                     <LessonsCard
                       data={lessonProgressData}
-                      isClickable={index === 0}
                     />
                   </div>
                 )
