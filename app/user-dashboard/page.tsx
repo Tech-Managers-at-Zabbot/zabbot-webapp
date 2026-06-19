@@ -4,8 +4,8 @@ import Image from "next/image";
 import Head from "next/head";
 import { useUser } from "@/contexts/UserContext";
 import { useTheme } from "@/contexts/ThemeProvider";
-import SearchBar from "@/components/general/SearchBar";
-import { IoSearchOutline } from "react-icons/io5";
+// import SearchBar from "@/components/general/SearchBar";
+// import { IoSearchOutline } from "react-icons/io5";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import {
@@ -66,9 +66,8 @@ const Dashboard = () => {
   const dashboardMetricData = [
     {
       title: getPageText("completed_daily_goals"),
-      value: `${goalsCount} ${
-        goalsCount === 1 ? getPageText("goal") : getPageText("goals")
-      }`,
+      value: `${goalsCount} ${goalsCount === 1 ? getPageText("goal") : getPageText("goals")
+        }`,
       icon: (
         <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <HiOutlineTrophy />
@@ -82,9 +81,8 @@ const Dashboard = () => {
     },
     {
       title: getPageText("completed_courses"),
-      value: `${userCoursesCount} ${
-        userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
-      }`,
+      value: `${userCoursesCount} ${userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
+        }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <FaGraduationCap />

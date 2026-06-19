@@ -24,8 +24,8 @@ import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useGetUserCompletedCourses } from "@/services/generalApi/lessons/mutation";
-import SearchBar from "@/components/general/SearchBar";
-import { IoSearchOutline } from "react-icons/io5";
+// import SearchBar from "@/components/general/SearchBar";
+// import { IoSearchOutline } from "react-icons/io5";
 
 const Dashboard = () => {
   const [goPremium, setGoPremium] = useState(true);
