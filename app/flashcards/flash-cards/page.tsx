@@ -274,9 +274,9 @@ const Flashcards = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
   const { setLoading } = useLoading();
-   const [showConfetti, setShowConfetti] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
-     const { width = 0, height = 0 } = useWindowSize();
+  const { width = 0, height = 0 } = useWindowSize();
 
   const router = useRouter();
 
@@ -351,7 +351,7 @@ const Flashcards = () => {
         name: "Child",
         url: "https://icons8.com/icon/80976/boy",
       },
-    }, //<a target="_blank" href="https://icons8.com/icon/80976/boy">Child</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+    },
     {
       id: 2,
       ld: "00034a8d-a8a8-4d81-bf42-1e347bce5bd0",
@@ -528,7 +528,7 @@ const Flashcards = () => {
 
   const handleNextCard = () => {
     if (currentIndex + 1 === flashcardsData.length) {
-        setShowConfetti(true);
+      setShowConfetti(true);
       return setIsFinishModalOpen(true);
     }
     setNextCardLoading(true);
@@ -572,29 +572,28 @@ const Flashcards = () => {
         className="flex flex-col items-center justify-center gap-10 sm:gap-10 min-h-screen px-4"
         style={{ fontFamily: "Lexend" }}
       >
-             {showConfetti && (
-        <Confetti
-          width={width}
-          height={height}
-          recycle={false}
-          numberOfPieces={1000}
-          gravity={0.4}
-          tweenDuration={10000}
-          run={showConfetti}
-          style={{
-            zIndex: 9999,
-          }}
-        />
-      )}
+        {showConfetti && (
+          <Confetti
+            width={width}
+            height={height}
+            recycle={false}
+            numberOfPieces={1000}
+            gravity={0.4}
+            tweenDuration={10000}
+            run={showConfetti}
+            style={{
+              zIndex: 9999,
+            }}
+          />
+        )}
         <section className="flex justify-center w-full z-[111]">
           <div className="relative w-full max-w-[440px]">
             {/* Preview Card with fade/scale transition */}
             <div
-              className={`transition-all duration-500 ${
-                stage === "preview"
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-95 pointer-events-none absolute inset-0"
-              }`}
+              className={`transition-all duration-500 ${stage === "preview"
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none absolute inset-0"
+                }`}
             >
               <PreviewCard
                 yorubaWord={card.yorubaWord}
@@ -604,11 +603,10 @@ const Flashcards = () => {
 
             {/* Details Card with fade/scale transition */}
             <div
-              className={`transition-all duration-500 ${
-                stage === "details"
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-95 pointer-events-none absolute inset-0"
-              }`}
+              className={`transition-all duration-500 ${stage === "details"
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none absolute inset-0"
+                }`}
             >
               <DetailsCard
                 englishWord={card.englishWord}
@@ -626,10 +624,10 @@ const Flashcards = () => {
           </div>
         </section>
 
-        <IconAttribution
+        {/* <IconAttribution
           iconName={card.iconAttribution.name}
           iconUrl={card.iconAttribution.url}
-        />
+        /> */}
 
         {/* NEXT BUTTON */}
         <section className="mb-10">

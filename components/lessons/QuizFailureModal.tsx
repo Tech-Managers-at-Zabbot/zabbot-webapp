@@ -41,7 +41,7 @@ const QuizFailureModal: React.FC<QuizFailureModalProps> = ({
           <div>
             <h4 className="text-xl font-semibold leading-[145%] text-[#D42620] mb-2">
               {isAttemptExhausted
-                ? "You have exhausted your attemtps for this question. Try the next one"
+                ? "You have exhausted your attempts for this question. Try the next one"
                 : "Try Again!"}
             </h4>
             {/* <div className="text-xl text-[#475367]">Great Job</div> */}
