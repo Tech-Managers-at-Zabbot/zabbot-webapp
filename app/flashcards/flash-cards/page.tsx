@@ -12,7 +12,7 @@ import { RxCornerTopRight } from "react-icons/rx";
 import { RxCornerBottomLeft } from "react-icons/rx";
 import { RxCornerBottomRight } from "react-icons/rx";
 import { PiSpeakerSimpleHighBold } from "react-icons/pi";
-import IconAttribution from "@/components/flashCards/IconContribution";
+// import IconAttribution from "@/components/flashCards/IconContribution";
 import { Modal } from "@/components/general/Modal";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useRouter } from "next/navigation";
