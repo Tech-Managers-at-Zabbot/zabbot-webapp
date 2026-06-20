@@ -94,9 +94,8 @@ const Page = () => {
       <header className="bg-[url('/lessons/lesson-top.png')] absolute top-0 w-full bg-cover bg-center bg-no-repeat min-h-[200px]"></header>
       <div className="flex w-full relative items-center gap-3 sm:gap-4">
         <button
-          className={`cursor-pointer ${
-            dashboardLoading ? "cursor-not-allowed" : "cursor-pointer"
-          } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
+          className={`cursor-pointer ${dashboardLoading ? "cursor-not-allowed" : "cursor-pointer"
+            } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
           onClick={() => {
             setHomeModal(true);
           }}
@@ -212,17 +211,7 @@ const Page = () => {
       </div>
 
       <footer className="bg-[url('/lessons/lesson-description-footer.png')] absolute bottom-0 w-full bg-cover bg-center bg-no-repeat min-h-[100px]"></footer>
-      <footer className="text-xs text-center text-gray-500 z-[9999]">
-        Icons by{" "}
-        <a
-          href="https://icons8.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline text-sm"
-        >
-          Icons8
-        </a>
-      </footer>
+      <footer className="text-xs text-center text-gray-500 z-[9999]" />
 
       {homeModal && (
         <Modal

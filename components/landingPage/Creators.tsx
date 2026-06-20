@@ -16,6 +16,12 @@ const Creators = () => {
       loadingEager: false,
     },
     {
+      name: "Iniobong Ekpenyong",
+      imageSrc: "/creators/mr-iniobong.svg",
+      designation: "UI/UX Lead",
+      loadingEager: false,
+    },
+    {
       name: "Kemi Sobande",
       imageSrc: "/creators/kemi-sobande.jpeg",
       designation: "Cultural & Language content consultant",
@@ -48,7 +54,7 @@ const Creators = () => {
 
       {/* Team Grid */}
       <section>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10">
           {creatorsDataArray.map((item, index) => (
             <div key={index} className="flex flex-col items-center text-center">
               {/* Image Container */}

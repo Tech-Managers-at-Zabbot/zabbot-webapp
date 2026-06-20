@@ -105,6 +105,7 @@ export async function updateUserCourse(
   updateData: Record<string, any>,
   languageId?: string
 ) {
+  if (!courseId) return;
   const response = await axiosInstance.put(
     `/lessons/courses/update-user-course/${courseId}`,
     updateData
