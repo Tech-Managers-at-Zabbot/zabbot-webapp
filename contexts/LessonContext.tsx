@@ -499,7 +499,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           quizResult,
         ];
         // KEEP THIS - needed for page navigation
-        console.log('------ updatedQuizResults', updated)
         localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
         return updated;
       });
