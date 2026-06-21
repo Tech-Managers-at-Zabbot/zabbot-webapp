@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 import React, {
   createContext,
@@ -161,7 +159,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     // isPending: userCourseUpdateLoading
   } = useUpdateUserCourse();
 
-  const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
+  const { mutate: updateLeaderboard } =
     useUpdateUserLeaderboard();
 
   const { courseId, lessonId } = params;
@@ -175,6 +173,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [totalScore, setTotalScore] = useState(0);
   const [currentLessonScore, setCurrentLessonScore] = useState(0);
+  const [quizSuccessPercentage, setQuizSuccessPercentage] = useState(0);
 
   const { userDetails } = useUser();
 
@@ -196,7 +195,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const LESSON_PROGRESS_KEY = `lesson_progress_${lessonId}`;
   const USER_COURSE_KEY = `user_course_${courseId}`;
   const QUIZ_RESULTS_KEY = `quiz_results_${lessonId}`;
-
+  console.log('quizzes', quizzes)
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
     try {
@@ -500,6 +499,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           quizResult,
         ];
         // KEEP THIS - needed for page navigation
+        console.log('------ updatedQuizResults', updated)
         localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
         return updated;
       });
@@ -560,7 +560,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       );
       localStorage.removeItem(LESSON_PROGRESS_KEY);
       // Clear quiz results after lesson completion
-      localStorage.removeItem(QUIZ_RESULTS_KEY); // ADD THIS
+      // localStorage.removeItem(QUIZ_RESULTS_KEY); // ADD THIS
 
       saveProgress(
         contents.length - 1,
@@ -643,9 +643,20 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const progressPercentage =
     totalItems > 0
       ? Math.round(
-          ((completedContentItems + completedQuizItems) / totalItems) * 100,
-        )
+        ((completedContentItems + completedQuizItems) / totalItems) * 100,
+      )
       : 0;
+
+  useEffect(() => {
+    if (quizzes.length > 0) {
+      const quizProgress = Math.round(
+        (quizResults.filter((r) => r.isCorrect).length / quizzes.length) * 100,
+      );
+      setQuizSuccessPercentage(quizProgress);
+    } else {
+      setQuizSuccessPercentage(0);
+    }
+  }, [progressPercentage, quizResults, quizzes])
 
   const isFirstContent = currentContentIndex === 0;
   const isLastContent = currentContentIndex === contents.length - 1;
@@ -693,13 +704,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     isLastQuiz,
     totalScore,
     currentLessonScore,
-    quizSuccessPercentage:
-      quizzes.length > 0
-        ? Math.round(
-            (quizResults.filter((r) => r.isCorrect).length / quizzes.length) *
-              100,
-          )
-        : 0,
+    quizSuccessPercentage,
   };
 
   useEffect(() => {
@@ -726,9 +731,9 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         const progressPercentage =
           totalItems > 0
             ? Math.round(
-                ((completedContentItems + completedQuizItems) / totalItems) *
-                  100,
-              )
+              ((completedContentItems + completedQuizItems) / totalItems) *
+              100,
+            )
             : 0;
         userCourseUpdate({
           languageId: userDetails.languageId,

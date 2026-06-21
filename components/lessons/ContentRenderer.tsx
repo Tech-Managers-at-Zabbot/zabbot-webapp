@@ -54,12 +54,6 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
       className="items-center z-10 flex flex-col justify-center w-full h-full mx-auto px-4 relative"
       style={{ fontFamily: "Lexend" }}
     >
-      {/* <div className="mt-12 md:mt-2">
-        <h2 className="text-2xl text-[#F15B29] md:text-3xl font-bold mb-6 text-center">
-          {lessonTitle}
-        </h2>
-      </div> */}
-
       {content?.contentType === "proverb" && (
         <div className="">
           <ProverbsContentComponent content={content} />

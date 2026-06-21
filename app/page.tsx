@@ -78,7 +78,7 @@ const Home = () => {
         >
           <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
             <SubscriptionSection
-              setSubscriptionType={() => console.log("Set Subscription Type")}
+              setSubscriptionType={() => {}}
               onCloseModal={() => {}}
               showTitle={false}
             />
