@@ -17,15 +17,15 @@ const NormalComponentComponent = ({
   lessonImg: string;
 }) => {
   const cleanContent = content.customText?.replace(/<[^>]*>/g, "") || "";
-  const [ contentData, setContentData ] = useState([])
+  const [contentData, setContentData] = useState([])
   const [showPronunciationModal, setShowPronunciationModal] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
 
-  useEffect(()=> {
-    if(cleanContent?.length){
+  useEffect(() => {
+    if (cleanContent?.length) {
       setContentData(cleanContent.split("–"))
     }
-  },[cleanContent])
+  }, [cleanContent])
 
   const [selectedTone, setSelectedTone] = useState<string | null>(null);
 
@@ -56,7 +56,7 @@ const NormalComponentComponent = ({
 
   return (
     <div className="w-full flex flex-col justify-center items-center mb-2 px-4"
-    style={{fontFamily: "Lexend"}}
+      style={{ fontFamily: "Lexend" }}
     >
       <div className="w-full max-w-[90%] sm:max-w-[500px] md:max-w-[700px] lg:max-w-[600px] flex flex-col justify-center items-center">
         {/* Image Container */}
@@ -88,15 +88,15 @@ const NormalComponentComponent = ({
             <MediaComponents files={content.files} />
           </div>
         )}
-
+        
         {/* Main Content */}
         <div className="w-full flex flex-col text-center text-base sm:text-xl md:text-2xl font-medium">
           <div className="text-[#975945] text-[18px] font-normal uppercase">
-          {contentData[0]}
+            {contentData[0]}
           </div>
 
           <div className="text-[#F15B29] text-[60px] font-[700]">
-          {contentData[1]}
+            {contentData[1]}
           </div>
         </div>
 
@@ -118,28 +118,28 @@ const NormalComponentComponent = ({
             </div>
             <div className="flex flex-col sm:flex-row gap-4 mb-2 mt-6 w-full items-center justify-center">
               <div>
-              <InAppButton
-              background="#EB5017"
-              onClick={() => setShowChatModal(true)}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <div><FaArrowRight /></div>
-                  <div>Chat with Òrẹ́</div>
-                </div>
-              </InAppButton>
+                <InAppButton
+                  background="#EB5017"
+                  onClick={() => setShowChatModal(true)}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <div><FaArrowRight /></div>
+                    <div>Chat with Òrẹ́</div>
+                  </div>
+                </InAppButton>
               </div>
               <div>
-              <InAppButton
-              background="#EB5017"
-              onClick={() => setShowPronunciationModal(true)}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <div><FaArrowRight /></div>
-                  <div>
-                  Record with Pàrà
+                <InAppButton
+                  background="#EB5017"
+                  onClick={() => setShowPronunciationModal(true)}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <div><FaArrowRight /></div>
+                    <div>
+                      Record with Pàrà
+                    </div>
                   </div>
-                </div>
-              </InAppButton>
+                </InAppButton>
               </div>
             </div>
           </div>
@@ -155,25 +155,25 @@ const NormalComponentComponent = ({
           onClose={() => setSelectedTone(null)}
         />
       )}
-{showPronunciationModal && (
-  <InLessonRecordWithPara
-    isOpen={showPronunciationModal}
-    onClose={() => setShowPronunciationModal(false)}
-    word={contentData[1]}
-    files={content.files}
-    // pronunciationId={"12345"} 
-    />
-)}
+      {showPronunciationModal && (
+        <InLessonRecordWithPara
+          isOpen={showPronunciationModal}
+          onClose={() => setShowPronunciationModal(false)}
+          word={contentData[1]}
+          files={content.files}
+        // pronunciationId={"12345"} 
+        />
+      )}
 
-{showChatModal && (
-  <InLessonChatWithOreModal
-    isOpen={showChatModal}
-    onClose={() => setShowChatModal(false)}
-    word={contentData[1]}
-    // files={content.files}
-    // pronunciationId={"12345"} 
-    />
-)}
+      {showChatModal && (
+        <InLessonChatWithOreModal
+          isOpen={showChatModal}
+          onClose={() => setShowChatModal(false)}
+          word={contentData[1]}
+        // files={content.files}
+        // pronunciationId={"12345"} 
+        />
+      )}
     </div>
   );
 };

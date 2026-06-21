@@ -15,6 +15,7 @@ import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { useGetUserLeaderBoard } from "@/services/generalApi/leaderboard/tanstack";
 import CompletionLoader from "@/components/loadingComponent/CompletedPageLoader";
+import { QUIZ_RESULTS_KEY } from "@/constants/localstorageKeys";
 
 const Page = () => {
   const { lesson, quizSuccessPercentage } = useLessonContext();
@@ -178,6 +179,7 @@ const Page = () => {
           background="#EB5017"
           onClick={() => {
             setNavigationLoading(true);
+            localStorage.removeItem(QUIZ_RESULTS_KEY);
             router.push(`/lesson/${courseId}`);
           }}
           disabled={navigationLoading}

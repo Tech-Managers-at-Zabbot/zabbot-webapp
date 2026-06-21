@@ -95,14 +95,13 @@ const CourseManagementPage: React.FC = () => {
 
   const handleDeleteCourse = (courseId: string) => {
     setCourses((prev) => prev.filter((course) => course.id !== courseId));
-    console.log("Deleting course:", courseId);
   };
 
   const handleSaveCourse = (courseData: Course) => {
     setCourses((prev) =>
       prev.map((course) => (course.id === courseData.id ? courseData : course))
     );
-    console.log("Saving course:", courseData);
+    
   };
 
   const handleSaveLesson = (lessonData: Lesson) => {
