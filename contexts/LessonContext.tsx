@@ -560,7 +560,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       );
       localStorage.removeItem(LESSON_PROGRESS_KEY);
       // Clear quiz results after lesson completion
-      // localStorage.removeItem(QUIZ_RESULTS_KEY); // ADD THIS
+
 
       saveProgress(
         contents.length - 1,
