@@ -4,12 +4,9 @@ import Image from "next/image";
 import Head from "next/head";
 import { useUser } from "@/contexts/UserContext";
 import { useTheme } from "@/contexts/ThemeProvider";
-// import SearchBar from "@/components/general/SearchBar";
-// import { IoSearchOutline } from "react-icons/io5";
 import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import {
-  // DailyGoals,
   WordForTheDay,
 } from "@/components/dashboard/UserGoals";
 import Leaderboard from "@/components/dashboard/LeaderBoard";
@@ -44,15 +41,6 @@ const Dashboard = () => {
   const { goalsCount, userGoalsLoading } = useUser();
 
   const { loading, setLoading } = useLoading();
-
-  function LanguageCheck() {
-    if (isLanguageLoading) {
-      if (!loading) {
-        return setLoading(true);
-      }
-    }
-    return setLoading(false);
-  }
 
   const userCount = userCountData?.data || 0;
 
@@ -112,7 +100,12 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    LanguageCheck();
+    if (isLanguageLoading) {
+      if (!loading) setLoading(true);
+    } else {
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLanguageLoading]);
 
   useEffect(() => {
