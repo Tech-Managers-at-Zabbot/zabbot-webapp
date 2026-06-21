@@ -1,0 +1,1 @@
+export const FLASHCARD_STORAGE_KEY = "zabbot_flashcards_state";
