@@ -103,7 +103,6 @@ export async function getUserCourse(
 export async function updateUserCourse(
   courseId: string | any,
   updateData: Record<string, any>,
-  languageId?: string
 ) {
   if (!courseId) return;
   const response = await axiosInstance.put(

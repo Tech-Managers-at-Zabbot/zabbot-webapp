@@ -187,7 +187,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const LESSON_PROGRESS_KEY = `lesson_progress_${lessonId}`;
   const USER_COURSE_KEY = `user_course_${courseId}`;
   const QUIZ_RESULTS_KEY = `quiz_results_${lessonId}`;
-  
+
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
     try {
@@ -652,7 +652,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     } else {
       setQuizSuccessPercentage(0);
     }
-  }, [quizzes])
+  }, [quizResults, quizzes])
 
   const isFirstContent = currentContentIndex === 0;
   const isLastContent = currentContentIndex === contents.length - 1;
