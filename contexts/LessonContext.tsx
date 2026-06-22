@@ -177,14 +177,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
 
   const { userDetails } = useUser();
 
-  //  const {
-  //   data: userCourseDetails,
-  //   refetch: refetchUserCourse,
-  //   error: userCourseError
-  // } = useGetUserCourse(userDetails.languageId, courseId, {
-  //   enabled: false,
-  // });
-
   // Quiz-related state
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [currentQuizIndex, setCurrentQuizIndex] = useState(-1);
@@ -195,7 +187,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
   const LESSON_PROGRESS_KEY = `lesson_progress_${lessonId}`;
   const USER_COURSE_KEY = `user_course_${courseId}`;
   const QUIZ_RESULTS_KEY = `quiz_results_${lessonId}`;
-  console.log('quizzes', quizzes)
+
   // Load lesson data and user progress
   const loadLessonData = useCallback(async () => {
     try {
@@ -236,16 +228,16 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         setQuizResults(JSON.parse(savedQuizResults));
       }
 
-      await loadOrCreateUserCourse();
     } catch (error) {
       console.error("Error loading lesson data:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [lessonId]);
+  }, [lessonId, LESSON_PROGRESS_KEY, QUIZ_RESULTS_KEY]);
 
   // Load or create user course
-  const loadOrCreateUserCourse = async () => {
+  const loadOrCreateUserCourse = useCallback(async () => {
+    if (!userDetails?.languageId) return;
     try {
       localStorage.removeItem(USER_COURSE_KEY);
       let userCourse;
@@ -283,7 +275,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Error in loadOrCreateUserCourse:", error);
     }
-  };
+  }, [userDetails?.languageId, courseId, lessonId, USER_COURSE_KEY, addUserCourse]);
 
   const saveProgress = useCallback(
     async (
@@ -499,7 +491,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           quizResult,
         ];
         // KEEP THIS - needed for page navigation
-        console.log('------ updatedQuizResults', updated)
         localStorage.setItem(QUIZ_RESULTS_KEY, JSON.stringify(updated));
         return updated;
       });
@@ -528,7 +519,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     },
     [
       updateLeaderboard,
-      // userDetails.id,
     ],
   );
 
@@ -579,12 +569,11 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     quizzes,
     LESSON_PROGRESS_KEY,
     USER_COURSE_KEY,
-    QUIZ_RESULTS_KEY,
   ]);
 
   const navigateToCompletion = useCallback(async () => {
     router.push(`/lesson/${courseId}/${lessonId}/completed`);
-  }, [router, courseId]);
+  }, [router, courseId, lessonId]);
 
   // Load data on mount
   useEffect(() => {
@@ -592,6 +581,13 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       loadLessonData();
     }
   }, [lessonId, loadLessonData]);
+
+  // Load or create user course once user identity is available
+  useEffect(() => {
+    if (lessonId && userDetails?.languageId) {
+      loadOrCreateUserCourse();
+    }
+  }, [lessonId, userDetails?.languageId, loadOrCreateUserCourse]);
 
   // Auto-save progress when content or quiz changes
   useEffect(() => {
@@ -656,7 +652,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
     } else {
       setQuizSuccessPercentage(0);
     }
-  }, [progressPercentage, quizResults, quizzes])
+  }, [quizResults, quizzes])
 
   const isFirstContent = currentContentIndex === 0;
   const isLastContent = currentContentIndex === contents.length - 1;

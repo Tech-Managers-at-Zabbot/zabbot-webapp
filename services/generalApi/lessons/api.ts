@@ -180,8 +180,8 @@ export async function updateCourseImage(
 ) {
   const response = await axiosInstance.put(
     `/lessons/courses/change-course-image/${courseId}`,
-    updateData,{
-     headers: {
+    updateData, {
+    headers: {
       "Content-Type": "multipart/form-data",
     },
   }
@@ -195,8 +195,8 @@ export async function updateLessonImage(
 ) {
   const response = await axiosInstance.put(
     `/lessons/lessons/change-lesson-image/${lessonId}`,
-    updateData,{
-     headers: {
+    updateData, {
+    headers: {
       "Content-Type": "multipart/form-data",
     },
   }

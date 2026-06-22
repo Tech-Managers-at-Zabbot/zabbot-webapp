@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
@@ -182,11 +181,10 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handlePaymentMethodSelect("card")}
-                  className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
-                    selectedMethod === "card"
-                      ? "border-[#0089C8] bg-blue-50 shadow-lg"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
-                  }`}
+                  className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${selectedMethod === "card"
+                    ? "border-[#0089C8] bg-blue-50 shadow-lg"
+                    : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-md"
+                    }`}
                 >
                   {selectedMethod === "card" && (
                     <div className="absolute top-3 right-3">
@@ -195,11 +193,10 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                   )}
                   <div className="flex flex-col items-center gap-3">
                     <div
-                      className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                        selectedMethod === "card"
-                          ? "bg-[#0089C8]"
-                          : "bg-gray-100"
-                      }`}
+                      className={`w-16 h-16 rounded-full flex items-center justify-center ${selectedMethod === "card"
+                        ? "bg-[#0089C8]"
+                        : "bg-gray-100"
+                        }`}
                     >
                       <CreditCard
                         className={
@@ -243,7 +240,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                         Fast & secure
                       </p>
                     </div> */}
-{/* 
+                {/* 
                     {selectedMethod === "paypal" && (
                       <PaypalButtonsComponent
                         subscriptionType={subscriptionType}
@@ -257,7 +254,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
                       />
                     )} */}
 
-                    {/* {selectedMethod !== "paypal" && (
+                {/* {selectedMethod !== "paypal" && (
                       <button
                         onClick={() => handlePaymentMethodSelect("paypal")}
                         className="w-full py-2 px-4 bg-[#0089C8] text-white rounded-lg hover:bg-[#006B9E] transition-colors"
@@ -276,11 +273,10 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
               whileTap={{ scale: selectedMethod ? 0.98 : 1 }}
               onClick={handleProceedToPayment}
               disabled={!selectedMethod || isPending}
-              className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${
-                selectedMethod && !isPending
-                  ? "bg-[#0089C8] text-white hover:bg-[#006B9E] shadow-lg hover:shadow-xl"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-              }`}
+              className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${selectedMethod && !isPending
+                ? "bg-[#0089C8] text-white hover:bg-[#006B9E] shadow-lg hover:shadow-xl"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
             >
               {isPending ? (
                 <>
