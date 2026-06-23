@@ -148,11 +148,6 @@ export async function getCourseLessons(courseId: string) {
 
 // --- Content Endpoints ---
 
-// export async function createContent(contentData: any) {
-//   const response = await axiosInstance.post("/contents", contentData);
-//   return response.data;
-// }
-
 export async function getLessonContents(lessonId: string) {
   const response = await axiosInstance.get(`/contents/lesson/${lessonId}`);
   return response.data;
@@ -166,13 +161,6 @@ export async function getLanguageContents(languageId?: string) {
   );
   return response.data;
 }
-
-// export async function createLanguageContent(contentData: any) {
-//   const response = await axiosInstance.post("/language-contents", contentData);
-//   return response.data;
-// }
-
-
 
 export async function updateCourseImage(
   courseId: string,
