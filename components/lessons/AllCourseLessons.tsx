@@ -1,25 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
+import { useParams } from "next/navigation";
 import {
-  useGetCoursesWithLessons,
+  useGetCourseLessons
 } from "@/services/generalApi/lessons/mutation";
-import { useUser } from "@/contexts/UserContext";
+
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { LessonsCard2 } from "../dashboard/UserLessonDataComponent";
 import { useTheme } from "@/contexts/ThemeProvider";
 
 const AllCourseLessons = () => {
-  const { userDetails } = useUser();
+  const { courseId } = useParams<{ courseId: string }>();
 
   const { theme } = useTheme();
 
-  const { data: coursesWithLessons, isLoading: lessonsLoading } =
-    useGetCoursesWithLessons(userDetails?.languageId);
+  const { data: _courseLessons, isLoading: isCourseLessonsLoading } =
+    useGetCourseLessons(courseId);
 
-  const courseLessons = coursesWithLessons?.data?.lessons;
-
-  const course = coursesWithLessons?.data?.course;
+  const courseInfo = _courseLessons?.data;
 
   return (
     <div
@@ -39,18 +38,18 @@ const AllCourseLessons = () => {
             style={{ color: theme === "dark" ? "white" : "#162B6E" }}
           >
             {/* Immersing you in Yorùbá, one step at a time */}
-            {lessonsLoading
+            {isCourseLessonsLoading
               ? "Loading course details..."
-              : course?.title || "Course Title"}
+              : courseInfo[0].course?.title || "Course Title"}
           </span>
           <span
             className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
             style={{ color: "#207EC5" }}
-          >
+          >Joined
             {/* Building fluency through culture, sound, and everyday moments. */}
-            {lessonsLoading
+            {isCourseLessonsLoading
               ? null
-              : course?.description || "Course Description"}
+              : courseInfo[0].course?.description || "Course Description"}
           </span>
         </section>
       </header>
@@ -58,22 +57,20 @@ const AllCourseLessons = () => {
       {/* Courses Grid Section - Fully responsive grid */}
       <section className="w-full min-w-0">
         <div className="w-full">
-          {lessonsLoading ? (
+          {isCourseLessonsLoading ? (
             <div className="w-full flex gap-2">
               {Array.from({ length: 6 }).map((_, index) => (
                 <DashboardMetricCardSkeleton key={index} />
               ))}
             </div>
-          ) : !coursesWithLessons?.data ||
-            coursesWithLessons?.data?.lessons?.length === 0 ? (
+          ) : !courseInfo ||
+            courseInfo.length === 0 ? (
             <div className="w-full flex gap-2">
-              {/* {Array.from({ length: 6 }).map((_, index) => ( */}
               <EmptyStateCard title="No data" subtitle="No courses yet" />
-              {/* // ))} */}
             </div>
           ) : (
             <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 sm:gap-5 md:gap-6 lg:gap-[20px] auto-rows-fr">
-              {courseLessons?.map(
+              {courseInfo?.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
                     key={index}
@@ -94,16 +91,6 @@ const AllCourseLessons = () => {
 
       {/* Divider */}
       <div className="border-t border-[#EAECF0] w-full"></div>
-
-      {/* Pagination Section */}
-      {/* <section className="w-full overflow-x-auto">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          maxVisiblePages={5} // Reduced for mobile
-        />
-      </section> */}
     </div>
   );
 };
