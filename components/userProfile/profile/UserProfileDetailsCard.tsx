@@ -8,8 +8,8 @@ import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
 
 const UserProfileDetailsComponent = () => {
   // const { userProfile } = useUser();
-  const { data: userProfile, 
-    isLoading: userDataLoading 
+  const { data: userProfile,
+    isLoading: userDataLoading
   } = useGetSingleUserData();
 
   return (
@@ -44,8 +44,8 @@ const UserProfileDetailsComponent = () => {
                 <div>Loading user details...</div>
               ) : (
                 <> */}
-                  {userDataLoading ? "loading..." : `${userProfile?.data?.firstName} ${userProfile?.data?.lastName }`}
-                {/* </> */}
+              {userDataLoading ? "loading..." : `${userProfile?.data?.firstName} ${userProfile?.data?.lastName}`}
+              {/* </> */}
               {/* )} */}
             </h1>
 
@@ -53,7 +53,7 @@ const UserProfileDetailsComponent = () => {
               {/* {userDataLoading ? (
                 <div>Loading user details...</div>
               ) : ( */}
-                <>{userDataLoading ? "loading..." : userProfile?.data?.email}</>
+              <>{userDataLoading ? "loading..." : userProfile?.data?.email}</>
               {/* )} */}
             </div>
 
@@ -61,12 +61,12 @@ const UserProfileDetailsComponent = () => {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-6 text-base sm:text-lg font-normal leading-relaxed">
               <div className="flex items-center gap-2">
                 <PiCalendarBlank size={20} />
-                <span>Joined March 2024</span>
+                <span>Joined {userProfile?.data?.verifiedAt ? new Date(userProfile.data.verifiedAt).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : "March 2024"}</span>
               </div>
 
               <div className="flex items-center gap-2">
-                <HiMiniArrowTrendingUp size={20} />
-                <span>Level 5</span>
+                {/* <HiMiniArrowTrendingUp size={20} />
+                <span>Level 5</span> */}
               </div>
             </div>
           </div>

@@ -27,139 +27,6 @@ const PopularCourses = () => {
 
   const coursesToMap = [
     ...allCoursesWithThumbnails,
-    {
-      thumbnailImage: "/userDashboard/yoruba/journey-colors.png",
-      title: "Colors, Shapes, Descriptions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/yoruba-family.png",
-      title: "Family & Social Interactions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/stop-watch.png",
-      title: "Numbers, Time & Daily Activities",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/golden-heart.png",
-      title: "Politeness & Respect",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/big-baby.png",
-      title: "Emotions & Expressions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/food.png",
-      title: "Food & Market Culture",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/mat.png",
-      title: "Clothing & Self-Presentation",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "foundation"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/chores.png",
-      title: "Home & Housing",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/health.png",
-      title: "Health & Well-being",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/map-of-nigeria.png",
-      title: "Travel & Places",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/travel.png",
-      title: "Transport & Getting Around",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/sunset.svg",
-      title: "Weather, Nature & Spirituality",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/reading.svg",
-      title: "Work, School & Aspirations",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/dialogue-art.png",
-      title: "Conflict Resolution & Apologies",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "builder"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/culture.png",
-      title: "Proverbs & Everyday Wisdom",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "explorer"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/talking-drums.png",
-      title: "Music, Dance & Pop Culture",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "explorer"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/festival-drums.png",
-      title: "Festivals & Traditions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "explorer"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/customer-care.png",
-      title: "Technology & Modern Life",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "explorer"
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/nigeria-flag-and-woman.png",
-      title: "News, Politics & Community Issues",
-      estimatedDuration: 20,
-      totalLessons: 10,
-      level: "explorer"
-    },
   ];
 
   return (
@@ -190,13 +57,17 @@ const PopularCourses = () => {
           ) : (
             <section className="flex gap-[15px] min-w-max">
               {coursesToMap.map(
-                (lessonProgressData: Record<string, any>, index: number) => (
-                  <div key={index}>
-                    <LessonsCard
-                      data={lessonProgressData}
-                    />
-                  </div>
-                )
+                (lessonProgressData: Record<string, any>, index: number) => {
+                  console.log("lessonProgressData in PopularCourses", lessonProgressData)
+                  return (
+                    <div key={index}>
+                      <LessonsCard
+                        data={lessonProgressData}
+                      />
+
+                    </div>
+                  )
+                }
               )}
             </section>
           )}

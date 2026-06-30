@@ -146,6 +146,44 @@ export async function getCourseLessons(courseId: string) {
   return response.data;
 }
 
+// Get all user lessons: GET / lessons / user - lessons
+export async function getUserLessons() {
+  const response = await axiosInstance.get("/lessons/user-lessons");
+  return response.data;
+}
+
+// Get a single user lesson GET /lessons/user-lessons/{{lessonId}}
+export async function getUserLesson(lessonId: string) {
+  const response = await axiosInstance.get(`/lessons/user-lessons/${lessonId}`);
+  return response.data;
+}
+
+// Add a user lesson POST /lessons/user-lessons
+// const lessonData = ⁠{
+//   "courseId": string,
+//   "lessonId": string,
+//   "languageId": "language-123",
+//   "percentageCompletion": 25,
+//   "score": 60,
+//   "isCompleted": false,
+//   "startedAt": "2026-06-29T10:00:00.000Z"
+// } ⁠
+
+export async function addUserLesson(lessonData: any) {
+  const response = await axiosInstance.post("/lessons/user-lessons", lessonData);
+  return response.data;
+}
+
+// Update user lesson: PUT /lessons/user-lessons
+export async function updateUserLesson(lessonId: string, updateData: any) {
+  const response = await axiosInstance.put(
+    `/lessons/user-lessons/${lessonId}`,
+    updateData
+  );
+  return response.data;
+}
+
+
 // --- Content Endpoints ---
 
 export async function getLessonContents(lessonId: string) {
