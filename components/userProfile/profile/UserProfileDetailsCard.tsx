@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { PiCalendarBlank } from "react-icons/pi";
-import { HiMiniArrowTrendingUp } from "react-icons/hi2";
+// import { HiMiniArrowTrendingUp } from "react-icons/hi2";
 // import { useUser } from "@/contexts/UserContext";
 import { CgProfile } from "react-icons/cg";
 import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
