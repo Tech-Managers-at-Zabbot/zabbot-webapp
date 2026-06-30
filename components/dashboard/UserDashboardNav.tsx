@@ -107,16 +107,16 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     ...(userDetails?.role === "admin"
       ? [
-          {
-            name: "Admin",
-            route: "/admin",
-            iconPath: "/userDashboard/admin.svg",
-            isActiveIconPath: "/userDashboard/adminActive.svg",
-            action: () => "",
-            useAction: false,
-            disabled: false,
-          },
-        ]
+        {
+          name: "Admin",
+          route: "/admin",
+          iconPath: "/userDashboard/admin.svg",
+          isActiveIconPath: "/userDashboard/adminActive.svg",
+          action: () => "",
+          useAction: false,
+          disabled: false,
+        },
+      ]
       : []),
   ];
 
@@ -207,16 +207,16 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     ...(userDetails?.role === "admin"
       ? [
-          {
-            name: "Admin",
-            route: "/admin",
-            iconPath: "/userDashboard/admin.svg",
-            isActiveIconPath: "/userDashboard/adminActive.svg",
-            action: () => "",
-            useAction: false,
-            disabled: false,
-          },
-        ]
+        {
+          name: "Admin",
+          route: "/admin",
+          iconPath: "/userDashboard/admin.svg",
+          isActiveIconPath: "/userDashboard/adminActive.svg",
+          action: () => "",
+          useAction: false,
+          disabled: false,
+        },
+      ]
       : []),
     {
       name: "Logout",
@@ -339,25 +339,22 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <div className="flex gap-x-[32px] gap-y-[16px] xl:gap-x-[40px] xl:gap-y-0">
           {userDashboardDetails.map((item, index) => (
             <nav
-              className={`flex hover:cursor-${
-                !item.disabled ? "pointer" : "not-allowed"
-              } hover:text-[${
-                pathname === item.route.split("?")[0] &&
-                currentTab ===
+              className={`flex hover:cursor-${!item.disabled ? "pointer" : "not-allowed"
+                } hover:text-[${pathname === item.route.split("?")[0] &&
+                  currentTab ===
                   new URLSearchParams(item.route.split("?")[1]).get("tab")
                   ? "#162B6E"
                   : item.disabled
                     ? ""
                     : "#FFE933"
-              }] rounded-4xl px-[16px] text-[${
-                pathname === item.route.split("?")[0] &&
-                currentTab ===
+                }] rounded-4xl px-[16px] text-[${pathname === item.route.split("?")[0] &&
+                  currentTab ===
                   new URLSearchParams(item.route.split("?")[1]).get("tab")
                   ? "#162B6E"
                   : item.disabled
                     ? "#666666"
                     : "white"
-              }] justify-center items-center`}
+                }] justify-center items-center`}
               key={index}
               onClick={() =>
                 item.useAction ? item.action() : handleMenuItemClick(item.route)
@@ -365,7 +362,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
               style={{
                 backgroundColor:
                   pathname === item.route.split("?")[0] &&
-                  currentTab ===
+                    currentTab ===
                     new URLSearchParams(item.route.split("?")[1]).get("tab")
                     ? "#FFE933"
                     : "",
@@ -374,7 +371,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
               <Image
                 src={
                   pathname === item.route.split("?")[0] &&
-                  currentTab ===
+                    currentTab ===
                     new URLSearchParams(item.route.split("?")[1]).get("tab")
                     ? item.isActiveIconPath
                     : item.iconPath
@@ -437,20 +434,19 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                         ? item.action()
                         : handleMenuItemClick(item.route)
                     }
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${
-                      pathname === item.route.split("?")[0] &&
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${pathname === item.route.split("?")[0] &&
                       currentTab ===
-                        new URLSearchParams(item.route.split("?")[1]).get("tab")
-                        ? "bg-[#FFE933] text-[#162B6E]"
-                        : item.disabled
-                          ? "text-[#666666]"
-                          : "text-[#FFFFFF]"
-                    }`}
+                      new URLSearchParams(item.route.split("?")[1]).get("tab")
+                      ? "bg-[#FFE933] text-[#162B6E]"
+                      : item.disabled
+                        ? "text-[#666666]"
+                        : "text-[#FFFFFF]"
+                      }`}
                   >
                     <Image
                       src={
                         pathname === item.route.split("?")[0] &&
-                        currentTab ===
+                          currentTab ===
                           new URLSearchParams(item.route.split("?")[1]).get(
                             "tab",
                           )
