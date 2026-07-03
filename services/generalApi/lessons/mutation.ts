@@ -17,6 +17,11 @@ import {
   getUserCompletedCourses,
   updateCourseImage,
   updateLessonImage,
+  addUserLesson,
+  deleteUserLesson,
+  getUserLesson,
+  getUserLessons,
+  updateUserLesson,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -269,11 +274,11 @@ export function useChangeCourseImage() {
       courseId,
       data,
       // languageId,
-}: {
-  courseId: string;
-  data: FormData;
-  languageId:string;
-}) => updateCourseImage(courseId, data),
+    }: {
+      courseId: string;
+      data: FormData;
+      languageId: string;
+    }) => updateCourseImage(courseId, data),
 
     onSuccess: async (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["getAllCourses", variables?.languageId] });
@@ -291,11 +296,11 @@ export function useChangeLessonImage() {
       lessonId,
       data,
       // languageId,
-}: {
-  lessonId: string;
-  data: FormData;
-  languageId:string;
-}) => updateLessonImage(lessonId, data),
+    }: {
+      lessonId: string;
+      data: FormData;
+      languageId: string;
+    }) => updateLessonImage(lessonId, data),
 
     onSuccess: async (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["getAllCourses", variables?.languageId] });
@@ -305,3 +310,86 @@ export function useChangeLessonImage() {
     },
   });
 }
+
+// handles everything around user and lessons
+export function useCreateUserLesson() {
+  return useMutation({
+    mutationFn: async (lessonData: {
+      languageId: string;
+      courseId: string | any;
+      lessonId: string | any;
+      score: number;
+    }) => {
+      console.log("lessonData in useCreateUserLesson", lessonData);
+      return await addUserLesson(lessonData);
+    },
+    onSuccess: async () => {
+      console.log("User lesson created successfully");
+    },
+    onError: (error: any) => {
+      console.error("Error Creating user lesson:", error);
+    },
+  });
+}
+
+export function useGetUserLesson(lessonId: string) {
+  return useQuery({
+    queryKey: ["getUserLesson", lessonId],
+    queryFn: () => getUserLesson(lessonId),
+    refetchOnMount: true,
+    enabled: !!lessonId,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useGetUserLessons() {
+  return useQuery({
+    queryKey: ["getUserLessons"],
+    queryFn: () => getUserLessons(),
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useUpdateUserLesson() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      lessonId,
+      updateData,
+    }: {
+      lessonId: string;
+      updateData: Record<string, any>;
+    }) => {
+      return await updateUserLesson(lessonId, updateData);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getUserLesson", variables.lessonId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["getUserLessons"] });
+    },
+    onError: (error: any) => {
+      console.error("Error updating user lesson:", error);
+    },
+  });
+}
+
+export function useDeleteUserLesson() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ userId, lessonId }: { userId: string; lessonId: string }) => {
+      return await deleteUserLesson(userId, lessonId);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getUserLesson", variables.lessonId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["getUserLessons"] });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting user lesson:", error);
+    },
+  });
+}
+

@@ -15,19 +15,31 @@ import Confetti from "react-confetti";
 import { useWindowSize } from "react-use";
 import { useGetUserLeaderBoard } from "@/services/generalApi/leaderboard/tanstack";
 import CompletionLoader from "@/components/loadingComponent/CompletedPageLoader";
-import { QUIZ_RESULTS_KEY } from "@/constants/localstorageKeys";
+// import { QUIZ_RESULTS_KEY } from "@/constants/localstorageKeys";
+import { useCreateUserLesson, useDeleteUserLesson, useGetUserLessons } from "@/services/generalApi/lessons/mutation";
+import { useUser } from "@/contexts/UserContext";
 
+
+function getQuizStats(results: { isCorrect: boolean; scoreEarned: number }[]) {
+  const correct = results.filter(r => r.isCorrect);
+  const totalScore = correct.reduce((sum, r) => sum + r.scoreEarned, 0);
+  const percentage = results.length > 0 ? (correct.length / results.length) * 100 : 0;
+
+  return { totalScore, percentage };
+}
 const Page = () => {
   const { lesson, quizSuccessPercentage } = useLessonContext();
-
+  const { userDetails } = useUser();
+  const { mutate: createUserLesson } = useCreateUserLesson();
+  const { mutate: deleteUserLesson } = useDeleteUserLesson();
+  const { data: userLessonsData } = useGetUserLessons();
   const { width = 0, height = 0 } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
 
   const router = useRouter();
-
   const params = useParams();
-
-  const { courseId } = params;
+  const { courseId, lessonId } = params;
+  const QUIZ_RESULTS_KEY = `quiz_results_${lessonId}`;
 
   const [navigationLoading, setNavigationLoading] = useState(false);
   const { setLoading } = useLoading();
@@ -46,6 +58,51 @@ const Page = () => {
     setDashboardLoading(true);
     router.push("/user-dashboard");
   };
+
+  const savedQuizResults = localStorage.getItem(QUIZ_RESULTS_KEY);
+  const parsedQuizResults = savedQuizResults ? JSON.parse(savedQuizResults) : [];
+  const quizStats = getQuizStats(parsedQuizResults);
+
+  useEffect(() => {
+    if (!savedQuizResults) return;
+
+    const handleStoreUserLessonData = (savedQuizResults: string) => {
+      console.log("savedQuizResults", savedQuizResults);
+
+      const existingLessons: { lessonId: string; userId: string; score: number; id: string }[] =
+        Array.isArray((userLessonsData as { data?: unknown })?.data)
+          ? (userLessonsData as { data: { lessonId: string; userId: string; score: number; id: string }[] }).data
+          : Array.isArray(userLessonsData)
+            ? (userLessonsData as { lessonId: string; userId: string; score: number; id: string }[])
+            : [];
+
+      const existingLesson = existingLessons.find(
+        (l) => l.lessonId === lessonId && l.userId === userDetails.id,
+      );
+
+      const lessonPayload = {
+        languageId: userDetails.languageId,
+        courseId: courseId as string,
+        lessonId: lessonId as string,
+        score: quizStats.totalScore,
+        percentageCompletion: quizStats.percentage,
+        isCompleted: true,
+        completedAt: new Date().toISOString(),
+      };
+
+      if (existingLesson) {
+        deleteUserLesson(
+          { userId: userDetails.id, lessonId: existingLesson.lessonId },
+          { onSuccess: () => createUserLesson(lessonPayload) },
+        );
+      } else {
+        createUserLesson(lessonPayload);
+      }
+    };
+
+    handleStoreUserLessonData(savedQuizResults);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function formatOrdinal(rank?: number | null) {
     if (!rank || !Number.isFinite(rank)) return "--";

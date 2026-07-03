@@ -341,14 +341,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         }
       }
     },
-    [
-      lessonId,
-      contents.length,
-      quizzes.length,
-      userCourseUpdate,
-      userDetails.languageId,
-      courseId,
-    ],
+    [LESSON_PROGRESS_KEY, userCourse, contents.length, quizzes.length, lessonId, USER_COURSE_KEY, userCourseUpdate, userDetails.languageId, courseId],
   );
 
   // Content Actions
@@ -498,7 +491,6 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
       if (isCorrect && scoreEarned > 0) {
         setCurrentLessonScore((prev) => prev + scoreEarned);
         setTotalScore((prev) => prev + scoreEarned);
-        console.log('earn', scoreEarned)
 
         updateLeaderboard({
           formData: {
@@ -507,6 +499,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
             quizCorrect: true,
           },
         });
+
       } else if (!isCorrect && attemptNumber >= 3) {
         updateLeaderboard({
           formData: {
@@ -517,9 +510,7 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
         });
       }
     },
-    [
-      updateLeaderboard,
-    ],
+    [updateLeaderboard, QUIZ_RESULTS_KEY],
   );
 
   const completeQuizPhase = useCallback(() => {

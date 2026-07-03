@@ -55,33 +55,7 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
   const [maxAttempts] = useState<number>(3);
 
   const { addAlert } = useAlert();
-  // const [attemptHistory, setAttemptHistory] = useState<
-  //   {
-  //     quizId: string;
-  //     attempts: number;
-  //   }[]
-  // >([]);
-
-  // useEffect(() => {
-  //   if (quiz?.id) {
-  //     const savedAttempts = localStorage.getItem(`quiz_attempts_${quiz.id}`);
-  //     if (savedAttempts) {
-  //       const parsed = JSON.parse(savedAttempts);
-  //       setAttemptCount(parsed.attempts || 0);
-  //       setHasSubmitted(parsed.hasSubmitted || false);
-  //       setIsCorrect(parsed.isCorrect || false);
-  //       setShowResult(parsed.hasSubmitted || false);
-  //     } else {
-  //       setAttemptCount(0);
-  //       setHasSubmitted(false);
-  //       setIsCorrect(false);
-  //       setShowResult(false);
-  //       setSelectedAnswer("");
-  //       setFillInAnswer("");
-  //     }
-  //   }
-  // }, [quiz?.id]);
-
+  
   if (!quiz) return null;
 
   const handleOptionSelect = (option: string) => {
@@ -158,16 +132,6 @@ const QuizRenderer: React.FC<QuizRendererProps> = ({
 
     const newAttemptCount = attemptCount + 1;
     setAttemptCount(newAttemptCount);
-
-    // localStorage.setItem(
-    //   `quiz_attempts_${quiz.id}`,
-    //   JSON.stringify({
-    //     attempts: newAttemptCount,
-    //     hasSubmitted: correct || newAttemptCount >= maxAttempts,
-    //     isCorrect: correct,
-    //     lastAttempt: new Date().toISOString(),
-    //   })
-    // );
 
     setIsCorrect(correct);
     setShowResult(true);
