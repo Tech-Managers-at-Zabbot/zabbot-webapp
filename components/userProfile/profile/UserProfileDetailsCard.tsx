@@ -1,8 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { PiCalendarBlank } from "react-icons/pi";
-// import { HiMiniArrowTrendingUp } from "react-icons/hi2";
-// import { useUser } from "@/contexts/UserContext";
+
 import { CgProfile } from "react-icons/cg";
 import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
 
@@ -40,21 +39,15 @@ const UserProfileDetailsComponent = () => {
         <section className="text-center sm:text-left">
           <div className="flex flex-col items-center sm:items-start gap-3 sm:gap-4">
             <h1 className="text-xl sm:text-2xl font-semibold leading-tight">
-              {/* {userDataLoading ? (
-                <div>Loading user details...</div>
-              ) : (
-                <> */}
+
               {userDataLoading ? "loading..." : `${userProfile?.data?.firstName} ${userProfile?.data?.lastName}`}
-              {/* </> */}
-              {/* )} */}
+
             </h1>
 
             <div className="text-base sm:text-lg font-normal leading-snug">
-              {/* {userDataLoading ? (
-                <div>Loading user details...</div>
-              ) : ( */}
+
               <>{userDataLoading ? "loading..." : userProfile?.data?.email}</>
-              {/* )} */}
+
             </div>
 
             {/* Extra profile info */}
@@ -65,8 +58,7 @@ const UserProfileDetailsComponent = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                {/* <HiMiniArrowTrendingUp size={20} />
-                <span>Level 5</span> */}
+
               </div>
             </div>
           </div>

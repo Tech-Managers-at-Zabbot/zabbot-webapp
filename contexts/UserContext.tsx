@@ -25,17 +25,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     languageId: "",
   });
   const [goalId, setGoalId] = useState("");
-  // const [userProfile, setUserProfile] = useState({});
-
-//   const { data: user, isLoading: userDataLoading } = useGetSingleUserData();
-// useEffect(() => {
-//   if (!user) {
-//     return;
-//   }
-//   if (user?.data) {
-//     setUserProfile(user.data);
-//   }
-// }, [user?.data]);
 
   useEffect(() => {
     const user = Cookies.get("userProfile");

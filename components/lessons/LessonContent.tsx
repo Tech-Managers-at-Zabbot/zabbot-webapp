@@ -54,6 +54,7 @@ const LessonContent = () => {
     attemptNumber: number,
     scoreEarned: number
   ) => {
+    console.log(`Quiz submitted: ${quizId}, Answer: ${userAnswer}, Correct: ${isCorrect}`);
     submitQuizAnswer(quizId, userAnswer, isCorrect, attemptNumber, scoreEarned);
   };
   const { setLoading } = useLoading();
@@ -206,9 +207,8 @@ const LessonContent = () => {
       <div className="flex px-[5%] justify-between relative items-center">
         <div className="flex relative items-center gap-3 sm:gap-4">
           <button
-            className={`cursor-pointer ${
-              dashboardLoading ? "cursor-not-allowed" : "cursor-pointer"
-            } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
+            className={`cursor-pointer ${dashboardLoading ? "cursor-not-allowed" : "cursor-pointer"
+              } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
             onClick={() => {
               setHomeModal(true);
             }}
@@ -254,11 +254,11 @@ const LessonContent = () => {
                              //     : "cursor-pointer"
                              // }
                              `}
-                // onClick={() => {
-                //   if (startLoading || dashboardLoading) return;
-                //   setDashboardLoading(true);
-                //   router.push("/user-dashboard");
-                // }}
+              // onClick={() => {
+              //   if (startLoading || dashboardLoading) return;
+              //   setDashboardLoading(true);
+              //   router.push("/user-dashboard");
+              // }}
               >
                 <FiHeart className="w-4 h-4 sm:w-6 sm:h-6" fill="#FEEFEA" />
                 <span className="text-[#FEEFEA] font-semibold text-sm sm:text-lg md:text-xl">

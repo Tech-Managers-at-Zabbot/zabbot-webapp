@@ -183,6 +183,13 @@ export async function updateUserLesson(lessonId: string, updateData: any) {
   return response.data;
 }
 
+// Delete user lesson: DELETE /lessons/user-lessons/{{userId}}/{{lessonId}}
+export async function deleteUserLesson(userId: string, lessonId: string) {
+  if (!lessonId) return;
+  const response = await axiosInstance.delete(`/lessons/user-lessons/${userId}/${lessonId}`);
+  return response.data;
+}
+
 
 // --- Content Endpoints ---
 

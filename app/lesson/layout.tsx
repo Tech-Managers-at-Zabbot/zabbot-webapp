@@ -2,7 +2,7 @@
 // import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
 // import UserDashboardNav from "@/components/dashboard/UserDashboardNav";
 import AuthGuard from "@/components/security/AuthGuard";
-import React, { 
+import React, {
   // useEffect, 
   // useState 
 } from "react";
@@ -15,26 +15,6 @@ const Layout = ({
 }: {
   children: React.ReactNode;
 }) => {
-  // const [timeSunMoonLink, setTimeSunMoonLink] = useState(
-  //   // "/userDashboard/morning-sun.png"
-  //   "#"
-  // );
-
-  // useEffect(() => {
-  //   const currentTime = new Date();
-  //   const hours = currentTime.getHours();
-
-  //   if (hours >= 6 && hours < 12) {
-  //     // Morning: 6 AM to 12 PM
-  //     // setTimeSunMoonLink("/userDashboard/morning-sun.svg");
-  //   } else if (hours >= 12 && hours < 18) {
-  //     // Afternoon: 12 PM to 6 PM
-  //     // setTimeSunMoonLink("/userDashboard/afternoon-sun.svg");
-  //   } else {
-  //     // Night: 6 PM to 6 AM
-  //     // setTimeSunMoonLink("/userDashboard/moon.svg");
-  //   }
-  // }, []);
 
   return (
     <AuthGuard isAdmin={false}>
