@@ -5,14 +5,17 @@ import Head from "next/head";
 import InAppButton from "@/components/InAppButton";
 import { useState } from "react";
 import { CustomSpinner } from "@/components/CustomSpinner";
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
 const Flashcards = () => {
   const router = useRouter();
+  const { mutate: logUserStreak } = useLogUserStreak();
 
   const [nextPageLoading, setNextPageLoading] = useState(false);
 
   const handleRedirect = () => {
     setNextPageLoading(true);
+    logUserStreak();
     return router.push("/flashcards/flash-cards");
   };
 

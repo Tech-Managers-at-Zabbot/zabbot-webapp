@@ -18,6 +18,7 @@ import CompletionLoader from "@/components/loadingComponent/CompletedPageLoader"
 // import { QUIZ_RESULTS_KEY } from "@/constants/localstorageKeys";
 import { useCreateUserLesson, useDeleteUserLesson, useGetUserLessons } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
 
 function getQuizStats(results: { isCorrect: boolean; scoreEarned: number }[]) {
@@ -35,6 +36,7 @@ const Page = () => {
   const { data: userLessonsData } = useGetUserLessons();
   const { width = 0, height = 0 } = useWindowSize();
   const [showConfetti, setShowConfetti] = useState(false);
+  const { mutate: logUserStreak } = useLogUserStreak();
 
   const router = useRouter();
   const params = useParams();
@@ -126,6 +128,7 @@ const Page = () => {
 
   useEffect(() => {
     setShowConfetti(true);
+    logUserStreak();
   }, []);
 
   if (leaderboardLoading) return <CompletionLoader />;

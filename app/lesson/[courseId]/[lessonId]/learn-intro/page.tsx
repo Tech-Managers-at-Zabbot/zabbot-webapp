@@ -15,6 +15,7 @@ import { TalkingDrumIcon } from "@/constants/SvgPaths";
 import { useGetLessonWithContents } from "@/services/generalApi/lessons/mutation";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiHeart } from "react-icons/fi";
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
 const LessonDescriptionComponent = ({
   lesson,
@@ -23,8 +24,15 @@ const LessonDescriptionComponent = ({
 }) => {
   const [dashboardLoading, setDashboardLoading] = useState(false);
   const [startLoading, setStartLoading] = useState(false);
+  const { mutate: logUserStreak } = useLogUserStreak();
 
   const router = useRouter();
+
+  const handleStartLesson = () => {
+    setStartLoading(true);
+    logUserStreak();
+    router.push(`/lesson/${lesson?.courseId}/${lesson?.id}`);
+  };
 
   return (
     <div
@@ -44,11 +52,10 @@ const LessonDescriptionComponent = ({
       <div className="relative flex flex-wrap sm:flex-nowrap justify-between items-center gap-4 px-4 sm:px-[5%] mt-4 sm:mt-10">
         <div className="flex items-center gap-3 sm:gap-4">
           <div
-            className={`cursor-pointer ${
-              startLoading || dashboardLoading
-                ? "cursor-not-allowed"
-                : "cursor-pointer"
-            } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
+            className={`cursor-pointer ${startLoading || dashboardLoading
+              ? "cursor-not-allowed"
+              : "cursor-pointer"
+              } text-[#ebebeb] hover:text-[#B6822E] p-2 sm:p-3 rounded-full transition`}
             onClick={() => {
               if (startLoading || dashboardLoading) return;
               setDashboardLoading(true);
@@ -85,11 +92,6 @@ const LessonDescriptionComponent = ({
             //     : "cursor-pointer"
             // }
             `}
-            // onClick={() => {
-            //   if (startLoading || dashboardLoading) return;
-            //   setDashboardLoading(true);
-            //   router.push("/user-dashboard");
-            // }}
           >
             <FiHeart className="w-4 h-4 sm:w-6 sm:h-6" fill="#FEEFEA" />
             <span className="text-[#FEEFEA] font-semibold text-sm sm:text-lg md:text-xl">
@@ -188,10 +190,7 @@ const LessonDescriptionComponent = ({
                 background="linear-gradient(to right, #EF4642, #F87118)"
                 width="100%"
                 height="64px"
-                onClick={() => {
-                  setStartLoading(true);
-                  router.push(`/lesson/${lesson?.courseId}/${lesson?.id}`);
-                }}
+                onClick={handleStartLesson}
                 disabled={startLoading || dashboardLoading}
               >
                 {startLoading ? (
@@ -224,11 +223,10 @@ const LessonDescriptionComponent = ({
           </div>
           <div
             className={`
-  ${
-    startLoading || dashboardLoading
-      ? "cursor-not-allowed bg-[#E0E1E6]"
-      : "cursor-pointer bg-[#EB5017]"
-  }
+  ${startLoading || dashboardLoading
+                ? "cursor-not-allowed bg-[#E0E1E6]"
+                : "cursor-pointer bg-[#EB5017]"
+              }
   absolute
   bottom-4 sm:bottom-0
   right-4 sm:right-10 md:right-20 lg:right-40
@@ -239,6 +237,7 @@ const LessonDescriptionComponent = ({
             onClick={() => {
               if (startLoading || dashboardLoading) return;
               setStartLoading(true);
+              logUserStreak();
               router.push(`/lesson/${lesson?.courseId}/${lesson?.id}`);
             }}
           >

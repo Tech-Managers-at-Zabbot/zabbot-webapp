@@ -8,6 +8,7 @@ import {
   getUserNotificationSettings,
   updateUserNames,
   updateUserNotificationSettings,
+  logUserStreak
 } from "./api";
 
 export function useGetUserCount() {
@@ -73,8 +74,8 @@ export function useChangeUserProfileImage() {
   });
 }
 
-export function useGetUserNotificationSettings () {
-return useQuery({
+export function useGetUserNotificationSettings() {
+  return useQuery({
     queryKey: ["getUserNotifcationSettings"],
     queryFn: getUserNotificationSettings,
     refetchOnMount: false,
@@ -97,3 +98,17 @@ export function useUpdateUserNotification() {
     },
   });
 }
+
+// logUserStreak
+export function useLogUserStreak() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => logUserStreak(),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["logUserStreak"] });
+    },
+    onError: (error: any) => {
+      console.error("Error logging user streak:", error);
+    },
+  });
+} 
