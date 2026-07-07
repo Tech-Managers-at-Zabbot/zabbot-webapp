@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { FaThermometerHalf } from "react-icons/fa";
-import { FaArrowUpLong, FaArrowDownLong } from "react-icons/fa6";
 
 const UserAnalytics = () => {
   const analyticsDataArray = [
@@ -57,27 +56,6 @@ const UserAnalytics = () => {
               <div className="p-2 border border-[#E4E7EC] rounded-full">
                 <FaThermometerHalf size={26} />
               </div>
-            </div>
-
-            {/* Percentage comparison */}
-            <div className="flex items-center gap-2 text-sm font-medium leading-[140%]">
-              <span className="flex items-center gap-1">
-                {item.increase ? (
-                  <FaArrowUpLong size={14} color="#00DDA5" />
-                ) : (
-                  <FaArrowDownLong size={14} color="red" />
-                )}
-
-                <span
-                  className={
-                    item.increase ? "text-[#00DDA5]" : "text-red-500"
-                  }
-                >
-                  {item.percentage}%
-                </span>
-              </span>
-
-              <span className="text-[#667085] font-normal">vs last month</span>
             </div>
           </div>
         ))}

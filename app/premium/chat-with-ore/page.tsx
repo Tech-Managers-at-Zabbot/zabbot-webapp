@@ -4,16 +4,17 @@
 "use client";
 
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAlert } from "next-alert";
 import { FiSearch } from "react-icons/fi";
 import { useUser } from "@/contexts/UserContext";
 import { useDailyLimit } from "@/hooks/useChatDailyLimit";
 import { useConversations } from "@/components/premium/chat-with-ore/use-conversation";
 import ConversationCard from "@/components/premium/chat-with-ore/conversation-card";
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
 const ChatWithOre = () => {
-  // const { theme } = useTheme();
+
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,8 @@ const ChatWithOre = () => {
   const { userDetails } = useUser();
   const firstName = userDetails?.firstName || "User";
   const chatLetter = firstName.charAt(0).toUpperCase();
+
+  const { mutate: logUserStreak } = useLogUserStreak();
 
   // List of possible proverbs
   const allProverbs = [
@@ -52,6 +55,11 @@ const ChatWithOre = () => {
     const shuffled = [...allProverbs].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 4);
   };
+
+  useEffect(() => {
+    logUserStreak();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // State to store the current random proverbs
   const [randomProverbs, setRandomProverbs] = useState(getRandomProverbs());

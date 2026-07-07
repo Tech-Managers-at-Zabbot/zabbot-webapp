@@ -39,6 +39,12 @@ export const updateUserNames = async (formData: {
   return response.data;
 };
 
+// /users/log-streak ⁠
+export const logUserStreak = async () => {
+  const response = await axiosInstance.post("/users/users/log-streak");
+  return response.data;
+};
+
 export const getSingleUser = async () => {
   const response = await axiosInstance.get("/users/auth/single-user");
   return response.data;
@@ -73,15 +79,3 @@ export const updateUserNotificationSettings = async (
   );
   return response.data;
 };
-
-// export const completeUserDailyGoal = async (
-//     userId: string,
-//     goalId: string,
-// ) => {
-//      const response = await axiosInstance.post(`/lessons/goals/complete-daily-goal/${userId}/${goalId}`, {
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//     });
-//     return response.data;
-// }

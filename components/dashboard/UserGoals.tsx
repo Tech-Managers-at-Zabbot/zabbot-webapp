@@ -16,85 +16,7 @@ import { useTheme } from "@/contexts/ThemeProvider";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import InAppButton from "../InAppButton";
 import { useUpdateUserLeaderboard } from "@/services/generalApi/leaderboard/tanstack";
-
-// const DailyGoals = () => {
-//   const { userDailyGoal, goalLoading } = useUser();
-
-//   const { getPageText } =
-//         usePageLanguage("userDashboard");
-
-//   return (
-//     <>
-//       {goalLoading ? (
-//         <DailyGoalsSkeleton />
-//       ) : !userDailyGoal && userDailyGoal !== 0 ? (
-//         <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
-//       ) : (
-//         <div
-//           className="bg-white justify-between shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
-//           style={{ fontFamily: "Lexend" }}
-//         >
-//           <section>
-//             <h1 className="font-semibold text-[18px] sm:text-[20px] md:text-[24px] leading-[100%] text-[#162B6E]">
-//               {getPageText("daily_goal")}
-//             </h1>
-//             <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
-//               {userDailyGoal === 100
-//                 ? getPageText("completed_daily_goal_tag")
-//                 : getPageText("uncompleted_daily_goal_tag")}
-//             </span>
-//           </section>
-//           <section className="flex h-full justify-center items-center my-2 sm:my-4">
-//             <Box position="relative" display="inline-flex">
-//               <CircularProgress
-//                 variant="determinate"
-//                 value={100}
-//                 size={120}
-//                 thickness={5}
-//                 sx={{
-//                   color: "#F2F4F7",
-//                 }}
-//               />
-//               <CircularProgress
-//                 variant="determinate"
-//                 value={userDailyGoal}
-//                 size={120}
-//                 thickness={5}
-//                 sx={{
-//                   color: "#CDA674", // Progress bar color
-//                   position: "absolute",
-//                   left: 0,
-//                   "& .MuiCircularProgress-circle": {
-//                     strokeLinecap: "round",
-//                   },
-//                 }}
-//               />
-//               <Box
-//                 top={0}
-//                 left={0}
-//                 bottom={0}
-//                 right={0}
-//                 position="absolute"
-//                 display="flex"
-//                 alignItems="center"
-//                 justifyContent="center"
-//               >
-//                 <Typography
-//                   variant="h6"
-//                   component="div"
-//                   color="textPrimary"
-//                   fontWeight={600}
-//                 >
-//                   {`${Math.round(userDailyGoal)}%`}
-//                 </Typography>
-//               </Box>
-//             </Box>
-//           </section>
-//         </div>
-//       )}
-//     </>
-//   );
-// };
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
 const WordForTheDay = () => {
   const [fill, setFill] = useState("white");
@@ -104,7 +26,9 @@ const WordForTheDay = () => {
   const { theme } = useTheme();
   const [showDailyGoalCard, setShowDailyGoalCard] = useState(false);
 
-const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
+  const { mutate: logUserStreak } = useLogUserStreak();
+
+  const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
     useUpdateUserLeaderboard();
 
   const { getPageText } = usePageLanguage("userDashboard");
@@ -141,11 +65,11 @@ const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
         () => {
           setShowCongrats(true);
           updateLeaderboard({
-          formData: {
-            scoreToAdd: 10,
-            dailyWordsListened: 1,
-          },
-        });
+            formData: {
+              scoreToAdd: 10,
+              dailyWordsListened: 1,
+            },
+          });
         },
         (error: any) => {
           console.error("Failed to complete goal:", error);
@@ -177,6 +101,8 @@ const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
     );
     const audio = new Audio(dailyWordData?.audioUrls[randomIndex]);
 
+    logUserStreak();
+
     audio.addEventListener("canplaythrough", async () => {
       setIsPlaying(true);
       setAudioPlayerLoading(false);
@@ -198,20 +124,6 @@ const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
       setAudioPlayerLoading(false);
     });
   };
-
-  //   useEffect(() => {
-  //   setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
-  //   setCloudsUrl(
-  //     theme === "dark"
-  //       ? "/userDashboard/dark-clouds.svg"
-  //       : "/userDashboard/light-clouds.svg"
-  //   );
-  //   setLogoUrl(
-  //     theme === "dark"
-  //       ? "/general/zabbot-logo-white.svg"
-  //       : "/general/zabbot-logo-blue.svg"
-  //   );
-  // }, [theme]);
 
   const handleMouseEnter = () => {
     setFill("#CDA674");
