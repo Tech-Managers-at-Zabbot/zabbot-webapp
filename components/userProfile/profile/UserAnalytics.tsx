@@ -1,7 +1,7 @@
-/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { FaThermometerHalf } from "react-icons/fa";
 import { useUser } from "@/contexts/UserContext";
+import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
 
 const getBadgesEarnedFromStreak = (longestStreak: number) => {
   if (longestStreak >= 30) return 4;
@@ -13,8 +13,15 @@ const getBadgesEarnedFromStreak = (longestStreak: number) => {
 
 const UserAnalytics = () => {
   const { userDetails } = useUser();
-
+  const { data: singleUserData } = useGetSingleUserData();
   const badgesEarned = getBadgesEarnedFromStreak(userDetails.longestStreak);
+
+  const { completedLessonsCount = 0, totalLessonsCount = 0 } = singleUserData?.data || {};
+
+  const progressPercentage =
+    totalLessonsCount > 0
+      ? Math.round((completedLessonsCount / totalLessonsCount) * 100)
+      : 0;
 
   const analyticsDataArray = [
     {
@@ -32,7 +39,7 @@ const UserAnalytics = () => {
     },
     {
       title: "Progress",
-      data: "45 / 120 lessons",
+      data: `${completedLessonsCount} / ${totalLessonsCount} lessons`,
       percentage: "40",
       increase: false,
     },
@@ -85,18 +92,21 @@ const UserAnalytics = () => {
               Learning Progress
             </h4>
             <p className="text-[#717182] text-sm sm:text-base">
-              You've completed 45 out of 120 lessons
+              {`You've completed ${completedLessonsCount} out of ${totalLessonsCount} lessons`}
             </p>
           </div>
 
           {/* Progress Bar */}
           <div className="flex flex-col gap-2">
             <div className="w-full h-2 bg-[#CEE8CB] rounded-full overflow-hidden border border-[#CEE8CB]">
-              <div className="bg-[#3B6D35] h-full w-[30%]" />
+              <div
+                className="bg-[#3B6D35] h-full"
+                style={{ width: `${progressPercentage}%` }}
+              />
             </div>
 
             <p className="text-[#0F973D] text-sm font-medium">
-              30% complete
+              {progressPercentage}% complete
             </p>
           </div>
         </div>

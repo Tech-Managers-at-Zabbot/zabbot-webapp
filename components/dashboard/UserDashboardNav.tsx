@@ -50,7 +50,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     setLoading(true);
     router.push("/login");
   };
-
+  
   const userDashboardDetails = [
     {
       name: "Home",
