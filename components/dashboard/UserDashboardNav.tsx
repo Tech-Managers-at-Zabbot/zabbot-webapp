@@ -24,6 +24,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const currentTab = searchParams.get("tab");
   const { addAlert } = useAlert();
   const { userDetails } = useUser();
+  const isDashboardRoute = pathname === "/user-dashboard";
 
   const handleLogout = () => {
     const keepChatHistory = localStorage.getItem("chat_conversations");
@@ -489,14 +490,16 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       </section>
 
       {/* Language Toggle - Always visible */}
-      <section className="flex items-end">
-        <LanguageToggle
-          backgroundColor="#162B6E"
-          color="#FFFFFF"
-          borderColor="#D9F3FF"
-          dropDownBgColor="#24a6ee"
-        />
-      </section>
+      {isDashboardRoute &&
+        <section className="flex items-end">
+          <LanguageToggle
+            backgroundColor="#162B6E"
+            color="#FFFFFF"
+            borderColor="#D9F3FF"
+            dropDownBgColor="#24a6ee"
+          />
+        </section>}
+
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
