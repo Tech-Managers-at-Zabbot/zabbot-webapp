@@ -70,9 +70,14 @@ const NewNotificationsSettingsCard = () => {
 
     const newFrequency = freqToIdMap[selectedSetting];
 
+    // return;
     changeUserNotificationSettings(
       {
-      frequency: newFrequency,
+        frequency: newFrequency,
+        dailyReminders: selectedSetting === 1,
+        weeklyReminders: selectedSetting === 2,
+        biWeeklyReminders: selectedSetting === 3,
+        noNotificationsAndReminders: selectedSetting === 4,
       },
       {
         onSuccess: () => {
@@ -82,7 +87,7 @@ const NewNotificationsSettingsCard = () => {
           addAlert(
             "Error",
             error?.response?.data?.message ||
-              "An error occurred, please try again",
+            "An error occurred, please try again",
             "error"
           );
         },
@@ -154,62 +159,62 @@ const NewNotificationsSettingsCard = () => {
 
       {/* Settings Items */}
       <div>
-      <div className="flex flex-col gap-4 sm:gap-8 mb-6">
-        {settingsItemsArray.map((item) => (
-          <div
-            key={item.id}
-            className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[#FEF3C6] py-2 sm:py-4"
-          >
-            <div className="flex gap-4 items-start sm:items-center w-full">
-              <div
-                className="p-3 sm:p-4 rounded-[14px] flex-shrink-0"
-                style={{ backgroundColor: item.iconBackground }}
-              >
-                {item.icon}
-              </div>
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <p className="text-[#101828] text-sm sm:text-base font-[400] leading-tight sm:leading-[88%]">
-                  {item.label}
-                </p>
-                <p className="text-[#4A5565] font-normal text-xs sm:text-sm leading-snug sm:leading-[170%]">
-                  {item.subLabel}
-                </p>
-              </div>
-            </div>
+        <div className="flex flex-col gap-4 sm:gap-8 mb-6">
+          {settingsItemsArray.map((item) => (
             <div
-              className="cursor-pointer mt-2 sm:mt-0"
-              onClick={() => toggleSetting(item.id)}
+              key={item.id}
+              className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-[#FEF3C6] py-2 sm:py-4"
             >
-              {selectedSetting === item.id ? (
-                <IoToggleOutline size={36} color="#1671D9" />
-              ) : (
-                <LiaToggleOffSolid size={36} color="#A0AEC0" />
-              )}
+              <div className="flex gap-4 items-start sm:items-center w-full">
+                <div
+                  className="p-3 sm:p-4 rounded-[14px] flex-shrink-0"
+                  style={{ backgroundColor: item.iconBackground }}
+                >
+                  {item.icon}
+                </div>
+                <div className="flex flex-col gap-1 sm:gap-2">
+                  <p className="text-[#101828] text-sm sm:text-base font-[400] leading-tight sm:leading-[88%]">
+                    {item.label}
+                  </p>
+                  <p className="text-[#4A5565] font-normal text-xs sm:text-sm leading-snug sm:leading-[170%]">
+                    {item.subLabel}
+                  </p>
+                </div>
+              </div>
+              <div
+                className="cursor-pointer mt-2 sm:mt-0"
+                onClick={() => toggleSetting(item.id)}
+              >
+                {selectedSetting === item.id ? (
+                  <IoToggleOutline size={36} color="#1671D9" />
+                ) : (
+                  <LiaToggleOffSolid size={36} color="#A0AEC0" />
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Save Button */}
-      <div className="w-full mt-4">
-        <InAppButton
-          background="#1671D9"
-          width="100%"
-          borderRadius="8px"
-          disabled={
-            isPending ||
-            userNotificationChangeLoading ||
-            selectedSetting === userNotificationsSettings ||
-            selectedSetting === null
-          }
-          onClick={handleSubmit}
-        >
-          <div className="flex items-center justify-center gap-4 sm:gap-6 w-full">
-            <RiSaveLine size={24} />
-            <div>Save Changes</div>
-          </div>
-        </InAppButton>
-      </div>
+        {/* Save Button */}
+        <div className="w-full mt-4">
+          <InAppButton
+            background="#1671D9"
+            width="100%"
+            borderRadius="8px"
+            disabled={
+              isPending ||
+              userNotificationChangeLoading ||
+              selectedSetting === userNotificationsSettings ||
+              selectedSetting === null
+            }
+            onClick={handleSubmit}
+          >
+            <div className="flex items-center justify-center gap-4 sm:gap-6 w-full">
+              <RiSaveLine size={24} />
+              <div>Save Changes</div>
+            </div>
+          </InAppButton>
+        </div>
       </div>
     </div>
   );

@@ -1,18 +1,32 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { FaThermometerHalf } from "react-icons/fa";
+import { useUser } from "@/contexts/UserContext";
+
+const getBadgesEarnedFromStreak = (longestStreak: number) => {
+  if (longestStreak >= 30) return 4;
+  if (longestStreak >= 14) return 3;
+  if (longestStreak >= 7) return 2;
+  if (longestStreak >= 1) return 1;
+  return 0;
+};
 
 const UserAnalytics = () => {
+  const { userDetails } = useUser();
+
+  const badgesEarned = getBadgesEarnedFromStreak(userDetails.longestStreak);
+
   const analyticsDataArray = [
     {
       title: "Current Streak",
-      data: "12 Days",
+      data: `${userDetails.longestStreak} ${userDetails.longestStreak === 1 ? "Day" : "Days"
+        }`,
       percentage: "40",
       increase: true,
     },
     {
       title: "Badges Earned",
-      data: "8 badges",
+      data: `${badgesEarned} ${badgesEarned === 1 ? "badge" : "badges"}`,
       percentage: "40",
       increase: true,
     },

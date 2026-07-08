@@ -91,7 +91,7 @@ export function useUpdateUserNotification() {
   return useMutation({
     mutationFn: updateUserNotificationSettings,
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ["getUserNotifcationSettings"] });
+      queryClient.invalidateQueries({ queryKey: ["getUserNotificationSettings"] });
     },
     onError: (error: any) => {
       console.error("Error changing notification settings:", error);
