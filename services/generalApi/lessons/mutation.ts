@@ -22,6 +22,7 @@ import {
   getUserLesson,
   getUserLessons,
   updateUserLesson,
+  deleteCourse,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -44,6 +45,23 @@ export function useCreateCourseWithLessons() {
     },
     onError: (error: any) => {
       console.error("Error Creating Course with Lessons:", error);
+    },
+  });
+}
+
+export function useDeleteCourse() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (courseId: string) => {
+      return await deleteCourse(courseId);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getAllCourses"],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting course:", error);
     },
   });
 }

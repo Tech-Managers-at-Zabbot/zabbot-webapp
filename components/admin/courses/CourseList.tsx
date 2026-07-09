@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Eye, Edit, Trash2, Book, Clock } from 'lucide-react';
 import { Course } from '@/types/interfaces';
 import { Level } from '@/types/enums';
+import { useDeleteCourse } from '@/services/generalApi/lessons/mutation';
 
 interface CourseListProps {
   courses: Course[];
@@ -16,13 +17,13 @@ const CourseList: React.FC<CourseListProps> = ({
   courses,
   onViewCourse,
   onEditCourse,
-  onDeleteCourse,
 }) => {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const { mutate: deleteCourseData } = useDeleteCourse(); // Assuming you have a mutation hook for deleting courses
 
   const handleDelete = (courseId: string) => {
     if (deleteConfirm === courseId) {
-      onDeleteCourse(courseId);
+      deleteCourseData(courseId);
       setDeleteConfirm(null);
     } else {
       setDeleteConfirm(courseId);
@@ -85,11 +86,10 @@ const CourseList: React.FC<CourseListProps> = ({
             {/* Status Badge */}
             <div className="absolute top-3 right-3">
               <span
-                className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  course.isActive
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-100 text-gray-800'
-                }`}
+                className={`px-2 py-1 rounded-full text-xs font-medium ${course.isActive
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-gray-100 text-gray-800'
+                  }`}
               >
                 {course.isActive ? 'Active' : 'Inactive'}
               </span>
@@ -159,11 +159,10 @@ const CourseList: React.FC<CourseListProps> = ({
               </button>
               <button
                 onClick={() => handleDelete(course.id!)}
-                className={`flex items-center hover:cursor-pointer px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  deleteConfirm === course.id
-                    ? 'text-white bg-red-600 hover:bg-red-700'
-                    : 'text-red-600 hover:text-red-800 hover:bg-red-50'
-                }`}
+                className={`flex items-center hover:cursor-pointer px-3 py-2 text-sm font-medium rounded-md transition-colors ${deleteConfirm === course.id
+                  ? 'text-white bg-red-600 hover:bg-red-700'
+                  : 'text-red-600 hover:text-red-800 hover:bg-red-50'
+                  }`}
               >
                 <Trash2 size={16} className="mr-1" />
                 {deleteConfirm === course.id ? 'Confirm' : 'Delete'}

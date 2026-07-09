@@ -14,7 +14,7 @@ const getBadgesEarnedFromStreak = (longestStreak: number) => {
 const UserAnalytics = () => {
   const { userDetails } = useUser();
   const { data: singleUserData } = useGetSingleUserData();
-  const badgesEarned = getBadgesEarnedFromStreak(userDetails.longestStreak);
+  const badgesEarned = getBadgesEarnedFromStreak(userDetails?.longestStreak);
 
   const { completedLessonsCount = 0, totalLessonsCount = 0 } = singleUserData?.data || {};
 
@@ -26,7 +26,7 @@ const UserAnalytics = () => {
   const analyticsDataArray = [
     {
       title: "Current Streak",
-      data: `${userDetails.longestStreak} ${userDetails.longestStreak === 1 ? "Day" : "Days"
+      data: `${userDetails?.longestStreak} ${userDetails?.longestStreak === 1 ? "Day" : "Days"
         }`,
       percentage: "40",
       increase: true,

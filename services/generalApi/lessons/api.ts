@@ -10,6 +10,23 @@ export async function createCourse(courseData: CreateCoursePayload) {
   return response.data;
 }
 
+export async function deleteCourse(courseId: string) {
+  const response = await axiosInstance.delete(`/lessons/courses/${courseId}`);
+  return response.data;
+}
+
+export async function updateCourse(
+  courseId: string | any,
+  updateData: Record<string, any>,
+) {
+  if (!courseId) return;
+  const response = await axiosInstance.put(
+    `/lessons/courses/${courseId}`,
+    updateData
+  );
+  return response.data;
+}
+
 export async function createCourseWithLessons(
   courseData: any,
   languageId: string
