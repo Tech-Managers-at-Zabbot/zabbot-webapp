@@ -33,8 +33,8 @@ const CourseManagementPage: React.FC = () => {
 
   const allCoursesWithThumbnails = Array.isArray(allCoursesData?.data)
     ? allCoursesData?.data.map((step: Record<string, any>) => ({
-        ...step
-      }))
+      ...step
+    }))
     : [];
 
   const router = useRouter();
@@ -98,10 +98,11 @@ const CourseManagementPage: React.FC = () => {
   };
 
   const handleSaveCourse = (courseData: Course) => {
+    console.log("Saving course.....:", courseData);
     setCourses((prev) =>
       prev.map((course) => (course.id === courseData.id ? courseData : course))
     );
-    
+
   };
 
   const handleSaveLesson = (lessonData: Lesson) => {
