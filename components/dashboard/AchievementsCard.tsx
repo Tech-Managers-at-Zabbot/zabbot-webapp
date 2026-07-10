@@ -22,7 +22,7 @@ export const achievementsData = [
     icon: FaWalking,
     isCompleted: true,
     isVisible: true,
-    expectedPoint: 1,
+    expectedPoint: 0,
   },
   {
     key: "7_day_streak",
