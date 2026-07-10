@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import InAppButton from "@/components/InAppButton";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
+import { useGetAllCourses, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
@@ -28,6 +28,7 @@ const CourseManagementPage: React.FC = () => {
 
   const { data: allCoursesData, isLoading: allCoursesLoading } =
     useGetAllCourses(userDetails?.languageId);
+  const { mutate: handleCourseUpdate } = useUpdateCourse();
 
   // const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
@@ -99,9 +100,10 @@ const CourseManagementPage: React.FC = () => {
 
   const handleSaveCourse = (courseData: Course) => {
     console.log("Saving course.....:", courseData);
-    setCourses((prev) =>
-      prev.map((course) => (course.id === courseData.id ? courseData : course))
-    );
+    handleCourseUpdate({ courseId: courseData.id, updateData: courseData })
+    // setCourses((prev) =>
+    //   prev.map((course) => (course.id === courseData.id ? courseData : course))
+    // );
 
   };
 
