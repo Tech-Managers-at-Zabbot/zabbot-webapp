@@ -52,7 +52,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
     setSelectedMethod(method);
   };
 
-  const { mutate, isPending } = useCreateCheckoutSession();
+  const { mutate: handlePayment, isPending } = useCreateCheckoutSession();
 
   const handleProceedToPayment = () => {
     if (!selectedMethod) return;
@@ -61,7 +61,7 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
     setTimeout(() => {
       if (selectedMethod === "card") {
         // Redirect to Stripe Checkout or your card payment page
-        mutate(
+        handlePayment(
           {
             subscriptionType,
           },

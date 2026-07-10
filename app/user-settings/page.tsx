@@ -29,7 +29,7 @@ import { Modal } from "@/components/general/Modal";
 import NewNotificationsSettingsCard from "@/components/userProfile/notifications/NewNotificationsSettingsCard";
 // import { useUser } from "@/contexts/UserContext";
 import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
-import { useGetUserPaymentHistory } from "@/services/payment/transactions/tanstack";
+import { useGetUserPaymentHistory, useUserSubscriptionCancellation, useGetUserSubscriptionListing } from "@/services/payment/transactions/tanstack";
 import NoSubscription from "@/components/userProfile/paymentHistory/NoSubscription";
 
 interface MenuItemsData {
@@ -42,7 +42,7 @@ const UserSettings = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const defaultTab = searchParams.get("tab") || "profile";
-  // const { userDetails } = useUser();
+  const [confirmSubCancellation, setConfirmSubCancellation] = useState(false);
 
   const {
     data: userProfile,
@@ -50,6 +50,8 @@ const UserSettings = () => {
   } = useGetSingleUserData();
   const { data: userPaymentHistory, isLoading: paymentHistoryLoading } =
     useGetUserPaymentHistory();
+  const { data: subscriptionListing } = useGetUserSubscriptionListing();
+  const { mutate: subscriptionCancellation } = useUserSubscriptionCancellation();
 
   const [menuKeyword, setMenukeyword] = useState(defaultTab);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
@@ -57,6 +59,13 @@ const UserSettings = () => {
   const [currentPlan, setCurrentPlan] = useState("no-subscription");
 
   const openSubscriptionModal = () => setSubScriptionModalOpen(true);
+
+  const handleSubscriptionCancellation = () => {
+    if (subscriptionListing?.data?.id && confirmSubCancellation) {
+      subscriptionCancellation(subscriptionListing?.data?.id);
+      setConfirmSubCancellation(false);
+    }
+  }
 
   const columns = [
     {
@@ -127,7 +136,7 @@ const UserSettings = () => {
     {
       title: "Achievements",
       icon: <IoMdNotificationsOutline size={20} />,
-      keyword: "achievemets",
+      keyword: "achievements",
     }
   ];
 
@@ -268,11 +277,17 @@ const UserSettings = () => {
                       borderRadius="8px"
                       padding="12px 24px"
                       width="100%"
-                      onClick={() => { }}
+                      onClick={() => {
+                        if (!confirmSubCancellation) {
+                          setConfirmSubCancellation(true)
+                        } else {
+                          handleSubscriptionCancellation()
+                        }
+                      }}
                     >
                       <div className="flex items-center justify-center gap-2 text-[#D42620]">
                         <IoMdClose size={20} />
-                        <span>Cancel Subscription</span>
+                        <span>{confirmSubCancellation ? "Confirm Cancellation" : "Cancel Subscription"}</span>
                       </div>
                     </InAppButton>
                   </div>
