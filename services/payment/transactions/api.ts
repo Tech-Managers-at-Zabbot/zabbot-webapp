@@ -31,7 +31,7 @@ export const getUserSubscriptionListing = async () => {
 };
 
 export const userSubscriptionCancellation = async (subscriptionId: string) => {
-  const response = await axiosInstance.get(
+  const response = await axiosInstance.post(
     `/payments/payment-services/stripe/cancel-subscription/${subscriptionId}`
   );
   return response.data;
