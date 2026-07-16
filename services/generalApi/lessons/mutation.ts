@@ -447,6 +447,7 @@ export function useDeleteLessonById() {
       queryClient.invalidateQueries({
         queryKey: ["getAllLessons"],
       });
+      queryClient.invalidateQueries({ queryKey: ["getLessonById"] });
     },
     onError: (error: any) => {
       console.error("Error deleting lesson:", error);
