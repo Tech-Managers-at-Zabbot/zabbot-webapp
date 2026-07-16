@@ -108,8 +108,8 @@ const CourseManagementPage: React.FC = () => {
 
   };
 
-  const handleSaveLesson = (lessonData: Lesson) => {
-   //  console.log("Saving lesson:", lessonData);
+  const handleSaveLesson = () => {
+    //  console.log("Saving lesson:", lessonData);
   };
 
   const handleDeleteLesson = (lessonId: string) => {
