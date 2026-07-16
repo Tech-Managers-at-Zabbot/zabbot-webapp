@@ -24,6 +24,8 @@ import {
   updateUserLesson,
   deleteCourse,
   updateCourse,
+  deleteLessonById,
+  updateLessonById,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -435,3 +437,43 @@ export function useDeleteUserLesson() {
   });
 }
 
+export function useDeleteLessonById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (lessonId: string) => {
+      return await deleteLessonById(lessonId);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getAllLessons"],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting lesson:", error);
+    },
+  });
+}
+
+export function useUpdateLessonById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      lessonId,
+      updateData,
+    }: {
+      lessonId: string;
+      updateData: Record<string, any>;
+    }) => {
+      return await updateLessonById(lessonId, updateData);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonById", variables.lessonId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["getLessonById"] });
+    },
+    onError: (error: any) => {
+      console.error("Error updating lesson:", error);
+    },
+  });
+}

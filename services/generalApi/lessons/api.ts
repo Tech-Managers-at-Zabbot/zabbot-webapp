@@ -207,7 +207,6 @@ export async function deleteUserLesson(userId: string, lessonId: string) {
   return response.data;
 }
 
-
 // --- Content Endpoints ---
 
 export async function getLessonContents(lessonId: string) {
@@ -250,6 +249,26 @@ export async function updateLessonImage(
       "Content-Type": "multipart/form-data",
     },
   }
+  );
+  return response.data;
+}
+
+export async function updateLessonById(
+  lessonId: string,
+  updateData: any
+) {
+  const response = await axiosInstance.put(
+    `/lessons/lessons/${lessonId}`,
+    updateData
+  );
+  return response.data;
+}
+
+export async function deleteLessonById(
+  lessonId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/lessons/${lessonId}`,
   );
   return response.data;
 }

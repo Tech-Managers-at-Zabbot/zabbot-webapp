@@ -81,35 +81,32 @@ const EditCourseModal: React.FC<EditCourseModalProps> = ({
       size="xl"
       containerClassName="w-full"
     >
-      <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
+      <div className="p-6 w-full" style={{ fontFamily: "Lexend", overflowY: "scroll" }}>
         {/* Tab Navigation */}
         <div className="flex mb-6 border-b border-gray-200">
           <button
-            className={`px-4 py-2 hover:cursor-pointer font-medium text-sm ${
-              activeTab === "course"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`px-4 py-2 hover:cursor-pointer font-medium text-sm ${activeTab === "course"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
+              }`}
             onClick={() => setActiveTab("course")}
           >
             Course Details
           </button>
           <button
-            className={`px-4 py-2 hover:cursor-pointer font-medium text-sm ml-4 ${
-              activeTab === "lessons"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`px-4 py-2 hover:cursor-pointer font-medium text-sm ml-4 ${activeTab === "lessons"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
+              }`}
             onClick={() => setActiveTab("lessons")}
           >
             Lessons ({lessons.length})
           </button>
           <button
-            className={`px-4 py-2 hover:cursor-pointer font-medium text-sm ml-4 ${
-              activeTab === "quizzes"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-600 hover:text-blue-600"
-            }`}
+            className={`px-4 py-2 hover:cursor-pointer font-medium text-sm ml-4 ${activeTab === "quizzes"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-600 hover:text-blue-600"
+              }`}
             onClick={() => setActiveTab("quizzes")}
           >
             Quizzes ({quizzes.length})

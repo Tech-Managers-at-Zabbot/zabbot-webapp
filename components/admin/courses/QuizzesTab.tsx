@@ -83,7 +83,7 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
                   <button
                     onClick={() => handleEditQuiz(quiz)}
                     disabled
-                    className="px-3 py-1 text-sm text-gray-600 cursor-not-allowed rounded"
+                    className="px-3 py-1 text-sm text-gray-600 cursor-pointer rounded"
                   >
                     <Edit size={14} className="mr-1 inline" />
                     Edit
@@ -91,7 +91,7 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
                   <button
                     onClick={() => onDeleteQuiz(quiz.id)}
                     disabled
-                    className="px-3 py-1 text-sm text-gray-600 cursor-not-allowed rounded"
+                    className="px-3 py-1 text-sm text-gray-600 cursor-pointer rounded"
                   >
                     <Trash2 size={14} className="mr-1 inline" />
                     Delete

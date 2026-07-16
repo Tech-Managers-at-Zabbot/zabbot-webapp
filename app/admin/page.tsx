@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import InAppButton from "@/components/InAppButton";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useGetAllCourses, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
+import { useDeleteLessonById, useGetAllCourses, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
@@ -26,6 +26,7 @@ const CourseManagementPage: React.FC = () => {
     setShowAddQuizModal(true);
   };
 
+  const { mutate: handleDelLesson } = useDeleteLessonById()
   const { data: allCoursesData, isLoading: allCoursesLoading } =
     useGetAllCourses(userDetails?.languageId);
   const { mutate: handleCourseUpdate } = useUpdateCourse();
@@ -108,11 +109,11 @@ const CourseManagementPage: React.FC = () => {
   };
 
   const handleSaveLesson = (lessonData: Lesson) => {
-    console.log("Saving lesson:", lessonData);
+   //  console.log("Saving lesson:", lessonData);
   };
 
   const handleDeleteLesson = (lessonId: string) => {
-    console.log("Deleting lesson:", lessonId);
+    handleDelLesson(lessonId);
   };
 
   const handleDeleteQuiz = (quizId: string) => {
