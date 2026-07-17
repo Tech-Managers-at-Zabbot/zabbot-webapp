@@ -11,6 +11,8 @@ import {
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EditLessonForm } from "./EditLessonForm";
 import { Lesson } from "@/types/interfaces";
+import { useUpdateLessonById } from "@/services/generalApi/lessons/mutation";
+
 
 interface LessonsTabProps {
   lessons: Lesson[];
@@ -28,6 +30,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
   const [expandedLessons, setExpandedLessons] = useState<Set<string>>(new Set());
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
 
+  const { mutate: handleUpdateLessonById } = useUpdateLessonById();
   const toggleLessonExpansion = (lessonId: string) => {
     const newExpanded = new Set(expandedLessons);
     if (newExpanded.has(lessonId)) {
@@ -51,6 +54,12 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
   const handleSaveLesson = () => {
     if (editingLesson) {
       onSaveLesson(editingLesson);
+      console.log("Saving lesson.....>>>>:", editingLesson);
+      const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
+      handleUpdateLessonById({
+        lessonId: editingLesson.id || '',
+        updateData: { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id },
+      });
       setEditingLesson(null);
     }
   };
@@ -101,24 +110,24 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
                   </button>
                   <div className="flex items-center gap-4">
                     <div>
-                        {lesson?.lessonImg && (
-                            <div>
-                              <img
-                                src={lesson?.lessonImg}
-                                className="w-40 h-40 object-cover rounded-md"
-                                alt="Lesson Image"
-                              />
-                            </div>
-                          )}
+                      {lesson?.lessonImg && (
+                        <div>
+                          <img
+                            src={lesson?.lessonImg}
+                            className="w-40 h-40 object-cover rounded-md"
+                            alt="Lesson Image"
+                          />
+                        </div>
+                      )}
                     </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900">
-                      Lesson {lesson.orderNumber}: {lesson.title}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {lesson.description}
-                    </p>
-                  </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900">
+                        Lesson {lesson.orderNumber}: {lesson.title}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {lesson.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
