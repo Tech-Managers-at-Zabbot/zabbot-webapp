@@ -40,19 +40,18 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
     setExpandedLessons(newExpanded);
   };
 
-  const handleEditLesson = (lesson: Record<string, any> | any) => {
-    setEditingLesson({ ...lesson });
-  };
-
   const handleLessonChange = (field: keyof Lesson, value: any) => {
     if (editingLesson) {
       setEditingLesson((prev) => ({ ...prev!, [field]: value }));
     }
   };
 
+  const handleEditLesson = (lesson: Record<string, any> | any) => {
+    setEditingLesson({ ...lesson });
+  };
+
   const handleSaveLesson = () => {
     if (editingLesson) {
-      console.log("Saving lesson.....>>>>:", editingLesson);
       const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
       handleUpdateLessonById({
         lessonId: editingLesson.id || '',
