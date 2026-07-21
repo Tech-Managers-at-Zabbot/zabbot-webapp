@@ -5,6 +5,7 @@ import { Modal } from "@/components/general/Modal";
 import { Save, Plus, Trash2 } from "lucide-react";
 import {
   useCreateQuiz,
+  useUpdateQuizById,
   useGetCourseLessons,
 } from "@/services/generalApi/lessons/mutation";
 import { useAlert } from "next-alert";
@@ -17,9 +18,12 @@ export enum QuizType {
 
 interface Quiz {
   id?: string;
+  createdAt?: string;
+  updatedAt?: string;
   courseId: string;
   lessonId?: string;
   contentId?: string;
+  lessonDetails?: { title?: string; description?: string };
   languageId: string;
   quizType: QuizType;
   instruction: string;
@@ -62,6 +66,8 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saveQuizLoading, setSaveQuizLoading] = useState(false);
   const { mutate: addQuiz, isPending: createQuizLoading } = useCreateQuiz();
+  const { mutate: updateQuiz, isPending: updateQuizLoading } =
+    useUpdateQuizById();
 
   const { addAlert } = useAlert();
 
@@ -69,7 +75,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     useGetCourseLessons(courseId);
 
   const lessons = courseLessons?.data || [];
-  
+
   // Initialize form when modal opens or editing quiz changes
   useEffect(() => {
     if (isOpen) {
@@ -241,6 +247,10 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     if (validateForm()) {
       setSaveQuizLoading(true);
       const cleanData = { ...quizData };
+      delete cleanData.id;
+      delete cleanData.createdAt;
+      delete cleanData.updatedAt;
+      delete cleanData.lessonDetails;
       if (cleanData.quizType === QuizType.MULTIPLE_CHOICE) {
         delete cleanData.correctAnswer;
       } else if (cleanData.quizType === QuizType.FILL_IN_BLANK) {
@@ -256,26 +266,50 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
         }
       }
 
-      addQuiz(
-        { quizPayload: cleanData },
-        {
-          onSuccess: () => {
-            setSaveQuizLoading(false);
-            addAlert("Success", "Quiz created successfully", "success");
-            onClose();
-            onSaveQuiz();
-          },
-          onError: (error) => {
-            setSaveQuizLoading(false);
-            addAlert(
-              "Error",
-              `Unable to create quiz: ${error.message}`,
-              "error"
-            );
-            console.error("Error saving quiz:", error);
-          },
-        }
-      );
+      if (editingQuiz?.id) {
+        
+        updateQuiz(
+          { quizId: editingQuiz.id, updateData: cleanData },
+          {
+            onSuccess: () => {
+              setSaveQuizLoading(false);
+              addAlert("Success", "Quiz updated successfully", "success");
+              onClose();
+              onSaveQuiz();
+            },
+            onError: (error) => {
+              setSaveQuizLoading(false);
+              addAlert(
+                "Error",
+                `Unable to update quiz: ${error.message}`,
+                "error"
+              );
+              console.error("Error updating quiz:", error);
+            },
+          }
+        );
+      } else {
+        addQuiz(
+          { quizPayload: cleanData },
+          {
+            onSuccess: () => {
+              setSaveQuizLoading(false);
+              addAlert("Success", "Quiz created successfully", "success");
+              onClose();
+              onSaveQuiz();
+            },
+            onError: (error) => {
+              setSaveQuizLoading(false);
+              addAlert(
+                "Error",
+                `Unable to create quiz: ${error.message}`,
+                "error"
+              );
+              console.error("Error saving quiz:", error);
+            },
+          }
+        );
+      }
     }
   };
 
@@ -292,7 +326,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
       title={modalTitle}
       size="lg"
       containerClassName="w-full"
-      disableClose={saveQuizLoading || createQuizLoading}
+      disableClose={saveQuizLoading || createQuizLoading || updateQuizLoading}
     >
       <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
         <div className="space-y-6">
@@ -364,6 +398,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
                 </div>
               ) : (
                 <select
+                  value={quizData.lessonId || ""}
                   onChange={(e) =>
                     handleInputChange("lessonId", e.target.value)
                   }
@@ -543,18 +578,18 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
           <InAppButton
             onClick={onClose}
             background="#8a0c03"
-            disabled={saveQuizLoading || createQuizLoading}
+            disabled={saveQuizLoading || createQuizLoading || updateQuizLoading}
           >
             Cancel
           </InAppButton>
           <InAppButton
             onClick={handleSave}
             background="#012657"
-            disabled={saveQuizLoading || createQuizLoading}
+            disabled={saveQuizLoading || createQuizLoading || updateQuizLoading}
           >
             <div className="flex justify-center items-center">
               <Save size={16} className="mr-2" />
-              {saveQuizLoading || createQuizLoading
+              {saveQuizLoading || createQuizLoading || updateQuizLoading
                 ? "Processing..."
                 : editingQuiz
                   ? "Update Quiz"

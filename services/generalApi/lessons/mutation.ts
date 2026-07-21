@@ -27,6 +27,7 @@ import {
   deleteLessonById,
   updateLessonById,
   deleteQuizById,
+  updateQuizById,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -493,6 +494,29 @@ export function useDeleteQuizById() {
     },
     onError: (error: any) => {
       console.error("Error deleting quiz:", error);
+    },
+  });
+}
+
+export function useUpdateQuizById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      quizId,
+      updateData,
+    }: {
+      quizId: string;
+      updateData: Record<string, any>;
+    }) => {
+      return await updateQuizById(quizId, updateData);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getCourseQuizzes"],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error updating quiz:", error);
     },
   });
 }

@@ -2,11 +2,9 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
-import { EditQuizForm } from "./EditQuizForm";
 
 interface QuizzesTabProps {
   quizzes: any[];
-  lessons: any[];
   isLoading: boolean;
   onDeleteQuiz: (quizId: string) => void;
   onOpenAddQuizModal: (quiz?: any) => void;
@@ -15,32 +13,16 @@ interface QuizzesTabProps {
 
 export const QuizzesTab: React.FC<QuizzesTabProps> = ({
   quizzes,
-  lessons,
   isLoading,
   onDeleteQuiz,
   onOpenAddQuizModal,
   onCloseEditModal,
 }) => {
-  const [editingQuiz, setEditingQuiz] = useState<any | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleEditQuiz = (quiz: any) => {
-    setEditingQuiz(quiz);
     onCloseEditModal();
-    console.log("Editing quiz.....:", quiz);
     onOpenAddQuizModal(quiz);
-  };
-
-  const handleQuizChange = (field: string, value: any) => {
-    if (editingQuiz) {
-      setEditingQuiz((prev: any) => ({ ...prev, [field]: value }));
-    }
-  };
-
-  const handleSaveQuiz = () => {
-    if (editingQuiz) {
-      setEditingQuiz(null);
-    }
   };
 
   return (
@@ -116,16 +98,6 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
             </div>
           ))}
         </div>
-      )}
-
-      {editingQuiz && (
-        <EditQuizForm
-          quiz={editingQuiz}
-          lessons={lessons}
-          onQuizChange={handleQuizChange}
-          onSave={handleSaveQuiz}
-          onCancel={() => setEditingQuiz(null)}
-        />
       )}
     </div>
   );

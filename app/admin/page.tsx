@@ -22,7 +22,9 @@ const CourseManagementPage: React.FC = () => {
   const { userDetails } = useUser();
 
   const [showAddQuizModal, setShowAddQuizModal] = useState(false);
-  const handleOpenAddQuizModal = () => {
+  const [editingQuiz, setEditingQuiz] = useState<any | null>(null);
+  const handleOpenAddQuizModal = (quiz?: any) => {
+    setEditingQuiz(quiz || null);
     setShowAddQuizModal(true);
   };
 
@@ -271,10 +273,15 @@ const CourseManagementPage: React.FC = () => {
           isOpen={showAddQuizModal}
           onClose={() => {
             setShowAddQuizModal(false);
+            setEditingQuiz(null);
           }}
           courseId={selectedCourse.id}
           languageId={selectedCourse.languageId}
-          onSaveQuiz={handleSaveQuiz}
+          editingQuiz={editingQuiz}
+          onSaveQuiz={() => {
+            setEditingQuiz(null);
+            handleSaveQuiz();
+          }}
         />
       )}
     </div>

@@ -282,3 +282,14 @@ export async function deleteQuizById(
   );
   return response.data;
 }
+
+export async function updateQuizById(
+  quizId: string,
+  updateData: Record<string, any>,
+) {
+  const response = await axiosInstance.put(
+    `/lessons/quizzes/${quizId}`,
+    updateData
+  );
+  return response.data;
+}
