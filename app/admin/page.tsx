@@ -3,7 +3,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Plus, Search, Filter } from "lucide-react";
-import { Course, Lesson } from "@/types/interfaces";
+import { Course } from "@/types/interfaces";
 import { Level } from "@/types/enums";
 import CourseList from "@/components/admin/courses/CourseList";
 import ViewCourseModal from "@/components/admin/courses/ViewCourseModal";
