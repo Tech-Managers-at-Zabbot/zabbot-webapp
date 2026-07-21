@@ -24,7 +24,6 @@ interface LessonsTabProps {
 export const LessonsTab: React.FC<LessonsTabProps> = ({
   lessons,
   isLoading,
-  onSaveLesson,
   onDeleteLesson,
 }) => {
   const [expandedLessons, setExpandedLessons] = useState<Set<string>>(new Set());
