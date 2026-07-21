@@ -69,11 +69,12 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     useGetCourseLessons(courseId);
 
   const lessons = courseLessons?.data || [];
-
+  
   // Initialize form when modal opens or editing quiz changes
   useEffect(() => {
     if (isOpen) {
       if (editingQuiz) {
+        console.log('editingQuiz:', editingQuiz);
         setQuizData({ ...editingQuiz });
         setAssociationType(editingQuiz.lessonId ? "lesson" : "content");
       } else {
@@ -132,7 +133,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     const newOptions = [...(quizData.options || [])];
     newOptions[index] = value;
     setQuizData((prev) => ({ ...prev, options: newOptions }));
-    
+
     // Clear correct answer/option when options change
     if (quizData.quizType === QuizType.FILL_IN_BLANK) {
       setQuizData((prev) => ({ ...prev, correctAnswer: "" }));
@@ -152,18 +153,18 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
 
   const removeOption = (index: number) => {
     const currentOptions = quizData.options || [];
-    
+
     // For multiple choice, minimum 2 options required
     if (quizData.quizType === QuizType.MULTIPLE_CHOICE && currentOptions.length <= 2) {
       return;
     }
-    
+
     // For fill in blank, allow removal of all options
     const newOptions = currentOptions.filter((_, i) => i !== index);
-    
+
     setQuizData((prev) => {
       const updatedData = { ...prev, options: newOptions };
-      
+
       if (quizData.quizType === QuizType.MULTIPLE_CHOICE) {
         // For multiple choice, update correctOption if it's no longer valid
         if (!newOptions.includes(prev.correctOption || "")) {
@@ -173,7 +174,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
         // For fill in blank, clear correctAnswer when options change
         updatedData.correctAnswer = "";
       }
-      
+
       return updatedData;
     });
   };
@@ -279,7 +280,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
   };
 
   const modalTitle = editingQuiz ? "Edit Quiz" : "Add New Quiz";
-  
+
   // Get filled options for fill in blank dropdown
   const filledOptions = quizData.options?.filter(option => option.trim()) || [];
   const hasOptions = filledOptions.length > 0;
@@ -437,14 +438,14 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
                   {/* Show remove button based on quiz type and minimum requirements */}
                   {((quizData.quizType === QuizType.MULTIPLE_CHOICE && (quizData.options?.length || 0) > 3) ||
                     (quizData.quizType === QuizType.FILL_IN_BLANK)) && (
-                    <button
-                      type="button"
-                      onClick={() => removeOption(index)}
-                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
+                      <button
+                        type="button"
+                        onClick={() => removeOption(index)}
+                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                 </div>
               ))}
             </div>
@@ -556,8 +557,8 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
               {saveQuizLoading || createQuizLoading
                 ? "Processing..."
                 : editingQuiz
-                ? "Update Quiz"
-                : "Create Quiz"}
+                  ? "Update Quiz"
+                  : "Create Quiz"}
             </div>
           </InAppButton>
         </div>

@@ -26,6 +26,7 @@ import {
   updateCourse,
   deleteLessonById,
   updateLessonById,
+  deleteQuizById,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -346,8 +347,8 @@ export function useChangeLessonImage() {
       languageId: string;
     }) => updateLessonImage(lessonId, data),
 
-    onSuccess: async (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["getAllCourses", variables?.languageId] });
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["getCourseLessons"] });
     },
     onError: (error: any) => {
       console.error("Error uploading lesson image:", error);
@@ -443,11 +444,10 @@ export function useDeleteLessonById() {
     mutationFn: async (lessonId: string) => {
       return await deleteLessonById(lessonId);
     },
-    onSuccess: async (_, variables) => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({
-        queryKey: ["getAllLessons"],
+        queryKey: ["getCourseLessons"],
       });
-      queryClient.invalidateQueries({ queryKey: ["getLessonById"] });
     },
     onError: (error: any) => {
       console.error("Error deleting lesson:", error);
@@ -472,9 +472,27 @@ export function useUpdateLessonById() {
         queryKey: ["getLessonById", variables.lessonId],
       });
       queryClient.invalidateQueries({ queryKey: ["getLessonById"] });
+      queryClient.invalidateQueries({ queryKey: ["getCourseLessons"] });
     },
     onError: (error: any) => {
       console.error("Error updating lesson:", error);
+    },
+  });
+}
+
+export function useDeleteQuizById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (quizId: string) => {
+      return await deleteQuizById(quizId);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getCourseQuizzes"],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting quiz:", error);
     },
   });
 }

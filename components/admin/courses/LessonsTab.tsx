@@ -53,7 +53,6 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
 
   const handleSaveLesson = () => {
     if (editingLesson) {
-      onSaveLesson(editingLesson);
       console.log("Saving lesson.....>>>>:", editingLesson);
       const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
       handleUpdateLessonById({

@@ -22,10 +22,12 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
   onCloseEditModal,
 }) => {
   const [editingQuiz, setEditingQuiz] = useState<any | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleEditQuiz = (quiz: any) => {
     setEditingQuiz(quiz);
     onCloseEditModal();
+    console.log("Editing quiz.....:", quiz);
     onOpenAddQuizModal(quiz);
   };
 
@@ -82,19 +84,25 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleEditQuiz(quiz)}
-                    disabled
                     className="px-3 py-1 text-sm text-gray-600 cursor-pointer rounded"
                   >
                     <Edit size={14} className="mr-1 inline" />
                     Edit
                   </button>
                   <button
-                    onClick={() => onDeleteQuiz(quiz.id)}
-                    disabled
-                    className="px-3 py-1 text-sm text-gray-600 cursor-pointer rounded"
+                    onClick={() => {
+                      if (confirmDelete) {
+                        onDeleteQuiz(quiz.id);
+                        setConfirmDelete(false);
+                      } else {
+                        setConfirmDelete(true);
+                        setTimeout(() => setConfirmDelete(false), 5000); // Reset after 3 seconds
+                      }
+                    }}
+                    className="px-3 py-1 text-sm text-red-600 cursor-pointer rounded"
                   >
                     <Trash2 size={14} className="mr-1 inline" />
-                    Delete
+                    {confirmDelete ? "Confirm Delete" : "Delete"}
                   </button>
                 </div>
               </div>

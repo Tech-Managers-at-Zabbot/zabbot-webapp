@@ -272,3 +272,13 @@ export async function deleteLessonById(
   );
   return response.data;
 }
+
+
+export async function deleteQuizById(
+  quizId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/quizzes/${quizId}`,
+  );
+  return response.data;
+}
