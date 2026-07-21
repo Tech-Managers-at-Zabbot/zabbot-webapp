@@ -51,7 +51,7 @@ const UserSettings = () => {
   const { data: userPaymentHistory, isLoading: paymentHistoryLoading } =
     useGetUserPaymentHistory();
   const { data: subscriptionListing } = useGetUserSubscriptionListing();
-  const { mutate: subscriptionCancellation } = useUserSubscriptionCancellation();
+  const { mutate: subscriptionCancellation, isPending: subscriptionCancellationLoading } = useUserSubscriptionCancellation();
 
   const [menuKeyword, setMenukeyword] = useState(defaultTab);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
@@ -61,9 +61,14 @@ const UserSettings = () => {
   const openSubscriptionModal = () => setSubScriptionModalOpen(true);
 
   const handleSubscriptionCancellation = () => {
-    if (subscriptionListing?.data?.id && confirmSubCancellation) {
-      subscriptionCancellation(subscriptionListing?.data?.id);
-      setConfirmSubCancellation(false);
+    if (
+      subscriptionListing?.data?.id &&
+      confirmSubCancellation &&
+      !subscriptionCancellationLoading
+    ) {
+      subscriptionCancellation(subscriptionListing?.data?.id, {
+        onSettled: () => setConfirmSubCancellation(false),
+      });
     }
   }
 
@@ -277,7 +282,9 @@ const UserSettings = () => {
                       borderRadius="8px"
                       padding="12px 24px"
                       width="100%"
+                      disabled={subscriptionCancellationLoading}
                       onClick={() => {
+                        if (subscriptionCancellationLoading) return;
                         if (!confirmSubCancellation) {
                           setConfirmSubCancellation(true)
                         } else {
@@ -287,7 +294,13 @@ const UserSettings = () => {
                     >
                       <div className="flex items-center justify-center gap-2 text-[#D42620]">
                         <IoMdClose size={20} />
-                        <span>{confirmSubCancellation ? "Confirm Cancellation" : "Cancel Subscription"}</span>
+                        <span>
+                          {subscriptionCancellationLoading
+                            ? "Cancelling..."
+                            : confirmSubCancellation
+                              ? "Confirm Cancellation"
+                              : "Cancel Subscription"}
+                        </span>
                       </div>
                     </InAppButton>
                   </div>

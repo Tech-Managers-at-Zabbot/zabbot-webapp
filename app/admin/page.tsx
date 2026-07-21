@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import InAppButton from "@/components/InAppButton";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useDeleteLessonById, useGetAllCourses, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
+import { useDeleteLessonById, useDeleteQuizById, useGetAllCourses, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
@@ -22,7 +22,9 @@ const CourseManagementPage: React.FC = () => {
   const { userDetails } = useUser();
 
   const [showAddQuizModal, setShowAddQuizModal] = useState(false);
-  const handleOpenAddQuizModal = () => {
+  const [editingQuiz, setEditingQuiz] = useState<any | null>(null);
+  const handleOpenAddQuizModal = (quiz?: any) => {
+    setEditingQuiz(quiz || null);
     setShowAddQuizModal(true);
   };
 
@@ -30,6 +32,8 @@ const CourseManagementPage: React.FC = () => {
   const { data: allCoursesData, isLoading: allCoursesLoading } =
     useGetAllCourses(userDetails?.languageId);
   const { mutate: handleCourseUpdate } = useUpdateCourse();
+
+  const { mutate: handleDeleteQuizById } = useDeleteQuizById();
 
   // const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
@@ -117,7 +121,9 @@ const CourseManagementPage: React.FC = () => {
   };
 
   const handleDeleteQuiz = (quizId: string) => {
-    console.log("Deleting quiz:", quizId);
+    console.log("Deleting quiz.....:", quizId);
+    handleDeleteQuizById(quizId);
+
   };
 
   const clearFilters = () => {
@@ -267,10 +273,15 @@ const CourseManagementPage: React.FC = () => {
           isOpen={showAddQuizModal}
           onClose={() => {
             setShowAddQuizModal(false);
+            setEditingQuiz(null);
           }}
           courseId={selectedCourse.id}
           languageId={selectedCourse.languageId}
-          onSaveQuiz={handleSaveQuiz}
+          editingQuiz={editingQuiz}
+          onSaveQuiz={() => {
+            setEditingQuiz(null);
+            handleSaveQuiz();
+          }}
         />
       )}
     </div>

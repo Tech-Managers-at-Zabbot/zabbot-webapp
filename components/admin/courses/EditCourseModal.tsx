@@ -135,7 +135,6 @@ const EditCourseModal: React.FC<EditCourseModalProps> = ({
         {activeTab === "quizzes" && (
           <QuizzesTab
             quizzes={quizzes}
-            lessons={lessons}
             isLoading={quizzesLoading}
             onDeleteQuiz={onDeleteQuiz}
             onOpenAddQuizModal={onOpenAddQuizModal}

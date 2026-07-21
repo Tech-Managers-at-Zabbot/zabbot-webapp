@@ -5,6 +5,7 @@ import { Modal } from "@/components/general/Modal";
 import { Save, Plus, Trash2 } from "lucide-react";
 import {
   useCreateQuiz,
+  useUpdateQuizById,
   useGetCourseLessons,
 } from "@/services/generalApi/lessons/mutation";
 import { useAlert } from "next-alert";
@@ -17,9 +18,12 @@ export enum QuizType {
 
 interface Quiz {
   id?: string;
+  createdAt?: string;
+  updatedAt?: string;
   courseId: string;
   lessonId?: string;
   contentId?: string;
+  lessonDetails?: { title?: string; description?: string };
   languageId: string;
   quizType: QuizType;
   instruction: string;
@@ -62,6 +66,8 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saveQuizLoading, setSaveQuizLoading] = useState(false);
   const { mutate: addQuiz, isPending: createQuizLoading } = useCreateQuiz();
+  const { mutate: updateQuiz, isPending: updateQuizLoading } =
+    useUpdateQuizById();
 
   const { addAlert } = useAlert();
 
@@ -74,6 +80,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       if (editingQuiz) {
+        console.log('editingQuiz:', editingQuiz);
         setQuizData({ ...editingQuiz });
         setAssociationType(editingQuiz.lessonId ? "lesson" : "content");
       } else {
@@ -132,7 +139,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     const newOptions = [...(quizData.options || [])];
     newOptions[index] = value;
     setQuizData((prev) => ({ ...prev, options: newOptions }));
-    
+
     // Clear correct answer/option when options change
     if (quizData.quizType === QuizType.FILL_IN_BLANK) {
       setQuizData((prev) => ({ ...prev, correctAnswer: "" }));
@@ -152,18 +159,18 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
 
   const removeOption = (index: number) => {
     const currentOptions = quizData.options || [];
-    
+
     // For multiple choice, minimum 2 options required
     if (quizData.quizType === QuizType.MULTIPLE_CHOICE && currentOptions.length <= 2) {
       return;
     }
-    
+
     // For fill in blank, allow removal of all options
     const newOptions = currentOptions.filter((_, i) => i !== index);
-    
+
     setQuizData((prev) => {
       const updatedData = { ...prev, options: newOptions };
-      
+
       if (quizData.quizType === QuizType.MULTIPLE_CHOICE) {
         // For multiple choice, update correctOption if it's no longer valid
         if (!newOptions.includes(prev.correctOption || "")) {
@@ -173,7 +180,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
         // For fill in blank, clear correctAnswer when options change
         updatedData.correctAnswer = "";
       }
-      
+
       return updatedData;
     });
   };
@@ -240,6 +247,10 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
     if (validateForm()) {
       setSaveQuizLoading(true);
       const cleanData = { ...quizData };
+      delete cleanData.id;
+      delete cleanData.createdAt;
+      delete cleanData.updatedAt;
+      delete cleanData.lessonDetails;
       if (cleanData.quizType === QuizType.MULTIPLE_CHOICE) {
         delete cleanData.correctAnswer;
       } else if (cleanData.quizType === QuizType.FILL_IN_BLANK) {
@@ -255,31 +266,55 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
         }
       }
 
-      addQuiz(
-        { quizPayload: cleanData },
-        {
-          onSuccess: () => {
-            setSaveQuizLoading(false);
-            addAlert("Success", "Quiz created successfully", "success");
-            onClose();
-            onSaveQuiz();
-          },
-          onError: (error) => {
-            setSaveQuizLoading(false);
-            addAlert(
-              "Error",
-              `Unable to create quiz: ${error.message}`,
-              "error"
-            );
-            console.error("Error saving quiz:", error);
-          },
-        }
-      );
+      if (editingQuiz?.id) {
+        
+        updateQuiz(
+          { quizId: editingQuiz.id, updateData: cleanData },
+          {
+            onSuccess: () => {
+              setSaveQuizLoading(false);
+              addAlert("Success", "Quiz updated successfully", "success");
+              onClose();
+              onSaveQuiz();
+            },
+            onError: (error) => {
+              setSaveQuizLoading(false);
+              addAlert(
+                "Error",
+                `Unable to update quiz: ${error.message}`,
+                "error"
+              );
+              console.error("Error updating quiz:", error);
+            },
+          }
+        );
+      } else {
+        addQuiz(
+          { quizPayload: cleanData },
+          {
+            onSuccess: () => {
+              setSaveQuizLoading(false);
+              addAlert("Success", "Quiz created successfully", "success");
+              onClose();
+              onSaveQuiz();
+            },
+            onError: (error) => {
+              setSaveQuizLoading(false);
+              addAlert(
+                "Error",
+                `Unable to create quiz: ${error.message}`,
+                "error"
+              );
+              console.error("Error saving quiz:", error);
+            },
+          }
+        );
+      }
     }
   };
 
   const modalTitle = editingQuiz ? "Edit Quiz" : "Add New Quiz";
-  
+
   // Get filled options for fill in blank dropdown
   const filledOptions = quizData.options?.filter(option => option.trim()) || [];
   const hasOptions = filledOptions.length > 0;
@@ -291,7 +326,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
       title={modalTitle}
       size="lg"
       containerClassName="w-full"
-      disableClose={saveQuizLoading || createQuizLoading}
+      disableClose={saveQuizLoading || createQuizLoading || updateQuizLoading}
     >
       <div className="p-6 w-full" style={{ fontFamily: "Lexend" }}>
         <div className="space-y-6">
@@ -363,6 +398,7 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
                 </div>
               ) : (
                 <select
+                  value={quizData.lessonId || ""}
                   onChange={(e) =>
                     handleInputChange("lessonId", e.target.value)
                   }
@@ -437,14 +473,14 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
                   {/* Show remove button based on quiz type and minimum requirements */}
                   {((quizData.quizType === QuizType.MULTIPLE_CHOICE && (quizData.options?.length || 0) > 3) ||
                     (quizData.quizType === QuizType.FILL_IN_BLANK)) && (
-                    <button
-                      type="button"
-                      onClick={() => removeOption(index)}
-                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
+                      <button
+                        type="button"
+                        onClick={() => removeOption(index)}
+                        className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
                 </div>
               ))}
             </div>
@@ -542,22 +578,22 @@ const AddQuizModal: React.FC<AddQuizModalProps> = ({
           <InAppButton
             onClick={onClose}
             background="#8a0c03"
-            disabled={saveQuizLoading || createQuizLoading}
+            disabled={saveQuizLoading || createQuizLoading || updateQuizLoading}
           >
             Cancel
           </InAppButton>
           <InAppButton
             onClick={handleSave}
             background="#012657"
-            disabled={saveQuizLoading || createQuizLoading}
+            disabled={saveQuizLoading || createQuizLoading || updateQuizLoading}
           >
             <div className="flex justify-center items-center">
               <Save size={16} className="mr-2" />
-              {saveQuizLoading || createQuizLoading
+              {saveQuizLoading || createQuizLoading || updateQuizLoading
                 ? "Processing..."
                 : editingQuiz
-                ? "Update Quiz"
-                : "Create Quiz"}
+                  ? "Update Quiz"
+                  : "Create Quiz"}
             </div>
           </InAppButton>
         </div>

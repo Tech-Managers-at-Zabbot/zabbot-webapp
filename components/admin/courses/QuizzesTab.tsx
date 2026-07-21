@@ -2,11 +2,9 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
-import { EditQuizForm } from "./EditQuizForm";
 
 interface QuizzesTabProps {
   quizzes: any[];
-  lessons: any[];
   isLoading: boolean;
   onDeleteQuiz: (quizId: string) => void;
   onOpenAddQuizModal: (quiz?: any) => void;
@@ -15,30 +13,16 @@ interface QuizzesTabProps {
 
 export const QuizzesTab: React.FC<QuizzesTabProps> = ({
   quizzes,
-  lessons,
   isLoading,
   onDeleteQuiz,
   onOpenAddQuizModal,
   onCloseEditModal,
 }) => {
-  const [editingQuiz, setEditingQuiz] = useState<any | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleEditQuiz = (quiz: any) => {
-    setEditingQuiz(quiz);
     onCloseEditModal();
     onOpenAddQuizModal(quiz);
-  };
-
-  const handleQuizChange = (field: string, value: any) => {
-    if (editingQuiz) {
-      setEditingQuiz((prev: any) => ({ ...prev, [field]: value }));
-    }
-  };
-
-  const handleSaveQuiz = () => {
-    if (editingQuiz) {
-      setEditingQuiz(null);
-    }
   };
 
   return (
@@ -82,19 +66,25 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleEditQuiz(quiz)}
-                    disabled
                     className="px-3 py-1 text-sm text-gray-600 cursor-pointer rounded"
                   >
                     <Edit size={14} className="mr-1 inline" />
                     Edit
                   </button>
                   <button
-                    onClick={() => onDeleteQuiz(quiz.id)}
-                    disabled
-                    className="px-3 py-1 text-sm text-gray-600 cursor-pointer rounded"
+                    onClick={() => {
+                      if (confirmDelete) {
+                        onDeleteQuiz(quiz.id);
+                        setConfirmDelete(false);
+                      } else {
+                        setConfirmDelete(true);
+                        setTimeout(() => setConfirmDelete(false), 5000); // Reset after 3 seconds
+                      }
+                    }}
+                    className="px-3 py-1 text-sm text-red-600 cursor-pointer rounded"
                   >
                     <Trash2 size={14} className="mr-1 inline" />
-                    Delete
+                    {confirmDelete ? "Confirm Delete" : "Delete"}
                   </button>
                 </div>
               </div>
@@ -108,16 +98,6 @@ export const QuizzesTab: React.FC<QuizzesTabProps> = ({
             </div>
           ))}
         </div>
-      )}
-
-      {editingQuiz && (
-        <EditQuizForm
-          quiz={editingQuiz}
-          lessons={lessons}
-          onQuizChange={handleQuizChange}
-          onSave={handleSaveQuiz}
-          onCancel={() => setEditingQuiz(null)}
-        />
       )}
     </div>
   );
