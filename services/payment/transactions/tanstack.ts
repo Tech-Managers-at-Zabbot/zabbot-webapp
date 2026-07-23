@@ -50,6 +50,9 @@ export function useUserSubscriptionCancellation() {
       queryClient.invalidateQueries({
         queryKey: ["getUserSubscriptionListing"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["getUserPaymentHistory"],
+      });
     },
     onError: (error: any) => {
       console.error("Error canceling subscription:", error);
