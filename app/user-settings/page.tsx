@@ -145,6 +145,8 @@ const UserSettings = () => {
     }
   ];
 
+  const hideButton = currentPlan !== "no-subscription" && currentPlan !== "lifetime";
+
   return (
     <div className="min-h-screen font-[Lexend] z-50">
       <Head>
@@ -252,29 +254,31 @@ const UserSettings = () => {
 
               {/* Subscription Actions */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                <div className="max-w-[320px] w-full">
-                  <InAppButton
-                    background="#1671D9"
-                    color="#FFFFFF"
-                    borderRadius="8px"
-                    padding="12px 24px"
-                    width="100%"
-                    onClick={openSubscriptionModal}
-                  >
-                    <div>
-                      {currentPlan !== "no-subscription" ? (
-                        <div className="flex items-center justify-center gap-2">
-                          <MdOutlinePublishedWithChanges size={20} />
-                          <span>Change Plan</span>
-                        </div>
-                      ) : (
-                        <div className="p-2">Subscribe</div>
-                      )}
-                    </div>
-                  </InAppButton>
-                </div>
+                {hideButton && (
+                  < div className="max-w-[320px] w-full">
+                    <InAppButton
+                      background="#1671D9"
+                      color="#FFFFFF"
+                      borderRadius="8px"
+                      padding="12px 24px"
+                      width="100%"
+                      onClick={openSubscriptionModal}
+                    >
+                      <div>
+                        {currentPlan !== "no-subscription" ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <MdOutlinePublishedWithChanges size={20} />
+                            <span>Change Plan</span>
+                          </div>
+                        ) : (
+                          <div className="p-2">Subscribe</div>
+                        )}
+                      </div>
+                    </InAppButton>
+                  </div>
+                )}
 
-                {currentPlan !== "no-subscription" && currentPlan !== "lifetime" && (
+                {hideButton && (
                   <div className="max-w-[320px] w-full">
                     <InAppButton
                       background="#FFF"
@@ -387,7 +391,7 @@ const UserSettings = () => {
           />
         </div>
       </Modal>
-    </div>
+    </div >
   );
 };
 
