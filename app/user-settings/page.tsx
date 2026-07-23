@@ -121,8 +121,8 @@ const UserSettings = () => {
 
       setPaymentHistory(formatted);
     }
-    if (userPaymentHistory?.data?.userCurrentPlan) {
-      setCurrentPlan(userPaymentHistory?.data?.userCurrentPlan);
+    if (userPaymentHistory?.data) {
+      setCurrentPlan(userPaymentHistory?.data?.userCurrentPlan || "no-subscription");
     }
   }, [userPaymentHistory]);
 
