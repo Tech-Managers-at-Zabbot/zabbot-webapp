@@ -274,7 +274,7 @@ const UserSettings = () => {
                   </InAppButton>
                 </div>
 
-                {currentPlan !== "no-subscription" && (
+                {currentPlan !== "no-subscription" && currentPlan !== "lifetime" && (
                   <div className="max-w-[320px] w-full">
                     <InAppButton
                       background="#FFF"
