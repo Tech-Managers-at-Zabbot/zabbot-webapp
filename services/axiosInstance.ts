@@ -12,14 +12,18 @@ const axiosInstance = axios.create({
 
 
 const getAccessToken = () => Cookies.get("access_token");
-const setAccessToken = (token: string) => Cookies.set("access_token", token, {
-  expires: 30,
-  secure: true,
-  sameSite: 'strict'
-});
+const setAccessToken = (token: string) => {
+  const rememberMe = Cookies.get("remember_me") === "true";
+  Cookies.set("access_token", token, {
+    expires: rememberMe ? 30 : 1,
+    secure: true,
+    sameSite: 'strict'
+  });
+};
 const clearTokens = () => {
   Cookies.remove("access_token");
   Cookies.remove("userProfile");
+  Cookies.remove("remember_me");
 };
 
 axiosInstance.interceptors.request.use(

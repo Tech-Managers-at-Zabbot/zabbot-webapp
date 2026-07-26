@@ -96,6 +96,11 @@ const LoginAuth: React.FC = () => {
               secure: true,
               sameSite: "strict",
             });
+            Cookies.set("remember_me", stayLoggedIn ? "true" : "false", {
+              expires: stayLoggedIn ? 30 : 1,
+              secure: true,
+              sameSite: "strict",
+            });
 
             setError({
               emailError: false,
@@ -236,15 +241,15 @@ const LoginAuth: React.FC = () => {
           >
             <input
               type="checkbox"
-              id="sendUpdates"
-              name="sendUpdates"
+              id="stayLoggedIn"
+              name="stayLoggedIn"
               checked={stayLoggedIn}
               onChange={(e) => setStayLoggedIn(e.target.checked)}
               className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
             />
             <div className="block">
               <label
-                htmlFor="sendUpdates"
+                htmlFor="stayLoggedIn"
                 className="block hover:cursor-pointer"
               >
                 {/* Remember me */}

@@ -38,6 +38,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     localStorage.removeItem("userProfile");
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    Cookies.remove("remember_me");
     localStorage.clear();
 
     localStorage.setItem("chat_conversations", keepChatHistory || "[]");

@@ -45,6 +45,7 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    Cookies.remove("remember_me");
     router.push("/login");
   };
 
