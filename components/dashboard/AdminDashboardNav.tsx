@@ -29,6 +29,7 @@ const AdminNavBar = ({ showLogo = false }) => {
     localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    Cookies.remove("remember_me");
     setLoading(true);
     router.push("/login");
   };

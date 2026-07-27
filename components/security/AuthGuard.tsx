@@ -63,12 +63,19 @@ export default function AuthGuard({
       return;
     }
 
+    const rememberMe = Cookies.get("remember_me") === "true";
     const decoded = parseJwt(token);
     const expired = !decoded?.exp || decoded.exp * 1000 < Date.now();
 
-    if (expired) {
+    // When "remember me" was chosen, don't force a logout just because the
+    // token's own exp claim looks stale - the backend rotates the token via
+    // the x-access-token response header on real API calls, and axiosInstance
+    // already redirects to /login on an actual 403 "please login again".
+    // Trust the still-valid remember_me/access_token cookies instead.
+    if (expired && !rememberMe) {
       Cookies.remove("access_token");
       Cookies.remove("userProfile");
+      Cookies.remove("remember_me");
       localStorage.removeItem("token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("userProfile");
@@ -85,6 +92,7 @@ export default function AuthGuard({
       if (!userDetails) {
         Cookies.remove("access_token");
         Cookies.remove("userProfile");
+        Cookies.remove("remember_me");
         localStorage.removeItem("token");
         localStorage.removeItem("access_token");
         localStorage.removeItem("userProfile");
