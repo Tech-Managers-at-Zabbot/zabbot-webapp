@@ -70,6 +70,11 @@ const LessonDescriptionComponent = ({
               src="/lessons/lessons-home.svg"
               alt="home"
               className="w-8 h-8 sm:w-10 sm:h-10 md:w-[55px] md:h-[55px]"
+              onClick={() => {
+                if (startLoading || dashboardLoading) return;
+                setDashboardLoading(true);
+                router.push("/user-dashboard");
+              }}
             />
           </div>
         </div>

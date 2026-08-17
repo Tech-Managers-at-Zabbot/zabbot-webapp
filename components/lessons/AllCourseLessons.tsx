@@ -40,7 +40,7 @@ const AllCourseLessons = () => {
             {/* Immersing you in Yorùbá, one step at a time */}
             {isCourseLessonsLoading
               ? "Loading course details..."
-              : courseInfo[0].course?.title || "Course Title"}
+              : courseInfo[0]?.course?.title || "Course Title"}
           </span>
           <span
             className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
@@ -49,7 +49,7 @@ const AllCourseLessons = () => {
             {/* Building fluency through culture, sound, and everyday moments. */}
             {isCourseLessonsLoading
               ? null
-              : courseInfo[0].course?.description || "Course Description"}
+              : courseInfo[0]?.course?.description || "Course Description"}
           </span>
         </section>
       </header>

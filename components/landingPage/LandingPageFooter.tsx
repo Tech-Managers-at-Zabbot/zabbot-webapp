@@ -35,7 +35,7 @@ const LandingPageFooter = () => {
           <ul className="flex flex-col gap-2 text-[#D1D5DC] text-[14px] sm:text-[15px] font-[400]">
             <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">About</li>
             <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">Contact</li>
-            <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer">Privacy</li>
+            <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer"><Link href="/privacy-policy">Privacy</Link></li>
             <li className="hover:text-[#A6DFFF] transition-colors cursor-pointer"><Link href="/terms-of-service">Terms</Link></li>
           </ul>
         </div>

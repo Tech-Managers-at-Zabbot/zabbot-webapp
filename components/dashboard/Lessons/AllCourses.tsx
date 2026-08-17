@@ -312,7 +312,7 @@ const AllCourses = () => {
                   >
                     <CoursesCard
                       data={lessonProgressData}
-                      isClickable={index === 0}
+                      isClickable
                     />
                   </div>
                 )
