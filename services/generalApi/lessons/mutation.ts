@@ -94,10 +94,14 @@ export function useDeleteCourse() {
   });
 }
 
-export function useGetAllCourses(languageId: string) {
+export function useGetAllCourses(
+  languageId: string,
+  isActive = true,
+  isAdmin = false
+) {
   return useQuery({
-    queryKey: ["getAllCourses", languageId],
-    queryFn: () => getCourses(true, languageId),
+    queryKey: ["getAllCourses", languageId, isActive, isAdmin],
+    queryFn: () => getCourses(isActive, languageId, isAdmin),
     refetchOnMount: true,
     enabled: !!languageId,
     refetchOnWindowFocus: false,

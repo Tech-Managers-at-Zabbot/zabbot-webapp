@@ -50,12 +50,12 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
     setEditingLesson({ ...lesson });
   };
 
-  const handleEditNewLesson = (lesson: any) => {
+  const handleEditNewLesson = () => {
     // onCloseEditModal();
-    // onOpenAddQuizModal(quiz);
+    // onOpenAddQuizModal(lesson);
   };
 
-  const handleAddNewLesson = (lesson: any) => {
+  const onOpenAddLessonModal = () => {
     // onCloseEditModal();
     // onOpenAddQuizModal(quiz);
   };
