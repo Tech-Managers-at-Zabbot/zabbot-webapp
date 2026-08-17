@@ -97,7 +97,7 @@ export function useDeleteCourse() {
 export function useGetAllCourses(languageId: string) {
   return useQuery({
     queryKey: ["getAllCourses", languageId],
-    queryFn: () => getCourses(true, languageId),
+    queryFn: () => getCourses(languageId),
     refetchOnMount: true,
     enabled: !!languageId,
     refetchOnWindowFocus: false,

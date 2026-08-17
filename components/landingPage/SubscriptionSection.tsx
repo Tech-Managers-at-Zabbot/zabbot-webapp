@@ -3,6 +3,7 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import { useLoading } from "@/contexts/LoadingProvider";
 
 interface SubscriptionSectionProps {
@@ -89,6 +90,13 @@ const SubscriptionSection: React.FC<SubscriptionSectionProps> = ({
   // };
 
   const handleSubscriptionSelect = (subscriptionType: any): any => {
+    const token = Cookies.get("access_token");
+    if (!token) {
+      onCloseModal?.();
+      router.push("/login");
+      return;
+    }
+
     setLoading(true)
     if (setSubscriptionType && onCloseModal) {
       setSubscriptionType(subscriptionType);

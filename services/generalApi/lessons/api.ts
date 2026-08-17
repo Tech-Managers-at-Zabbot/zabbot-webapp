@@ -38,9 +38,10 @@ export async function createCourseWithLessons(
   return response.data;
 }
 
-export async function getCourses(isActive = true, languageId: string) {
+export async function getCourses(languageId: string, isActive?: boolean | undefined) {
+  const query = isActive !== undefined ? `?isActive=${isActive}` : "";
   const response = await axiosInstance.get(
-    `/lessons/courses/${languageId}?isActive=${isActive}`
+    `/lessons/courses/${languageId}${query}`
   );
   return response.data;
 }

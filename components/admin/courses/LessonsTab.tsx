@@ -50,6 +50,16 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
     setEditingLesson({ ...lesson });
   };
 
+  const handleEditNewLesson = (lesson: any) => {
+    // onCloseEditModal();
+    // onOpenAddQuizModal(quiz);
+  };
+
+  const handleAddNewLesson = (lesson: any) => {
+    // onCloseEditModal();
+    // onOpenAddQuizModal(quiz);
+  };
+
   const handleSaveLesson = () => {
     if (editingLesson) {
       const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
@@ -67,7 +77,8 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
         <h3 className="text-lg font-semibold text-gray-900">Course Lessons</h3>
         <button
           onClick={() => {
-            /* Add new lesson logic */
+            onOpenAddLessonModal();
+            handleEditNewLesson();
           }}
           className="px-4 hover:cursor-pointer py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
         >

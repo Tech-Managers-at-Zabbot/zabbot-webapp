@@ -12,7 +12,7 @@ import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { steps } from '@/constants/data-to-populate/dashboardData';
+// import { steps } from '@/constants/data-to-populate/dashboardData';
 
 const AllSteps = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,23 +25,23 @@ const AllSteps = () => {
   const { data: allLanguageSteps, isLoading: stepsLoading } =
     useGetLanguageLessons(userDetails?.languageId);
 
-    const [ allSteps, setAllSteps ] = useState<any[]>([])
+  const [allSteps, setAllSteps] = useState<any[]>([])
 
-    console.log('steps', allLanguageSteps)
+  console.log('steps', allLanguageSteps)
 
   // const allSteps = allLanguageSteps?.data;
 
   // const stepsToMap = [...allStepsWithThumbnails];
 
-  useEffect(()=> {
-    if(allLanguageSteps?.data){
+  useEffect(() => {
+    if (allLanguageSteps?.data) {
       setAllSteps(allLanguageSteps?.data)
     }
-  },[allLanguageSteps])
+  }, [allLanguageSteps])
 
   const stepsToMap = [
     ...allSteps,
-    ...steps
+    // ...steps
   ]
   // Calculate total pages based on your data
   const totalPages = Math.ceil(stepsToMap.length / itemsPerPage);
@@ -228,7 +228,7 @@ const AllSteps = () => {
                   >
                     <StepsCard
                       data={lessonProgressData}
-                      isClickable={index === 0 || index === 1}
+                      isClickable
                     />
                   </div>
                 )
@@ -243,16 +243,16 @@ const AllSteps = () => {
 
       {/* Pagination Section */}
       {allLanguageSteps?.data &&
-            allLanguageSteps?.data?.length > 0 && (
-      <section className="w-full overflow-x-auto">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          maxVisiblePages={5} // Reduced for mobile
-        />
-      </section>
-            )}
+        allLanguageSteps?.data?.length > 0 && (
+          <section className="w-full overflow-x-auto">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              maxVisiblePages={5} // Reduced for mobile
+            />
+          </section>
+        )}
     </div>
   );
 };
