@@ -38,9 +38,13 @@ export async function createCourseWithLessons(
   return response.data;
 }
 
-export async function getCourses(isActive = true, languageId: string) {
+export async function getCourses(
+  isActive = true,
+  languageId: string,
+  isAdmin = false
+) {
   const response = await axiosInstance.get(
-    `/lessons/courses/${languageId}?isActive=${isActive}`
+    `/lessons/courses/${languageId}?isActive=${isActive}&isAdmin=${isAdmin}`
   );
   return response.data;
 }

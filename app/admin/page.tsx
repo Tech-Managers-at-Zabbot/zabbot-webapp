@@ -30,7 +30,7 @@ const CourseManagementPage: React.FC = () => {
 
   const { mutate: handleDelLesson } = useDeleteLessonById()
   const { data: allCoursesData, isLoading: allCoursesLoading } =
-    useGetAllCourses(userDetails?.languageId);
+    useGetAllCourses(userDetails?.languageId, true, true);
   const { mutate: handleCourseUpdate } = useUpdateCourse();
 
   const { mutate: handleDeleteQuizById } = useDeleteQuizById();
