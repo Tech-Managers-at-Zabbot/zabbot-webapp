@@ -72,6 +72,8 @@ const UserSettings = () => {
     }
   }
 
+  const showCancellationButton = currentPlan !== "no-subscription" && currentPlan !== "lifetime";
+
   const columns = [
     {
       key: "date",
@@ -145,7 +147,7 @@ const UserSettings = () => {
     }
   ];
 
-  const hideButton = currentPlan !== "no-subscription" && currentPlan !== "lifetime";
+  const hideButton = currentPlan !== "lifetime";
 
   return (
     <div className="min-h-screen font-[Lexend] z-50">
@@ -278,7 +280,7 @@ const UserSettings = () => {
                   </div>
                 )}
 
-                {hideButton && (
+                {showCancellationButton && (
                   <div className="max-w-[320px] w-full">
                     <InAppButton
                       background="#FFF"

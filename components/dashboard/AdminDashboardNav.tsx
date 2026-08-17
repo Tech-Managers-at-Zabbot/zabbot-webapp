@@ -332,7 +332,7 @@ const AdminNavBar = ({ showLogo = false }) => {
         </div>
         <MainDropdown
           options={dropdownOptions}
-          placeholder="Go Premium"
+          placeholder="Premium"
           icon={
             <Image
               src={"/userDashboard/isPremiumImage.svg"}
