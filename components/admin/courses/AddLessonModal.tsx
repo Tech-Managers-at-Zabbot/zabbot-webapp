@@ -347,7 +347,19 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
       },
       {
         onSuccess: (response: any) => {
+          console.log("createLesson response:", response);
           const newLessonId = response?.data?.id || response?.id;
+
+          if (finalContents.length > 0 && !newLessonId) {
+            addAlert(
+              "Error",
+              "Lesson created, but could not find its id to save content. Check the console for the raw response.",
+              "error"
+            );
+            onClose();
+            onSaveLesson();
+            return;
+          }
 
           if (finalContents.length > 0 && newLessonId) {
             attachLessonContents(

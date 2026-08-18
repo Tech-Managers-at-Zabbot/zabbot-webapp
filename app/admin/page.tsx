@@ -116,7 +116,6 @@ const CourseManagementPage: React.FC = () => {
   };
 
   const handleSaveCourse = (courseData: Course) => {
-    console.log("Saving course.....:", courseData);
     handleCourseUpdate({ courseId: courseData.id, updateData: courseData })
     // setCourses((prev) =>
     //   prev.map((course) => (course.id === courseData.id ? courseData : course))
@@ -125,7 +124,6 @@ const CourseManagementPage: React.FC = () => {
   };
 
   const handleSaveLesson = () => {
-    //  console.log("Saving lesson:", lessonData);
   };
 
   const handleLessonCreated = () => {
@@ -139,9 +137,7 @@ const CourseManagementPage: React.FC = () => {
   };
 
   const handleDeleteQuiz = (quizId: string) => {
-    console.log("Deleting quiz.....:", quizId);
     handleDeleteQuizById(quizId);
-
   };
 
   const clearFilters = () => {

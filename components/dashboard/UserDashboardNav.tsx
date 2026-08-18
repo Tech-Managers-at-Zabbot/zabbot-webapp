@@ -82,7 +82,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Achievements",
-      route: "/user-settings?tab=achievemets",
+      route: "/user-settings?tab=achievements",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "",
       action: () => "",
@@ -152,7 +152,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Achievements",
-      route: "/user-settings?tab=achievemets",
+      route: "/user-settings?tab=achievements",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "",
       action: () => "",
