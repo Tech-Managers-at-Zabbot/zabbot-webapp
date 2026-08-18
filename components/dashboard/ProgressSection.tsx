@@ -46,7 +46,7 @@ const ProgressSection = () => {
       <section className="flex-1 xl:w-[58%] w-full">
         <UserLessonDataComponent
           title={getPageText("immersion_tagline")}
-          subtitle={"Empowering you to learn, speak, and belong—authentically."}
+          subtitle={getPageText("empowering_you")}
           maxWidth="100%"
         >
           <section className="flex gap-[15px] min-w-max">
