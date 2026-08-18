@@ -156,7 +156,7 @@ export async function getUserCompletedCourses(
 // --- Lesson Endpoints ---
 
 export async function createLesson(lessonData: any) {
-  const response = await axiosInstance.post("/lessons", lessonData);
+  const response = await axiosInstance.post("/lessons/lessons", lessonData);
   return response.data;
 }
 

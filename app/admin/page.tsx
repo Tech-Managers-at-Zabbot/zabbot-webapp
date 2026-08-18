@@ -12,11 +12,12 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import InAppButton from "@/components/InAppButton";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useDeleteLessonById, useDeleteQuizById, useGetAllCourses, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
+import { useDeleteLessonById, useDeleteQuizById, useGetAllCourses, useGetCourseLessons, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import AddQuizModal from "@/components/admin/courses/AddQuizModal";
+import AddLessonModal from "@/components/admin/courses/AddLessonModal";
 
 const CourseManagementPage: React.FC = () => {
   const { userDetails } = useUser();
@@ -26,6 +27,11 @@ const CourseManagementPage: React.FC = () => {
   const handleOpenAddQuizModal = (quiz?: any) => {
     setEditingQuiz(quiz || null);
     setShowAddQuizModal(true);
+  };
+
+  const [showAddLessonModal, setShowAddLessonModal] = useState(false);
+  const handleOpenAddLessonModal = () => {
+    setShowAddLessonModal(true);
   };
 
   const { mutate: handleDelLesson } = useDeleteLessonById()
@@ -61,6 +67,12 @@ const CourseManagementPage: React.FC = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | any>({});
+
+  const { data: selectedCourseLessons } = useGetCourseLessons(
+    selectedCourse?.id
+  );
+  const nextLessonOrderNumber =
+    (selectedCourseLessons?.data?.length || 0) + 1;
 
   // Filter courses based on search and filters
   const filteredCourses = courses?.filter((course: Record<string, any>) => {
@@ -114,6 +126,12 @@ const CourseManagementPage: React.FC = () => {
 
   const handleSaveLesson = () => {
     //  console.log("Saving lesson:", lessonData);
+  };
+
+  const handleLessonCreated = () => {
+    setTimeout(() => {
+      setEditModalOpen(true);
+    }, 100);
   };
 
   const handleDeleteLesson = (lessonId: string) => {
@@ -265,6 +283,18 @@ const CourseManagementPage: React.FC = () => {
           onDeleteLesson={handleDeleteLesson}
           onDeleteQuiz={handleDeleteQuiz}
           onOpenAddQuizModal={handleOpenAddQuizModal}
+          onOpenAddLessonModal={handleOpenAddLessonModal}
+        />
+      )}
+
+      {selectedCourse && (
+        <AddLessonModal
+          isOpen={showAddLessonModal}
+          onClose={() => setShowAddLessonModal(false)}
+          courseId={selectedCourse.id}
+          languageId={selectedCourse.languageId}
+          nextOrderNumber={nextLessonOrderNumber}
+          onSaveLesson={handleLessonCreated}
         />
       )}
 

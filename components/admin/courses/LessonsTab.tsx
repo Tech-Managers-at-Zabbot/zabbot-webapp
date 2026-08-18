@@ -11,20 +11,196 @@ import {
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EditLessonForm } from "./EditLessonForm";
 import { Lesson } from "@/types/interfaces";
-import { useUpdateLessonById } from "@/services/generalApi/lessons/mutation";
+import {
+  useUpdateLessonById,
+  useGetLessonWithContents,
+} from "@/services/generalApi/lessons/mutation";
 
+interface LessonAccordionItemProps {
+  lesson: Record<string, any>;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
+const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
+  lesson,
+  isExpanded,
+  onToggleExpand,
+  onEdit,
+  onDelete,
+}) => {
+  const { data: lessonWithContents, isLoading: contentsLoading } =
+    useGetLessonWithContents(isExpanded ? lesson.id : undefined);
+
+  const contents = lessonWithContents?.data?.contents || [];
+
+  return (
+    <div className="border border-gray-200 rounded-lg overflow-hidden">
+      <div className="p-4 bg-gray-50 flex items-center justify-between">
+        <div className="flex items-center flex-1">
+          <button onClick={onToggleExpand} className="mr-2">
+            {isExpanded ? (
+              <ChevronDown
+                size={20}
+                className="text-gray-500 hover:cursor-pointer"
+              />
+            ) : (
+              <ChevronRight
+                size={20}
+                className="text-gray-500 hover:cursor-pointer"
+              />
+            )}
+          </button>
+          <div className="flex items-center gap-4">
+            <div>
+              {lesson?.lessonImg && (
+                <div>
+                  <img
+                    src={lesson?.lessonImg}
+                    className="w-40 h-40 object-cover rounded-md"
+                    alt="Lesson Image"
+                  />
+                </div>
+              )}
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">
+                Lesson {lesson.orderNumber}: {lesson.title}
+              </h4>
+              <p className="text-sm text-gray-600">{lesson.description}</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onEdit}
+            className="px-3 py-1 cursor-pointer hover:text-gray-900 text-sm text-gray-600 rounded"
+          >
+            <Edit size={14} className="mr-1 inline" />
+            Edit
+          </button>
+          <button
+            onClick={onDelete}
+            className="px-3 py-1 cursor-pointer hover:text-gray-900 text-sm text-gray-600 rounded"
+          >
+            <Trash2 size={14} className="mr-1 inline" />
+            Delete
+          </button>
+        </div>
+      </div>
+
+      {isExpanded && (
+        <div className="p-4 border-t border-gray-200 bg-white">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <span className="text-sm font-medium text-gray-700">
+                Headline:{" "}
+              </span>
+              <span className="text-sm text-gray-600">
+                {lesson.headLineTag || "Not set"}
+              </span>
+            </div>
+            <div>
+              <span className="text-sm font-medium text-gray-700">
+                Estimated Time:{" "}
+              </span>
+              <span className="text-sm text-gray-600">
+                {lesson.estimatedDuration
+                  ? `${lesson.estimatedDuration} mins`
+                  : "Not set"}
+              </span>
+            </div>
+          </div>
+
+          {lesson.objectives && (
+            <div className="mb-3">
+              <span className="text-sm font-medium text-gray-700 block mb-1">
+                Objectives:
+              </span>
+              <p className="text-sm text-gray-600">{lesson.objectives}</p>
+            </div>
+          )}
+
+          {lesson.outcomes && (
+            <div className="mb-3">
+              <span className="text-sm font-medium text-gray-700 block mb-1">
+                Outcomes:
+              </span>
+              <p className="text-sm text-gray-600">{lesson.outcomes}</p>
+            </div>
+          )}
+
+          <div>
+            <span className="text-sm font-medium text-gray-700 block mb-2">
+              Content Items{contents.length > 0 ? `: ${contents.length}` : ""}
+            </span>
+            {contentsLoading ? (
+              <p className="text-xs text-gray-500">Loading content...</p>
+            ) : contents.length === 0 ? (
+              <p className="text-xs text-gray-500">
+                No content items added yet.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {contents
+                  .slice(0, 3)
+                  .map((content: Record<string, any>, index: number) => (
+                    <div
+                      key={content.id || index}
+                      className="text-xs text-gray-500 bg-gray-50 p-2 rounded"
+                    >
+                      {content.customText && (
+                        <>
+                          {content.customText.startsWith("<") ? (
+                            <span
+                              dangerouslySetInnerHTML={{
+                                __html: content.customText,
+                              }}
+                            />
+                          ) : (
+                            content.customText
+                          )}
+                        </>
+                      )}
+                      {content.contentFiles &&
+                        content.contentFiles.length > 0 && (
+                          <div className="text-gray-500">
+                            {content.contentFiles.length} media file(s)
+                          </div>
+                        )}
+                    </div>
+                  ))}
+                {contents.length > 3 && (
+                  <div className="text-xs text-gray-500">
+                    ... and {contents.length - 3} more items
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 interface LessonsTabProps {
   lessons: Lesson[];
   isLoading: boolean;
   onSaveLesson: (lessonData: Lesson) => void;
   onDeleteLesson: (lessonId: string) => void;
+  onOpenAddLessonModal: () => void;
+  onCloseEditModal: () => void;
 }
 
 export const LessonsTab: React.FC<LessonsTabProps> = ({
   lessons,
   isLoading,
   onDeleteLesson,
+  onOpenAddLessonModal,
+  onCloseEditModal,
 }) => {
   const [expandedLessons, setExpandedLessons] = useState<Set<string>>(new Set());
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
@@ -50,16 +226,6 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
     setEditingLesson({ ...lesson });
   };
 
-  const handleEditNewLesson = () => {
-    // onCloseEditModal();
-    // onOpenAddQuizModal(lesson);
-  };
-
-  const onOpenAddLessonModal = () => {
-    // onCloseEditModal();
-    // onOpenAddQuizModal(quiz);
-  };
-
   const handleSaveLesson = () => {
     if (editingLesson) {
       const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
@@ -78,7 +244,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
         <button
           onClick={() => {
             onOpenAddLessonModal();
-            handleEditNewLesson();
+            onCloseEditModal();
           }}
           className="px-4 hover:cursor-pointer py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center"
         >
@@ -100,152 +266,14 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
       ) : (
         <div className="space-y-3">
           {lessons.map((lesson: Record<string, any>) => (
-            <div
+            <LessonAccordionItem
               key={lesson.id}
-              className="border border-gray-200 rounded-lg overflow-hidden"
-            >
-              <div className="p-4 bg-gray-50 flex items-center justify-between">
-                <div className="flex items-center flex-1">
-                  <button
-                    onClick={() => toggleLessonExpansion(lesson.id!)}
-                    className="mr-2"
-                  >
-                    {expandedLessons.has(lesson.id!) ? (
-                      <ChevronDown size={20} className="text-gray-500 hover:cursor-pointer" />
-                    ) : (
-                      <ChevronRight size={20} className="text-gray-500 hover:cursor-pointer" />
-                    )}
-                  </button>
-                  <div className="flex items-center gap-4">
-                    <div>
-                      {lesson?.lessonImg && (
-                        <div>
-                          <img
-                            src={lesson?.lessonImg}
-                            className="w-40 h-40 object-cover rounded-md"
-                            alt="Lesson Image"
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900">
-                        Lesson {lesson.orderNumber}: {lesson.title}
-                      </h4>
-                      <p className="text-sm text-gray-600">
-                        {lesson.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleEditLesson(lesson)}
-                    // disabled
-                    className="px-3 py-1 cursor-pointer hover:text-gray-900 text-sm text-gray-600 rounded"
-                  >
-                    <Edit size={14} className="mr-1 inline" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => onDeleteLesson(lesson.id!)}
-                    // disabled
-                    className="px-3 py-1 cursor-pointer hover:text-gray-900 text-sm text-gray-600 rounded"
-                  >
-                    <Trash2 size={14} className="mr-1 inline" />
-                    Delete
-                  </button>
-                </div>
-              </div>
-
-              {expandedLessons.has(lesson.id!) && (
-                <div className="p-4 border-t border-gray-200 bg-white">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <span className="text-sm font-medium text-gray-700">
-                        Headline:{" "}
-                      </span>
-                      <span className="text-sm text-gray-600">
-                        {lesson.headLineTag || "Not set"}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-gray-700">
-                        Estimated Time:{" "}
-                      </span>
-                      <span className="text-sm text-gray-600">
-                        {lesson.estimatedDuration
-                          ? `${lesson.estimatedDuration} mins`
-                          : "Not set"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {lesson.objectives && (
-                    <div className="mb-3">
-                      <span className="text-sm font-medium text-gray-700 block mb-1">
-                        Objectives:
-                      </span>
-                      <p className="text-sm text-gray-600">
-                        {lesson.objectives}
-                      </p>
-                    </div>
-                  )}
-
-                  {lesson.outcomes && (
-                    <div className="mb-3">
-                      <span className="text-sm font-medium text-gray-700 block mb-1">
-                        Outcomes:
-                      </span>
-                      <p className="text-sm text-gray-600">{lesson.outcomes}</p>
-                    </div>
-                  )}
-
-                  {lesson.contents && lesson.contents.length > 0 && (
-                    <div>
-                      <span className="text-sm font-medium text-gray-700 block mb-2">
-                        Content Items: {lesson.contents.length}
-                      </span>
-                      <div className="space-y-2">
-                        {lesson.contents
-                          .slice(0, 3)
-                          .map((content: Record<string, any>, index: number) => (
-                            <div
-                              key={index}
-                              className="text-xs text-gray-500 bg-gray-50 p-2 rounded"
-                            >
-                              {content.customText && (
-                                <>
-                                  {content.customText.startsWith("<") ? (
-                                    <span
-                                      dangerouslySetInnerHTML={{
-                                        __html: content.customText,
-                                      }}
-                                    />
-                                  ) : (
-                                    content.customText
-                                  )}
-                                </>
-                              )}
-                              {content.contentFiles &&
-                                content.contentFiles.length > 0 && (
-                                  <div className="text-gray-500">
-                                    {content.contentFiles.length} media file(s)
-                                  </div>
-                                )}
-                            </div>
-                          ))}
-                        {lesson.contents.length > 3 && (
-                          <div className="text-xs text-gray-500">
-                            ... and {lesson.contents.length - 3} more items
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+              lesson={lesson}
+              isExpanded={expandedLessons.has(lesson.id!)}
+              onToggleExpand={() => toggleLessonExpansion(lesson.id!)}
+              onEdit={() => handleEditLesson(lesson)}
+              onDelete={() => onDeleteLesson(lesson.id!)}
+            />
           ))}
         </div>
       )}

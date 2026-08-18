@@ -4,6 +4,7 @@ import {
   addQuiz,
   addUserCourse,
   createCourseWithLessons,
+  createLesson,
   getCourse,
   getCourseLessons,
   getCourseQuizzes,
@@ -160,6 +161,26 @@ export function useGetLanguageLessons(languageId: string) {
     //   onError: (error) => {
     //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
     //   },
+  });
+}
+
+export function useCreateLesson() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ lessonData }: { lessonData: any }) => {
+      return await createLesson(lessonData);
+    },
+    onSuccess: async (_, variables) => {
+      const courseId = variables?.lessonData?.courseId;
+      if (courseId) {
+        queryClient.invalidateQueries({
+          queryKey: ["getCourseLessons", courseId],
+        });
+      }
+    },
+    onError: (error: any) => {
+      console.error("Error Creating Lesson:", error);
+    },
   });
 }
 
@@ -478,6 +499,9 @@ export function useUpdateLessonById() {
       });
       queryClient.invalidateQueries({ queryKey: ["getLessonById"] });
       queryClient.invalidateQueries({ queryKey: ["getCourseLessons"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
     },
     onError: (error: any) => {
       console.error("Error updating lesson:", error);
