@@ -8,7 +8,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
-// import { usePageLanguage } from "@/contexts/LanguageContext";
+import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const PopularCourses = () => {
   const { userDetails } = useUser();
@@ -16,8 +16,7 @@ const PopularCourses = () => {
     userDetails?.languageId
   );
 
-  //  const { getPageText } =
-  //       usePageLanguage("userDashboard");
+  const { getPageText } = usePageLanguage("userDashboard");
 
   const allCoursesWithThumbnails = Array.isArray(allCourses?.data)
     ? allCourses?.data.map((step: Record<string, any>) => ({
@@ -33,8 +32,8 @@ const PopularCourses = () => {
     <div className="flex gap-[30px]">
       <section className="flex-1 xl:max-w-[100%] w-full">
         <UserLessonDataComponent
-          title={"Journey into Yorùbá language & life."}
-          subtitle={"Your journey grows with every lesson you finish."}
+          title={getPageText("journey_into_yoruba")}
+          subtitle={getPageText("journey_grows")}
           maxWidth="100%"
           background="#FFF8C7"
         >

@@ -232,7 +232,7 @@ const WordForTheDay = () => {
             ) : (
               <InAppButton background="#266950" onClick={handlePlayAudio}>
                 <div className="text-white text-[15.612px] fonnt-[700] leading-[100%]">
-                  Listen Again
+                  {getPageText("listen_again")}
                 </div>
               </InAppButton>
             )}

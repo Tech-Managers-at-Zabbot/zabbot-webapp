@@ -2,6 +2,8 @@
 import { useGetAllLeaderboard } from "@/services/generalApi/leaderboard/tanstack";
 import React, { useState } from "react";
 import LeaderboardLoader from "../loadingComponent/LoaderBoardLoader";
+import { usePageLanguage } from "@/contexts/LanguageContext";
+
 // Types
 type TimeFrame = "today" | "week" | "allTime";
 
@@ -53,6 +55,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
     if (rank === 3) return "bg-[#F5C9A8]";
     return "";
   };
+
 
   return (
     <div className="overflow-x-auto">
@@ -108,7 +111,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   initialTimeFrame = "today",
 }) => {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>(initialTimeFrame);
-
+  const { getPageText } = usePageLanguage("userDashboard");
   const periodMap = {
     today: "daily",
     week: "weekly",
@@ -121,9 +124,9 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   const currentData = leaderboardData?.data?.leaderboard || [];
 
   const tabs: { key: TimeFrame; label: string }[] = [
-    { key: "today", label: "Today" },
-    { key: "week", label: "Week" },
-    { key: "allTime", label: "All Time" },
+    { key: "today", label: getPageText("today") },
+    { key: "week", label: getPageText("week") },
+    { key: "allTime", label: getPageText("all_time") },
   ];
 
   const customIconRenderer = (rank: number) => {
@@ -138,7 +141,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       <div className="max-w-2xl w-full">
         <div className="bg-[#d3ebeb] backdrop-blur-sm rounded-3xl p-8 shadow-lg">
           <h1 className="text-4xl sm:text-4xl md:text-3xl font-bold text-teal-700 mb-6">
-            Leaderboard
+            {getPageText("leaderboard")}
           </h1>
 
           {/* Tab Navigation */}
@@ -147,11 +150,10 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
               <button
                 key={tab.key}
                 onClick={() => setTimeFrame(tab.key)}
-                className={`flex-1 py-3 text-[15px] px-6 rounded-lg font-semibold transition-all ${
-                  timeFrame === tab.key
-                    ? "bg-white text-gray-800 shadow-md"
-                    : "text-teal-700 hover:bg-white/50"
-                }`}
+                className={`flex-1 py-3 text-[15px] px-6 rounded-lg font-semibold transition-all ${timeFrame === tab.key
+                  ? "bg-white text-gray-800 shadow-md"
+                  : "text-teal-700 hover:bg-white/50"
+                  }`}
               >
                 {tab.label}
               </button>
