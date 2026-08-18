@@ -10,7 +10,15 @@ import Loader from "../general/Loader";
 
 function parseJwt(token: string) {
   try {
-    return JSON.parse(atob(token.split(".")[1]));
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
   } catch (e: any) {
     console.log("parsing error", e.message);
     return null;
@@ -67,11 +75,6 @@ export default function AuthGuard({
     const decoded = parseJwt(token);
     const expired = !decoded?.exp || decoded.exp * 1000 < Date.now();
 
-    // When "remember me" was chosen, don't force a logout just because the
-    // token's own exp claim looks stale - the backend rotates the token via
-    // the x-access-token response header on real API calls, and axiosInstance
-    // already redirects to /login on an actual 403 "please login again".
-    // Trust the still-valid remember_me/access_token cookies instead.
     if (expired && !rememberMe) {
       Cookies.remove("access_token");
       Cookies.remove("userProfile");
