@@ -20,6 +20,7 @@ interface EditCourseModalProps {
   onDeleteLesson: (lessonId: string) => void;
   onDeleteQuiz: (quizId: string) => void;
   onOpenAddQuizModal: (quiz?: any) => void;
+  onOpenAddLessonModal: () => void;
 }
 
 const EditCourseModal: React.FC<EditCourseModalProps> = ({
@@ -31,6 +32,7 @@ const EditCourseModal: React.FC<EditCourseModalProps> = ({
   onDeleteLesson,
   onDeleteQuiz,
   onOpenAddQuizModal,
+  onOpenAddLessonModal,
 }) => {
   const [activeTab, setActiveTab] = useState<"course" | "lessons" | "quizzes">(
     "course"
@@ -129,6 +131,8 @@ const EditCourseModal: React.FC<EditCourseModalProps> = ({
             isLoading={lessonsLoading}
             onSaveLesson={onSaveLesson}
             onDeleteLesson={onDeleteLesson}
+            onOpenAddLessonModal={onOpenAddLessonModal}
+            onCloseEditModal={onClose}
           />
         )}
 
