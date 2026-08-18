@@ -369,7 +369,7 @@ const UserSettings = () => {
           )}
 
           {/* ACHIEVEMENTS SECTION */}
-          {menuKeyword === "achievemets" && (
+          {menuKeyword === "achievements" && (
             <section className="flex flex-col gap-6">
               <div className="p-6 bg-white border border-[#E0E0E0] rounded-2xl shadow-sm">
                 <AchievementsCard />
