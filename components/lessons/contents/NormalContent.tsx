@@ -88,7 +88,7 @@ const NormalComponentComponent = ({
             <MediaComponents files={content.files} />
           </div>
         )}
-        
+
         {/* Main Content */}
         <div className="w-full flex flex-col text-center text-base sm:text-xl md:text-2xl font-medium">
           <div className="text-[#975945] text-[18px] font-normal uppercase">
@@ -155,6 +155,7 @@ const NormalComponentComponent = ({
           onClose={() => setSelectedTone(null)}
         />
       )}
+      
       {showPronunciationModal && (
         <InLessonRecordWithPara
           isOpen={showPronunciationModal}

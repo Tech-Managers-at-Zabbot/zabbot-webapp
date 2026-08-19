@@ -73,17 +73,17 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
       },
       isActive: true,
     },
-         {
-      name: "Payment",
-      icon: <MdOutlinePayments size={25} color="#4d4f56"/> as unknown as string,
-       action: () => {
+    {
+      name: getPageText("payment"),
+      icon: <MdOutlinePayments size={25} color="#4d4f56" /> as unknown as string,
+      action: () => {
         setLoading(true);
         router.push("/user-settings?tab=payment");
       },
       isReactIcon: true,
       isActive: true,
     },
-        {
+    {
       name: getPageText("notifications"),
       icon: "/userDashboard/notifications.svg",
       action: () => {
@@ -127,11 +127,10 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
             {dropdownOptions.map((option, index) => (
               <li
                 key={index}
-                className={`flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 ${
-                  !option.isActive
-                    ? "hover:cursor-not-allowed"
-                    : "hover:bg-gray-300 hover:cursor-pointer"
-                } rounded`}
+                className={`flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 ${!option.isActive
+                  ? "hover:cursor-not-allowed"
+                  : "hover:bg-gray-300 hover:cursor-pointer"
+                  } rounded`}
                 onClick={() => {
                   option.action();
                   setIsBreadcrumbOpen(false);
@@ -147,17 +146,15 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
                 )}
                 {option.isReactIcon && (
                   <span
-                    className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${
-                      !option.isActive ? "text-[#666666]" : "text-[#162B6E]"
-                    }`}
+                    className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${!option.isActive ? "text-[#666666]" : "text-[#162B6E]"
+                      }`}
                   >
                     {option.icon}
                   </span>
                 )}
                 <span
-                  className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${
-                    !option.isActive ? "text-[#666666]" : "text-[#162B6E]"
-                  }`}
+                  className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${!option.isActive ? "text-[#666666]" : "text-[#162B6E]"
+                    }`}
                 >
                   {option.name}
                 </span>
