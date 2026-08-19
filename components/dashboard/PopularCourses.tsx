@@ -57,7 +57,7 @@ const PopularCourses = () => {
             <section className="flex gap-[15px] min-w-max">
               {coursesToMap.map(
                 (lessonProgressData: Record<string, any>, index: number) => {
-                  console.log("lessonProgressData in PopularCourses", lessonProgressData)
+
                   return (
                     <div key={index}>
                       <LessonsCard
