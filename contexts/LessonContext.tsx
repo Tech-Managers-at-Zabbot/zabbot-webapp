@@ -312,12 +312,21 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           lastAccessed: newLastAccessed,
           progress,
         };
-        const existing = JSON.stringify(userCourse);
-        const updated = JSON.stringify(updatedUserCourse);
 
-        if (existing !== updated) {
+        const { lastAccessed: _prevLastAccessed, ...existingComparable } =
+          userCourse;
+        const { lastAccessed: _newLastAccessed, ...updatedComparable } =
+          updatedUserCourse;
+
+        if (
+          JSON.stringify(existingComparable) !==
+          JSON.stringify(updatedComparable)
+        ) {
           setUserCourse(updatedUserCourse);
-          localStorage.setItem(USER_COURSE_KEY, updated);
+          localStorage.setItem(
+            USER_COURSE_KEY,
+            JSON.stringify(updatedUserCourse),
+          );
         }
 
         if (sendToBackend) {
