@@ -64,7 +64,7 @@ interface UserCourse {
   lastContentId?: string;
   progress: number;
   isCompleted: boolean;
-  lastAccessed?: string;
+  lastAccessed?: any;
 }
 
 interface QuizResult {
