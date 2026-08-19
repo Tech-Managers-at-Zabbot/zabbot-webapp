@@ -64,6 +64,7 @@ interface UserCourse {
   lastContentId?: string;
   progress: number;
   isCompleted: boolean;
+  lastAccessed?: any;
 }
 
 interface QuizResult {
@@ -317,7 +318,8 @@ export const LessonProvider: React.FC<LessonProviderProps> = ({ children }) => {
           userCourse;
         const { lastAccessed: _newLastAccessed, ...updatedComparable } =
           updatedUserCourse;
-
+        console.log(_prevLastAccessed);
+        console.log(_newLastAccessed);
         if (
           JSON.stringify(existingComparable) !==
           JSON.stringify(updatedComparable)
