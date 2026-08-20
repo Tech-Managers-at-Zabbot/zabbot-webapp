@@ -297,3 +297,14 @@ export async function updateQuizById(
   );
   return response.data;
 }
+
+export async function updateContentById(
+  contentId: string,
+  updateData: Record<string, any>,
+) {
+  const response = await axiosInstance.put(
+    `/lessons/contents/${contentId}`,
+    updateData
+  );
+  return response.data;
+}

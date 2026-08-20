@@ -29,6 +29,7 @@ import {
   updateLessonById,
   deleteQuizById,
   updateQuizById,
+  updateContentById,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -545,6 +546,30 @@ export function useUpdateQuizById() {
     },
     onError: (error: any) => {
       console.error("Error updating quiz:", error);
+    },
+  });
+}
+
+export function useUpdateContentById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      contentId,
+      updateData,
+    }: {
+      contentId: string;
+      lessonId: string;
+      updateData: Record<string, any>;
+    }) => {
+      return await updateContentById(contentId, updateData);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error updating content:", error);
     },
   });
 }

@@ -10,10 +10,14 @@ import {
 } from "lucide-react";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EditLessonForm } from "./EditLessonForm";
+import { EditContentForm } from "./EditContentForm";
 import { Lesson } from "@/types/interfaces";
+import { ContentSourceType } from "@/types/enums";
+import { useAlert } from "next-alert";
 import {
   useUpdateLessonById,
   useGetLessonWithContents,
+  useUpdateContentById,
 } from "@/services/generalApi/lessons/mutation";
 
 interface LessonAccordionItemProps {
@@ -22,7 +26,12 @@ interface LessonAccordionItemProps {
   onToggleExpand: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  onEditContent: (content: Record<string, any>, lessonId: string) => void;
 }
+
+const isEditableContent = (content: Record<string, any>) =>
+  content.sourceType !== ContentSourceType.EDEDUN &&
+  !(content.ededunPhrases && content.ededunPhrases.length > 0);
 
 const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
   lesson,
@@ -30,6 +39,7 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
   onToggleExpand,
   onEdit,
   onDelete,
+  onEditContent,
 }) => {
   const { data: lessonWithContents, isLoading: contentsLoading } =
     useGetLessonWithContents(isExpanded ? lesson.id : undefined);
@@ -144,13 +154,12 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
               </p>
             ) : (
               <div className="space-y-2">
-                {contents
-                  .slice(0, 3)
-                  .map((content: Record<string, any>, index: number) => (
-                    <div
-                      key={content.id || index}
-                      className="text-xs text-gray-500 bg-gray-50 p-2 rounded"
-                    >
+                {contents.map((content: Record<string, any>, index: number) => (
+                  <div
+                    key={content.id || index}
+                    className="text-xs text-gray-500 bg-gray-50 p-2 rounded flex items-start justify-between gap-2"
+                  >
+                    <div className="flex-1 min-w-0">
                       {content.customText && (
                         <>
                           {content.customText.startsWith("<") ? (
@@ -170,13 +179,23 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
                             {content.contentFiles.length} media file(s)
                           </div>
                         )}
+                      {!isEditableContent(content) && (
+                        <div className="text-gray-400 italic">
+                          Added via Ededun
+                        </div>
+                      )}
                     </div>
-                  ))}
-                {contents.length > 3 && (
-                  <div className="text-xs text-gray-500">
-                    ... and {contents.length - 3} more items
+                    {isEditableContent(content) && (
+                      <button
+                        onClick={() => onEditContent(content, lesson.id)}
+                        className="shrink-0 flex items-center text-gray-600 hover:text-gray-900 hover:cursor-pointer"
+                      >
+                        <Edit size={12} className="mr-1 inline" />
+                        Edit
+                      </button>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
             )}
           </div>
@@ -204,8 +223,14 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
 }) => {
   const [expandedLessons, setExpandedLessons] = useState<Set<string>>(new Set());
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
+  const [editingContent, setEditingContent] = useState<Record<string, any> | null>(null);
+  const [editingContentLessonId, setEditingContentLessonId] = useState<string | null>(null);
 
+  const { addAlert } = useAlert();
   const { mutate: handleUpdateLessonById } = useUpdateLessonById();
+  const { mutate: handleUpdateContentById, isPending: isSavingContent } =
+    useUpdateContentById();
+
   const toggleLessonExpansion = (lessonId: string) => {
     const newExpanded = new Set(expandedLessons);
     if (newExpanded.has(lessonId)) {
@@ -234,6 +259,45 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
         updateData: { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id },
       });
       setEditingLesson(null);
+    }
+  };
+
+  const handleEditContent = (content: Record<string, any>, lessonId: string) => {
+    setEditingContent({ ...content });
+    setEditingContentLessonId(lessonId);
+  };
+
+  const handleContentChange = (field: string, value: any) => {
+    if (editingContent) {
+      setEditingContent((prev) => ({ ...prev!, [field]: value }));
+    }
+  };
+
+  const handleSaveContent = () => {
+    if (editingContent && editingContentLessonId) {
+      const { customText, translation, id } = editingContent;
+      handleUpdateContentById(
+        {
+          contentId: id || "",
+          lessonId: editingContentLessonId,
+          updateData: { customText, translation },
+        },
+        {
+          onSuccess: () => {
+            addAlert("Success", "Content updated successfully", "success");
+            setEditingContent(null);
+            setEditingContentLessonId(null);
+          },
+          onError: (error: any) => {
+            addAlert(
+              "Error",
+              error?.response?.data?.message ||
+                "An error occurred, please try again",
+              "error"
+            );
+          },
+        }
+      );
     }
   };
 
@@ -273,6 +337,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
               onToggleExpand={() => toggleLessonExpansion(lesson.id!)}
               onEdit={() => handleEditLesson(lesson)}
               onDelete={() => onDeleteLesson(lesson.id!)}
+              onEditContent={handleEditContent}
             />
           ))}
         </div>
@@ -284,6 +349,19 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
           onLessonChange={handleLessonChange}
           onSave={handleSaveLesson}
           onCancel={() => setEditingLesson(null)}
+        />
+      )}
+
+      {editingContent && (
+        <EditContentForm
+          content={editingContent}
+          onContentChange={handleContentChange}
+          onSave={handleSaveContent}
+          onCancel={() => {
+            setEditingContent(null);
+            setEditingContentLessonId(null);
+          }}
+          isSaving={isSavingContent}
         />
       )}
     </div>
