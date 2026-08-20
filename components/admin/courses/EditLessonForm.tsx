@@ -226,7 +226,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
                 </label>
                 <input
                   type="text"
-                  value={lesson.headLineTag}
+                  value={lesson.headLineTag || ""}
                   onChange={(e) =>
                     onLessonChange("headLineTag", e.target.value)
                   }

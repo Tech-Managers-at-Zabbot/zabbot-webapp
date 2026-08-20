@@ -29,6 +29,11 @@ import {
   updateLessonById,
   deleteQuizById,
   updateQuizById,
+  updateContentById,
+  deleteContentById,
+  addContentFile,
+  deleteContentFile,
+  addSingleContentFile,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -545,6 +550,121 @@ export function useUpdateQuizById() {
     },
     onError: (error: any) => {
       console.error("Error updating quiz:", error);
+    },
+  });
+}
+
+export function useUpdateContentById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      contentId,
+      updateData,
+    }: {
+      contentId: string;
+      lessonId: string;
+      updateData: Record<string, any>;
+    }) => {
+      return await updateContentById(contentId, updateData);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error updating content:", error);
+    },
+  });
+}
+
+export function useDeleteContentById() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      contentId,
+    }: {
+      contentId: string;
+      lessonId: string;
+    }) => {
+      return await deleteContentById(contentId);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting content:", error);
+    },
+  });
+}
+
+export function useAddContentFile() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      contentId,
+      data,
+    }: {
+      contentId: string;
+      lessonId: string;
+      data: { filePath: string; contentType: string; description?: string };
+    }) => {
+      return await addContentFile(contentId, data);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error adding content file:", error);
+    },
+  });
+}
+
+export function useDeleteContentFile() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      contentId,
+      fileId,
+    }: {
+      contentId: string;
+      lessonId: string;
+      fileId: string;
+    }) => {
+      return await deleteContentFile(contentId, fileId);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting content file:", error);
+    },
+  });
+}
+
+export function useAddSingleContentFile() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      data,
+    }: {
+      data: { filePath: string; contentType: string; description?: string, contentId: string };
+    }) => {
+      return await addSingleContentFile(data);
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.contentId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error adding content file:", error);
     },
   });
 }

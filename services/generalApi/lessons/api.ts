@@ -297,3 +297,54 @@ export async function updateQuizById(
   );
   return response.data;
 }
+
+export async function updateContentById(
+  contentId: string,
+  updateData: Record<string, any>,
+) {
+  const response = await axiosInstance.put(
+    `/lessons/contents/${contentId}`,
+    updateData
+  );
+  return response.data;
+}
+
+export async function deleteContentById(
+  contentId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/contents/${contentId}`,
+  );
+  return response.data;
+}
+
+export async function addSingleContentFile(
+  data: { filePath: string; contentType: string; description?: string, contentId: string },
+) {
+  const response = await axiosInstance.post(
+    `/lessons/contents/add-file`,
+    data
+  );
+  return response.data;
+}
+
+export async function addContentFile(
+  fileId: string,
+  data: { filePath: string; contentType: string; description?: string },
+) {
+  const response = await axiosInstance.put(
+    `/lessons/contents/file/${fileId}`,
+    data
+  );
+  return response.data;
+}
+
+export async function deleteContentFile(
+  contentId: string,
+  fileId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/contents/file/${fileId}`,
+  );
+  return response.data;
+}
