@@ -18,6 +18,7 @@ import {
   useUpdateLessonById,
   useGetLessonWithContents,
   useUpdateContentById,
+  useDeleteContentById,
 } from "@/services/generalApi/lessons/mutation";
 
 interface LessonAccordionItemProps {
@@ -27,6 +28,7 @@ interface LessonAccordionItemProps {
   onEdit: () => void;
   onDelete: () => void;
   onEditContent: (content: Record<string, any>, lessonId: string) => void;
+  onDeleteContent: (contentId: string, lessonId: string) => void;
 }
 
 const isEditableContent = (content: Record<string, any>) =>
@@ -40,6 +42,7 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
   onEdit,
   onDelete,
   onEditContent,
+  onDeleteContent,
 }) => {
   const { data: lessonWithContents, isLoading: contentsLoading } =
     useGetLessonWithContents(isExpanded ? lesson.id : undefined);
@@ -173,27 +176,38 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
                           )}
                         </>
                       )}
-                      {content.contentFiles &&
-                        content.contentFiles.length > 0 && (
-                          <div className="text-gray-500">
-                            {content.contentFiles.length} media file(s)
-                          </div>
-                        )}
+                      {content.files && content.files.length > 0 && (
+                        <div className="text-gray-500">
+                          {content.files.length} media file(s)
+                        </div>
+                      )}
                       {!isEditableContent(content) && (
                         <div className="text-gray-400 italic">
                           Added via Ededun
                         </div>
                       )}
                     </div>
-                    {isEditableContent(content) && (
-                      <button
-                        onClick={() => onEditContent(content, lesson.id)}
-                        className="shrink-0 flex items-center text-gray-600 hover:text-gray-900 hover:cursor-pointer"
-                      >
-                        <Edit size={12} className="mr-1 inline" />
-                        Edit
-                      </button>
-                    )}
+                    <div className="flex items-center gap-2 shrink-0 pr-2">
+                      {isEditableContent(content) && (
+                        <button
+                          onClick={() => onEditContent(content, lesson.id)}
+                          className="flex items-center text-gray-600 hover:text-gray-900 hover:cursor-pointer"
+                        >
+                          <Edit size={12} className="mr-1 inline" />
+                          Edit
+                        </button>
+                      )}
+                      {isEditableContent(content) && (
+                        <button
+                          onClick={() => onDeleteContent(content.id, lesson.id)}
+                          className="flex items-center text-gray-600 hover:text-red-700 hover:cursor-pointer"
+                        >
+                          <Trash2 size={12} className="mr-1 inline" />
+                          Delete
+                        </button>
+                      )}
+
+                    </div>
                   </div>
                 ))}
               </div>
@@ -230,6 +244,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
   const { mutate: handleUpdateLessonById } = useUpdateLessonById();
   const { mutate: handleUpdateContentById, isPending: isSavingContent } =
     useUpdateContentById();
+  const { mutate: handleDeleteContentById } = useDeleteContentById();
 
   const toggleLessonExpansion = (lessonId: string) => {
     const newExpanded = new Set(expandedLessons);
@@ -267,6 +282,33 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
     setEditingContentLessonId(lessonId);
   };
 
+  const handleDeleteContent = (contentId: string, lessonId: string) => {
+    if (!contentId) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this content item? This cannot be undone."
+      )
+    ) {
+      return;
+    }
+    handleDeleteContentById(
+      { contentId, lessonId },
+      {
+        onSuccess: () => {
+          addAlert("Success", "Content deleted successfully", "success");
+        },
+        onError: (error: any) => {
+          addAlert(
+            "Error",
+            error?.response?.data?.message ||
+            "An error occurred, please try again",
+            "error"
+          );
+        },
+      }
+    );
+  };
+
   const handleContentChange = (field: string, value: any) => {
     if (editingContent) {
       setEditingContent((prev) => ({ ...prev!, [field]: value }));
@@ -292,7 +334,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
             addAlert(
               "Error",
               error?.response?.data?.message ||
-                "An error occurred, please try again",
+              "An error occurred, please try again",
               "error"
             );
           },
@@ -338,6 +380,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
               onEdit={() => handleEditLesson(lesson)}
               onDelete={() => onDeleteLesson(lesson.id!)}
               onEditContent={handleEditContent}
+              onDeleteContent={handleDeleteContent}
             />
           ))}
         </div>
@@ -352,9 +395,10 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
         />
       )}
 
-      {editingContent && (
+      {editingContent && editingContentLessonId && (
         <EditContentForm
           content={editingContent}
+          lessonId={editingContentLessonId}
           onContentChange={handleContentChange}
           onSave={handleSaveContent}
           onCancel={() => {
