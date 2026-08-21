@@ -27,6 +27,7 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const handleLogout = () => {
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
+    const keepLastLoggedInEmail = localStorage.getItem("remembered_email");
     const keepDailyCallsRemaining = localStorage.getItem(
       "daily_calls_remaining"
     );
@@ -38,6 +39,7 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
     localStorage.setItem("chat_conversations", keepChatHistory || "[]");
     localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
+    localStorage.setItem("remembered_email", keepLastLoggedInEmail || "");
     localStorage.setItem(
       "daily_calls_remaining",
       keepDailyCallsRemaining || "30"
