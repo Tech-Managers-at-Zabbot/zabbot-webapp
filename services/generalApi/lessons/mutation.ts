@@ -29,6 +29,7 @@ import {
   updateLessonById,
   deleteQuizById,
   updateQuizById,
+  createContent,
   updateContentById,
   deleteContentById,
   addContentFile,
@@ -550,6 +551,29 @@ export function useUpdateQuizById() {
     },
     onError: (error: any) => {
       console.error("Error updating quiz:", error);
+    },
+  });
+}
+
+export function useCreateContent() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      lessonId,
+      payload,
+    }: {
+      lessonId: string;
+      payload: Record<string, any>;
+    }) => {
+      return await createContent({ ...payload, lessonId });
+    },
+    onSuccess: async (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["getLessonWithContents", variables.lessonId],
+      });
+    },
+    onError: (error: any) => {
+      console.error("Error creating content:", error);
     },
   });
 }

@@ -98,6 +98,7 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
       sourceType,
       ededunPhrases: sourceType === ContentSourceType.EDEDUN ? [] : undefined,
       customText: sourceType === ContentSourceType.NEW ? "" : undefined,
+      contentType: sourceType === ContentSourceType.NEW ? "normal" : undefined,
     };
 
     setContents((prev) => [...prev, newContent]);
@@ -112,6 +113,45 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
     setContents((prev) =>
       prev.map((content, i) => (i === index ? { ...content, ...updates } : content))
     );
+  };
+
+  const handleContentTypeChange = (index: number, newType: string) => {
+    const currentTranslation = contents[index]?.translation;
+    if (newType === "grammar_rule") {
+      updateContent(index, { contentType: newType, translation: "Grammar Rule" });
+    } else if (currentTranslation === "Grammar Rule") {
+      updateContent(index, { contentType: newType, translation: "" });
+    } else {
+      updateContent(index, { contentType: newType });
+    }
+  };
+
+  const handleGrammarExampleChange = (
+    contentIndex: number,
+    exampleIndex: number,
+    field: "yoruba" | "translation",
+    value: string
+  ) => {
+    const examples = contents[contentIndex]?.grammarExamples || [];
+    updateContent(contentIndex, {
+      grammarExamples: examples.map((example, i) =>
+        i === exampleIndex ? { ...example, [field]: value } : example
+      ),
+    });
+  };
+
+  const handleAddGrammarExample = (contentIndex: number) => {
+    const examples = contents[contentIndex]?.grammarExamples || [];
+    updateContent(contentIndex, {
+      grammarExamples: [...examples, { yoruba: "", translation: "" }],
+    });
+  };
+
+  const handleRemoveGrammarExample = (contentIndex: number, exampleIndex: number) => {
+    const examples = contents[contentIndex]?.grammarExamples || [];
+    updateContent(contentIndex, {
+      grammarExamples: examples.filter((_, i) => i !== exampleIndex),
+    });
   };
 
   const removeContent = (index: number) => {
@@ -328,6 +368,12 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
       sourceType: content.sourceType,
       customText: content.customText,
       ededunPhrases: content.ededunPhrases,
+      contentType: content.contentType,
+      proverb: content.proverb,
+      grammarTitle: content.grammarTitle,
+      grammarSubtitle: content.grammarSubtitle,
+      grammarDescription: content.grammarDescription,
+      grammarExamples: content.grammarExamples,
       contentFiles: content.contentFiles.map((file, fileIndex) => ({
         contentType: file.contentType,
         filePath:
@@ -637,19 +683,178 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
                       )}
                     </div>
                   ) : (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Content Text
-                      </label>
-                      <TextEditor
-                        value={content.customText || ""}
-                        onChange={(value) =>
-                          updateContent(index, { customText: value })
-                        }
-                        placeholder="Type your content here..."
-                        height="150px"
-                      />
-                    </div>
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Content Type
+                        </label>
+                        <select
+                          value={content.contentType || "normal"}
+                          onChange={(e) =>
+                            handleContentTypeChange(index, e.target.value)
+                          }
+                          className="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="normal">Normal</option>
+                          <option value="proverb">Proverb</option>
+                          <option value="grammar_rule">Grammar Rule</option>
+                        </select>
+                      </div>
+
+                      {content.contentType !== "grammar_rule" && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Content Text
+                          </label>
+                          <TextEditor
+                            value={content.customText || ""}
+                            onChange={(value) =>
+                              updateContent(index, { customText: value })
+                            }
+                            placeholder="Type your content here..."
+                            height="150px"
+                          />
+                        </div>
+                      )}
+
+                      {content.contentType === "proverb" && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Proverb
+                          </label>
+                          <textarea
+                            value={content.proverb || ""}
+                            onChange={(e) =>
+                              updateContent(index, { proverb: e.target.value })
+                            }
+                            rows={2}
+                            className="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                      )}
+
+                      {content.contentType === "grammar_rule" && (
+                        <>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Grammar Title
+                            </label>
+                            <input
+                              type="text"
+                              value={content.grammarTitle || ""}
+                              onChange={(e) =>
+                                updateContent(index, {
+                                  grammarTitle: e.target.value,
+                                })
+                              }
+                              className="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Grammar Subtitle
+                            </label>
+                            <input
+                              type="text"
+                              value={content.grammarSubtitle || ""}
+                              onChange={(e) =>
+                                updateContent(index, {
+                                  grammarSubtitle: e.target.value,
+                                })
+                              }
+                              className="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Grammar Description
+                            </label>
+                            <textarea
+                              value={
+                                Array.isArray(content.grammarDescription)
+                                  ? content.grammarDescription.join("\n")
+                                  : content.grammarDescription || ""
+                              }
+                              onChange={(e) =>
+                                updateContent(index, {
+                                  grammarDescription: e.target.value.split("\n"),
+                                })
+                              }
+                              placeholder="One bullet point per line"
+                              rows={4}
+                              className="w-full px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Grammar Examples
+                            </label>
+                            <div className="space-y-3">
+                              {(content.grammarExamples || []).map(
+                                (example, exampleIndex) => (
+                                  <div
+                                    key={exampleIndex}
+                                    className="p-3 bg-gray-50 rounded-md flex flex-col sm:flex-row gap-2"
+                                  >
+                                    <input
+                                      type="text"
+                                      value={example.yoruba}
+                                      onChange={(e) =>
+                                        handleGrammarExampleChange(
+                                          index,
+                                          exampleIndex,
+                                          "yoruba",
+                                          e.target.value
+                                        )
+                                      }
+                                      placeholder="Yoruba"
+                                      className="flex-1 px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={example.translation}
+                                      onChange={(e) =>
+                                        handleGrammarExampleChange(
+                                          index,
+                                          exampleIndex,
+                                          "translation",
+                                          e.target.value
+                                        )
+                                      }
+                                      placeholder="Translation"
+                                      className="flex-1 px-3 py-2 text-gray-600 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        handleRemoveGrammarExample(
+                                          index,
+                                          exampleIndex
+                                        )
+                                      }
+                                      className="text-red-600 hover:text-red-800 hover:cursor-pointer self-center shrink-0"
+                                      title="Remove example"
+                                    >
+                                      <Trash2 size={16} />
+                                    </button>
+                                  </div>
+                                )
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => handleAddGrammarExample(index)}
+                                className="px-4 py-2 border-2 border-dashed border-gray-300 rounded-md text-gray-700 hover:border-blue-500 hover:cursor-pointer"
+                              >
+                                + Add Example
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </>
                   )}
 
                   <div>
@@ -661,9 +866,10 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
                       onChange={(e) =>
                         updateContent(index, { translation: e.target.value })
                       }
+                      disabled={content.contentType === "grammar_rule"}
                       placeholder="Enter translation or summary text"
                       rows={3}
-                      className="w-full px-3 py-2 border rounded-md text-[#012657] font-[500] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-3 py-2 border rounded-md text-[#012657] font-[500] focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                       style={{ backgroundColor: "#F8F9FA" }}
                     />
                   </div>

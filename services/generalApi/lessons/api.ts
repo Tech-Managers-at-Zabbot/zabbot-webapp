@@ -298,6 +298,16 @@ export async function updateQuizById(
   return response.data;
 }
 
+export async function createContent(
+  payload: Record<string, any>,
+) {
+  const response = await axiosInstance.post(
+    `/lessons/contents`,
+    payload
+  );
+  return response.data;
+}
+
 export async function updateContentById(
   contentId: string,
   updateData: Record<string, any>,

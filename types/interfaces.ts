@@ -34,6 +34,11 @@ export interface ContentFile {
   description?: string;
 }
 
+export interface GrammarExample {
+  yoruba: string;
+  translation: string;
+}
+
 export interface Content {
   id?: string;
   translation: string;
@@ -41,6 +46,12 @@ export interface Content {
   sourceType: ContentSourceType;
   ededunPhrases?: EdedunPhrase[];
   customText?: string;
+  contentType?: string;
+  proverb?: string;
+  grammarTitle?: string;
+  grammarSubtitle?: string;
+  grammarDescription?: string[];
+  grammarExamples?: GrammarExample[];
   // mediaDescriptions?: { [key: string]: string };
 }
 

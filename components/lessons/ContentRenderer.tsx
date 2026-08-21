@@ -86,48 +86,50 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
 
       {/* <div className="border-t-1 h-[0.5px] mt-6 border-[#FCD2C2] w-full"></div> */}
 
-{/* Navigation Buttons */}
-<div className="px-[2%] sm:px-[5%] absolute bottom-5 -translate-y-1/2 z-30 gap-2 md:gap-0 flex w-full justify-between items-center pointer-events-none">
-  <div className="pointer-events-auto">
-    <InAppButton
-      onClick={onPrevious}
-      disabled={!canGoBack || completeLoading}
-      disabledColor="#C98F5DCC"
-      background={canGoBack ? `#5A2E10` : `#C98F5DCC`}
-      borderRadius="100%"
-      height="60px"
-      width="60px"
-    >
-      <div className="flex justify-center items-center">
-        <FaArrowLeft className="text-base sm:text-xl md:text-2xl" />
-      </div>
-    </InAppButton>
-  </div>
+      {/* Navigation Buttons */}
+      <div className="px-[2%] sm:px-[5%] absolute bottom-5 -translate-y-1/2 z-30 gap-2 md:gap-0 flex w-full justify-between items-center pointer-events-none">
+        <div className="pointer-events-auto">
+          <InAppButton
+            onClick={onPrevious}
+            disabled={!canGoBack || completeLoading}
+            disabledColor="#C98F5DCC"
+            background={canGoBack ? `#5A2E10` : `#C98F5DCC`}
+            borderRadius="100%"
+            height="60px"
+            width="60px"
+          >
+            <div className="flex justify-center items-center">
+              <FaArrowLeft className="text-base sm:text-xl md:text-2xl" />
+            </div>
+          </InAppButton>
+        </div>
 
-  <div className="pointer-events-auto">
-    <InAppButton
-      onClick={handleNext}
-      background={`#5A2E10`}
-      disabled={completeLoading}
-      disabledColor="#C98F5DCC"
-      borderRadius="100%"
-      height="60px"
-      width="60px"
-    >
-      <div>
-        {isLastContent ? (
-          "Complete Lesson"
-        ) : completeLoading ? (
-          <CustomSpinner />
-        ) : (
-          <div className="flex justify-center items-center">
-            <FaArrowRight className="text-base sm:text-xl md:text-2xl" />
-          </div>
-        )}
+        <div className="pointer-events-auto">
+          <InAppButton
+            onClick={handleNext}
+            background={`#5A2E10`}
+            disabled={completeLoading}
+            disabledColor="#C98F5DCC"
+            borderRadius="100%"
+            height="60px"
+            width="60px"
+          >
+            <div>
+              {isLastContent ? (
+                <div className="flex justify-center items-center">
+                  <FaArrowRight className="text-base sm:text-xl md:text-2xl" />
+                </div>
+              ) : completeLoading ? (
+                <CustomSpinner />
+              ) : (
+                <div className="flex justify-center items-center">
+                  <FaArrowRight className="text-base sm:text-xl md:text-2xl" />
+                </div>
+              )}
+            </div>
+          </InAppButton>
+        </div>
       </div>
-    </InAppButton>
-  </div>
-</div>
     </div>
   );
 };
