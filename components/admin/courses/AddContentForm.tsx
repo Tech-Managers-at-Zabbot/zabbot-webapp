@@ -82,10 +82,13 @@ export const AddContentForm: React.FC<AddContentFormProps> = ({
   };
 
   const handleSave = () => {
+    const payload = { ...content, languageId };
+
     createContent(
-      { lessonId, payload: { ...content, languageId } },
+      { lessonId, payload },
       {
-        onSuccess: () => {
+        onSuccess: (data: any) => {
+          console.log("createContent response:", data);
           addAlert("Success", "Content created successfully", "success");
           onClose();
         },
@@ -93,7 +96,7 @@ export const AddContentForm: React.FC<AddContentFormProps> = ({
           addAlert(
             "Error",
             error?.response?.data?.message ||
-              "An error occurred, please try again",
+            "An error occurred, please try again",
             "error"
           );
         },
