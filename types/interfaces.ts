@@ -47,6 +47,7 @@ export interface Content {
   ededunPhrases?: EdedunPhrase[];
   customText?: string;
   contentType?: string;
+  isGrammarRule?: boolean;
   proverb?: string;
   grammarTitle?: string;
   grammarSubtitle?: string;

@@ -352,6 +352,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
             customText,
             translation,
             contentType,
+            isGrammarRule: contentType === "grammar_rule",
             proverb,
             grammarTitle,
             grammarSubtitle,

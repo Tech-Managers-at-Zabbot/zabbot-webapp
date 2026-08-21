@@ -270,6 +270,7 @@ const CreateCoursePage = () => {
       ededunPhrases: sourceType === ContentSourceType.EDEDUN ? [] : undefined,
       customText: sourceType === ContentSourceType.NEW ? "" : undefined,
       contentType: sourceType === ContentSourceType.NEW ? "normal" : undefined,
+      isGrammarRule: false,
     };
 
     setCurrentLesson((prev) => ({

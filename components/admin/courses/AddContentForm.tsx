@@ -15,6 +15,7 @@ interface AddContentFormProps {
 
 const emptyContent = {
   contentType: "normal",
+  isGrammarRule: false,
   customText: "",
   translation: "",
   proverb: "",
@@ -38,16 +39,23 @@ export const AddContentForm: React.FC<AddContentFormProps> = ({
   };
 
   const handleContentTypeChange = (newType: string) => {
-    if (newType === "grammar_rule") {
+    const isGrammarRule = newType === "grammar_rule";
+    if (isGrammarRule) {
       setContent((prev) => ({
         ...prev,
         contentType: newType,
+        isGrammarRule,
         translation: "Grammar Rule",
       }));
     } else if (content.translation === "Grammar Rule") {
-      setContent((prev) => ({ ...prev, contentType: newType, translation: "" }));
+      setContent((prev) => ({
+        ...prev,
+        contentType: newType,
+        isGrammarRule,
+        translation: "",
+      }));
     } else {
-      setContent((prev) => ({ ...prev, contentType: newType }));
+      setContent((prev) => ({ ...prev, contentType: newType, isGrammarRule }));
     }
   };
 
@@ -82,7 +90,11 @@ export const AddContentForm: React.FC<AddContentFormProps> = ({
   };
 
   const handleSave = () => {
-    const payload = { ...content, languageId };
+    const payload = {
+      ...content,
+      languageId,
+      isGrammarRule: content.contentType === "grammar_rule",
+    };
 
     createContent(
       { lessonId, payload },

@@ -67,12 +67,17 @@ const LessonModal: React.FC<LessonModalProps> = ({
 
   const handleContentTypeChange = (index: number, newType: string) => {
     const currentTranslation = currentLesson.contents[index]?.translation;
-    if (newType === "grammar_rule") {
-      updateContent(index, { contentType: newType, translation: "Grammar Rule" });
+    const isGrammarRule = newType === "grammar_rule";
+    if (isGrammarRule) {
+      updateContent(index, {
+        contentType: newType,
+        isGrammarRule,
+        translation: "Grammar Rule",
+      });
     } else if (currentTranslation === "Grammar Rule") {
-      updateContent(index, { contentType: newType, translation: "" });
+      updateContent(index, { contentType: newType, isGrammarRule, translation: "" });
     } else {
-      updateContent(index, { contentType: newType });
+      updateContent(index, { contentType: newType, isGrammarRule });
     }
   };
 

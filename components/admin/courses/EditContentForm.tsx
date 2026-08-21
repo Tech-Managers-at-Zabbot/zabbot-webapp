@@ -81,7 +81,7 @@ export const EditContentForm: React.FC<EditContentFormProps> = ({
     (c: Record<string, any>) => c.id === content.id
   );
   const contentFiles: Record<string, any>[] =
-    liveContent?.contentFiles || content.contentFiles || [];
+    liveContent?.files || content?.files || [];
 
   const [isUploadingToCloudinary, setIsUploadingToCloudinary] = useState(false);
   const { mutate: addFile, isPending: isSavingFile } = useAddContentFile();
@@ -245,6 +245,7 @@ export const EditContentForm: React.FC<EditContentFormProps> = ({
                 onChange={(e) => {
                   const newType = e.target.value;
                   onContentChange("contentType", newType);
+                  onContentChange("isGrammarRule", newType === "grammar_rule");
                   if (newType === "grammar_rule") {
                     onContentChange("translation", "Grammar Rule");
                   } else if (content.translation === "Grammar Rule") {
@@ -414,7 +415,7 @@ export const EditContentForm: React.FC<EditContentFormProps> = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Media Files <span className="text-xs text-gray-900">[{content?.files.length} file(s) exists]</span>
+                Media Files <span className="text-xs text-gray-900">[{contentFiles.length} file(s) exists]</span>
               </label>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
