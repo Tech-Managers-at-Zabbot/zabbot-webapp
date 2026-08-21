@@ -11,6 +11,7 @@ import {
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EditLessonForm } from "./EditLessonForm";
 import { EditContentForm } from "./EditContentForm";
+import { AddContentForm } from "./AddContentForm";
 import { Lesson } from "@/types/interfaces";
 import { ContentSourceType } from "@/types/enums";
 import { useAlert } from "next-alert";
@@ -29,6 +30,7 @@ interface LessonAccordionItemProps {
   onDelete: () => void;
   onEditContent: (content: Record<string, any>, lessonId: string) => void;
   onDeleteContent: (contentId: string, lessonId: string) => void;
+  onAddContent: (lessonId: string, languageId?: string) => void;
 }
 
 const isEditableContent = (content: Record<string, any>) =>
@@ -43,6 +45,7 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
   onDelete,
   onEditContent,
   onDeleteContent,
+  onAddContent,
 }) => {
   const { data: lessonWithContents, isLoading: contentsLoading } =
     useGetLessonWithContents(isExpanded ? lesson.id : undefined);
@@ -146,9 +149,18 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
           )}
 
           <div>
-            <span className="text-sm font-medium text-gray-700 block mb-2">
-              Content Items{contents.length > 0 ? `: ${contents.length}` : ""}
-            </span>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm font-medium text-gray-700">
+                Content Items{contents.length > 0 ? `: ${contents.length}` : ""}
+              </span>
+              <button
+                onClick={() => onAddContent(lesson.id, lesson.languageId)}
+                className="flex items-center text-sm text-blue-600 hover:text-blue-800 hover:cursor-pointer"
+              >
+                <Plus size={14} className="mr-1 inline" />
+                Add Content
+              </button>
+            </div>
             {contentsLoading ? (
               <p className="text-xs text-gray-500">Loading content...</p>
             ) : contents.length === 0 ? (
@@ -239,6 +251,10 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
   const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const [editingContent, setEditingContent] = useState<Record<string, any> | null>(null);
   const [editingContentLessonId, setEditingContentLessonId] = useState<string | null>(null);
+  const [addingContent, setAddingContent] = useState<{
+    lessonId: string;
+    languageId?: string;
+  } | null>(null);
 
   const { addAlert } = useAlert();
   const { mutate: handleUpdateLessonById } = useUpdateLessonById();
@@ -317,12 +333,31 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
 
   const handleSaveContent = () => {
     if (editingContent && editingContentLessonId) {
-      const { customText, translation, id } = editingContent;
+      const {
+        customText,
+        translation,
+        contentType,
+        proverb,
+        grammarTitle,
+        grammarSubtitle,
+        grammarDescription,
+        grammarExamples,
+        id,
+      } = editingContent;
       handleUpdateContentById(
         {
           contentId: id || "",
           lessonId: editingContentLessonId,
-          updateData: { customText, translation },
+          updateData: {
+            customText,
+            translation,
+            contentType,
+            proverb,
+            grammarTitle,
+            grammarSubtitle,
+            grammarDescription,
+            grammarExamples,
+          },
         },
         {
           onSuccess: () => {
@@ -381,6 +416,9 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
               onDelete={() => onDeleteLesson(lesson.id!)}
               onEditContent={handleEditContent}
               onDeleteContent={handleDeleteContent}
+              onAddContent={(lessonId, languageId) =>
+                setAddingContent({ lessonId, languageId })
+              }
             />
           ))}
         </div>
@@ -406,6 +444,14 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
             setEditingContentLessonId(null);
           }}
           isSaving={isSavingContent}
+        />
+      )}
+
+      {addingContent && (
+        <AddContentForm
+          lessonId={addingContent.lessonId}
+          languageId={addingContent.languageId}
+          onClose={() => setAddingContent(null)}
         />
       )}
     </div>

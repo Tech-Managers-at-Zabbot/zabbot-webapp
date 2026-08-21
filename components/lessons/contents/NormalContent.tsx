@@ -1,5 +1,6 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useEffect, useState } from "react";
 import MediaComponents from "../MediaRendererComponent";
 import Image from "next/image";
@@ -28,6 +29,10 @@ const NormalComponentComponent = ({
   }, [cleanContent])
 
   const [selectedTone, setSelectedTone] = useState<string | null>(null);
+
+  const hasContentImage = content?.files?.some(
+    (file: any) => file.contentType === "image"
+  );
 
   function splitTones(text: string): string[] {
     return text.trim().split(/\s+/);
@@ -63,14 +68,16 @@ const NormalComponentComponent = ({
         {lessonImg && (
           <div className="w-full mb-6 sm:mb-8">
             <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[10/4] mx-auto">
-              <Image
-                src={lessonImg}
-                alt="Lesson Image"
-                fill
-                priority
-                className="object-fill rounded-[20px] sm:rounded-[30px]"
-                sizes="(max-width: 640px) 90vw, (max-width: 768px) 500px, (max-width: 1024px) 400px, 400px"
-              />
+
+              {!hasContentImage && (
+                <Image
+                  src={lessonImg}
+                  alt="Lesson Image"
+                  fill
+                  priority
+                  className="object-fill rounded-[20px] sm:rounded-[30px]"
+                  sizes="(max-width: 640px) 90vw, (max-width: 768px) 500px, (max-width: 1024px) 400px, 400px"
+                />)}
 
               {/* Media Components - Positioned at bottom center of image */}
               {content?.files?.length > 0 && (
@@ -155,7 +162,7 @@ const NormalComponentComponent = ({
           onClose={() => setSelectedTone(null)}
         />
       )}
-      
+
       {showPronunciationModal && (
         <InLessonRecordWithPara
           isOpen={showPronunciationModal}
