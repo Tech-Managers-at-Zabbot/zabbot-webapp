@@ -99,6 +99,7 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
       ededunPhrases: sourceType === ContentSourceType.EDEDUN ? [] : undefined,
       customText: sourceType === ContentSourceType.NEW ? "" : undefined,
       contentType: sourceType === ContentSourceType.NEW ? "normal" : undefined,
+      isGrammarRule: false,
     };
 
     setContents((prev) => [...prev, newContent]);
@@ -117,12 +118,17 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
 
   const handleContentTypeChange = (index: number, newType: string) => {
     const currentTranslation = contents[index]?.translation;
-    if (newType === "grammar_rule") {
-      updateContent(index, { contentType: newType, translation: "Grammar Rule" });
+    const isGrammarRule = newType === "grammar_rule";
+    if (isGrammarRule) {
+      updateContent(index, {
+        contentType: newType,
+        isGrammarRule,
+        translation: "Grammar Rule",
+      });
     } else if (currentTranslation === "Grammar Rule") {
-      updateContent(index, { contentType: newType, translation: "" });
+      updateContent(index, { contentType: newType, isGrammarRule, translation: "" });
     } else {
-      updateContent(index, { contentType: newType });
+      updateContent(index, { contentType: newType, isGrammarRule });
     }
   };
 
@@ -369,6 +375,7 @@ const AddLessonModal: React.FC<AddLessonModalProps> = ({
       customText: content.customText,
       ededunPhrases: content.ededunPhrases,
       contentType: content.contentType,
+      isGrammarRule: content.contentType === "grammar_rule",
       proverb: content.proverb,
       grammarTitle: content.grammarTitle,
       grammarSubtitle: content.grammarSubtitle,

@@ -48,6 +48,8 @@ const LoginAuth: React.FC = () => {
     const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
     if (rememberedEmail) {
       setEmail(rememberedEmail);
+    } else {
+      setEmail("");
     }
   }, []);
 
@@ -60,9 +62,8 @@ const LoginAuth: React.FC = () => {
       const params = new URLSearchParams(searchParams.toString());
       params.delete("error");
 
-      const newUrl = `${window.location.pathname}${
-        params.toString() ? `?${params.toString()}` : ""
-      }`;
+      const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""
+        }`;
       router.replace(newUrl);
     }
   }, [searchParams, router]);
@@ -113,8 +114,6 @@ const LoginAuth: React.FC = () => {
 
             if (stayLoggedIn) {
               localStorage.setItem(REMEMBERED_EMAIL_KEY, email.toLowerCase().trim());
-            } else {
-              localStorage.removeItem(REMEMBERED_EMAIL_KEY);
             }
 
             setError({
@@ -135,7 +134,7 @@ const LoginAuth: React.FC = () => {
             if (
               error?.response?.data?.specialCodeMessage &&
               error?.response?.data?.specialCodeMessage[0] ===
-                "UNVERIFIED_ACCOUNT"
+              "UNVERIFIED_ACCOUNT"
             ) {
               router.push(
                 `/otp?email=${error?.response?.data?.specialCodeMessage[1]}`
@@ -304,11 +303,10 @@ const LoginAuth: React.FC = () => {
               }}
             >
               <span
-                className={`font-[500] ${
-                  isLoginLoading || isResetLoading || isResetLoading
-                    ? "cursor-not-allowed"
-                    : "hover:cursor-pointer"
-                }`}
+                className={`font-[500] ${isLoginLoading || isResetLoading || isResetLoading
+                  ? "cursor-not-allowed"
+                  : "hover:cursor-pointer"
+                  }`}
               >
                 {/* Reset it here. */}
                 {getPageText("reset_here")}
@@ -415,11 +413,10 @@ const LoginAuth: React.FC = () => {
           }}
         >
           <span
-            className={`font-[400] ${
-              isLoginLoading || isResetLoading || isResetLoading
-                ? "cursor-not-allowed"
-                : "hover:cursor-pointer"
-            }`}
+            className={`font-[400] ${isLoginLoading || isResetLoading || isResetLoading
+              ? "cursor-not-allowed"
+              : "hover:cursor-pointer"
+              }`}
           >
             {/* Create Account */}
             {getPageText("create_account")}

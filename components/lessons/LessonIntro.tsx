@@ -74,7 +74,7 @@ const LessonOneIntro = ({
 
           <div className="relative w-full max-w-[600px] mx-auto aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9]">
             <Image
-              src={lesson?.lessonImage || "/userDashboard/say-hello.svg"}
+              src={lesson?.lessonImg || "/userDashboard/say-hello.svg"}
               alt="Lesson Intro"
               fill
               priority
