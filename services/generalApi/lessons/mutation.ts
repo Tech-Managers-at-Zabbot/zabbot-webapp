@@ -660,7 +660,7 @@ export function useAddSingleContentFile() {
     },
     onSuccess: async (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["getLessonWithContents", variables.contentId],
+        queryKey: ["getLessonWithContents", variables.data],
       });
     },
     onError: (error: any) => {
