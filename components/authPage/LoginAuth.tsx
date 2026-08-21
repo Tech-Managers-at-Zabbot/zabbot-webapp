@@ -21,6 +21,8 @@ import { useSearchParams } from "next/navigation";
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
+const REMEMBERED_EMAIL_KEY = "remembered_email";
+
 const LoginAuth: React.FC = () => {
   const { getPageText, isPageLoading: isLanguageLoading } =
     usePageLanguage("login");
@@ -41,6 +43,13 @@ const LoginAuth: React.FC = () => {
     passwordError: false,
   });
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+    }
+  }, []);
 
   useEffect(() => {
     const googleAuthError = searchParams.get("error");
@@ -101,6 +110,12 @@ const LoginAuth: React.FC = () => {
               secure: true,
               sameSite: "strict",
             });
+
+            if (stayLoggedIn) {
+              localStorage.setItem(REMEMBERED_EMAIL_KEY, email.toLowerCase().trim());
+            } else {
+              localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+            }
 
             setError({
               emailError: false,
