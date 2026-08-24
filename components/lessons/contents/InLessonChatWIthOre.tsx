@@ -240,7 +240,7 @@ const sendMessage = async () => {
           ))}
           {loading && (
             <div className="text-gray-500 flex justify-end">
-              <div className="pr-14 text-lg">Òrẹ́ is typing...</div>
+              <div className="pr-14 text-lg">Ọ̀rẹ́ is typing...</div>
             </div>
           )}
         </div>
@@ -313,7 +313,7 @@ const sendMessage = async () => {
 
           <div className="flex flex-col items-center mt-2">
             <p className="text-gray-400 text-sm">
-              Òrẹ́ can make mistakes. Consider checking important information.
+              Ọ̀rẹ́ can make mistakes. Consider checking important information.
             </p>
           </div>
         </div>
