@@ -45,7 +45,7 @@ const AllCourseLessons = () => {
           <span
             className="font-semibold text-[12px] sm:text-[13px] lg:text-[15px] leading-tight text-[#207EC5] mt-1"
             style={{ color: "#207EC5" }}
-          >Joined
+          >
             {/* Building fluency through culture, sound, and everyday moments. */}
             {isCourseLessonsLoading
               ? null
