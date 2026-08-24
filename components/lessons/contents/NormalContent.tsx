@@ -131,7 +131,7 @@ const NormalComponentComponent = ({
                 >
                   <div className="flex items-center justify-center gap-2">
                     <div><FaArrowRight /></div>
-                    <div>Chat with Òrẹ́</div>
+                    <div>Chat with Ọ̀rẹ́</div>
                   </div>
                 </InAppButton>
               </div>

@@ -12,8 +12,8 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa6";
 import { useState } from "react";
-import { FiHeart } from "react-icons/fi";
-import LanguageToggle from "../languageToggle/LanguageToggle";
+
+// import LanguageToggle from "../languageToggle/LanguageToggle";
 import LessonProgress from "./LessonProgressTracker";
 import { Modal } from "../general/Modal";
 import { useLoading } from "@/contexts/LoadingProvider";
@@ -239,44 +239,14 @@ const LessonContent = () => {
           currentStep !== "lesson-completed" &&
           currentStep !== "completed" && (
             <div className="flex gap-2 sm:gap-4 items-center">
-              <div className="bg-[#FBCCBD] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2">
-                <img
-                  src="/lessons/fire.svg"
-                  alt="fire"
-                  className="w-4 h-4 sm:w-6 sm:h-6"
-                />
-                <span className="text-[#CC400C] font-semibold text-sm sm:text-lg md:text-xl">
-                  7
-                </span>
-              </div>
-
-              <div
-                className={`bg-[#EB5017] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2 
-                             //   startLoading || dashboardLoading
-                             //     ? "cursor-not-allowed"
-                             //     : "cursor-pointer"
-                             // }
-                             `}
-              // onClick={() => {
-              //   if (startLoading || dashboardLoading) return;
-              //   setDashboardLoading(true);
-              //   router.push("/user-dashboard");
-              // }}
-              >
-                <FiHeart className="w-4 h-4 sm:w-6 sm:h-6" fill="#FEEFEA" />
-                <span className="text-[#FEEFEA] font-semibold text-sm sm:text-lg md:text-xl">
-                  5
-                </span>
-              </div>
-
-              <div>
+              {/* <div>
                 <LanguageToggle
                   backgroundColor="#064a00"
                   color="#FFFFFF"
                   borderColor="#D9F3FF"
                   dropDownBgColor="#064a00"
                 />
-              </div>
+              </div> */}
             </div>
           )}
       </div>

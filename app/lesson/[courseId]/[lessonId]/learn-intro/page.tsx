@@ -79,30 +79,7 @@ const LessonDescriptionComponent = ({
           </div>
         </div>
         <div className="flex gap-2 sm:gap-4">
-          <div className="bg-[#FBCCBD] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2">
-            <img
-              src="/lessons/fire.svg"
-              alt="fire"
-              className="w-4 h-4 sm:w-6 sm:h-6"
-            />
-            <span className="text-[#CC400C] font-semibold text-sm sm:text-lg md:text-xl">
-              7
-            </span>
-          </div>
 
-          <div
-            className={`bg-[#EB5017] px-3 py-2 sm:p-2 rounded-full flex items-center gap-1 sm:gap-2 
-            //   startLoading || dashboardLoading
-            //     ? "cursor-not-allowed"
-            //     : "cursor-pointer"
-            // }
-            `}
-          >
-            <FiHeart className="w-4 h-4 sm:w-6 sm:h-6" fill="#FEEFEA" />
-            <span className="text-[#FEEFEA] font-semibold text-sm sm:text-lg md:text-xl">
-              5
-            </span>
-          </div>
         </div>
       </div>
       <section className="relative px-[3%] md:px-[5%] mt-6 md:mt-10 flex flex-col lg:flex-row justify-between items-center gap-8 lg:gap-4 pb-24 md:pb-32">
@@ -270,9 +247,12 @@ const LessonPreviewComponent = ({
     .split(/\(\d+\)\s*/)
     .filter((item: any) => item.trim() !== "");
 
-  const lines = lesson?.outcomes.split("\n");
-  // const title = lines[0];
-  const lessonOutcomes = lines.slice(1);
+  const outcomesLines = (lesson?.outcomes || "")
+    .split("\n")
+    .filter((line: string) => line.trim() !== "");
+  // when outcomes has multiple lines, the first line is a title to drop; otherwise keep the single line
+  const lessonOutcomes =
+    outcomesLines.length > 1 ? outcomesLines.slice(1) : outcomesLines;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-900 via-amber-800 to-yellow-900 px-6 flex items-center justify-center">
@@ -363,7 +343,7 @@ const LessonPreviewComponent = ({
               <p className="text-lg font-semibold text-green-700 mb-8">
                 By The End Of This Lesson, You'll Be Able To:
               </p>
-
+              
               {/* Outcomes List */}
               <ul className="space-y-4 mb-8">
                 {lessonOutcomes.map((outcome: any, index: number) => (

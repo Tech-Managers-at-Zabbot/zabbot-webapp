@@ -32,9 +32,7 @@ const ProverbsContentComponent = ({
           </h1>
 
           <h2 className="text-gray-800 text-lg font-normal md:text-xl mb-8">
-            <span className="font-bold text-[#F15B29]">Translation:</span> A
-            younger person does not give an older person a lecture. (Respect
-            elders.)
+            <span className="font-bold text-[#F15B29]">Translation:</span> {content?.translation}
           </h2>
           {/* Dynamic content area */}
           <div
@@ -52,9 +50,9 @@ const ProverbsContentComponent = ({
               />
             </div>
             <div className="w-full flex justify-end">
-            {content?.files?.length > 0 && (
-              <MediaComponents files={content.files} />
-            )}
+              {content?.files?.length > 0 && (
+                <MediaComponents files={content.files} />
+              )}
             </div>
           </div>
 
