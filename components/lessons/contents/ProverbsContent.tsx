@@ -30,7 +30,7 @@ const ProverbsContentComponent = ({
             <span className="text-[#F15B29] font-bold">Proverb:</span>{" "}
             {content?.proverb}
           </h1>
-          {console.log("content", content)}
+
           <h2 className="text-gray-800 text-lg font-normal md:text-xl mb-8">
             <span className="font-bold text-[#F15B29]">Translation:</span> {content?.translation}
           </h2>
