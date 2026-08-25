@@ -76,6 +76,7 @@ export interface Lesson {
   outcomes?: string;
   objectives?: string;
   lessonImg?:string;
+  isActive?: boolean;
 }
 
 export interface Course {

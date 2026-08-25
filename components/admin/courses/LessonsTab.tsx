@@ -284,10 +284,10 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
 
   const handleSaveLesson = () => {
     if (editingLesson) {
-      const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
+      const { description, estimatedDuration, headLineTag, isActive, objectives, orderNumber, outcomes, title, id } = editingLesson;
       handleUpdateLessonById({
         lessonId: editingLesson.id || '',
-        updateData: { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id },
+        updateData: { description, estimatedDuration, headLineTag, isActive, objectives, orderNumber, outcomes, title, id },
       });
       setEditingLesson(null);
     }

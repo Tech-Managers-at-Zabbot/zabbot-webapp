@@ -5,7 +5,7 @@ import UserLessonDataComponent, {
 } from "./UserLessonDataComponent";
 // import { DailyGoals, WordForTheDay } from "./UserGoals";
 import { useUser } from "@/contexts/UserContext";
-import { useGetCoursesWithLessons } from "@/services/generalApi/lessons/mutation";
+import { useGetCoursesWithLessons, useGetAllLessons } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 // import { useRouter } from "next/navigation";
@@ -15,31 +15,8 @@ import { usePageLanguage } from "@/contexts/LanguageContext";
 // const imagePathsArr: string[] = ["/userDashboard/say-hello.svg"];
 
 const ProgressSection = () => {
-  const { userDetails } = useUser();
-
   const { getPageText } = usePageLanguage("userDashboard");
-
-  const { data: coursesWithLessons, isLoading: lessonsLoading } =
-    useGetCoursesWithLessons(userDetails?.languageId);
-
-  const course = coursesWithLessons?.data?.course;
-
-  const courseLessons = coursesWithLessons?.data?.lessons;
-
-  // Prepare a shuffled copy of images to assign to lessons without repetition
-  // const shuffledImages = useMemo(() => getShuffledImages(imagePathsArr), []);
-
-  // Keep track of next image index (wrap around)
-  // const [imageIndex, setImageIndex] = useState(0);
-
-  // Map lessons with assigned images based on imageIndex and reset logic
-  // const lessonsWithImages = useMemo(() => {
-  //   if (!courseLessons) return [];
-  //   return courseLessons.map((lesson: Record<string, any>, idx: number) => {
-  //     const img = shuffledImages[idx % shuffledImages.length];
-  //     return { ...lesson, lessonImg: img };
-  //   });
-  // }, [courseLessons, shuffledImages]);
+  const { data: allLessonsData, isLoading: allLessonsLoading } = useGetAllLessons();
 
   return (
     <div className="flex flex-col xl:flex-row gap-[20px] w-full z-10">
@@ -50,34 +27,31 @@ const ProgressSection = () => {
           maxWidth="100%"
         >
           <section className="flex gap-[15px] min-w-max">
-            {lessonsLoading ? (
+            {allLessonsLoading ? (
               <div className="flex gap-[15px] min-w-max">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <DashboardMetricCardSkeleton key={index} />
                 ))}
               </div>
-            ) : !coursesWithLessons?.data || !courseLessons?.length ? (
+            ) : !allLessonsData?.data || !allLessonsData.data.length ? (
               <div className="flex gap-[15px] min-w-max">
                 <EmptyStateCard
                   // key={index}
                   title="No data"
-                  subtitle="No courses yet"
+                  subtitle="No Lesson yet"
                 />
               </div>
             ) : (
-              courseLessons?.map(
+              allLessonsData?.data?.map(
                 (lessonData: Record<string, any>, index: number) => (
                   <div key={index} className="flex-shrink-0">
                     <LessonProgressCard
                       data={lessonData}
-                      courseId={course?.id}
+                      courseId={lessonData?.courseId}
                       lessonId={lessonData?.id}
-                      imagePath={
-                        index === 0 || index === 1
-                          ? lessonData.lessonImg
-                          : "/userDashboard/yoruba/coming-soon.svg"
+                      imagePath={lessonData.lessonImg || "/userDashboard/yoruba/coming-soon.svg"
                       }
-                      isClickable
+                      isClickable={lessonData?.isActive}
                     />
                   </div>
                 )
