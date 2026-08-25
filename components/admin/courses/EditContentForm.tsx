@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef, useState } from "react";
+import NextImage from "next/image";
 import { Save, Trash2, Upload } from "lucide-react";
 import { MdOutlineCancel } from "react-icons/md";
 import { useAlert } from "next-alert";
@@ -503,9 +504,11 @@ export const EditContentForm: React.FC<EditContentFormProps> = ({
                         </span>
 
                         {file.contentType === ContentDataType.IMAGE && (
-                          <img
+                          <NextImage
                             src={file.filePath}
                             alt="Preview"
+                            width={64}
+                            height={64}
                             className="w-16 h-16 object-cover rounded mr-2 shrink-0"
                           />
                         )}
