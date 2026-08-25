@@ -173,6 +173,12 @@ export async function getUserLessons() {
   return response.data;
 }
 
+// Get all lessons: GET / lessons 
+export async function getAllLessons() {
+  const response = await axiosInstance.get("/lessons/lessons");
+  return response.data;
+}
+
 // Get a single user lesson GET /lessons/user-lessons/{{lessonId}}
 export async function getUserLesson(lessonId: string) {
   const response = await axiosInstance.get(`/lessons/user-lessons/${lessonId}`);

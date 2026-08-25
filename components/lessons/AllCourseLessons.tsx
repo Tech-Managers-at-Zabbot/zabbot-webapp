@@ -37,7 +37,7 @@ const AllCourseLessons = () => {
             className="font-semibold flex flex-col text-[18px] sm:text-[20px] lg:text-[24px] leading-tight text-[#162B6E]"
             style={{ color: theme === "dark" ? "white" : "#162B6E" }}
           >
-            {/* Immersing you in Yorùbá, one step at a time */}
+            
             {isCourseLessonsLoading
               ? "Loading course details..."
               : courseInfo[0]?.course?.title || "Course Title"}

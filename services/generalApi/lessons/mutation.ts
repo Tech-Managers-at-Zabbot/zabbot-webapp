@@ -35,6 +35,7 @@ import {
   addContentFile,
   deleteContentFile,
   addSingleContentFile,
+  getAllLessons,
 } from "./api";
 
 export function useCreateCourseWithLessons() {
@@ -115,6 +116,16 @@ export function useGetAllCourses(
     //   onError: (error) => {
     //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
     //   },
+  });
+}
+
+export function useGetAllLessons(
+) {
+  return useQuery({
+    queryKey: ["getAllLessons"],
+    queryFn: () => getAllLessons(),
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 }
 

@@ -175,7 +175,7 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
                     className="text-xs text-gray-500 bg-gray-50 p-2 rounded flex items-start justify-between gap-2"
                   >
                     <div className="flex-1 min-w-0">
-                      {content.customText && (
+                      {content.customText || content?.isGrammarRule && (
                         <>
                           {content.customText.startsWith("<") ? (
                             <span
@@ -184,7 +184,7 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
                               }}
                             />
                           ) : (
-                            content.customText
+                            content.grammarTitle || content.customText
                           )}
                         </>
                       )}
@@ -284,10 +284,10 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({
 
   const handleSaveLesson = () => {
     if (editingLesson) {
-      const { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id } = editingLesson;
+      const { description, estimatedDuration, headLineTag, isActive, objectives, orderNumber, outcomes, title, id } = editingLesson;
       handleUpdateLessonById({
         lessonId: editingLesson.id || '',
-        updateData: { description, estimatedDuration, headLineTag, objectives, orderNumber, outcomes, title, id },
+        updateData: { description, estimatedDuration, headLineTag, isActive, objectives, orderNumber, outcomes, title, id },
       });
       setEditingLesson(null);
     }

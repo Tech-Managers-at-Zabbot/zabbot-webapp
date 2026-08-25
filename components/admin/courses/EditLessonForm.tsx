@@ -179,6 +179,20 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
                   </button>
                 </div>
               )}
+
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={!!lesson.isActive}
+                  onChange={(e) =>
+                    onLessonChange("isActive", e.target.checked)
+                  }
+                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                />
+                <span className="ml-2 text-sm text-gray-700">
+                  Lesson is active
+                </span>
+              </label>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
