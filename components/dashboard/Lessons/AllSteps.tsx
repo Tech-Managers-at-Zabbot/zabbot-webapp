@@ -27,7 +27,6 @@ const AllSteps = () => {
 
   const [allSteps, setAllSteps] = useState<any[]>([])
 
-  console.log('steps', allLanguageSteps)
 
   // const allSteps = allLanguageSteps?.data;
 
@@ -228,7 +227,7 @@ const AllSteps = () => {
                   >
                     <StepsCard
                       data={lessonProgressData}
-                      isClickable
+                      isClickable={lessonProgressData?.isActive}
                     />
                   </div>
                 )
