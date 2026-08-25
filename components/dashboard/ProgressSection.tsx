@@ -3,16 +3,10 @@ import React from "react";
 import UserLessonDataComponent, {
   LessonProgressCard,
 } from "./UserLessonDataComponent";
-// import { DailyGoals, WordForTheDay } from "./UserGoals";
-import { useUser } from "@/contexts/UserContext";
-import { useGetCoursesWithLessons, useGetAllLessons } from "@/services/generalApi/lessons/mutation";
+import { useGetAllLessons } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
-// import { useRouter } from "next/navigation";
-// import { getShuffledImages } from "@/utilities/utilities";
 import { usePageLanguage } from "@/contexts/LanguageContext";
-
-// const imagePathsArr: string[] = ["/userDashboard/say-hello.svg"];
 
 const ProgressSection = () => {
   const { getPageText } = usePageLanguage("userDashboard");
@@ -60,17 +54,6 @@ const ProgressSection = () => {
           </section>
         </UserLessonDataComponent>
       </section>
-
-      {/* <section className="flex-shrink-0 xl:w-[40%] w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
-          <div className="h-full">
-            <DailyGoals />
-          </div>
-          <div className="h-full">
-            <WordForTheDay />
-          </div>
-        </div>
-      </section> */}
     </div>
   );
 };
