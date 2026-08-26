@@ -78,6 +78,25 @@ const CourseForm: React.FC<CourseFormProps> = ({
             border="0"
           />
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Order Number *
+          </label>
+          <NormalInputField
+            id="courseOrder"
+            value={courseData.orderNumber?.toString() || ""}
+            onChange={(e) =>
+              handleCourseChange("orderNumber", parseInt(e.target.value) || 0)
+            }
+            placeholder="Enter order number"
+            type="number"
+            error={!!courseErrors.orderNumber}
+            errorMessage={courseErrors.orderNumber}
+            backgroundColor="#E3EFFC"
+            border="0"
+          />
+        </div>
       </div>
 
       {/* Course Thumbnail Image */}

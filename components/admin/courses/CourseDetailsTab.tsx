@@ -249,6 +249,22 @@ export const CourseDetailsTab: React.FC<CourseDetailsTabProps> = ({
         </div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Order Number
+          </label>
+          <input
+            type="number"
+            value={courseData.orderNumber ?? ""}
+            onChange={(e) =>
+              onCourseChange("orderNumber", parseInt(e.target.value) || 0)
+            }
+            className="w-full px-3 py-2 text-[#252525] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+
       <div className="pt-4 border-t border-gray-200">
         <button
           onClick={onSaveCourse}

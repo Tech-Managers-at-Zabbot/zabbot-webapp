@@ -15,6 +15,7 @@ export const courseSchema = z.object({
   level: z.nativeEnum(Level, {
     errorMap: () => ({ message: "Please select a level" }),
   }),
+  orderNumber: z.number().min(1, "Order must be at least 1"),
   estimatedDuration: z
     .number()
     .min(1, "Estimated duration must be at least 1 minute")

@@ -85,6 +85,7 @@ export interface Course {
   description?: string;
   languageId: string;
   level: Level;
+  orderNumber: number;
   isActive: boolean;
   estimatedDuration?: number;
   totalLessons?: number;
