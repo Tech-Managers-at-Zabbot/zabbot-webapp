@@ -349,7 +349,7 @@ const ViewCourseModal: React.FC<ViewCourseModalProps> = ({
                                   {content?.customText && (
                                     <div className="mb-2">
                                       <p className="text-sm text-gray-700">
-                                        {content.customText.startsWith("<") ? (
+                                        {content?.customText?.startsWith("<") ? (
                                           <span
                                             dangerouslySetInnerHTML={{
                                               __html: content.customText,
