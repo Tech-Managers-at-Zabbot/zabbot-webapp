@@ -177,7 +177,7 @@ const LessonAccordionItem: React.FC<LessonAccordionItemProps> = ({
                     <div className="flex-1 min-w-0">
                       {content.customText || content?.isGrammarRule && (
                         <>
-                          {content.customText.startsWith("<") ? (
+                          {content?.customText?.startsWith("<") ? (
                             <span
                               dangerouslySetInnerHTML={{
                                 __html: content.customText,
