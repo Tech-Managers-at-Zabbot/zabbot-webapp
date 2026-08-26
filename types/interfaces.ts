@@ -101,3 +101,20 @@ export interface CreateCoursePayload {
     contents: Array<Omit<Content, 'id' | 'lessonId'>>;
   }>;
 }
+
+export interface FlashcardIconAttribution {
+  name: string;
+  url: string;
+}
+
+export interface Flashcard {
+  id?: string;
+  language: string;
+  yorubaWord: string;
+  englishWord: string;
+  transcription: string;
+  tonal: string;
+  image: string;
+  audio: string[];
+  iconAttribution: FlashcardIconAttribution;
+}

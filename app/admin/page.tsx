@@ -18,6 +18,8 @@ import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/Dashbo
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import AddQuizModal from "@/components/admin/courses/AddQuizModal";
 import AddLessonModal from "@/components/admin/courses/AddLessonModal";
+import FlashcardsListModal from "@/components/admin/flashcards/FlashcardsListModal";
+import { Layers } from "lucide-react";
 
 const CourseManagementPage: React.FC = () => {
   const { userDetails } = useUser();
@@ -33,6 +35,8 @@ const CourseManagementPage: React.FC = () => {
   const handleOpenAddLessonModal = () => {
     setShowAddLessonModal(true);
   };
+
+  const [showFlashcardsModal, setShowFlashcardsModal] = useState(false);
 
   const { mutate: handleDelLesson } = useDeleteLessonById()
   const { data: allCoursesData, isLoading: allCoursesLoading } =
@@ -162,21 +166,35 @@ const CourseManagementPage: React.FC = () => {
               <h1 className="text-3xl font-bold">Admin Management</h1>
               <p className="mt-2">Manage your language learning journeys</p>
             </div>
-            <InAppButton
-              onClick={() => {
-                setLoading(true);
-                router.push("/admin/create-course");
-              }}
-              background={theme === "dark" ? "#dff9fb" : "#012657"}
-            >
-              <div
-                className="text-white flex justify-center items-center"
-                style={{ color: theme === "dark" ? "#012657" : "#dff9fb" }}
+            <div className="flex items-center gap-3">
+              <InAppButton
+                onClick={() => setShowFlashcardsModal(true)}
+                background={theme === "dark" ? "#dff9fb" : "#012657"}
               >
-                <Plus size={20} className="mr-2" />
-                Create New Journey
-              </div>
-            </InAppButton>
+                <div
+                  className="text-white flex justify-center items-center"
+                  style={{ color: theme === "dark" ? "#012657" : "#dff9fb" }}
+                >
+                  <Layers size={20} className="mr-2" />
+                  Flash Cards
+                </div>
+              </InAppButton>
+              <InAppButton
+                onClick={() => {
+                  setLoading(true);
+                  router.push("/admin/create-course");
+                }}
+                background={theme === "dark" ? "#dff9fb" : "#012657"}
+              >
+                <div
+                  className="text-white flex justify-center items-center"
+                  style={{ color: theme === "dark" ? "#012657" : "#dff9fb" }}
+                >
+                  <Plus size={20} className="mr-2" />
+                  Create New Journey
+                </div>
+              </InAppButton>
+            </div>
           </div>
         </div>
 
@@ -310,6 +328,10 @@ const CourseManagementPage: React.FC = () => {
           }}
         />
       )}
+      <FlashcardsListModal
+        isOpen={showFlashcardsModal}
+        onClose={() => setShowFlashcardsModal(false)}
+      />
     </div>
   );
 };
