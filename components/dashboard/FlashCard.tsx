@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import InAppButton from "../InAppButton";
 import { useRouter } from "next/navigation"
 import { useLoading } from "@/contexts/LoadingProvider";
-import { flashcardsData } from "@/constants/flashcards";
+import { CustomSpinner } from "@/components/CustomSpinner";
+import { useGetAllFlashcards } from "@/services/generalApi/flashcards/mutation";
+import { Flashcard } from "@/types/interfaces";
 import { FLASHCARD_STORAGE_KEY } from "@/constants/localstorageKeys";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
@@ -12,6 +14,13 @@ const FlashCard = () => {
   const [flashCardIndex, setCurrentFlashCardIndex] = useState(0);
 
   const { getPageText } = usePageLanguage("userDashboard");
+  const { data: flashcardsResponse, isLoading: flashcardsLoading } =
+    useGetAllFlashcards();
+
+  const flashcardsData: Flashcard[] = Array.isArray(flashcardsResponse?.data)
+    ? flashcardsResponse.data
+    : [];
+
   const handleRedirect = () => {
     setLoading(true)
     return router.push("/flashcards")
@@ -25,7 +34,7 @@ const FlashCard = () => {
     }
   }, []);
 
-  const card = flashcardsData[flashCardIndex];
+  const card = flashcardsData[flashCardIndex] || flashcardsData[0];
 
   return (
     <div
@@ -33,7 +42,13 @@ const FlashCard = () => {
       style={{ fontFamily: "Lexend" }}
     >
       <div className="text-[#162B6E] text-[23px] font-[600]">{getPageText("flash_cards")}</div>
-      <div className="text-[#000000CC] font-[700] text-[36px]">{card.yorubaWord}</div>
+      <div className="text-[#000000CC] font-[700] text-[36px]">
+        {flashcardsLoading ? (
+          <CustomSpinner title="" isShowTitle={false} spinnerColor="#162B6E" />
+        ) : (
+          card?.yorubaWord || "-"
+        )}
+      </div>
       <div className="text-[#666666] font-[400]">
         {getPageText("mastering_alphabet_sounds")}
       </div>
