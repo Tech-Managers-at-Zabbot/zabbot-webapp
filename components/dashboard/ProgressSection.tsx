@@ -36,20 +36,25 @@ const ProgressSection = () => {
                 />
               </div>
             ) : (
-              allLessonsData?.data?.map(
-                (lessonData: Record<string, any>, index: number) => (
-                  <div key={index} className="flex-shrink-0">
-                    <LessonProgressCard
-                      data={lessonData}
-                      courseId={lessonData?.courseId}
-                      lessonId={lessonData?.id}
-                      imagePath={lessonData.lessonImg || "/userDashboard/yoruba/coming-soon.svg"
-                      }
-                      isClickable={lessonData?.isActive}
-                    />
-                  </div>
+              [...allLessonsData.data]
+                .sort(
+                  (a: Record<string, any>, b: Record<string, any>) =>
+                    Number(Boolean(b?.isActive)) - Number(Boolean(a?.isActive))
                 )
-              )
+                .map(
+                  (lessonData: Record<string, any>, index: number) => (
+                    <div key={index} className="flex-shrink-0">
+                      <LessonProgressCard
+                        data={lessonData}
+                        courseId={lessonData?.courseId}
+                        lessonId={lessonData?.id}
+                        imagePath={lessonData.lessonImg || "/userDashboard/yoruba/coming-soon.svg"
+                        }
+                        isClickable={lessonData?.isActive}
+                      />
+                    </div>
+                  )
+                )
             )}
           </section>
         </UserLessonDataComponent>
