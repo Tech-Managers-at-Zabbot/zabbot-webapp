@@ -116,5 +116,5 @@ export interface Flashcard {
   tonal: string;
   image: string;
   audio: string[];
-  iconAttribution: FlashcardIconAttribution;
+  iconAttributions: FlashcardIconAttribution;
 }

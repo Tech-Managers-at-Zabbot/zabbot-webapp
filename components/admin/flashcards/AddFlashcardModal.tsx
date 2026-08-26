@@ -79,8 +79,8 @@ const AddFlashcardModal: React.FC<AddFlashcardModalProps> = ({
         transcription: editingFlashcard.transcription || "",
         tonal: editingFlashcard.tonal || "",
         image: editingFlashcard.image || "",
-        iconAttributionName: editingFlashcard.iconAttribution?.name || "",
-        iconAttributionUrl: editingFlashcard.iconAttribution?.url || "",
+        iconAttributionName: editingFlashcard.iconAttributions?.name || "",
+        iconAttributionUrl: editingFlashcard.iconAttributions?.url || "",
       });
       const existingAudio = editingFlashcard.audio?.length
         ? editingFlashcard.audio
@@ -235,7 +235,7 @@ const AddFlashcardModal: React.FC<AddFlashcardModalProps> = ({
       tonal: formData.tonal.trim(),
       image: formData.image,
       audio: audioSlots.map((slot) => slot.url).filter(Boolean),
-      iconAttribution: {
+      iconAttributions: {
         name: formData.iconAttributionName.trim(),
         url: formData.iconAttributionUrl.trim(),
       },
