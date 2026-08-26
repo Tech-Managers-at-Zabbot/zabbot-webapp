@@ -21,7 +21,9 @@ const AllCourses = () => {
   const { theme } = useTheme();
 
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
-    userDetails?.languageId
+    userDetails?.languageId,
+    true,
+    true
   );
 
   const allData = allCourses?.data;
@@ -312,7 +314,7 @@ const AllCourses = () => {
                   >
                     <CoursesCard
                       data={lessonProgressData}
-                      isClickable
+                      isClickable={lessonProgressData?.isActive}
                     />
                   </div>
                 )

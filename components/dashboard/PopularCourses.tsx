@@ -13,7 +13,9 @@ import { usePageLanguage } from "@/contexts/LanguageContext";
 const PopularCourses = () => {
   const { userDetails } = useUser();
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
-    userDetails?.languageId
+    userDetails?.languageId,
+    true,
+    true
   );
 
   const { getPageText } = usePageLanguage("userDashboard");
@@ -62,6 +64,7 @@ const PopularCourses = () => {
                     <div key={index}>
                       <LessonsCard
                         data={lessonProgressData}
+                        isClickable={lessonProgressData?.isActive}
                       />
 
                     </div>
