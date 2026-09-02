@@ -3,7 +3,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Plus, Search, Filter } from "lucide-react";
-import { Course, Lesson } from "@/types/interfaces";
+import { Course } from "@/types/interfaces";
 import { Level } from "@/types/enums";
 import CourseList from "@/components/admin/courses/CourseList";
 import ViewCourseModal from "@/components/admin/courses/ViewCourseModal";
@@ -12,31 +12,45 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import InAppButton from "@/components/InAppButton";
 import { useTheme } from "@/contexts/ThemeProvider";
-import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
+import { useDeleteLessonById, useDeleteQuizById, useGetAllCourses, useGetCourseLessons, useUpdateCourse } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import AddQuizModal from "@/components/admin/courses/AddQuizModal";
+import AddLessonModal from "@/components/admin/courses/AddLessonModal";
+import FlashcardsListModal from "@/components/admin/flashcards/FlashcardsListModal";
+import { Layers } from "lucide-react";
 
 const CourseManagementPage: React.FC = () => {
   const { userDetails } = useUser();
 
   const [showAddQuizModal, setShowAddQuizModal] = useState(false);
-  const handleOpenAddQuizModal = () => {
+  const [editingQuiz, setEditingQuiz] = useState<any | null>(null);
+  const handleOpenAddQuizModal = (quiz?: any) => {
+    setEditingQuiz(quiz || null);
     setShowAddQuizModal(true);
   };
 
-  const { data: allCoursesData, isLoading: allCoursesLoading } =
-    useGetAllCourses(userDetails?.languageId);
+  const [showAddLessonModal, setShowAddLessonModal] = useState(false);
+  const handleOpenAddLessonModal = () => {
+    setShowAddLessonModal(true);
+  };
 
-  const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
+  const [showFlashcardsModal, setShowFlashcardsModal] = useState(false);
+
+  const { mutate: handleDelLesson } = useDeleteLessonById()
+  const { data: allCoursesData, isLoading: allCoursesLoading } =
+    useGetAllCourses(userDetails?.languageId, true, true);
+  const { mutate: handleCourseUpdate } = useUpdateCourse();
+
+  const { mutate: handleDeleteQuizById } = useDeleteQuizById();
+
+  // const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
   const allCoursesWithThumbnails = Array.isArray(allCoursesData?.data)
-    ? allCoursesData?.data.map((step: Record<string, any>, index: number) => ({
-        ...step,
-        thumbnailImage:
-          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
-      }))
+    ? allCoursesData?.data.map((step: Record<string, any>) => ({
+      ...step
+    }))
     : [];
 
   const router = useRouter();
@@ -57,6 +71,12 @@ const CourseManagementPage: React.FC = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | any>({});
+
+  const { data: selectedCourseLessons } = useGetCourseLessons(
+    selectedCourse?.id
+  );
+  const nextLessonOrderNumber =
+    (selectedCourseLessons?.data?.length || 0) + 1;
 
   // Filter courses based on search and filters
   const filteredCourses = courses?.filter((course: Record<string, any>) => {
@@ -97,26 +117,31 @@ const CourseManagementPage: React.FC = () => {
 
   const handleDeleteCourse = (courseId: string) => {
     setCourses((prev) => prev.filter((course) => course.id !== courseId));
-    console.log("Deleting course:", courseId);
   };
 
   const handleSaveCourse = (courseData: Course) => {
-    setCourses((prev) =>
-      prev.map((course) => (course.id === courseData.id ? courseData : course))
-    );
-    console.log("Saving course:", courseData);
+    handleCourseUpdate({ courseId: courseData.id, updateData: courseData })
+    // setCourses((prev) =>
+    //   prev.map((course) => (course.id === courseData.id ? courseData : course))
+    // );
+
   };
 
-  const handleSaveLesson = (lessonData: Lesson) => {
-    console.log("Saving lesson:", lessonData);
+  const handleSaveLesson = () => {
+  };
+
+  const handleLessonCreated = () => {
+    setTimeout(() => {
+      setEditModalOpen(true);
+    }, 100);
   };
 
   const handleDeleteLesson = (lessonId: string) => {
-    console.log("Deleting lesson:", lessonId);
+    handleDelLesson(lessonId);
   };
 
   const handleDeleteQuiz = (quizId: string) => {
-    console.log("Deleting quiz:", quizId);
+    handleDeleteQuizById(quizId);
   };
 
   const clearFilters = () => {
@@ -136,26 +161,42 @@ const CourseManagementPage: React.FC = () => {
       <div className="px-[5%] relative w-full mx-auto pt-6">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}>
-              <h1 className="text-3xl font-bold">Admin Management</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">Admin Management</h1>
               <p className="mt-2">Manage your language learning journeys</p>
             </div>
-            <InAppButton
-              onClick={() => {
-                setLoading(true);
-                router.push("/admin/create-course");
-              }}
-              background={theme === "dark" ? "#dff9fb" : "#012657"}
-            >
-              <div
-                className="text-white flex justify-center items-center"
-                style={{ color: theme === "dark" ? "#012657" : "#dff9fb" }}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+              <InAppButton
+                onClick={() => setShowFlashcardsModal(true)}
+                background={theme === "dark" ? "#dff9fb" : "#012657"}
+                className="!w-full sm:!w-[230px]"
               >
-                <Plus size={20} className="mr-2" />
-                Create New Journey
-              </div>
-            </InAppButton>
+                <div
+                  className="text-white flex justify-center items-center whitespace-nowrap"
+                  style={{ color: theme === "dark" ? "#012657" : "#dff9fb" }}
+                >
+                  <Layers size={20} className="mr-2" />
+                  Flash Cards
+                </div>
+              </InAppButton>
+              <InAppButton
+                onClick={() => {
+                  setLoading(true);
+                  router.push("/admin/create-course");
+                }}
+                background={theme === "dark" ? "#dff9fb" : "#012657"}
+                className="!w-full sm:!w-[230px]"
+              >
+                <div
+                  className="text-white flex justify-center items-center whitespace-nowrap"
+                  style={{ color: theme === "dark" ? "#012657" : "#dff9fb" }}
+                >
+                  <Plus size={20} className="mr-2" />
+                  Create New Journey
+                </div>
+              </InAppButton>
+            </div>
           </div>
         </div>
 
@@ -221,7 +262,6 @@ const CourseManagementPage: React.FC = () => {
             <div className="flex gap-[15px] min-w-max">
               {/* {Array.from({ length: 6 }).map((_, index) => ( */}
               <EmptyStateCard
-                // key={index}
                 title="No data"
                 subtitle="No courses yet"
               />
@@ -258,6 +298,18 @@ const CourseManagementPage: React.FC = () => {
           onDeleteLesson={handleDeleteLesson}
           onDeleteQuiz={handleDeleteQuiz}
           onOpenAddQuizModal={handleOpenAddQuizModal}
+          onOpenAddLessonModal={handleOpenAddLessonModal}
+        />
+      )}
+
+      {selectedCourse && (
+        <AddLessonModal
+          isOpen={showAddLessonModal}
+          onClose={() => setShowAddLessonModal(false)}
+          courseId={selectedCourse.id}
+          languageId={selectedCourse.languageId}
+          nextOrderNumber={nextLessonOrderNumber}
+          onSaveLesson={handleLessonCreated}
         />
       )}
 
@@ -266,12 +318,21 @@ const CourseManagementPage: React.FC = () => {
           isOpen={showAddQuizModal}
           onClose={() => {
             setShowAddQuizModal(false);
+            setEditingQuiz(null);
           }}
           courseId={selectedCourse.id}
           languageId={selectedCourse.languageId}
-          onSaveQuiz={handleSaveQuiz}
+          editingQuiz={editingQuiz}
+          onSaveQuiz={() => {
+            setEditingQuiz(null);
+            handleSaveQuiz();
+          }}
         />
       )}
+      <FlashcardsListModal
+        isOpen={showFlashcardsModal}
+        onClose={() => setShowFlashcardsModal(false)}
+      />
     </div>
   );
 };

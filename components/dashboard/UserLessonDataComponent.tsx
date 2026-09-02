@@ -8,40 +8,41 @@ import { TfiArrowCircleRight } from "react-icons/tfi";
 import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useTheme } from "@/contexts/ThemeProvider";
+// import { TfiArrowCircleRight } from "react-icons/tfi";
+import { IoIosArrowDroprightCircle } from "react-icons/io";
+import InAppButton from "../InAppButton";
 
 export const LessonProgressCard = ({
   data,
   courseId,
   lessonId,
-  imagePath = '/lessons/yoruba.avif',
-  isClickable = true
+  imagePath = "/lessons/yoruba.avif",
+  isClickable = true,
 }: {
   data: Record<string, any>;
   courseId?: string;
   lessonId?: string;
-  imagePath?:string;
+  imagePath?: string;
   isClickable?: boolean;
 }) => {
   const router = useRouter();
 
   const { setLoading } = useLoading();
 
-
   return (
     <div
-  className={`bg-white flex relative transition-all duration-300 gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0 ${
-    isClickable 
-      ? 'hover:cursor-pointer transform hover:scale-105 hover:shadow-xl' 
-      : 'opacity-60 cursor-not-allowed'
-  }`}
-  style={{ fontFamily: "Lexend" }}
-  onClick={() => {
-    if (isClickable) {
-      router.push(`/lesson/${courseId}/${lessonId}/learn-intro`);
-      setLoading(true);
-    }
-  }}
->
+      className={`bg-white flex relative transition-all duration-300 gap-[10px] w-[350px] sm:w-[400px] h-[188px] rounded-sm border flex-shrink-0 ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
+      style={{ fontFamily: "Lexend" }}
+      onClick={() => {
+        if (isClickable) {
+          router.push(`/lesson/${courseId}/${lessonId}/learn-intro`);
+          setLoading(true);
+        }
+      }}
+    >
       <section className="w-1/2 flex-shrink-0">
         <div className="relative w-[170px] sm:w-[194px] h-full">
           <Image
@@ -53,16 +54,16 @@ export const LessonProgressCard = ({
           />
         </div>
       </section>
-      {/* 
+
       <section
-        className="absolute hover:cursor-pointer top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={() => {
-          router.push("/lesson");
-          setLoading(true);
-        }}
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      // onClick={() => {
+      //   router.push("/lesson");
+      //   setLoading(true);
+      // }}
       >
-        <div className="flex-shrink-0">
-          <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
+        <div className="flex-shrink-0 rounded-full bg-white">
+          {/* <div className="relative w-[40px] sm:w-[48px] h-[40px] sm:h-[48px]">
             <Image
               src="/userDashboard/hand-click-element.svg"
               alt="A hand clicking the card"
@@ -70,9 +71,10 @@ export const LessonProgressCard = ({
               priority
               className="object-cover rounded-l-sm"
             />
-          </div>
+          </div> */}
+          <IoIosArrowDroprightCircle size={40} color="#207EC5" fill="#207EC5" />
         </div>
-      </section> */}
+      </section>
 
       <section className="flex flex-col justify-between p-[10px] w-1/2 pr-4 min-w-0">
         <div className="flex flex-col gap-[8px]">
@@ -81,11 +83,11 @@ export const LessonProgressCard = ({
               ? data?.title.slice(0, 15) + "..."
               : data?.title}
           </h3>
-          {/* <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%] line-clamp-3">
-          {data?.description?.length > 50
-              ? data?.description.slice(0, 50) + "..."
-              : data?.description}
-          </div> */}
+          <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%] line-clamp-3">
+            {data?.headLineTag?.length > 150
+              ? data?.headLineTag.slice(0, 150) + "..."
+              : data?.headLineTag}
+          </div>
         </div>
 
         <div className="flex flex-col gap-[4px]">
@@ -115,24 +117,32 @@ export const LessonProgressCard = ({
   );
 };
 
-export const CoursesCard = ({ data, isClickable = false }: { data: any; isClickable?: boolean }) => {
+export const CoursesCard = ({
+  data,
+  isClickable = false,
+}: {
+  data: any;
+  isClickable?: boolean;
+}) => {
   const router = useRouter();
   const { setLoading } = useLoading();
 
   const { theme } = useTheme();
 
-
   return (
     <div
-      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${ isClickable ? 'hover:cursor-pointer transform hover:scale-105 hover:shadow-xl' : 'opacity-60 cursor-not-allowed'}`}
+      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{
         fontFamily: "Lexend",
         background: theme === "dark" ? "#012657" : "#FFFFFF",
       }}
       onClick={() => {
-        if(isClickable){
-        router.push(`/lesson/${data?.id}`);
-        setLoading(true);
+        if (isClickable) {
+          router.push(`/lesson/${data?.id}`);
+          setLoading(true);
         }
       }}
     >
@@ -217,24 +227,33 @@ export const CoursesCard = ({ data, isClickable = false }: { data: any; isClicka
   );
 };
 
-export const LessonsCard = ({ data, isClickable = false }: { data: any; isClickable?:boolean }) => {
+export const LessonsCard = ({
+  data,
+  isClickable = true,
+}: {
+  data: any;
+  isClickable?: boolean;
+}) => {
   const router = useRouter();
   const { setLoading } = useLoading();
 
   return (
     <div
       // className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[325px] rounded-lg border border-[#E1E1E1] flex-shrink-0 mx-auto"
-      className={`flex flex-col relative gap-[20px] w-full h-[330px] max-w-[278px] min-w-[300px] rounded-[14px] border border-[#254E83] ${ isClickable ? 'hover:cursor-pointer transform hover:scale-105 hover:shadow-xl' : 'opacity-60 cursor-not-allowed'}`}
+      className={`flex flex-col bg-white relative gap-[20px] w-full h-[300px] max-w-[278px] min-w-[300px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{ fontFamily: "Lexend" }}
       onClick={() => {
-        if(isClickable){
-        router.push(`/lesson/${data?.id}`);
-        setLoading(true);
+        if (isClickable) {
+          router.push(`/lesson/${data?.id}`);
+          setLoading(true);
         }
       }}
     >
       <section className="w-full p-1">
-        <div className="relative w-full h-[200px]">
+        <div className="relative w-full h-[150px]">
           <Image
             src={data?.thumbnailImage || "/lessons/yoruba.avif"}
             alt="An image of a boy prostrating before an elderly woman in greeting"
@@ -245,42 +264,6 @@ export const LessonsCard = ({ data, isClickable = false }: { data: any; isClicka
         </div>
       </section>
 
-      {/* <section
-        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={() => {
-          router.push("/lesson");
-          setLoading(true);
-        }}
-      >
-        <div className="flex-shrink-0">
-          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
-            <Image
-              src="/userDashboard/hand-click-element.svg"
-              alt="A hand clicking the card"
-              fill
-              priority
-              className="object-cover rounded-l-sm"
-            />
-          </div>
-        </div>
-      </section> */}
-
-      {/* <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
-        <div
-          className={`px-[12px] py-[8px] border rounded-md`}
-          style={{
-            color:
-              data.level === "foundation"
-                ? "#D3AF37"
-                : data.level === "builder"
-                ? "#CF0A5C"
-                : "#169A9C",
-          }}
-        >
-          {data?.level}
-        </div>
-      </section> */}
-
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
           <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%] text-[#000000]">
@@ -288,11 +271,6 @@ export const LessonsCard = ({ data, isClickable = false }: { data: any; isClicka
               ? data?.title.slice(0, 50) + "..."
               : data?.title}
           </h3>
-          {/* <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
-            {data?.description?.length > 50
-              ? data?.description.slice(0, 50) + "..."
-              : data?.description}
-          </div> */}
         </div>
 
         <div className="flex flex-col gap-[4px]">
@@ -308,7 +286,11 @@ export const LessonsCard = ({ data, isClickable = false }: { data: any; isClicka
   );
 };
 
-export const LessonsCard2 = ({ data, isClickable = false }: { data: any; isClickable?:boolean }) => {
+export const LessonsCard2 = ({
+  data,
+}: {
+  data: any;
+}) => {
   const router = useRouter();
   const { setLoading } = useLoading();
   const { theme } = useTheme();
@@ -316,19 +298,22 @@ export const LessonsCard2 = ({ data, isClickable = false }: { data: any; isClick
   return (
     <div
       // className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[300px] rounded-lg border border-[#E1E1E1] flex-shrink-0 mx-auto"
-      className={`flex flex-col relative gap-[20px] w-full h-[300px] rounded-[14px] border border-[#254E83] ${ isClickable ? 'hover:cursor-pointer transform hover:scale-105 hover:shadow-xl' : 'opacity-60 cursor-not-allowed'}`}
+      className={`flex flex-col relative gap-[20px] w-full h-[300px] rounded-[14px] border border-[#254E83] ${data?.isActive
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{ fontFamily: "Lexend" }}
       onClick={() => {
-        if(isClickable){
-        router.push(`/lesson/${data?.courseId}/${data?.id}/learn-intro`);
-        setLoading(true);
+        if (data?.isActive) {
+          router.push(`/lesson/${data?.courseId}/${data?.id}/learn-intro`);
+          setLoading(true);
         }
       }}
     >
       <section className="w-full p-1">
         <div className="relative w-full h-[170px]">
           <Image
-            src={data?.thumbnailImage}
+            src={data?.lessonImg ?? "/userDashboard/yoruba/coming-soon.svg"}
             alt="An image of a boy prostrating before an elderly woman in greeting"
             fill
             priority
@@ -337,61 +322,22 @@ export const LessonsCard2 = ({ data, isClickable = false }: { data: any; isClick
         </div>
       </section>
 
-      {/* <section
-        className="absolute hover:cursor-pointer top-1/2 right-0.5 transform -translate-x-1/2 -translate-y-1/2"
-        onClick={() => {
-          router.push("/lesson");
-          setLoading(true);
-        }}
-      >
-        <div className="flex-shrink-0">
-          <div className="relative w-[58px] sm:w-[68px] h-[58px] sm:h-[68px]">
-            <Image
-              src="/userDashboard/hand-click-element.svg"
-              alt="A hand clicking the card"
-              fill
-              priority
-              className="object-cover rounded-l-sm"
-            />
-          </div>
-        </div>
-      </section> */}
-
-      {/* <section className="flex px-[10px] font-[400] text-[11px] sm:text-[12px] leading-[100%]">
-        <div
-          className={`px-[12px] py-[8px] border rounded-md`}
-          style={{
-            color:
-              data.level === "foundation"
-                ? "#D3AF37"
-                : data.level === "builder"
-                ? "#CF0A5C"
-                : "#169A9C",
-          }}
-        >
-          {data?.level}
-        </div>
-      </section> */}
-
       <section className="flex flex-col gap-[16px] justify-between p-[10px] flex-1">
         <div className="flex flex-col gap-[8px]">
-          <h3 className="font-medium text-[16px] sm:text-[18px] leading-[100%]"
-          style={{ color: theme === "dark" ? "#FFFFFF" : "#000000" }}
+          <h3
+            className="font-medium text-[16px] sm:text-[18px] leading-[100%]"
+            style={{ color: theme === "dark" ? "#FFFFFF" : "#000000" }}
           >
             {data?.title?.length > 50
               ? data?.title.slice(0, 50) + "..."
               : data?.title}
           </h3>
-          {/* <div className="font-light text-[#666666] text-[11px] sm:text-[12px] leading-[100%]">
-            {data?.description?.length > 50
-              ? data?.description.slice(0, 50) + "..."
-              : data?.description}
-          </div> */}
         </div>
 
         <div className="flex flex-col gap-[4px]">
-          <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]"
-          style={{ color: theme === "dark" ? "#7AACD3" : "#333333" }}
+          <div
+            className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]"
+            style={{ color: theme === "dark" ? "#7AACD3" : "#333333" }}
           >
             <span>{data?.estimatedDuration} min</span>
             <span>
@@ -405,32 +351,41 @@ export const LessonsCard2 = ({ data, isClickable = false }: { data: any; isClick
   );
 };
 
-
-export const StepsCard = ({ data, isClickable = false }: { data: any; isClickable?: boolean }) => {
+export const StepsCard = ({
+  data,
+  isClickable = false,
+}: {
+  data: any;
+  isClickable?: boolean;
+}) => {
   const router = useRouter();
   const { setLoading } = useLoading();
 
   const { theme } = useTheme();
 
-
   return (
     <div
-      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${ isClickable ? 'hover:cursor-pointer transform hover:scale-105 hover:shadow-xl' : 'opacity-60 cursor-not-allowed'}`}
+      className={`flex flex-col relative gap-[20px] w-full h-[330px] rounded-[14px] border border-[#254E83] ${isClickable
+        ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
+        : "opacity-60 cursor-not-allowed"
+        }`}
       style={{
         fontFamily: "Lexend",
         background: theme === "dark" ? "#012657" : "#FFFFFF",
       }}
       onClick={() => {
-        if(isClickable){
-        router.push(`/lesson/${data?.courseId}/${data?.id}/learn-intro`);
-        setLoading(true);
+        if (isClickable) {
+          router.push(`/lesson/${data?.courseId}/${data?.id}/learn-intro`);
+          setLoading(true);
         }
       }}
     >
       <section className="w-full p-2">
         <div className="relative rounded-lg w-full p-2 h-[200px]">
           <Image
-            src={data?.thumbnailImage || "/userDashboard/yoruba/coming-soon.svg"}
+            src={
+              data?.lessonImg ?? "/userDashboard/yoruba/coming-soon.svg"
+            }
             alt="Course Banner Image"
             fill
             priority
@@ -499,7 +454,8 @@ export const StepsCard = ({ data, isClickable = false }: { data: any; isClickabl
           >
             <span>{data?.estimatedDuration} min</span>
             <span>
-              {data?.totalContents} {data?.totalContents === 1 ? "spark" : "sparks"}
+              {data?.totalContents}{" "}
+              {data?.totalContents === 1 ? "spark" : "sparks"}
             </span>
           </div>
         </div>
@@ -516,7 +472,9 @@ interface UserLessonDataComponentProps {
   padding?: string;
   totalItems?: number;
   visibleItems?: number;
+  background?: string;
   maxWidth?: string;
+  showViewQuizBtn?: boolean;
 }
 
 const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
@@ -526,6 +484,8 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
   gap = "24px",
   padding = "24px",
   maxWidth = "100%",
+  background = "white",
+  showViewQuizBtn = false,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState<"left" | "right" | null>(null);
@@ -592,14 +552,17 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
 
   return (
     <div
-      className={`flex flex-col h-full min-h-[350px] gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg bg-white w-full`}
+      className={`flex flex-col h-full min-h-[350px] gap-[${gap}] border shadow-sm border-[#EAECF0] rounded-lg w-full z-10`}
       style={{
         fontFamily: "Lexend",
         maxWidth,
         padding,
+        background,
       }}
     >
       <section className="flex justify-between items-start flex-wrap gap-4">
+
+        {/* LEFT SIDE */}
         <div className="min-w-0 flex-1 flex flex-col gap-2">
           <h3 className="font-semibold text-[20px] sm:text-[24px] leading-[100%] text-[#162B6E]">
             {title}
@@ -608,41 +571,55 @@ const UserLessonDataComponent: React.FC<UserLessonDataComponentProps> = ({
             {subtitle}
           </span>
         </div>
-        <div className="flex gap-[16px] flex-shrink-0">
-          <TfiArrowCircleLeft
-            size={32}
-            color={showLeftArrow ? "#737477" : "#cccccc"}
-            className={`select-none ${
-              showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
-            }`}
-            onMouseDown={
-              showLeftArrow ? () => startScrolling("left") : undefined
-            }
-            onMouseUp={stopScrolling}
-            onMouseLeave={stopScrolling}
-            onTouchStart={
-              showLeftArrow ? () => startScrolling("left") : undefined
-            }
-            onTouchEnd={stopScrolling}
-          />
-          <TfiArrowCircleRight
-            size={32}
-            color={showRightArrow ? "#737477" : "#cccccc"}
-            className={`select-none ${
-              showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
-            }`}
-            onMouseDown={
-              showRightArrow ? () => startScrolling("right") : undefined
-            }
-            onMouseUp={stopScrolling}
-            onMouseLeave={stopScrolling}
-            onTouchStart={
-              showRightArrow ? () => startScrolling("right") : undefined
-            }
-            onTouchEnd={stopScrolling}
-          />
+
+        {/* RIGHT SIDE (Fix applied here) */}
+        <div className="flex gap-4 flex-wrap items-center justify-end w-full sm:w-auto">
+
+          {showViewQuizBtn && (
+            <div className="w-full sm:w-auto">
+              <InAppButton
+                paddingLeft="17px"
+                paddingRight="17px"
+                borderRadius="6px"
+                border="1px solid #E2E8F0"
+                height="40px"
+                width="100%"     // allows full width on small screens
+              >
+                <div className="text-[#0F172A] text-[14px] font-[500] leading-[143%] text-center">
+                  View All Quizzes
+                </div>
+              </InAppButton>
+            </div>
+          )}
+
+          {/* Arrow Controls */}
+          <div className="flex gap-[16px] flex-shrink-0">
+            <TfiArrowCircleLeft
+              size={32}
+              color={showLeftArrow ? "#737477" : "#cccccc"}
+              className={`select-none ${showLeftArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+                }`}
+              onMouseDown={showLeftArrow ? () => startScrolling("left") : undefined}
+              onMouseUp={stopScrolling}
+              onMouseLeave={stopScrolling}
+              onTouchStart={showLeftArrow ? () => startScrolling("left") : undefined}
+              onTouchEnd={stopScrolling}
+            />
+            <TfiArrowCircleRight
+              size={32}
+              color={showRightArrow ? "#737477" : "#cccccc"}
+              className={`select-none ${showRightArrow ? "hover:cursor-pointer" : "cursor-not-allowed"
+                }`}
+              onMouseDown={showRightArrow ? () => startScrolling("right") : undefined}
+              onMouseUp={stopScrolling}
+              onMouseLeave={stopScrolling}
+              onTouchStart={showRightArrow ? () => startScrolling("right") : undefined}
+              onTouchEnd={stopScrolling}
+            />
+          </div>
         </div>
       </section>
+
       <section
         className="overflow-x-auto scrollbar-hide"
         ref={scrollRef}

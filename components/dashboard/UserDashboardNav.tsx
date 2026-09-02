@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import MainDropdown from "../MainDropdown";
 import LanguageToggle from "../languageToggle/LanguageToggle";
 import { Modal } from "../general/Modal";
@@ -20,29 +20,38 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("tab");
   const { addAlert } = useAlert();
   const { userDetails } = useUser();
+  const isDashboardRoute = pathname === "/user-dashboard";
 
   const handleLogout = () => {
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
-    const keepDailyCallsRemaining = localStorage.getItem("daily_calls_remaining");
-    
+    const keepDailyCallsRemaining = localStorage.getItem(
+      "daily_calls_remaining",
+    );
+
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    Cookies.remove("remember_me");
     localStorage.clear();
 
     localStorage.setItem("chat_conversations", keepChatHistory || "[]");
     localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
-    localStorage.setItem("daily_calls_remaining", keepDailyCallsRemaining || "30");
+    localStorage.setItem(
+      "daily_calls_remaining",
+      keepDailyCallsRemaining || "30",
+    );
 
     setLoading(true);
     router.push("/login");
   };
-
+  
   const userDashboardDetails = [
     {
       name: "Home",
@@ -73,12 +82,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Achievements",
-      route: "#",
+      route: "/user-settings?tab=achievements",
       iconPath: "/userDashboard/isAchievements.svg",
       isActiveIconPath: "",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Marketplace",
@@ -90,26 +99,26 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: true,
     },
     {
-      name: "Billing",
-      route: "#",
+      name: "Payment",
+      route: "/user-settings?tab=payment",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     ...(userDetails?.role === "admin"
       ? [
-          {
-            name: "Admin",
-            route: "/admin",
-            iconPath: "/userDashboard/admin.svg",
-            isActiveIconPath: "/userDashboard/adminActive.svg",
-            action: () => "",
-            useAction: false,
-            disabled: false,
-          },
-        ]
+        {
+          name: "Admin",
+          route: "/admin",
+          iconPath: "/userDashboard/admin.svg",
+          isActiveIconPath: "/userDashboard/adminActive.svg",
+          action: () => "",
+          useAction: false,
+          disabled: false,
+        },
+      ]
       : []),
   ];
 
@@ -143,12 +152,12 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     {
       name: "Achievements",
-      route: "#",
+      route: "/user-settings?tab=achievements",
       iconPath: "/userDashboard/isAchievements.svg",
-      isActiveIconPath: "#",
+      isActiveIconPath: "",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Marketplace",
@@ -160,22 +169,25 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       disabled: true,
     },
     {
-      name: "Billing",
-      route: "#",
+      name: "Payment",
+      route: "/user-settings?tab=payment",
       iconPath: "/userDashboard/isBilling.svg",
       isActiveIconPath: "#",
       action: () => "",
       useAction: false,
-      disabled: true,
+      disabled: false,
     },
     {
       name: "Settings",
       route: "#",
       iconPath: "/userDashboard/settings.svg",
       isActiveIconPath: "#",
-      action: () => "",
-      useAction: false,
-      disabled: true,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      useAction: true,
+      disabled: false,
     },
     {
       name: "Profile",
@@ -197,16 +209,16 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
     ...(userDetails?.role === "admin"
       ? [
-          {
-            name: "Admin",
-            route: "/admin",
-            iconPath: "/userDashboard/admin.svg",
-            isActiveIconPath: "/userDashboard/adminActive.svg",
-            action: () => "",
-            useAction: false,
-            disabled: false,
-          },
-        ]
+        {
+          name: "Admin",
+          route: "/admin",
+          iconPath: "/userDashboard/admin.svg",
+          isActiveIconPath: "/userDashboard/adminActive.svg",
+          action: () => "",
+          useAction: false,
+          disabled: false,
+        },
+      ]
       : []),
     {
       name: "Logout",
@@ -237,12 +249,25 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
     },
   ];
 
+  // const handleMenuItemClick = (route: string) => {
+  //   if (route !== "#" && pathname !== route) {
+  //     router.push(route);
+  //     setLoading(true);
+  //     setIsMobileMenuOpen(false);
+  //   }
+  // };
+
   const handleMenuItemClick = (route: string) => {
-    if (route !== "#" && pathname !== route) {
-      router.push(route);
-      setLoading(true);
-      setIsMobileMenuOpen(false);
-    }
+    if (route === "#") return;
+
+    const [path, query] = route.split("?");
+    const routeTab = new URLSearchParams(query).get("tab");
+
+    if (pathname === path && routeTab === currentTab) return;
+
+    router.push(route);
+    setLoading(true);
+    setIsMobileMenuOpen(false);
   };
 
   const mobilePremiumItemClick = (data: {
@@ -316,32 +341,40 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         <div className="flex gap-x-[32px] gap-y-[16px] xl:gap-x-[40px] xl:gap-y-0">
           {userDashboardDetails.map((item, index) => (
             <nav
-              className={`flex hover:cursor-${
-                !item.disabled ? "pointer" : "not-allowed"
-              } hover:text-[${
-                pathname === item.route
+              className={`flex hover:cursor-${!item.disabled ? "pointer" : "not-allowed"
+                } hover:text-[${pathname === item.route.split("?")[0] &&
+                  currentTab ===
+                  new URLSearchParams(item.route.split("?")[1]).get("tab")
                   ? "#162B6E"
                   : item.disabled
-                  ? ""
-                  : "#FFE933"
-              }] rounded-4xl px-[16px] text-[${
-                pathname === item.route
+                    ? ""
+                    : "#FFE933"
+                }] rounded-4xl px-[16px] text-[${pathname === item.route.split("?")[0] &&
+                  currentTab ===
+                  new URLSearchParams(item.route.split("?")[1]).get("tab")
                   ? "#162B6E"
                   : item.disabled
-                  ? "#666666"
-                  : "white"
-              }] justify-center items-center`}
+                    ? "#666666"
+                    : "white"
+                }] justify-center items-center`}
               key={index}
               onClick={() =>
                 item.useAction ? item.action() : handleMenuItemClick(item.route)
               }
               style={{
-                backgroundColor: pathname === item.route ? "#FFE933" : "",
+                backgroundColor:
+                  pathname === item.route.split("?")[0] &&
+                    currentTab ===
+                    new URLSearchParams(item.route.split("?")[1]).get("tab")
+                    ? "#FFE933"
+                    : "",
               }}
             >
               <Image
                 src={
-                  pathname === item.route
+                  pathname === item.route.split("?")[0] &&
+                    currentTab ===
+                    new URLSearchParams(item.route.split("?")[1]).get("tab")
                     ? item.isActiveIconPath
                     : item.iconPath
                 }
@@ -355,7 +388,7 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
         </div>
         <MainDropdown
           options={dropdownOptions}
-          placeholder="Go Premium"
+          placeholder="Premium"
           color={isPremiumRoute ? "#000000" : "#ffffff"}
           backgroundColor={isPremiumRoute ? "#FFE933" : ""}
           icon={
@@ -403,17 +436,22 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
                         ? item.action()
                         : handleMenuItemClick(item.route)
                     }
-                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${
-                      pathname === item.route
-                        ? "bg-[#FFE933] text-[#162B6E]"
-                        : item.disabled
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-100 hover:text-[#162B6E] transition-colors ${pathname === item.route.split("?")[0] &&
+                      currentTab ===
+                      new URLSearchParams(item.route.split("?")[1]).get("tab")
+                      ? "bg-[#FFE933] text-[#162B6E]"
+                      : item.disabled
                         ? "text-[#666666]"
                         : "text-[#FFFFFF]"
-                    }`}
+                      }`}
                   >
                     <Image
                       src={
-                        pathname === item.route
+                        pathname === item.route.split("?")[0] &&
+                          currentTab ===
+                          new URLSearchParams(item.route.split("?")[1]).get(
+                            "tab",
+                          )
                           ? item.isActiveIconPath
                           : item.iconPath
                       }
@@ -453,14 +491,16 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
       </section>
 
       {/* Language Toggle - Always visible */}
-      <section className="flex items-end">
-        <LanguageToggle
-          backgroundColor="#162B6E"
-          color="#FFFFFF"
-          borderColor="#D9F3FF"
-          dropDownBgColor="#24a6ee"
-        />
-      </section>
+      {isDashboardRoute &&
+        <section className="flex items-end">
+          <LanguageToggle
+            backgroundColor="#162B6E"
+            color="#FFFFFF"
+            borderColor="#D9F3FF"
+            dropDownBgColor="#24a6ee"
+          />
+        </section>}
+
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (

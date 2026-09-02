@@ -66,6 +66,7 @@ const CreateCoursePage = () => {
     description: "",
     languageId: "",
     level: Level.BUILDER,
+    orderNumber: 1,
     isActive: true,
     estimatedDuration: undefined,
     thumbnailFile: undefined,
@@ -85,8 +86,8 @@ const CreateCoursePage = () => {
     description: "",
     orderNumber: 1,
     contents: [],
-    headlineTag: "",
-    estimatedTime: undefined,
+    headLineTag: "",
+    estimatedDuration: undefined,
     outcomes: "",
     objectives: "",
   });
@@ -269,6 +270,8 @@ const CreateCoursePage = () => {
       sourceType,
       ededunPhrases: sourceType === ContentSourceType.EDEDUN ? [] : undefined,
       customText: sourceType === ContentSourceType.NEW ? "" : undefined,
+      contentType: sourceType === ContentSourceType.NEW ? "normal" : undefined,
+      isGrammarRule: false,
     };
 
     setCurrentLesson((prev) => ({
@@ -388,8 +391,8 @@ const CreateCoursePage = () => {
       description: "",
       orderNumber: lessons.length + 1,
       contents: [],
-      headlineTag: "",
-      estimatedTime: undefined,
+      headLineTag: "",
+      estimatedDuration: undefined,
       outcomes: "",
       objectives: "",
     });
@@ -698,6 +701,7 @@ const CreateCoursePage = () => {
               description: "",
               languageId: "",
               level: Level.BUILDER,
+              orderNumber: 1,
               isActive: true,
               thumbnailFile: undefined,
               tags: [],

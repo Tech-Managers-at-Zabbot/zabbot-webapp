@@ -5,7 +5,7 @@ import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import CongratulationsModal from "@/components/general/CongratulationsModal";
 import { useGetDailyWord } from "@/services/generalApi/userGoals/query";
 import {
-  DailyGoalsSkeleton,
+  // DailyGoalsSkeleton,
   WordForTheDaySkeleton,
 } from "../skeletonLoaders/DashboardSkeletons";
 import { CustomSpinner } from "../CustomSpinner";
@@ -14,33 +14,162 @@ import { useUser } from "@/contexts/UserContext";
 import { EmptyStateCard } from "../general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { usePageLanguage } from "@/contexts/LanguageContext";
+import InAppButton from "../InAppButton";
+import { useUpdateUserLeaderboard } from "@/services/generalApi/leaderboard/tanstack";
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
-const DailyGoals = () => {
-  const { userDailyGoal, goalLoading } = useUser();
+const WordForTheDay = () => {
+  const [fill, setFill] = useState("white");
+  const [color, setColor] = useState("#CDA674");
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [isGoalComplete, setIsGoalComplete] = useState(false);
+  const { theme } = useTheme();
+  const [showDailyGoalCard, setShowDailyGoalCard] = useState(false);
 
-  const { getPageText } =
-        usePageLanguage("userDashboard");
+  const { mutate: logUserStreak } = useLogUserStreak();
+
+  const { mutate: updateLeaderboard, isPending: updateUserLeaderBoardLoading } =
+    useUpdateUserLeaderboard();
+
+  const { getPageText } = usePageLanguage("userDashboard");
+
+  const {
+    userDetails,
+    isGoalCompleted,
+    completeGoal,
+    isCompletingDailyGoal,
+    userDailyGoal,
+    goalLoading,
+  } = useUser();
+
+  useEffect(() => {
+    setIsGoalComplete(isGoalCompleted);
+  }, [completeGoal, goalLoading, isGoalCompleted, isCompletingDailyGoal]);
+
+  const [dailyWordData, setDailyWordData] = useState({
+    audioUrls: [],
+    englishText: "",
+    languageText: "",
+    pronunciationNote: "",
+  });
+  const [audioPlayerLoading, setAudioPlayerLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const { data: dailyWord, isLoading: dailyWordLoading } = useGetDailyWord(
+    userDetails?.languageId,
+  );
+
+  const completeUserGoal = () => {
+    if (!audioPlayerLoading && !isGoalCompleted) {
+      completeGoal(
+        () => {
+          setShowCongrats(true);
+          updateLeaderboard({
+            formData: {
+              scoreToAdd: 10,
+              dailyWordsListened: 1,
+            },
+          });
+        },
+        (error: any) => {
+          console.error("Failed to complete goal:", error);
+        },
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (dailyWord?.data !== undefined) {
+      const wordData = dailyWord.data;
+      setDailyWordData({
+        audioUrls: wordData?.audioUrls,
+        englishText: wordData?.englishText,
+        languageText: wordData?.languageText,
+        pronunciationNote: wordData?.pronunciationNote,
+      });
+    }
+  }, [dailyWord, userDailyGoal]);
+
+  const handlePlayAudio = () => {
+    if (!dailyWordData?.audioUrls || dailyWordData?.audioUrls?.length === 0)
+      return;
+
+    setAudioPlayerLoading(true);
+
+    const randomIndex = Math.floor(
+      Math.random() * dailyWordData?.audioUrls?.length,
+    );
+    const audio = new Audio(dailyWordData?.audioUrls[randomIndex]);
+
+    logUserStreak();
+
+    audio.addEventListener("canplaythrough", async () => {
+      setIsPlaying(true);
+      setAudioPlayerLoading(false);
+      audio.play();
+    });
+
+    audio.addEventListener("error", () => {
+      console.error("Failed to load audio");
+      setIsPlaying(false);
+      setAudioPlayerLoading(false);
+    });
+
+    audio.addEventListener("ended", () => {
+      if (!isGoalComplete) {
+        setShowCongrats(true);
+        completeUserGoal();
+      }
+      setIsPlaying(false);
+      setAudioPlayerLoading(false);
+    });
+  };
+
+  const handleMouseEnter = () => {
+    setFill("#CDA674");
+    setColor("white");
+  };
+
+  const handleMouseLeave = () => {
+    setFill("white");
+    setColor("#CDA674");
+  };
+
+  // const { userDailyGoal, goalLoading } = useUser();
 
   return (
     <>
-      {goalLoading ? (
-        <DailyGoalsSkeleton />
-      ) : !userDailyGoal && userDailyGoal !== 0 ? (
+      {dailyWordLoading || goalLoading || updateUserLeaderBoardLoading ? (
+        <WordForTheDaySkeleton />
+      ) : !dailyWord ? (
         <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
-      ) : (
+      ) : showDailyGoalCard || isGoalComplete ? (
         <div
           className="bg-white justify-between shadow-md flex rounded-lg border border-[#EAECF0] flex-col p-[16px] sm:p-[20px] h-full"
           style={{ fontFamily: "Lexend" }}
         >
           <section>
-            <h1 className="font-semibold text-[18px] sm:text-[20px] md:text-[24px] leading-[100%] text-[#162B6E]">
+            <h1 className="font-semibold text-center text-[18px] sm:text-[20px] md:text-[24px] leading-[100%] text-[#162B6E]">
               {getPageText("daily_goal")}
             </h1>
-            <span className="font-semibold text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
+            <span className="font-semibold text-center text-[12px] sm:text-[14px] md:text-[15px] leading-[120%] text-[#207EC5] mt-1 block">
               {userDailyGoal === 100
                 ? getPageText("completed_daily_goal_tag")
                 : getPageText("uncompleted_daily_goal_tag")}
             </span>
+          </section>
+          <section>
+            <div className="font-bold text-[#000000CC] text-center text-[20px] sm:text-[18px] md:text-[20px] leading-[100%] my-2 sm:my-4">
+              {dailyWordData?.languageText}
+            </div>
+            <div className="flex flex-col gap-[12px] sm:gap-[16px] md:gap-[20px] w-full">
+              <h3 className="font-[400] text-center text-[20px] sm:text-[18px] md:text-[20px] leading-[120%] text-[#666666]">
+                ({dailyWordData?.pronunciationNote})
+              </h3>
+              <h3 className="font-[400] text-center text-[14px] sm:text-[20px] md:text-[30px] leading-[120%] text-[#666666]">
+                {dailyWordData?.englishText}
+              </h3>
+            </div>
           </section>
           <section className="flex h-full justify-center items-center my-2 sm:my-4">
             <Box position="relative" display="inline-flex">
@@ -88,135 +217,27 @@ const DailyGoals = () => {
               </Box>
             </Box>
           </section>
+          <section className="flex justify-center items-center">
+            {audioPlayerLoading || isCompletingDailyGoal || goalLoading ? (
+              <CustomSpinner
+                spinnerColor="#162b6e"
+                isShowTitle={false}
+                spinnerHeight="32px"
+                spinnerWidth="32px"
+              />
+            ) : isPlaying ? (
+              <div className="flex items-center gap-1">
+                <PlayerEllipse />
+              </div>
+            ) : (
+              <InAppButton background="#266950" onClick={handlePlayAudio}>
+                <div className="text-white text-[15.612px] fonnt-[700] leading-[100%]">
+                  {getPageText("listen_again")}
+                </div>
+              </InAppButton>
+            )}
+          </section>
         </div>
-      )}
-    </>
-  );
-};
-
-const WordForTheDay = () => {
-  const [fill, setFill] = useState("white");
-  const [color, setColor] = useState("#CDA674");
-  const [showCongrats, setShowCongrats] = useState(false);
-  const [isGoalComplete, setIsGoalComplete] = useState(false);
-  const { theme } = useTheme();
-
-  const { getPageText } =
-        usePageLanguage("userDashboard");
-
-  const {
-    userDetails,
-    isGoalCompleted,
-    completeGoal,
-    isCompletingDailyGoal,
-    goalLoading,
-  } = useUser();
-
-  useEffect(() => {
-    setIsGoalComplete(isGoalCompleted);
-  }, [completeGoal, goalLoading, isGoalCompleted, isCompletingDailyGoal]);
-
-  const [dailyWordData, setDailyWordData] = useState({
-    audioUrls: [],
-    englishText: "",
-    languageText: "",
-    pronunciationNote: "",
-  });
-  const [audioPlayerLoading, setAudioPlayerLoading] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const { data: dailyWord, isLoading: dailyWordLoading } = useGetDailyWord(
-    userDetails?.languageId
-  );
-
-  const completeUserGoal = () => {
-    if (!audioPlayerLoading && !isGoalCompleted) {
-      completeGoal(
-        () => {
-          setShowCongrats(true);
-        },
-        (error: any) => {
-          console.error("Failed to complete goal:", error);
-        }
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (dailyWord?.data !== undefined) {
-      const wordData = dailyWord.data;
-      setDailyWordData({
-        audioUrls: wordData?.audioUrls,
-        englishText: wordData?.englishText,
-        languageText: wordData?.languageText,
-        pronunciationNote: wordData?.pronunciationNote,
-      });
-    }
-  }, [dailyWord]);
-
-  const handlePlayAudio = () => {
-    if (!dailyWordData?.audioUrls || dailyWordData?.audioUrls?.length === 0)
-      return;
-
-    setAudioPlayerLoading(true);
-
-    const randomIndex = Math.floor(
-      Math.random() * dailyWordData?.audioUrls?.length
-    );
-    const audio = new Audio(dailyWordData?.audioUrls[randomIndex]);
-
-    audio.addEventListener("canplaythrough", async () => {
-      setIsPlaying(true);
-      setAudioPlayerLoading(false);
-      audio.play();
-    });
-
-    audio.addEventListener("error", () => {
-      console.error("Failed to load audio");
-      setIsPlaying(false);
-      setAudioPlayerLoading(false);
-    });
-
-    audio.addEventListener("ended", () => {
-      if (!isGoalComplete) {
-        setShowCongrats(true);
-        completeUserGoal();
-      }
-      setIsPlaying(false);
-      setAudioPlayerLoading(false);
-    });
-  };
-
-  //   useEffect(() => {
-  //   setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
-  //   setCloudsUrl(
-  //     theme === "dark"
-  //       ? "/userDashboard/dark-clouds.svg"
-  //       : "/userDashboard/light-clouds.svg"
-  //   );
-  //   setLogoUrl(
-  //     theme === "dark"
-  //       ? "/general/zabbot-logo-white.svg"
-  //       : "/general/zabbot-logo-blue.svg"
-  //   );
-  // }, [theme]);
-
-  const handleMouseEnter = () => {
-    setFill("#CDA674");
-    setColor("white");
-  };
-
-  const handleMouseLeave = () => {
-    setFill("white");
-    setColor("#CDA674");
-  };
-
-  return (
-    <>
-      {dailyWordLoading ? (
-        <WordForTheDaySkeleton />
-      ) : !dailyWord ? (
-        <EmptyStateCard title="No Data" subtitle="No Data Available Yet" />
       ) : (
         <>
           <div
@@ -267,7 +288,10 @@ const WordForTheDay = () => {
 
             <CongratulationsModal
               isOpen={showCongrats}
-              onClose={() => setShowCongrats(false)}
+              onClose={() => {
+                setShowCongrats(false);
+                setShowDailyGoalCard(true);
+              }}
               title="Congratulations!"
               message="You've completed your daily goal! Keep up the great work!"
               imageUrl="/userDashboard/parrot-head.svg"
@@ -283,4 +307,7 @@ const WordForTheDay = () => {
   );
 };
 
-export { DailyGoals, WordForTheDay };
+export {
+  // DailyGoals,
+  WordForTheDay,
+};

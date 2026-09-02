@@ -8,6 +8,8 @@ import ProverbsContentComponent from "./contents/ProverbsContent";
 import NormalComponentComponent from "./contents/NormalContent";
 import GrammarRuleComponent from "./contents/GrammarRuleContent";
 import { useLessonContext } from "@/contexts/LessonContext";
+import { FaArrowRight } from "react-icons/fa6";
+import { FaArrowLeft } from "react-icons/fa";
 
 interface ContentRendererProps {
   content: any;
@@ -17,6 +19,7 @@ interface ContentRendererProps {
   isLastContent: boolean;
   onComplete: () => void;
   lessonTitle?: string;
+  lessonImg?: string;
 }
 
 const ContentRenderer: React.FC<ContentRendererProps> = ({
@@ -26,7 +29,8 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
   canGoBack,
   isLastContent,
   onComplete,
-  lessonTitle,
+  lessonImg,
+  // lessonTitle,
 }) => {
   const [completeLoading, setCompleteLoading] = useState(false);
 
@@ -50,12 +54,6 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
       className="items-center z-10 flex flex-col justify-center w-full h-full mx-auto px-4 relative"
       style={{ fontFamily: "Lexend" }}
     >
-      <div className="mt-12 md:mt-2">
-        <h2 className="text-2xl text-[#F15B29] md:text-3xl font-bold mb-6 text-center">
-          {lessonTitle}
-        </h2>
-      </div>
-
       {content?.contentType === "proverb" && (
         <div className="">
           <ProverbsContentComponent content={content} />
@@ -64,7 +62,10 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
 
       {content?.contentType === "normal" && (
         <div className="w-full flex items-center justify-center">
-          <NormalComponentComponent content={content} />
+          <NormalComponentComponent
+            content={content}
+            lessonImg={lessonImg || ""}
+          />
         </div>
       )}
 
@@ -83,37 +84,51 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({
         </div>
       )}
 
-      <div className="border-t-1 h-[0.5px] mt-6 border-[#FCD2C2] w-full"></div>
+      {/* <div className="border-t-1 h-[0.5px] mt-6 border-[#FCD2C2] w-full"></div> */}
 
       {/* Navigation Buttons */}
-      <div className="px-[5%] z-10 mt-6 flex-col md:flex-row gap-2 md:gap-0 flex w-full justify-between items-center">
-        <InAppButton
-          onClick={onPrevious}
-          disabled={!canGoBack || completeLoading}
-          disabledColor="#C98F5DCC"
-          background={canGoBack ? `#5A2E10` : `#C98F5DCC`}
-        >
-          <div className={`px-6 py-3 z-10 rounded-lg font-medium`}>
-            ← Previous
-          </div>
-        </InAppButton>
+      <div className="px-[2%] sm:px-[5%] absolute bottom-5 -translate-y-1/2 z-30 gap-2 md:gap-0 flex w-full justify-between items-center pointer-events-none">
+        <div className="pointer-events-auto">
+          <InAppButton
+            onClick={onPrevious}
+            disabled={!canGoBack || completeLoading}
+            disabledColor="#C98F5DCC"
+            background={canGoBack ? `#5A2E10` : `#C98F5DCC`}
+            borderRadius="100%"
+            height="60px"
+            width="60px"
+          >
+            <div className="flex justify-center items-center">
+              <FaArrowLeft className="text-base sm:text-xl md:text-2xl" />
+            </div>
+          </InAppButton>
+        </div>
 
-        <InAppButton
-          onClick={handleNext}
-          background={`#5A2E10`}
-          disabled={completeLoading}
-          disabledColor="#C98F5DCC"
-        >
-          <div>
-            {isLastContent ? (
-              "Complete Lesson"
-            ) : completeLoading ? (
-              <CustomSpinner />
-            ) : (
-              "Next →"
-            )}
-          </div>
-        </InAppButton>
+        <div className="pointer-events-auto">
+          <InAppButton
+            onClick={handleNext}
+            background={`#5A2E10`}
+            disabled={completeLoading}
+            disabledColor="#C98F5DCC"
+            borderRadius="100%"
+            height="60px"
+            width="60px"
+          >
+            <div>
+              {isLastContent ? (
+                <div className="flex justify-center items-center">
+                  <FaArrowRight className="text-base sm:text-xl md:text-2xl" />
+                </div>
+              ) : completeLoading ? (
+                <CustomSpinner />
+              ) : (
+                <div className="flex justify-center items-center">
+                  <FaArrowRight className="text-base sm:text-xl md:text-2xl" />
+                </div>
+              )}
+            </div>
+          </InAppButton>
+        </div>
       </div>
     </div>
   );

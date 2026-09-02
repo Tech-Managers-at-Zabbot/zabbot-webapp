@@ -10,6 +10,23 @@ export async function createCourse(courseData: CreateCoursePayload) {
   return response.data;
 }
 
+export async function deleteCourse(courseId: string) {
+  const response = await axiosInstance.delete(`/lessons/courses/${courseId}`);
+  return response.data;
+}
+
+export async function updateCourse(
+  courseId: string | any,
+  updateData: Record<string, any>,
+) {
+  if (!courseId) return;
+  const response = await axiosInstance.put(
+    `/lessons/courses/${courseId}`,
+    updateData
+  );
+  return response.data;
+}
+
 export async function createCourseWithLessons(
   courseData: any,
   languageId: string
@@ -21,9 +38,13 @@ export async function createCourseWithLessons(
   return response.data;
 }
 
-export async function getCourses(isActive = true, languageId: string) {
+export async function getCourses(
+  isActive = true,
+  languageId: string,
+  isAdmin = false
+) {
   const response = await axiosInstance.get(
-    `/lessons/courses/${languageId}?isActive=${isActive}`
+    `/lessons/courses/${languageId}?isActive=${isActive}&isAdmin=${isAdmin}`
   );
   return response.data;
 }
@@ -105,6 +126,7 @@ export async function updateUserCourse(
   updateData: Record<string, any>,
   languageId?: string
 ) {
+  if (!courseId) return;
   const response = await axiosInstance.put(
     `/lessons/courses/update-user-course/${courseId}`,
     updateData
@@ -134,23 +156,68 @@ export async function getUserCompletedCourses(
 // --- Lesson Endpoints ---
 
 export async function createLesson(lessonData: any) {
-  const response = await axiosInstance.post("/lessons", lessonData);
+  const response = await axiosInstance.post("/lessons/lessons", lessonData);
   return response.data;
 }
 
 export async function getCourseLessons(courseId: string) {
   const response = await axiosInstance.get(
-    `/lessons/lessons/course-lessons/${courseId}`
+    `lessons/lessons/course-lessons/${courseId}`
   );
   return response.data;
 }
 
-// --- Content Endpoints ---
+// Get all user lessons: GET / lessons / user - lessons
+export async function getUserLessons() {
+  const response = await axiosInstance.get("/lessons/user-lessons");
+  return response.data;
+}
 
-// export async function createContent(contentData: any) {
-//   const response = await axiosInstance.post("/contents", contentData);
-//   return response.data;
-// }
+// Get all lessons: GET / lessons 
+export async function getAllLessons() {
+  const response = await axiosInstance.get("/lessons/lessons");
+  return response.data;
+}
+
+// Get a single user lesson GET /lessons/user-lessons/{{lessonId}}
+export async function getUserLesson(lessonId: string) {
+  const response = await axiosInstance.get(`/lessons/user-lessons/${lessonId}`);
+  return response.data;
+}
+
+// Add a user lesson POST /lessons/user-lessons
+// const lessonData = ⁠{
+//   "courseId": string,
+//   "lessonId": string,
+//   "languageId": "language-123",
+//   "percentageCompletion": 25,
+//   "score": 60,
+//   "isCompleted": false,
+//   "startedAt": "2026-06-29T10:00:00.000Z"
+// } ⁠
+
+export async function addUserLesson(lessonData: any) {
+  const response = await axiosInstance.post("/lessons/user-lessons", lessonData);
+  return response.data;
+}
+
+// Update user lesson: PUT /lessons/user-lessons
+export async function updateUserLesson(lessonId: string, updateData: any) {
+  const response = await axiosInstance.put(
+    `/lessons/user-lessons/${lessonId}`,
+    updateData
+  );
+  return response.data;
+}
+
+// Delete user lesson: DELETE /lessons/user-lessons/{{userId}}/{{lessonId}}
+export async function deleteUserLesson(userId: string, lessonId: string) {
+  if (!lessonId) return;
+  const response = await axiosInstance.delete(`/lessons/user-lessons/${userId}/${lessonId}`);
+  return response.data;
+}
+
+// --- Content Endpoints ---
 
 export async function getLessonContents(lessonId: string) {
   const response = await axiosInstance.get(`/contents/lesson/${lessonId}`);
@@ -166,7 +233,134 @@ export async function getLanguageContents(languageId?: string) {
   return response.data;
 }
 
-// export async function createLanguageContent(contentData: any) {
-//   const response = await axiosInstance.post("/language-contents", contentData);
-//   return response.data;
-// }
+export async function updateCourseImage(
+  courseId: string,
+  updateData: FormData
+) {
+  const response = await axiosInstance.put(
+    `/lessons/courses/change-course-image/${courseId}`,
+    updateData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+  );
+  return response.data;
+}
+
+export async function updateLessonImage(
+  lessonId: string,
+  updateData: FormData
+) {
+  const response = await axiosInstance.put(
+    `/lessons/lessons/change-lesson-image/${lessonId}`,
+    updateData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+  );
+  return response.data;
+}
+
+export async function updateLessonById(
+  lessonId: string,
+  updateData: any
+) {
+  const response = await axiosInstance.put(
+    `/lessons/lessons/${lessonId}`,
+    updateData
+  );
+  return response.data;
+}
+
+export async function deleteLessonById(
+  lessonId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/lessons/${lessonId}`,
+  );
+  return response.data;
+}
+
+
+export async function deleteQuizById(
+  quizId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/quizzes/${quizId}`,
+  );
+  return response.data;
+}
+
+export async function updateQuizById(
+  quizId: string,
+  updateData: Record<string, any>,
+) {
+  const response = await axiosInstance.put(
+    `/lessons/quizzes/${quizId}`,
+    updateData
+  );
+  return response.data;
+}
+
+export async function createContent(
+  payload: Record<string, any>,
+) {
+  const response = await axiosInstance.post(
+    `/lessons/contents`,
+    payload
+  );
+  return response.data;
+}
+
+export async function updateContentById(
+  contentId: string,
+  updateData: Record<string, any>,
+) {
+  const response = await axiosInstance.put(
+    `/lessons/contents/${contentId}`,
+    updateData
+  );
+  return response.data;
+}
+
+export async function deleteContentById(
+  contentId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/contents/${contentId}`,
+  );
+  return response.data;
+}
+
+export async function addSingleContentFile(
+  data: { filePath: string; contentType: string; description?: string, contentId: string },
+) {
+  const response = await axiosInstance.post(
+    `/lessons/contents/add-file`,
+    data
+  );
+  return response.data;
+}
+
+export async function addContentFile(
+  fileId: string,
+  data: { filePath: string; contentType: string; description?: string },
+) {
+  const response = await axiosInstance.put(
+    `/lessons/contents/file/${fileId}`,
+    data
+  );
+  return response.data;
+}
+
+export async function deleteContentFile(
+  contentId: string,
+  fileId: string,
+) {
+  const response = await axiosInstance.delete(
+    `/lessons/contents/file/${fileId}`,
+  );
+  return response.data;
+}

@@ -7,6 +7,7 @@ import {
 } from "@/services/generalApi/userGoals/mutation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+// import { useGetSingleUserData } from "@/services/generalApi/users/mutation";
 
 const UserContext = createContext<unknown | undefined | any>(undefined);
 
@@ -18,11 +19,7 @@ export const useUser = () => {
   return context;
 };
 
-export const UserProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [userDetails, setUserDetails] = useState({
     id: "",
     languageId: "",
@@ -81,6 +78,8 @@ export const UserProvider = ({
   const value = {
     userDetails,
     userGoal: userGoal?.data,
+    // userProfile,
+    // userDataLoading,
     goalLoading,
     goalId,
     goalsCount,
@@ -92,9 +91,5 @@ export const UserProvider = ({
     refetchGoals,
   };
 
-  return (
-    <UserContext.Provider value={value}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

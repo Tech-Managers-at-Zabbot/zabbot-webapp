@@ -4,6 +4,7 @@ import { FiSearch } from 'react-icons/fi';
 import Head from "next/head";
 import Image from 'next/image';
 import { defaultDiacriticText } from './constants'
+import { useLogUserStreak } from '@/services/generalApi/users/mutation';
 
 const ListenWithOwe = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -14,6 +15,7 @@ const ListenWithOwe = () => {
     const [inputText, setInputText] = useState("");
     const [diacriticText, setDiaCriticText] = useState(defaultDiacriticText);
 
+    const { mutate: logUserStreak } = useLogUserStreak();
     const [selectedVoice, setSelectedVoice] = useState("sade");
 
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -24,6 +26,11 @@ const ListenWithOwe = () => {
         const customDiacriticText = localStorage.getItem("diacriticList");
         setItems(customDiacriticText ? JSON.parse(customDiacriticText) : []);
     }, [diacriticText]);
+
+    useEffect(() => {
+        logUserStreak();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (selectedItem) {
@@ -45,7 +52,7 @@ const ListenWithOwe = () => {
                 !diacriticList.some((item: string) => item.toLowerCase() === inputText.toLowerCase())) {
                 diacriticList.push(inputText);
 
-                 // Keep max 5 items
+                // Keep max 5 items
                 if (diacriticList.length > 5) {
                     diacriticList.shift();
                 }
@@ -140,7 +147,7 @@ const ListenWithOwe = () => {
                     content="Listen with Owe on Zabbot Language Learning Platform"
                 />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                
+
             </Head>
             <main className="flex flex-col bg-[#002557] relative p-5">
                 <section className="w-full bg-[#002557]">
@@ -265,8 +272,8 @@ const ListenWithOwe = () => {
                                         <span>{useMarkedText ? "✔ Tone-marked" : "✘ Original input"}</span>
                                     </div>
                                     <div>
-                                        {speaking && (<div className='text-white text-l flex p-2'><Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15}/> Playing audio. </div>)}
-                                        
+                                        {speaking && (<div className='text-white text-l flex p-2'><Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15} /> Playing audio. </div>)}
+
                                         <button
                                             onClick={handleSpeak}
                                             disabled={speaking || loading || diacriticText === defaultDiacriticText || diacriticText.trim().length < 1}

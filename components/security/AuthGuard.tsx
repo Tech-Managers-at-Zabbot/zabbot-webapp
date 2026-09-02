@@ -10,7 +10,15 @@ import Loader from "../general/Loader";
 
 function parseJwt(token: string) {
   try {
-    return JSON.parse(atob(token.split(".")[1]));
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
   } catch (e: any) {
     console.log("parsing error", e.message);
     return null;
@@ -28,6 +36,7 @@ export default function AuthGuard({
   const [isChecking, setIsChecking] = useState(true);
   const { setLoading, loading } = useLoading();
   const { addAlert } = useAlert();
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   const [isDark, setIsDark] = useState(false);
 
@@ -43,9 +52,15 @@ export default function AuthGuard({
   }, []);
 
   useEffect(() => {
+    const pathname = window.location.pathname;
+    if (pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password') {
+    setIsChecking(false);
+    return;
+  }
     const token = Cookies.get("access_token");
-
+ if (hasRedirected) return;
     if (!token) {
+      setHasRedirected(true);
       addAlert("Error", "Session expired. Please log in again.", "error");
       localStorage.removeItem("token");
       localStorage.removeItem("access_token");
@@ -56,12 +71,14 @@ export default function AuthGuard({
       return;
     }
 
+    const rememberMe = Cookies.get("remember_me") === "true";
     const decoded = parseJwt(token);
     const expired = !decoded?.exp || decoded.exp * 1000 < Date.now();
 
-    if (expired) {
+    if (expired && !rememberMe) {
       Cookies.remove("access_token");
       Cookies.remove("userProfile");
+      Cookies.remove("remember_me");
       localStorage.removeItem("token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("userProfile");
@@ -78,6 +95,7 @@ export default function AuthGuard({
       if (!userDetails) {
         Cookies.remove("access_token");
         Cookies.remove("userProfile");
+        Cookies.remove("remember_me");
         localStorage.removeItem("token");
         localStorage.removeItem("access_token");
         localStorage.removeItem("userProfile");
@@ -108,26 +126,26 @@ export default function AuthGuard({
     } else {
       setLoading(false);
     }
-  }, [isChecking, setLoading]);
+  }, [isChecking]);
 
   //   useEffect(() => {
   //   setLoading(isChecking);
   // }, [isChecking, setLoading]);
 
   if (isChecking) {
-    if(!loading){
-    return (
-      <>
-        <Loader isDark={isDark} />
-        {/* <Alerts
+    if (!loading) {
+      return (
+        <>
+          <Loader isDark={isDark} />
+          {/* <Alerts
           position="top-right"
           direction="right"
           timer={10000}
           className="rounded-md relative z-100 !w-80"
         /> */}
-      </>
-    );
-  }
+        </>
+      );
+    }
   }
 
   return (

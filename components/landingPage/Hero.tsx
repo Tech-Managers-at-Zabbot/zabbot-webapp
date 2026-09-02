@@ -1,81 +1,116 @@
+"use client";
 import React from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import ColouredButton from "../ColouredButton";
 import { appColors } from "@/constants/colors";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 // import { motion } from "framer-motion";
+import MascotComponent from "./MascotComponent";
+import { HiOutlinePlay } from "react-icons/hi2";
+import { useState } from "react";
+import { CustomSpinner } from "../CustomSpinner";
+import { useRouter } from "next/navigation";
+import WatchDemoModal from "./WatchDemoModal";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  setHeroLoginRedirect: (value: boolean) => void;
+  setHeroWatchDemoRedirect: (value: boolean) => void;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ setHeroLoginRedirect }) => {
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [isDemoOpen, setIsDemoOpen] = useState(false);
+
+  const router = useRouter();
+
+  const handleLoginClick = () => {
+    if (!loginLoading) {
+      setLoginLoading(true);
+      setHeroLoginRedirect(true);
+      router.push("/login");
+    }
+  };
+
+  const handleWatchDemoClick = () => {
+    if (!loginLoading) {
+      setIsDemoOpen(true);
+    }
+  };
+
   return (
     <div
-      className="text-[#000000] lg:px-[112px]"
+      className="text-[#000000] min-h-screen px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[112px] py-8 sm:py-12 lg:py-20 flex items-center justify-center"
       style={{ fontFamily: "Lexend", backgroundColor: appColors.primaryBlue }}
     >
-      <main className="flex flex-col lg:flex-row gap-10">
+      <main className="flex flex-col lg:flex-row gap-8 sm:gap-10 lg:gap-12 max-w-[1400px] w-full">
         {/* Text Content Section */}
-        <section className="flex flex-col justify-center gap-6 md:gap-[50px] lg:w-[55%]">
-          <div
-            className="text-center w-fit text-[20px] font-[400] leading-[145%]"
-            style={{ color: appColors.primaryGrayNormal }}
-          >
-            Ready to improve your Language today?
+        <section className="flex flex-col justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-[50px] lg:w-[55%]">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="text-center bg-[#FFFFFF] rounded-3xl text-[#162B6E] py-1.5 px-3 sm:py-2 sm:px-4 text-[13px] sm:text-[14px] md:text-[16px] font-[400] leading-[1.5]">
+              The spark that powers language & culture.
+            </div>
+            <div className="bg-[#00C950] shadow-xl text-[#FFFFFF] font-[500] text-[13px] sm:text-[14px] md:text-[16px] leading-[1.5] rounded-3xl py-1.5 px-3 sm:py-2 sm:px-4 text-center whitespace-nowrap">
+              Learn Yorùbá {/* Perfect tone! ✨ */}
+            </div>
           </div>
 
-          <div className="text-[62px] text-[#162B6E] font-[700] leading-[100%]">
-            Practice Learning a <br /> Language with Ease.
-          </div>
+          <h1 className="text-[28px] sm:text-[36px] md:text-[48px] lg:text-[56px] xl:text-[62px] text-[#162B6E] font-[700] leading-[1.2] sm:leading-[1.23]">
+            Learn your heritage <br className="hidden sm:block" /> language
+            through AI powered cultural immersion
+          </h1>
+          {/* <p className="text-[16px] sm:text-[18px] md:text-[20px] lg:text-[23px] xl:text-[25px] leading-[1.4] sm:leading-[1.3] font-[400] text-[#364153]">
+            Zabbot blends conversational AI, storytelling, and community to help
+            you speak Yoruba with confidence and cultural understanding.
+          </p> */}
 
-          <div
-            className="text-lg sm:text-xl md:text-[25px] font-[400]"
-            style={{ color: appColors.black }}
-          >
-            From your first words to fluent conversations, we&apos;re here to
-            make learning natural, engaging, and fun. Start practicing today and
-            watch your confidence grow!
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-[18px] items-start sm:items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-[18px] items-stretch sm:items-center">
             <ColouredButton
-              paddingBottom="16.31px"
-              paddingLeft="16.31px"
-              paddingRight="16.31px"
-              paddingTop="16.31px"
-              backgroundColor={appColors.yellowBtnColor}
-              color={appColors.darkRoyalBlueForBtn}
+              paddingBottom="14px"
+              paddingLeft="14px"
+              paddingRight="14px"
+              paddingTop="14px"
+              backgroundColor="#162B6E"
+              color="#FFFFFF"
+              boxShadow=""
+              onClick={handleLoginClick}
+              disabled={loginLoading}
             >
-              <main className="flex gap-[10.19px] items-center justify-center">
-                <div className="font-[600] text-sm sm:text-[16.31px] leading-[145%]">
-                  Get Started
+              {loginLoading ? (
+                <CustomSpinner
+                  title=""
+                  spinnerHeight="30px"
+                  spinnerWidth="30px"
+                  spinnerColor="#FFFFFF"
+                />
+              ) : (
+                <div className="font-[600] text-[16px] sm:text-[18px] md:text-[20px] leading-[145%]">
+                  Login
                 </div>
-                <div>
-                  <MdOutlineKeyboardArrowRight
-                    size={30}
-                    color={appColors.darkRoyalBlueForBtn}
-                  />
-                </div>
-              </main>
+              )}
             </ColouredButton>
 
             <ColouredButton
-              paddingBottom="16.31px"
-              paddingLeft="21px"
-              paddingRight="21px"
-              paddingTop="16.31px"
-              backgroundColor={appColors.darkRoyalBlueForBtn}
-              color={appColors.white}
-              width="266"
+              paddingBottom="14px"
+              paddingLeft="14px"
+              paddingRight="14px"
+              paddingTop="14px"
+              backgroundColor="#FFFFFF"
+              color="#162B6E"
+              border="1px solid #012657"
+              onClick={handleWatchDemoClick}
+              disabled={loginLoading}
             >
-              <main className="flex gap-[10px] items-center justify-center">
+              <main className="flex gap-[8px] sm:gap-[10px] items-center justify-center">
                 <div
-                  className="font-[600] text-sm sm:text-[16.31px] leading-[145%]"
+                  className="font-[600] text-[16px] sm:text-[18px] md:text-[20px] leading-[145%]"
                   style={{ fontFamily: "Inter" }}
                 >
-                  I Have An Account Already
+                  Watch Demo
                 </div>
                 <div>
-                  <MdOutlineKeyboardArrowRight
-                    size={30}
-                    color={appColors.white}
+                  <HiOutlinePlay
+                    size={24}
+                    color="#162B6E"
+                    className="sm:w-7 sm:h-7"
                   />
                 </div>
               </main>
@@ -83,55 +118,18 @@ const HeroSection = () => {
           </div>
         </section>
 
-        {/* Images Section */}
-        <section className="lg:w-[50%] mt-12 md:mt-16 relative">
-          <main>
-            <div className="rounded-lg">
-              <Image
-                src="/general/flags.svg"
-                alt="Language Flags"
-                width={500}
-                height={80}
-              />
-            </div>
-          </main>
-          <main className="flex justify-start items-center">
-            <div className="relative">
-              <Image
-                src="/landingPage/join-others.svg"
-                alt="more features"
-                height={100}
-                width={380}
-                // className="object-contain"
-                loading="lazy"
-                // priority
-              />
-            </div>
-            <div className="relative">
-              <Image
-                src="/landingPage/hundred-plus-score.svg"
-                alt="over 90 percent acheve 100 plus score"
-                height={96}
-                width={250}
-                className="object-contain"
-                priority
-              />
-            </div>
-          </main>
-
-          <main className="relative">
-            <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px]">
-              <Image
-                src="/landingPage/landing-page-parrot.svg"
-                alt="Zabbot blue mascot parrot, Para standing on a globe"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </main>
+        <section className="lg:w-[45%] flex items-center justify-center">
+          <div className="w-full flex items-center justify-center">
+            <MascotComponent />
+          </div>
         </section>
       </main>
+
+      <WatchDemoModal
+        isOpen={isDemoOpen}
+        onClose={() => setIsDemoOpen(false)}
+        youtubeUrl="https://youtu.be/mWBvbeLHVYs?si=MsZELQyh45RLpDT4"
+      />
     </div>
   );
 };

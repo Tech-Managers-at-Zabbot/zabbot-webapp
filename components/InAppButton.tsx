@@ -22,6 +22,8 @@ export interface ButtonProps {
   isShadowShow?: boolean;
   onClick?: (e: unknown) => void;
   background?: string;
+  padding?:string;
+  className?: string;
 }
 
 const InAppButton: React.FC<ButtonProps> = ({
@@ -33,6 +35,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   paddingBottom,
   paddingLeft,
   paddingRight,
+  padding,
   width = "230px",
   disabled,
   border,
@@ -44,6 +47,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   disabledColor = "#E0E1E6",
   background = "",
   onClick,
+  className = "",
 }) => {
   return (
     <button
@@ -58,7 +62,7 @@ const InAppButton: React.FC<ButtonProps> = ({
   ${!disabled ? "hover:translate-y-0.5" : ""}
   ${!disabled ? "active:shadow-none" : ""}
   ${!disabled ? "active:translate-y-1" : ""}
-  transition-all font-[700]`}
+  transition-all font-[700] ${className}`}
       onClick={onClick}
       style={{
         borderRadius,
@@ -73,6 +77,7 @@ const InAppButton: React.FC<ButtonProps> = ({
         fontFamily,
         backgroundColor: !disabled ? backgroundColor : disabledColor,
         background: !disabled ? background : disabledColor,
+        padding
       }}
       disabled={disabled}
       type={type}

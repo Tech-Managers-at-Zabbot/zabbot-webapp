@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ContentDataType, ContentSourceType, Level } from "./enums";
 
 
@@ -33,6 +34,11 @@ export interface ContentFile {
   description?: string;
 }
 
+export interface GrammarExample {
+  yoruba: string;
+  translation: string;
+}
+
 export interface Content {
   id?: string;
   translation: string;
@@ -40,6 +46,13 @@ export interface Content {
   sourceType: ContentSourceType;
   ededunPhrases?: EdedunPhrase[];
   customText?: string;
+  contentType?: string;
+  isGrammarRule?: boolean;
+  proverb?: string;
+  grammarTitle?: string;
+  grammarSubtitle?: string;
+  grammarDescription?: string[];
+  grammarExamples?: GrammarExample[];
   // mediaDescriptions?: { [key: string]: string };
 }
 
@@ -57,10 +70,13 @@ export interface Lesson {
   description: string;
   orderNumber: number;
   contents: Content[];
-  headlineTag?: string;
-  estimatedTime?: number;
+  headLineTag?: string;
+  languageId?:string;
+  estimatedDuration?: number | any;
   outcomes?: string;
   objectives?: string;
+  lessonImg?:string;
+  isActive?: boolean;
 }
 
 export interface Course {
@@ -69,6 +85,7 @@ export interface Course {
   description?: string;
   languageId: string;
   level: Level;
+  orderNumber: number;
   isActive: boolean;
   estimatedDuration?: number;
   totalLessons?: number;
@@ -84,4 +101,21 @@ export interface CreateCoursePayload {
   lessons: Array<Omit<Lesson, 'id' | 'courseId'> & {
     contents: Array<Omit<Content, 'id' | 'lessonId'>>;
   }>;
+}
+
+export interface FlashcardIconAttribution {
+  name: string;
+  url: string;
+}
+
+export interface Flashcard {
+  id?: string;
+  language: string;
+  yorubaWord: string;
+  englishWord: string;
+  transcription: string;
+  tonal: string;
+  image: string;
+  audio: string[];
+  iconAttributions: FlashcardIconAttribution;
 }

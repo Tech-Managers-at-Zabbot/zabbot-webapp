@@ -15,168 +15,149 @@ import { useTheme } from "@/contexts/ThemeProvider";
 
 const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 12;
 
   const { userDetails } = useUser();
 
   const { theme } = useTheme();
 
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
-    userDetails?.languageId
+    userDetails?.languageId,
+    true,
+    true
   );
 
   const allData = allCourses?.data;
 
-  const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
+  // const apiThumbnails = ["/userDashboard/yoruba/elderly-yoruba-woman.png"];
 
-  const allCoursesWithThumbnails = Array.isArray(allData)
-    ? allData.map((course, index) => ({
-        ...course,
-        thumbnailImage:
-          apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
-      }))
-    : [];
+  // const allCoursesWithThumbnails = Array.isArray(allData)
+  //   ? allData.map((course, index) => ({
+  //       ...course,
+  //       thumbnailImage:
+  //         apiThumbnails[index] || "/userDashboard/yoruba/coming-soon.svg",
+  //     }))
+  //   : [];
 
-  const coursesToMap = [
-    ...allCoursesWithThumbnails,
-    {
-      thumbnailImage: "/userDashboard/yoruba/journey-colors.png",
-      title: "Colors, Shapes, Descriptions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/yoruba-family.png",
-      title: "Family & Social Interactions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/stop-watch.png",
-      title: "Numbers, Time & Daily Activities",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/golden-heart.png",
-      title: "Politeness & Respect",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/big-baby.png",
-      title: "Emotions & Expressions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/food.png",
-      title: "Food & Market Culture",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/mat.png",
-      title: "Clothing & Self-Presentation",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/chores.png",
-      title: "Home & Housing",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/health.png",
-      title: "Health & Well-being",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/map-of-nigeria.png",
-      title: "Travel & Places",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/travel.png",
-      title: "Transport & Getting Around",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/sunset.svg",
-      title: "Weather, Nature & Spirituality",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/reading.svg",
-      title: "Work, School & Aspirations",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/dialogue-art.png",
-      title: "Conflict Resolution & Apologies",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/culture.png",
-      title: "Proverbs & Everyday Wisdom",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/talking-drums.png",
-      title: "Music, Dance & Pop Culture",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/festival-drums.png",
-      title: "Festivals & Traditions",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/customer-care.png",
-      title: "Technology & Modern Life",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-    {
-      thumbnailImage: "/userDashboard/yoruba/nigeria-flag-and-woman.png",
-      title: "News, Politics & Community Issues",
-      estimatedDuration: 20,
-      totalLessons: 10,
-    },
-  ];
-
-  // Calculate total pages based on your data
-  // const totalPages = Math.ceil(lessonProgressData.length / itemsPerPage);
-
-  // Get current page data
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
-  // const currentPageData = lessonProgressData.slice(startIndex, endIndex);
-
-  // const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-
-  // const handleFilterClick = (filterName: string) => {
-  //   setSelectedFilters((prev) =>
-  //     prev.includes(filterName)
-  //       ? prev.filter((f) => f !== filterName)
-  //       : [...prev, filterName]
-  //   );
-  // };
+  // const coursesToMap = [
+  //   ...allCoursesWithThumbnails,
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/journey-colors.png",
+  //     title: "Colors, Shapes, Descriptions",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/yoruba-family.png",
+  //     title: "Family & Social Interactions",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/stop-watch.png",
+  //     title: "Numbers, Time & Daily Activities",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/golden-heart.png",
+  //     title: "Politeness & Respect",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/big-baby.png",
+  //     title: "Emotions & Expressions",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/food.png",
+  //     title: "Food & Market Culture",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/mat.png",
+  //     title: "Clothing & Self-Presentation",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/chores.png",
+  //     title: "Home & Housing",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/health.png",
+  //     title: "Health & Well-being",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/map-of-nigeria.png",
+  //     title: "Travel & Places",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/travel.png",
+  //     title: "Transport & Getting Around",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/sunset.svg",
+  //     title: "Weather, Nature & Spirituality",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/reading.svg",
+  //     title: "Work, School & Aspirations",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/dialogue-art.png",
+  //     title: "Conflict Resolution & Apologies",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/culture.png",
+  //     title: "Proverbs & Everyday Wisdom",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/talking-drums.png",
+  //     title: "Music, Dance & Pop Culture",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/festival-drums.png",
+  //     title: "Festivals & Traditions",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/customer-care.png",
+  //     title: "Technology & Modern Life",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  //   {
+  //     thumbnailImage: "/userDashboard/yoruba/nigeria-flag-and-woman.png",
+  //     title: "News, Politics & Community Issues",
+  //     estimatedDuration: 20,
+  //     totalLessons: 10,
+  //   },
+  // ];
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Here you would typically make an API call to fetch the new page data
-    // For now, we're just updating the local state
   };
 
   // const dropdownOptions = [
@@ -324,7 +305,7 @@ const AllCourses = () => {
             </div>
           ) : (
             <div className="flex flex-wrap justify-center sm:justify-center items-center gap-4 sm:gap-6 md:gap-4">
-              {coursesToMap.map(
+              {allData.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
                     key={index}
@@ -333,7 +314,7 @@ const AllCourses = () => {
                   >
                     <CoursesCard
                       data={lessonProgressData}
-                      isClickable={index === 0}
+                      isClickable={lessonProgressData?.isActive}
                     />
                   </div>
                 )

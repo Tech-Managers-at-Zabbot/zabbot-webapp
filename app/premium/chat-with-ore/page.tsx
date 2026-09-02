@@ -4,16 +4,17 @@
 "use client";
 
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAlert } from "next-alert";
 import { FiSearch } from "react-icons/fi";
 import { useUser } from "@/contexts/UserContext";
 import { useDailyLimit } from "@/hooks/useChatDailyLimit";
 import { useConversations } from "@/components/premium/chat-with-ore/use-conversation";
 import ConversationCard from "@/components/premium/chat-with-ore/conversation-card";
+import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
 const ChatWithOre = () => {
-  // const { theme } = useTheme();
+
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,8 @@ const ChatWithOre = () => {
   const { userDetails } = useUser();
   const firstName = userDetails?.firstName || "User";
   const chatLetter = firstName.charAt(0).toUpperCase();
+
+  const { mutate: logUserStreak } = useLogUserStreak();
 
   // List of possible proverbs
   const allProverbs = [
@@ -52,6 +55,11 @@ const ChatWithOre = () => {
     const shuffled = [...allProverbs].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 4);
   };
+
+  useEffect(() => {
+    logUserStreak();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // State to store the current random proverbs
   const [randomProverbs, setRandomProverbs] = useState(getRandomProverbs());
@@ -224,14 +232,14 @@ const ChatWithOre = () => {
                   {!currentConversation ||
                     (currentConversation.messages.length === 0 && (
                       <div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-1 mt-5">
                           {randomProverbs.map((proverb, index) => (
                             <div
-                              className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-5 cursor-pointer"
+                              className="p-[4px] bg-gradient-to-r from-[#33BBFA] to-[#005278] rounded-lg p-2 cursor-pointer"
                               onClick={() => handleProverbClick(proverb)}
                               key={index}
                             >
-                              <div className="bg-[#123F77] flex items-center space-x-2 h-full p-4 rounded-md">
+                              <div className="bg-[#123F77] flex items-center space-x-2 h-full p-1 rounded-md">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="29"
@@ -269,7 +277,7 @@ const ChatWithOre = () => {
                       key={idx}
                       className={`flex items-end ${ // Use items-end to vertically align the icon and bubble
                         msg.role === "user" ? "justify-start" : "justify-end"
-                      }`}
+                        }`}
                     >
                       {/* Conditionally render the user's icon on the left */}
                       {msg.role === "user" && (
@@ -279,11 +287,10 @@ const ChatWithOre = () => {
                       )}
 
                       <div
-                        className={`px-4 py-2 rounded-lg max-w-xs md:max-w-md border border-2 border-[#33BBFA] ${
-                          msg.role === "user"
+                        className={`px-4 py-2 rounded-lg max-w-xs md:max-w-md border border-2 border-[#33BBFA] ${msg.role === "user"
                           ? "bg-[#213F67] text-gray-900 rounded-bl-none"
                           : "bg-[#213F67] text-white rounded-br-none"
-                        }`}
+                          }`}
                       >
                         {msg.role === "assistant" && msg.content.includes("[") ? (
                           <>
@@ -305,10 +312,10 @@ const ChatWithOre = () => {
                       {/* Conditionally render the assistant's icon on the right */}
                       {msg.role === "assistant" && (
                         <div className="w-20 h-20 ml-2 flex-shrink-0 bg-[#0098DE] rounded-full flex items-center justify-center">
-                          <img 
-                            src="../../../../premium/zabbot-ore-robot.svg" 
-                            alt="Assistant Avatar" 
-                            className="w-full h-full rounded-full object-cover object-top" 
+                          <img
+                            src="../../../../premium/zabbot-ore-robot.svg"
+                            alt="Assistant Avatar"
+                            className="w-full h-full rounded-full object-cover object-top"
                           />
                         </div>
                       )}
@@ -316,13 +323,13 @@ const ChatWithOre = () => {
                   ))}
                   {loading && (
                     <div className="text-gray-500 flex justify-end">
-                      <div className="pr-12 text-xl">Òrẹ́ is typing...</div>
+                      <div className="pr-12 text-xl">Ọ̀rẹ́ is typing...</div>
                     </div>
                   )}
                 </div>
 
                 {/* Input box */}
-                <div className="flex items-center p-4 border border-blue-500 rounded-lg mt-30 w-full">
+                <div className="flex items-center p-4 border border-blue-500 rounded-lg mt-15 w-full">
                   <div className="flex-shrink-0">
                     <svg
                       className="w-6 h-6 text-gray-800 dark:text-white"
@@ -366,17 +373,17 @@ const ChatWithOre = () => {
                       }
                     }}
                   />
-                  
+
                   <button className="flex-shrink-0 p-3 rounded-lg bg-[#0098DE]" onClick={sendMessage} disabled={loading}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                      <path d="M26.0704 6.01956C28.3929 5.78534 29.9038 8.4038 28.5391 10.2979L16.8516 26.5205C15.5293 28.3558 12.6721 27.8563 12.0498 25.6817L10.6114 20.6514C10.2874 19.5188 10.7328 18.3068 11.7129 17.6534L17.2217 13.9795L11.2862 16.9151C10.2303 17.437 8.95752 17.2158 8.13871 16.3692L4.50199 12.6075C2.92978 10.9812 3.92624 8.25878 6.1768 8.03128L26.0704 6.01956ZM12.5713 18.9414C12.1514 19.2214 11.96 19.7403 12.0987 20.2256L13.5381 25.2569C13.8051 26.1884 15.0291 26.4017 15.5957 25.6153L27.2842 9.39261C27.3716 9.27127 27.4277 9.14183 27.4629 9.01175L12.5713 18.9414ZM26.2256 7.5596L6.33207 9.57035C5.36751 9.66785 4.9404 10.8353 5.6143 11.5323L9.25102 15.294C9.60195 15.6567 10.1482 15.7511 10.6006 15.5274L26.6446 7.59378C26.5145 7.55943 26.3741 7.54463 26.2256 7.5596Z" fill="#FFF9FF"/>
+                      <path d="M26.0704 6.01956C28.3929 5.78534 29.9038 8.4038 28.5391 10.2979L16.8516 26.5205C15.5293 28.3558 12.6721 27.8563 12.0498 25.6817L10.6114 20.6514C10.2874 19.5188 10.7328 18.3068 11.7129 17.6534L17.2217 13.9795L11.2862 16.9151C10.2303 17.437 8.95752 17.2158 8.13871 16.3692L4.50199 12.6075C2.92978 10.9812 3.92624 8.25878 6.1768 8.03128L26.0704 6.01956ZM12.5713 18.9414C12.1514 19.2214 11.96 19.7403 12.0987 20.2256L13.5381 25.2569C13.8051 26.1884 15.0291 26.4017 15.5957 25.6153L27.2842 9.39261C27.3716 9.27127 27.4277 9.14183 27.4629 9.01175L12.5713 18.9414ZM26.2256 7.5596L6.33207 9.57035C5.36751 9.66785 4.9404 10.8353 5.6143 11.5323L9.25102 15.294C9.60195 15.6567 10.1482 15.7511 10.6006 15.5274L26.6446 7.59378C26.5145 7.55943 26.3741 7.54463 26.2256 7.5596Z" fill="#FFF9FF" />
                     </svg>
                   </button>
                 </div>
 
                 <div className="flex flex-col items-center ">
                   <p className="text-white-500 font-[400] text-[14px] mt-1">
-                    Òrẹ́ can make mistakes. Consider checking important
+                    Ọ̀rẹ́ can make mistakes. Consider checking important
                     information.
                   </p>
                 </div>

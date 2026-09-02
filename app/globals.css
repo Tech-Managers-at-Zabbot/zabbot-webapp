@@ -65,3 +65,38 @@ body {
 .no-scrollbar {
   -webkit-overflow-scrolling: touch;
 }
+
+.list-green-tick {
+  list-style-image: url('/landingPage/green-tick.svg');
+}
+
+.list-blue-tick {
+  list-style-image: url('/landingPage/blue-tick.svg');
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* @keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} */
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

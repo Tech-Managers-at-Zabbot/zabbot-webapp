@@ -21,6 +21,8 @@ import { useSearchParams } from "next/navigation";
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
+const REMEMBERED_EMAIL_KEY = "remembered_email";
+
 const LoginAuth: React.FC = () => {
   const { getPageText, isPageLoading: isLanguageLoading } =
     usePageLanguage("login");
@@ -43,6 +45,15 @@ const LoginAuth: React.FC = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+    } else {
+      setEmail("");
+    }
+  }, []);
+
+  useEffect(() => {
     const googleAuthError = searchParams.get("error");
     if (googleAuthError) {
       const errorMessage = getGoogleAuthErrorMessage(googleAuthError);
@@ -51,9 +62,8 @@ const LoginAuth: React.FC = () => {
       const params = new URLSearchParams(searchParams.toString());
       params.delete("error");
 
-      const newUrl = `${window.location.pathname}${
-        params.toString() ? `?${params.toString()}` : ""
-      }`;
+      const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""
+        }`;
       router.replace(newUrl);
     }
   }, [searchParams, router]);
@@ -96,6 +106,15 @@ const LoginAuth: React.FC = () => {
               secure: true,
               sameSite: "strict",
             });
+            Cookies.set("remember_me", stayLoggedIn ? "true" : "false", {
+              expires: stayLoggedIn ? 30 : 1,
+              secure: true,
+              sameSite: "strict",
+            });
+
+            if (stayLoggedIn) {
+              localStorage.setItem(REMEMBERED_EMAIL_KEY, email.toLowerCase().trim());
+            }
 
             setError({
               emailError: false,
@@ -115,7 +134,7 @@ const LoginAuth: React.FC = () => {
             if (
               error?.response?.data?.specialCodeMessage &&
               error?.response?.data?.specialCodeMessage[0] ===
-                "UNVERIFIED_ACCOUNT"
+              "UNVERIFIED_ACCOUNT"
             ) {
               router.push(
                 `/otp?email=${error?.response?.data?.specialCodeMessage[1]}`
@@ -236,15 +255,15 @@ const LoginAuth: React.FC = () => {
           >
             <input
               type="checkbox"
-              id="sendUpdates"
-              name="sendUpdates"
+              id="stayLoggedIn"
+              name="stayLoggedIn"
               checked={stayLoggedIn}
               onChange={(e) => setStayLoggedIn(e.target.checked)}
               className="h-4 w-4 hover:cursor-pointer rounded border-[#D0D5DD] text-indigo-600 focus:ring-indigo-500"
             />
             <div className="block">
               <label
-                htmlFor="sendUpdates"
+                htmlFor="stayLoggedIn"
                 className="block hover:cursor-pointer"
               >
                 {/* Remember me */}
@@ -284,11 +303,10 @@ const LoginAuth: React.FC = () => {
               }}
             >
               <span
-                className={`font-[500] ${
-                  isLoginLoading || isResetLoading || isResetLoading
-                    ? "cursor-not-allowed"
-                    : "hover:cursor-pointer"
-                }`}
+                className={`font-[500] ${isLoginLoading || isResetLoading || isResetLoading
+                  ? "cursor-not-allowed"
+                  : "hover:cursor-pointer"
+                  }`}
               >
                 {/* Reset it here. */}
                 {getPageText("reset_here")}
@@ -395,11 +413,10 @@ const LoginAuth: React.FC = () => {
           }}
         >
           <span
-            className={`font-[400] ${
-              isLoginLoading || isResetLoading || isResetLoading
-                ? "cursor-not-allowed"
-                : "hover:cursor-pointer"
-            }`}
+            className={`font-[400] ${isLoginLoading || isResetLoading || isResetLoading
+              ? "cursor-not-allowed"
+              : "hover:cursor-pointer"
+              }`}
           >
             {/* Create Account */}
             {getPageText("create_account")}

@@ -29,6 +29,7 @@ const AdminNavBar = ({ showLogo = false }) => {
     localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    Cookies.remove("remember_me");
     setLoading(true);
     router.push("/login");
   };
@@ -331,7 +332,7 @@ const AdminNavBar = ({ showLogo = false }) => {
         </div>
         <MainDropdown
           options={dropdownOptions}
-          placeholder="Go Premium"
+          placeholder="Premium"
           icon={
             <Image
               src={"/userDashboard/isPremiumImage.svg"}

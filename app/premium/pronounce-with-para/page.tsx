@@ -13,6 +13,7 @@ import { useGetAllPronunciation } from "@/services/generalApi/pronounciations/mu
 import { PronunciationProps } from '@/components/premium/types';
 
 import { normalizeYorubaString } from '@/utilities/utilities';
+import { useLogUserStreak } from '@/services/generalApi/users/mutation';
 
 const PronounceWithPara = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -20,6 +21,7 @@ const PronounceWithPara = () => {
     const [selectedPwpItem, setSelectedPwpItem] = useState<PronunciationProps | null>(null);
 
     const { data: pronunciations, isLoading: isLoadingPwp } = useGetAllPronunciation();
+    const { mutate: logUserStreak } = useLogUserStreak();
 
     const filteredPwpItems = pronunciations?.data.filter((item: PronunciationProps) => {
         // Normalize the user's search term once
@@ -53,6 +55,11 @@ const PronounceWithPara = () => {
             localStorage.setItem("pwpHistoryList", JSON.stringify(pronunciationHistoryList));
         }
     }, [selectedItem, pronunciations]);
+
+    useEffect(() => {
+        logUserStreak();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div>

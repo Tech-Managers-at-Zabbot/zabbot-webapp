@@ -1,56 +1,48 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
-import AchievementsCard from "@/components/dashboard/AchievementsCard";
-import GoPremiumCard from "@/components/dashboard/GoPremiumCard";
-// import { metricsData } from "@/constants/data-to-populate/dashboardData";
-import // DashboardMetricCard,
-"@/components/dashboard/DashboardMetricCard";
-import { BsPeople } from "react-icons/bs";
-import { FaGraduationCap } from "react-icons/fa6";
-// import UserDashboardFooter from "@/components/dashboard/UserDashboardFooter";
-import ProgressSection from "@/components/dashboard/ProgressSection";
-import PopularCourses from "@/components/dashboard/PopularCourses";
-import Advert from "@/components/dashboard/Advert";
-import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
-import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard2";
-import { useGetUserCount } from "@/services/generalApi/users/query";
-import { HiOutlineTrophy } from "react-icons/hi2";
 import { useUser } from "@/contexts/UserContext";
 import { useTheme } from "@/contexts/ThemeProvider";
-import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
+import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 import { usePageLanguage } from "@/contexts/LanguageContext";
-import { useLoading } from "@/contexts/LoadingProvider";
+import {
+  WordForTheDay,
+} from "@/components/dashboard/UserGoals";
+import Leaderboard from "@/components/dashboard/LeaderBoard";
+import FlashCard from "@/components/dashboard/FlashCard";
+import PopularCourses from "@/components/dashboard/PopularCourses";
+import ProgressSection from "@/components/dashboard/ProgressSection";
+import Advert from "@/components/dashboard/Advert";
+import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard2";
+import { HiOutlineTrophy } from "react-icons/hi2";
+import { BsPeople } from "react-icons/bs";
+import { FaGraduationCap } from "react-icons/fa6";
 import { useGetUserCompletedCourses } from "@/services/generalApi/lessons/mutation";
+import { useLoading } from "@/contexts/LoadingProvider";
+import { useGetUserCount } from "@/services/generalApi/users/mutation";
+// import LatestQuiz from "@/components/dashboard/LatestQuiz";
+import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
 
 const Dashboard = () => {
-  const [goPremium, setGoPremium] = useState(true);
-
+  const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
+  const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
+  const [greeting, setGreeting] = useState("");
   const { userDetails } = useUser();
-
-  const handleClosePremiumTag = () => setGoPremium(false);
-
-  const { data: userCountData, isLoading: userCountLoading } =
-    useGetUserCount();
-
-  const { goalsCount, userGoalsLoading } = useUser();
 
   const { getPageText, isPageLoading: isLanguageLoading } =
     usePageLanguage("userDashboard");
 
+  const { theme } = useTheme();
+  const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
+
+  const { data: userCountData, isLoading: userCountLoading } =
+    useGetUserCount();
+  const { goalsCount, userGoalsLoading } = useUser();
+
   const { loading, setLoading } = useLoading();
 
   const userCount = userCountData?.data || 0;
-
-  const [greeting, setGreeting] = useState("");
-
-  const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
-
-  const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
-
-  const { theme } = useTheme();
 
   const {
     data: userCompletedCoursesCount,
@@ -59,14 +51,11 @@ const Dashboard = () => {
 
   const userCoursesCount = userCompletedCoursesCount?.data || 0;
 
-  const [logoUrl, setLogoUrl] = useState("/general/zabbot-logo-blue.svg");
-
   const dashboardMetricData = [
     {
       title: getPageText("completed_daily_goals"),
-      value: `${goalsCount} ${
-        goalsCount === 1 ? getPageText("goal") : getPageText("goals")
-      }`,
+      value: `${goalsCount} ${goalsCount === 1 ? getPageText("goal") : getPageText("goals")
+        }`,
       icon: (
         <div className="transform -scale-x-100 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <HiOutlineTrophy />
@@ -80,9 +69,8 @@ const Dashboard = () => {
     },
     {
       title: getPageText("completed_courses"),
-      value: `${userCoursesCount} ${
-        userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
-      }`,
+      value: `${userCoursesCount} ${userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
+        }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
           <FaGraduationCap />
@@ -112,20 +100,13 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    const currentTime = new Date();
-    const hours = currentTime.getHours();
-
-    if (hours >= 1 && hours < 12) {
-      // Morning: 1 AM to 12 PM
-      setGreeting("Káàrọ̀");
-    } else if (hours >= 12 && hours < 18) {
-      // Afternoon: 12 PM to 6 PM
-      setGreeting("Káàsán");
+    if (isLanguageLoading) {
+      if (!loading) setLoading(true);
     } else {
-      // Night: 6 PM to 1 AM
-      setGreeting("Káalẹ́");
+      setLoading(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLanguageLoading]);
 
   useEffect(() => {
     setBackgroundColor(theme === "dark" ? "#012657" : "#dff9fb");
@@ -141,18 +122,21 @@ const Dashboard = () => {
     );
   }, [theme]);
 
-  function LanguageCheck() {
-    if (isLanguageLoading) {
-      if (!loading) {
-        return setLoading(true);
-      }
-    }
-    return setLoading(false);
-  }
-
   useEffect(() => {
-    LanguageCheck();
-  }, [isLanguageLoading]);
+    const currentTime = new Date();
+    const hours = currentTime.getHours();
+
+    if (hours >= 1 && hours < 12) {
+      // Morning: 1 AM to 12 PM
+      setGreeting("Káàrọ̀");
+    } else if (hours >= 12 && hours < 18) {
+      // Afternoon: 12 PM to 6 PM
+      setGreeting("Káàsán");
+    } else {
+      // Night: 6 PM to 1 AM
+      setGreeting("Káalẹ́");
+    }
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -164,144 +148,165 @@ const Dashboard = () => {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      {/* #06254c, #dff9fb */}
-      <div
-        className="min-h-screen py-0 my-0 pt-6 relative pb-50 px-[5%] overflow-x-hidden"
-        style={{ fontFamily: "Lexend", background: backgroundColor }}
-      >
-        <div
-          className="absolute bg-cover inset-0 top-0 h-40 bg-center"
-          style={{ backgroundImage: `url(${cloudsUrl})` }}
-        ></div>
-        <div className="max-w-screen-2xl mx-auto">
-          <section className="relative flex justify-between items-center mb-6">
-            {/* <div
-              className="absolute min-h-20 inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${cloudsUrl})` }}
-            ></div> */}
-            {/* Logo */}
-            <div className="flex-shrink-0 order-1">
-              <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
-                <Image
-                  src={logoUrl}
-                  alt="Zabbot Logo"
-                  fill
-                  priority
-                  className="object-contain"
-                />
-              </div>
-            </div>
 
-            {/* Right section */}
-            <div className="flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 flex-shrink-0 items-start order-3">
-              {/* Text section - responsive */}
-              <div className="flex flex-col gap-[4px] sm:gap-[6px] md:gap-[8px] text-right">
-                <span
-                  className="font-bold text-[18px] sm:text-[24px] md:text-[28px] lg:text-[35.53px] leading-[100%] break-words"
-                  style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
-                >
-                  <span className="text-[10px] sm:text-[18px] md:text-[20px] lg:text-[28px]">
-                    {greeting}
-                  </span>{" "}
-                  {userDetails?.firstName || "User"}
-                </span>
-                <span
-                  className="font-[400] text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] leading-[145%] max-w-[150px] sm:max-w-[200px] md:max-w-none"
-                  style={{ color: theme === "dark" ? "#FFFAEB" : "#333333" }}
-                >
-                  {getPageText("learn_speak_belong")}
-                </span>
+      <div
+        style={{ fontFamily: "Lexend", background: backgroundColor }}
+        className="min-h-screen"
+      >
+        <main className="px-[5%]">
+          <section className="">
+            <div
+              className="absolute bg-cover inset-0 top-0 h-40 bg-center"
+              style={{ backgroundImage: `url(${cloudsUrl})` }}
+            ></div>
+
+            <div
+              className="
+    relative 
+    w-full 
+    py-[20px] 
+    z-40
+    flex 
+    flex-col 
+    lg:flex-row 
+    lg:items-center 
+    lg:justify-between 
+    gap-4
+  "
+            >
+              {/* ---- ROW 1: Logos + Settings (mobile) ---- */}
+              <div className="flex w-full items-center justify-between lg:justify-start lg:gap-6">
+                {/* Logos group */}
+                <div className="flex items-center gap-4 flex-shrink-0">
+                  {/* Bird logo */}
+                  <div className="relative w-[36px] h-[30px] sm:w-[46px] sm:h-[36px] md:w-[70px] md:h-[76.91px]">
+                    <Image
+                      src="/userDashboard/bird-logo.png"
+                      alt="Centralized rounded parrot mascot"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
+
+                  {/* Zabbot logo */}
+                  <div className="relative w-[100px] h-[30px] sm:w-[120px] sm:h-[36px] md:w-[156px] md:h-[46.91px]">
+                    <Image
+                      src={logoUrl}
+                      alt="Zabbot Logo"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+
+                {/* Settings → visible on mobile here, hidden on desktop */}
+                <div className="flex lg:hidden">
+                  <SettingsBreadcrumb isDark={theme === "dark"} />
+                </div>
               </div>
-              {/* Menu */}
+
+              {/* ---- ROW 3: Search bar (full width on mobile, center on large) ---- */}
+              <div className="w-full z-10">
+                {/* <SearchBar
+                  placeholder="Search sparks, journeys, flashcards, and more..."
+                  icon={<IoSearchOutline />}
+                  background={"#BBE1E1"}
+                  className="w-full"
+                /> */}
+              </div>
+
+              {/* ---- ROW 2: Greeting text (mobile centered, desktop right-aligned) ---- */}
+              <div className="flex w-full justify-start lg:justify-end lg:order-none z-20">
+                <div className="flex flex-col text-left lg:text-right gap-1 z-20">
+                  <span
+                    className="
+          font-bold 
+          text-[18px] z-20 sm:text-[24px] md:text-[28px] lg:text-[35.53px]
+          leading-[100%]
+          break-words
+        "
+                    style={{ color: theme === "dark" ? "#D0F7F6" : "#202124" }}
+                  >
+                    <span className="text-[12px] sm:text-[18px] md:text-[20px] lg:text-[28px]">
+                      {greeting}
+                    </span>{" "}
+                    {userDetails?.firstName || "User"}
+                  </span>
+
+                  <span
+                    className="
+          font-[400] 
+          text-[11px] sm:text-[12px] md:text-[13px] 
+          leading-[145%] 
+          max-w-[300px] z-20
+        "
+                    style={{ color: theme === "dark" ? "#FFFAEB" : "#333333" }}
+                  >
+                    {getPageText("learn_speak_belong")}
+                  </span>
+                </div>
+              </div>
+
+              {/* Settings on desktop */}
               <div className="hidden lg:flex mt-1">
                 <SettingsBreadcrumb isDark={theme === "dark"} />
               </div>
             </div>
           </section>
-          <section className="relative">
-            {/* <div
-              className="absolute min-h-20 inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${cloudsUrl})` }}
-            ></div> */}
-            <div className="flex relative z-10 mt-4 sm:mt-6 md:mt-10 justify-between items-start">
-              {/* Parrot - Hidden on small screens, shown on medium+ */}
-              <div className="hidden lg:block absolute top-[60px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 order-2">
-                <div className="w-[113px] h-[137px]">
-                  <Image
-                    src="/userDashboard/parrot-head.svg"
-                    alt="Centralized rounded parrot mascot"
-                    fill
-                    priority
-                    className="object-contain"
-                  />
-                </div>
+
+          <div className="flex gap-6 flex-col lg:flex-row lg:items-start lg:justify-between">
+            {/* Left Section ==> Totay's Word, Flash Cards, Leader Board */}
+            <section
+              className="
+    flex 
+    flex-col 
+    gap-6
+    py-[40px]
+
+    w-full                /* mobile: full width (stacks) */
+    lg:w-[40%]            /* large: take ~40% */
+    xl:w-[23%]            /* xl: desktop size */
+    flex-shrink-0
+  "
+            >
+              <div className="z-30">
+                <WordForTheDay />
               </div>
-            </div>
-          </section>
 
-          {/* <section className="relative flex lg:hidden"> */}
-          <section className="relative flex lg:hidden z-10 mt-4 sm:mt-6 md:mt-10 items-start">
-            {/* Parrot - Hidden on large screens, shown on small+ */}
-            <div className="absolute top-[30px] right-0 sm:right-0 md:left-0 left-auto">
-              <div className="w-[80px] h-[80px]">
-                <Image
-                  src="/userDashboard/parrot-head.svg"
-                  alt="Centralized rounded parrot mascot"
-                  fill
-                  priority
-                  className="object-contain"
-                />
+              <div className="">
+                <FlashCard />
               </div>
-            </div>
-          </section>
-          {/* </section> */}
+              <div className="">
+                <Leaderboard />
+              </div>
+            </section>
 
-          <section className="mt-20">
-            <AchievementsCard />
-          </section>
-
-          <section
-            className={`transition-all duration-300 ease-in-out ${
-              goPremium
-                ? "opacity-100 max-h-96 mb-6"
-                : "opacity-0 max-h-0 mb-0 overflow-hidden"
-            }`}
-          >
-            <GoPremiumCard onClose={handleClosePremiumTag} />
-          </section>
-          {/* grid-cols-1 md:grid-cols-2 grid lg:grid-cols-3 */}
-
-          {/* <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
-            {metricsData.map((metric, index) => (
-              <DashboardMetricCard key={index} data={metric} />
-            ))}
-          </section> */}
-
-          <section className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
-            {dashboardMetricData?.map((metric, index) => (
-              <DashboardMetricCard2 key={index} data={metric} />
-            ))}
-          </section>
-
-          <section className="mt-10">
-            <PremiumFeaturesComponents />
-          </section>
-
-          <section className="mt-6">
-            <ProgressSection />
-          </section>
-
-          <section className="mt-6">
-            <PopularCourses />
-          </section>
-
-          <section className="mt-6">
-            <Advert />
-          </section>
-        </div>
+            <section className="flex flex-col w-full lg:w-[60%] xl:w-[77%] py-[40px] gap-10">
+              <div className="z-10">
+                <ProgressSection />
+              </div>
+              <div className="w-full">
+                <PopularCourses />
+              </div>
+              <div className="w-full">
+                {/* <LatestQuiz /> */}
+                <PremiumFeaturesComponents />
+              </div>
+              <div>
+                <Advert />
+              </div>
+              <div className="mt-6 flex flex-wrap lg:flex-nowrap w-full transition-all duration-300 ease-in-out gap-6">
+                {dashboardMetricData?.map((metric, index) => (
+                  <DashboardMetricCard2 key={index} data={metric} />
+                ))}
+              </div>
+            </section>
+          </div>
+        </main>
       </div>
     </div>
   );
 };
-
 export default Dashboard;

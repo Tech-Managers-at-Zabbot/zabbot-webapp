@@ -10,6 +10,8 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
 import { usePageLanguage } from "@/contexts/LanguageContext";
+import { useLoading } from "@/contexts/LoadingProvider";
+import { MdOutlinePayments } from "react-icons/md";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(false);
@@ -18,15 +20,17 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
+  const { setLoading } = useLoading();
 
-  const { getPageText } =
-        usePageLanguage("userDashboard");
+  const { getPageText } = usePageLanguage("userDashboard");
 
   const handleLogout = () => {
-    console.log("Logging out two...");
     const keepChatHistory = localStorage.getItem("chat_conversations");
     const keepChatLastResetDate = localStorage.getItem("last_reset_date");
-    const keepDailyCallsRemaining = localStorage.getItem("daily_calls_remaining");
+    const keepLastLoggedInEmail = localStorage.getItem("remembered_email");
+    const keepDailyCallsRemaining = localStorage.getItem(
+      "daily_calls_remaining"
+    );
 
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
@@ -35,10 +39,15 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
     localStorage.setItem("chat_conversations", keepChatHistory || "[]");
     localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
-    localStorage.setItem("daily_calls_remaining", keepDailyCallsRemaining || "30");
-    
+    localStorage.setItem("remembered_email", keepLastLoggedInEmail || "");
+    localStorage.setItem(
+      "daily_calls_remaining",
+      keepDailyCallsRemaining || "30"
+    );
+
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
+    Cookies.remove("remember_me");
     router.push("/login");
   };
 
@@ -58,29 +67,50 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
   const dropdownOptions = [
     {
-      name: getPageText("settings"),
-      icon: "/userDashboard/settings.svg",
-      action: () => "",
-      isActive: false,
-    },
-    {
       name: getPageText("profile"),
       icon: "/userDashboard/profile.svg",
-      action: () => "",
-      isActive: false,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings?tab=profile");
+      },
+      isActive: true,
+    },
+    {
+      name: getPageText("payment"),
+      icon: <MdOutlinePayments size={25} color="#4d4f56" /> as unknown as string,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings?tab=payment");
+      },
+      isReactIcon: true,
+      isActive: true,
     },
     {
       name: getPageText("notifications"),
       icon: "/userDashboard/notifications.svg",
-      action: () => "",
-      isActive: false,
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings?tab=notifications");
+      },
+      isActive: true,
     },
+    {
+      name: getPageText("settings"),
+      icon: "/userDashboard/settings.svg",
+      action: () => {
+        setLoading(true);
+        router.push("/user-settings");
+      },
+      isActive: true,
+    },
+
     {
       name: getPageText("logout"),
       icon: "/userDashboard/logout.svg",
       action: () => setShowLogoutModal(true),
       isActive: true,
     },
+
   ];
   return (
     <div className="flex p-0 z-20 relative">
@@ -99,26 +129,34 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
             {dropdownOptions.map((option, index) => (
               <li
                 key={index}
-                className={`flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 ${
-                  !option.isActive
-                    ? "hover:cursor-not-allowed"
-                    : "hover:bg-gray-300 hover:cursor-pointer"
-                } rounded`}
+                className={`flex items-center gap-2 font-medium leading-[145%] p-1.5 sm:p-2 ${!option.isActive
+                  ? "hover:cursor-not-allowed"
+                  : "hover:bg-gray-300 hover:cursor-pointer"
+                  } rounded`}
                 onClick={() => {
                   option.action();
                   setIsBreadcrumbOpen(false);
                 }}
               >
-                <Image
-                  src={option.icon}
-                  alt={option.name}
-                  width={window.innerWidth < 640 ? 20 : 25}
-                  height={window.innerWidth < 640 ? 20 : 25}
-                />
+                {!option.isReactIcon && (
+                  <Image
+                    src={option.icon}
+                    alt={option.name}
+                    width={window.innerWidth < 640 ? 20 : 25}
+                    height={window.innerWidth < 640 ? 20 : 25}
+                  />
+                )}
+                {option.isReactIcon && (
+                  <span
+                    className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${!option.isActive ? "text-[#666666]" : "text-[#162B6E]"
+                      }`}
+                  >
+                    {option.icon}
+                  </span>
+                )}
                 <span
-                  className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${
-                    !option.isActive ? "text-[#666666]" : "text-[#162B6E]"
-                  }`}
+                  className={`text-[14px] sm:text-[16px] font-medium leading-[145%] ${!option.isActive ? "text-[#666666]" : "text-[#162B6E]"
+                    }`}
                 >
                   {option.name}
                 </span>
