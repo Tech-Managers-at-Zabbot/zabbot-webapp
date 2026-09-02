@@ -262,7 +262,6 @@ const CourseManagementPage: React.FC = () => {
             <div className="flex gap-[15px] min-w-max">
               {/* {Array.from({ length: 6 }).map((_, index) => ( */}
               <EmptyStateCard
-                // key={index}
                 title="No data"
                 subtitle="No courses yet"
               />
