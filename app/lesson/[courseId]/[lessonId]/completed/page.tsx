@@ -129,7 +129,8 @@ const Page = () => {
   useEffect(() => {
     setShowConfetti(true);
     logUserStreak();
-  }, []);
+    // include logUserStreak in deps to satisfy exhaustive-deps rule
+  }, [logUserStreak]);
 
   if (leaderboardLoading) return <CompletionLoader />;
 
