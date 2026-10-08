@@ -108,8 +108,13 @@ const UserSettings = () => {
 
   useEffect(() => {
     if (userPaymentHistory?.data?.allUserTransactions) {
-      const formatted = userPaymentHistory?.data?.allUserTransactions.map(
-        (item: any) => ({
+      const formatted = userPaymentHistory.data.allUserTransactions
+        .slice()
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+        .map((item: any) => ({
           date: new Date(item.createdAt).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
@@ -118,8 +123,7 @@ const UserSettings = () => {
           planType: item.planType,
           amount: `US$${item.amount}`,
           status: item.status,
-        })
-      );
+        }));
 
       setPaymentHistory(formatted);
     }

@@ -19,12 +19,13 @@ export function useCreateTransactionSession() {
 }
 
 
-export function useGetUserPaymentHistory() {
+export function useGetUserPaymentHistory(refetchInterval: number | false = false) {
   return useQuery({
     queryKey: ["getUserPaymentHistory"],
     queryFn: () => getUserPaymentHistory(),
     refetchOnMount: true,
     refetchOnWindowFocus: false,
+    refetchInterval,
     //   onError: (error) => {
     //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
     //   },

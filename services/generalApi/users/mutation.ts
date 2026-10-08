@@ -42,6 +42,8 @@ export function useChangeUserNames() {
     mutationFn: updateUserNames,
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["getSingleUserData"] });
+      queryClient.invalidateQueries({ queryKey: ["getUserLeaderboard"] });
+      queryClient.invalidateQueries({ queryKey: ["leaderboard"] });
     },
     onError: (error: any) => {
       console.error("Error resetting password:", error);
