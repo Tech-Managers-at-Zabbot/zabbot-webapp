@@ -18,7 +18,7 @@ import { DashboardMetricCard2 } from "@/components/dashboard/DashboardMetricCard
 import { HiOutlineTrophy } from "react-icons/hi2";
 import { BsPeople } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa6";
-import { useGetUserCompletedCourses } from "@/services/generalApi/lessons/mutation";
+import { useGetUserLessons } from "@/services/generalApi/lessons/mutation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useGetUserCount } from "@/services/generalApi/users/mutation";
 // import LatestQuiz from "@/components/dashboard/LatestQuiz";
@@ -45,11 +45,17 @@ const Dashboard = () => {
   const userCount = userCountData?.data || 0;
 
   const {
-    data: userCompletedCoursesCount,
-    isLoading: isUserCompletedCoursesCountLoading,
-  } = useGetUserCompletedCourses(userDetails.languageId, true);
+    data: userLessonsData,
+    isLoading: isUserLessonsLoading,
+  } = useGetUserLessons();
 
-  const userCoursesCount = userCompletedCoursesCount?.data || 0;
+  const userLessonsList = Array.isArray(userLessonsData?.data)
+    ? userLessonsData.data
+    : [];
+  const completedLessonsCount = userLessonsList.filter(
+    (lesson: { isCompleted?: boolean; languageId?: string }) =>
+      lesson.isCompleted && lesson.languageId === userDetails.languageId
+  ).length;
 
   const dashboardMetricData = [
     {
@@ -64,12 +70,12 @@ const Dashboard = () => {
       loading:
         userGoalsLoading ||
         userCountLoading ||
-        isUserCompletedCoursesCountLoading,
+        isUserLessonsLoading,
       isEmpty: !goalsCount && goalsCount !== 0,
     },
     {
       title: getPageText("completed_courses"),
-      value: `${userCoursesCount} ${userCoursesCount === 1 ? getPageText("step") : getPageText("steps")
+      value: `${completedLessonsCount} ${completedLessonsCount === 1 ? getPageText("step") : getPageText("steps")
         }`,
       icon: (
         <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#162B6E]">
@@ -79,8 +85,8 @@ const Dashboard = () => {
       loading:
         userGoalsLoading ||
         userCountLoading ||
-        isUserCompletedCoursesCountLoading,
-      isEmpty: !userCoursesCount && userCoursesCount !== 0,
+        isUserLessonsLoading,
+      isEmpty: !completedLessonsCount && completedLessonsCount !== 0,
     },
 
     {
@@ -94,7 +100,7 @@ const Dashboard = () => {
       loading:
         userCountLoading ||
         userGoalsLoading ||
-        isUserCompletedCoursesCountLoading,
+        isUserLessonsLoading,
       isEmpty: !userCount,
     },
   ];
