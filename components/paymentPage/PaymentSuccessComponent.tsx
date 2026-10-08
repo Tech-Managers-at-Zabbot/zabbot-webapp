@@ -1,6 +1,45 @@
 import React from "react";
+import { CustomSpinner } from "@/components/CustomSpinner";
 
-const PaymentSuccess: React.FC = () => {
+type PaymentStatus = "pending" | "success" | "failed";
+
+const PaymentSuccess: React.FC<{ status?: PaymentStatus }> = ({ status = "success" }) => {
+  if (status === "pending") {
+    return (
+      <div
+        className="flex flex-col gap-4 items-center justify-center min-h-[300px] bg-white p-6 rounded-md shadow-md"
+        style={{ fontFamily: "Lexend" }}
+      >
+        <CustomSpinner spinnerColor="black" />
+        <h2 className="text-2xl font-semibold text-[#207ec6]">
+          Confirming your payment
+        </h2>
+        <p className="text-[#101828] text-center">
+          We&apos;re confirming your payment with our payment provider. This usually
+          only takes a few seconds — please don&apos;t close this page.
+        </p>
+      </div>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <div
+        className="flex flex-col gap-4 items-center justify-center min-h-[300px] bg-white p-6 rounded-md shadow-md"
+        style={{ fontFamily: "Lexend" }}
+      >
+        <h2 className="text-2xl font-semibold text-red-600">
+          We couldn&apos;t confirm your payment
+        </h2>
+        <p className="text-[#101828] text-center">
+          Your payment is taking longer than expected to confirm. If you were charged,
+          your subscription will activate automatically shortly. Otherwise, please
+          try again or contact support.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-[300px] bg-white p-6 rounded-md shadow-md"
     style={{fontFamily: "Lexend"}}

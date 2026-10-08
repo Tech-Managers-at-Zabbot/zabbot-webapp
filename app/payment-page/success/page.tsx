@@ -1,56 +1,54 @@
-// /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React from "react"; // useState
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import PaymentSuccess from "@/components/paymentPage/PaymentSuccessComponent";
 import PaymentPage from "@/components/paymentPage/PaymentOptions";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/general/Modal";
 import { useSearchParams } from "next/navigation";
-// import { useCreateTransactionSession } from "@/services/payment/transactions/tanstack";
-// import { useAlert } from "next-alert";
-// import { CustomSpinner } from "@/components/CustomSpinner";
+import { useGetUserPaymentHistory } from "@/services/payment/transactions/tanstack";
+
+// How long to keep polling for the webhook-confirmed transaction before giving up.
+const MAX_POLL_ATTEMPTS = 10;
+const POLL_INTERVAL_MS = 3000;
 
 export default function Page() {
   const params = useSearchParams();
   const planType = params.get("type");
   const router = useRouter();
-  // const { addAlert } = useAlert();
 
-  // const { mutate: createTransaction, isPending: transactionPending } =
-  //   useCreateTransactionSession();
+  const [pollAttempts, setPollAttempts] = useState(0);
+  const isPolling = pollAttempts < MAX_POLL_ATTEMPTS;
+
+  const { data: userPaymentHistory } = useGetUserPaymentHistory(
+    isPolling ? POLL_INTERVAL_MS : false
+  );
+
+  const allTransactions = userPaymentHistory?.data?.allUserTransactions || [];
+  const latestTransaction = [...allTransactions].sort(
+    (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  )[0];
+  const transactionStatus = (latestTransaction?.status || "").toUpperCase();
+
+  useEffect(() => {
+    if (!isPolling) return;
+    if (transactionStatus && transactionStatus !== "PENDING") return;
+    const timeout = setTimeout(() => setPollAttempts((count) => count + 1), POLL_INTERVAL_MS);
+    return () => clearTimeout(timeout);
+  }, [isPolling, transactionStatus]);
+
+  const paymentStatus =
+    transactionStatus === "FAILED"
+      ? "failed"
+      : transactionStatus && transactionStatus !== "PENDING"
+      ? "success"
+      : isPolling
+      ? "pending"
+      : "failed";
 
   const handleRedirect = () => {
     return router.push("/user-settings?tab=payment");
-    // let plan = 9.99;
-    // if (planType === "annual") {
-    //   plan = 69.99;
-    // } else if (planType === "lifetime") {
-    //   plan = 159.99;
-    // } else {
-    //   plan = 9.99;
-    // }
-    // const dataToSend: any = {
-    //   amount: plan,
-    //   planType,
-    //   status: "success",
-    // };
-
-    // createTransaction(dataToSend, {
-    //   onSuccess: () => {
-    //     addAlert("Success", "Transaction Successful", "success");
-    //     router.push("/user-settings?tab=payment");
-    //   },
-    //   onError: (error: any) => {
-    //     addAlert(
-    //       "Error",
-    //       error?.response?.data?.message ||
-    //         "An error occurred, please try again",
-    //       "error"
-    //     );
-    //     router.push("/user-settings?tab=payment");
-    //   },
-    // });
   };
   return (
     <div>
@@ -66,23 +64,16 @@ export default function Page() {
         <Modal
           isOpen={true}
           onClose={handleRedirect}
-          // title={modalTitle}
           size="md"
           containerClassName="w-full"
-          // disableClose={saveQuizLoading || createQuizLoading}
+          disableClose={paymentStatus === "pending"}
         >
-          {/* {transactionPending ? (
-            <div>
-              <CustomSpinner spinnerColor="black" />
-            </div>
-          ) : ( */}
-            <div
-              className="flex p-6 w-full items-center justify-center"
-              style={{ fontFamily: "Lexend" }}
-            >
-              <PaymentSuccess />
-            </div>
-          {/* )} */}
+          <div
+            className="flex p-6 w-full items-center justify-center"
+            style={{ fontFamily: "Lexend" }}
+          >
+            <PaymentSuccess status={paymentStatus} />
+          </div>
         </Modal>
       </section>
     </div>
