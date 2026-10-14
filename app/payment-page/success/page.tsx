@@ -1,63 +1,56 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react"; // useState
 import Head from "next/head";
 import PaymentSuccess from "@/components/paymentPage/PaymentSuccessComponent";
 import PaymentPage from "@/components/paymentPage/PaymentOptions";
 import { useRouter } from "next/navigation";
 import { Modal } from "@/components/general/Modal";
 import { useSearchParams } from "next/navigation";
-import { useGetUserPaymentHistory } from "@/services/payment/transactions/tanstack";
-
-// How long to keep polling for the webhook-confirmed transaction before giving up.
-const MAX_POLL_ATTEMPTS = 10;
-const POLL_INTERVAL_MS = 3000;
+// import { useCreateTransactionSession } from "@/services/payment/transactions/tanstack";
+// import { useAlert } from "next-alert";
+// import { CustomSpinner } from "@/components/CustomSpinner";
 
 export default function Page() {
   const params = useSearchParams();
   const planType = params.get("type");
   const router = useRouter();
+  // const { addAlert } = useAlert();
 
-  const [isResolved, setIsResolved] = useState(false);
-  const [isTimedOut, setIsTimedOut] = useState(false);
-  const isPolling = !isResolved && !isTimedOut;
-
-  const { data: userPaymentHistory } = useGetUserPaymentHistory(
-    isPolling ? POLL_INTERVAL_MS : false
-  );
-
-  const allTransactions = userPaymentHistory?.data?.allUserTransactions || [];
-  const latestTransaction = allTransactions.length
-    ? [...allTransactions].sort(
-        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )[0]
-    : undefined;
-  const transactionStatus = (latestTransaction?.status || "").toUpperCase();
-
-  // Stop polling as soon as the backend resolves the transaction out of PENDING.
-  useEffect(() => {
-    if (transactionStatus && transactionStatus !== "PENDING") {
-      setIsResolved(true);
-    }
-  }, [transactionStatus]);
-
-  // Give up after a fixed window so this never polls forever if the webhook never fires.
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsTimedOut(true), MAX_POLL_ATTEMPTS * POLL_INTERVAL_MS);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const paymentStatus =
-    transactionStatus === "FAILED"
-      ? "failed"
-      : transactionStatus && transactionStatus !== "PENDING"
-      ? "success"
-      : isTimedOut
-      ? "failed"
-      : "pending";
+  // const { mutate: createTransaction, isPending: transactionPending } =
+  //   useCreateTransactionSession();
 
   const handleRedirect = () => {
     return router.push("/user-settings?tab=payment");
+    // let plan = 9.99;
+    // if (planType === "annual") {
+    //   plan = 69.99;
+    // } else if (planType === "lifetime") {
+    //   plan = 159.99;
+    // } else {
+    //   plan = 9.99;
+    // }
+    // const dataToSend: any = {
+    //   amount: plan,
+    //   planType,
+    //   status: "success",
+    // };
+
+    // createTransaction(dataToSend, {
+    //   onSuccess: () => {
+    //     addAlert("Success", "Transaction Successful", "success");
+    //     router.push("/user-settings?tab=payment");
+    //   },
+    //   onError: (error: any) => {
+    //     addAlert(
+    //       "Error",
+    //       error?.response?.data?.message ||
+    //         "An error occurred, please try again",
+    //       "error"
+    //     );
+    //     router.push("/user-settings?tab=payment");
+    //   },
+    // });
   };
   return (
     <div>
@@ -73,16 +66,23 @@ export default function Page() {
         <Modal
           isOpen={true}
           onClose={handleRedirect}
+          // title={modalTitle}
           size="md"
           containerClassName="w-full"
-          disableClose={paymentStatus === "pending"}
+          // disableClose={saveQuizLoading || createQuizLoading}
         >
-          <div
-            className="flex p-6 w-full items-center justify-center"
-            style={{ fontFamily: "Lexend" }}
-          >
-            <PaymentSuccess status={paymentStatus} />
-          </div>
+          {/* {transactionPending ? (
+            <div>
+              <CustomSpinner spinnerColor="black" />
+            </div>
+          ) : ( */}
+            <div
+              className="flex p-6 w-full items-center justify-center"
+              style={{ fontFamily: "Lexend" }}
+            >
+              <PaymentSuccess />
+            </div>
+          {/* )} */}
         </Modal>
       </section>
     </div>
