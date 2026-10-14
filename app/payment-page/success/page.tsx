@@ -18,34 +18,43 @@ export default function Page() {
   const planType = params.get("type");
   const router = useRouter();
 
-  const [pollAttempts, setPollAttempts] = useState(0);
-  const isPolling = pollAttempts < MAX_POLL_ATTEMPTS;
+  const [isResolved, setIsResolved] = useState(false);
+  const [isTimedOut, setIsTimedOut] = useState(false);
+  const isPolling = !isResolved && !isTimedOut;
 
   const { data: userPaymentHistory } = useGetUserPaymentHistory(
     isPolling ? POLL_INTERVAL_MS : false
   );
 
   const allTransactions = userPaymentHistory?.data?.allUserTransactions || [];
-  const latestTransaction = [...allTransactions].sort(
-    (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )[0];
+  const latestTransaction = allTransactions.length
+    ? [...allTransactions].sort(
+        (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )[0]
+    : undefined;
   const transactionStatus = (latestTransaction?.status || "").toUpperCase();
 
+  // Stop polling as soon as the backend resolves the transaction out of PENDING.
   useEffect(() => {
-    if (!isPolling) return;
-    if (transactionStatus && transactionStatus !== "PENDING") return;
-    const timeout = setTimeout(() => setPollAttempts((count) => count + 1), POLL_INTERVAL_MS);
+    if (transactionStatus && transactionStatus !== "PENDING") {
+      setIsResolved(true);
+    }
+  }, [transactionStatus]);
+
+  // Give up after a fixed window so this never polls forever if the webhook never fires.
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsTimedOut(true), MAX_POLL_ATTEMPTS * POLL_INTERVAL_MS);
     return () => clearTimeout(timeout);
-  }, [isPolling, transactionStatus]);
+  }, []);
 
   const paymentStatus =
     transactionStatus === "FAILED"
       ? "failed"
       : transactionStatus && transactionStatus !== "PENDING"
       ? "success"
-      : isPolling
-      ? "pending"
-      : "failed";
+      : isTimedOut
+      ? "failed"
+      : "pending";
 
   const handleRedirect = () => {
     return router.push("/user-settings?tab=payment");
