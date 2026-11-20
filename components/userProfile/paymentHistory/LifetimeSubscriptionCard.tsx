@@ -25,7 +25,7 @@ const SubscriptionLifetime: React.FC<SubscriptionLifetimeProps> = ({
           </div>
 
           <div className="mb-2 sm:mb-4 leading-snug sm:leading-[135%] text-[#0F973D] flex items-baseline">
-            <span className="text-3xl sm:text-4xl font-bold">US$159.99</span>
+            <span className="text-3xl sm:text-4xl font-bold">US$337.50</span>
           </div>
 
           <p className="text-[#6A7282] text-base sm:text-xl font-normal leading-snug sm:leading-[150%]">
