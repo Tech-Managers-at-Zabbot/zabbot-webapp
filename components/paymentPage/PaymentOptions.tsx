@@ -27,14 +27,14 @@ const PaymentPage: React.FC<PaymentPageProps> = ({
   >(null);
 
   const subscriptionAMount = {
-    lifetime: 159.99,
-    annual: 69.99,
-    monthly: 9.99,
+    lifetime: 337.50,
+    annual: 112.50,
+    monthly: 12.50,
   };
 
   amount =
     subscriptionAMount[subscriptionType as keyof typeof subscriptionAMount] ||
-    9.99;
+    12.50;
 
   // Get subscription details based on type
   const getSubscriptionDetails = () => {
