@@ -8,8 +8,7 @@ import { useEffect, useState } from "react";
 import { useAlert } from "next-alert";
 import { FiSearch } from "react-icons/fi";
 import { useUser } from "@/contexts/UserContext";
-import { useDailyLimit } from "@/hooks/useChatDailyLimit";
-import { useConversations } from "@/components/premium/chat-with-ore/use-conversation";
+import { useServerChat } from "@/hooks/useServerChat";
 import ConversationCard from "@/components/premium/chat-with-ore/conversation-card";
 import { useLogUserStreak } from "@/services/generalApi/users/mutation";
 
@@ -17,7 +16,6 @@ const ChatWithOre = () => {
 
   const [backgroundColor, setBackgroundColor] = useState("#dff9fb");
   const [inputValue, setInputValue] = useState("");
-  const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const { addAlert } = useAlert();
   const { userDetails } = useUser();
@@ -69,57 +67,78 @@ const ChatWithOre = () => {
     setInputValue(proverb);
   };
 
-  const sendMessage: any = async () => {
-    if (!inputValue.trim()) return;
+  const {
+    conversations, activeId, setActiveId, messages, usage,
+    loading, sending, error, searchTerm, setSearchTerm,
+    start, send, rename, remove, refreshUsage,
+  } = useServerChat(userDetails?.id);
+
+  const [chatBusy, setChatBusy] = useState(false);
+  const currentConversation = { messages };
+  const callsRemaining = usage?.remaining ?? 0;
+  const totalCalls = usage?.limit ?? 30;
+  const canMakeCall = Boolean(userDetails?.id) && !loading && !error && Boolean(usage) && callsRemaining > 0;
+
+  const handleNewChat = async () => {
+    try {
+      await start();
+    } catch (cause) {
+      console.error("Unable to create conversation", cause);
+      addAlert("Error", "Unable to create a new chat. Please try again.", "error");
+    }
+  };
+
+  const handleRename = async (id: string, title: string) => {
+    try {
+      await rename(id, title);
+    } catch (cause) {
+      console.error("Unable to rename conversation", cause);
+      addAlert("Error", "Unable to rename this conversation.", "error");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await remove(id);
+    } catch (cause) {
+      console.error("Unable to delete conversation", cause);
+      addAlert("Error", "Unable to delete this conversation.", "error");
+    }
+  };
+
+  const sendMessage = async () => {
+    const message = inputValue.trim();
+    if (!message || chatBusy || sending || loading) return;
     if (!canMakeCall) {
       addAlert(
-        "Notice!!!",
-        "You have reached your daily limit of 30 calls. Please try again tomorrow.",
+        "Notice",
+        usage?.remaining === 0
+          ? "You have reached your daily limit of 30 messages. Please try again tomorrow (UTC)."
+          : "Chat is unavailable. Please refresh and try again.",
         "error"
       );
       return;
     }
 
-    setInputValue("");
-    setLoading(true);
-
-    addMessage("user", inputValue);
-
+    setChatBusy(true);
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: inputValue }),
-      });
-      const data = await res.json();
-      const reply =
-        data.choices?.[0]?.message?.content || "No response received.";
-
-      addMessage("assistant", reply);
-
-      if (reply !== "No response received.") decrementCalls();
-    } catch (err) {
-      console.error(err);
+      const reply = await send(message);
+      if (reply) {
+        setInputValue("");
+        setResponse("");
+      }
+    } catch (cause: any) {
+      console.error("Unable to send chat message", cause);
+      if (cause?.response?.status === 429) {
+        try { await refreshUsage(); } catch { /* leave last known usage */ }
+        addAlert("Daily limit reached", "You have used your 30 messages for today.", "error");
+      } else {
+        addAlert("Error", "Unable to send your message. Please try again.", "error");
+      }
     } finally {
-      setLoading(false);
+      setChatBusy(false);
     }
   };
-
-  const {
-    currentConversation,
-    conversations,
-    startNewChat,
-    addMessage,
-    switchConversation,
-    renameConversation,
-    deleteConversation,
-    searchTerm, // Get the search term state
-    setSearchTerm, // Get the function to update search term
-  //} = useConversations();
-    } = useConversations(userDetails?.id);
-
-  //const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } = useDailyLimit();
-  const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } = useDailyLimit(userDetails?.id);
 
   return (
     <div>
@@ -145,7 +164,7 @@ const ChatWithOre = () => {
             >
               <div className="mb-4">
                 <p className="mb-3 text-center">
-                  Used {TOTAL_CALLS - callsRemaining} out of {TOTAL_CALLS}
+                  Used {usage?.used ?? 0} out of {totalCalls}
                 </p>
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-3 text-gray-400" />
@@ -160,7 +179,7 @@ const ChatWithOre = () => {
               </div>
 
               <button
-                onClick={startNewChat}
+                onClick={handleNewChat}
                 className="w-full bg-blue-500 mb-5 mt-10 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 + New Chat
@@ -173,14 +192,14 @@ const ChatWithOre = () => {
                   <div
                     key={item.id}
                     className="cursor-pointer"
-                    onClick={() => switchConversation(item.id)}
+                    onClick={() => setActiveId(item.id)}
                   >
                     <ConversationCard
                       id={item.id}
                       title={item.title}
-                      date={item.date}
-                      onRename={renameConversation}
-                      onDelete={deleteConversation}
+                      date={new Date(item.updated_at).toLocaleString()}
+                      onRename={handleRename}
+                      onDelete={handleDelete}
                     />
                   </div>
                 ))}
@@ -229,6 +248,13 @@ const ChatWithOre = () => {
                     </div>
                   )}
 
+                  {error && (
+                    <p className="text-red-300 mt-4" role="alert">
+                      {error}
+                    </p>
+                  )}
+                  {loading && <p className="text-white mt-4">Loading your saved conversations...</p>}
+
                   {/* Cards */}
                   {!currentConversation ||
                     (currentConversation.messages.length === 0 && (
@@ -273,7 +299,7 @@ const ChatWithOre = () => {
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {currentConversation.messages.map((msg: any, idx: any) => (
+                  {messages.map((msg: any, idx: any) => (
                     <div
                       key={idx}
                       className={`flex items-end ${ // Use items-end to vertically align the icon and bubble
@@ -322,7 +348,7 @@ const ChatWithOre = () => {
                       )}
                     </div>
                   ))}
-                  {loading && (
+                  {sending && (
                     <div className="text-gray-500 flex justify-end">
                       <div className="pr-12 text-xl">Ọ̀rẹ́ is typing...</div>
                     </div>
@@ -369,13 +395,13 @@ const ChatWithOre = () => {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (e.key === "Enter" && !e.repeat) {
                         sendMessage();
                       }
                     }}
                   />
 
-                  <button className="flex-shrink-0 p-3 rounded-lg bg-[#0098DE]" onClick={sendMessage} disabled={loading}>
+                  <button className="flex-shrink-0 p-3 rounded-lg bg-[#0098DE]" onClick={sendMessage} disabled={loading || sending || chatBusy || !canMakeCall}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                       <path d="M26.0704 6.01956C28.3929 5.78534 29.9038 8.4038 28.5391 10.2979L16.8516 26.5205C15.5293 28.3558 12.6721 27.8563 12.0498 25.6817L10.6114 20.6514C10.2874 19.5188 10.7328 18.3068 11.7129 17.6534L17.2217 13.9795L11.2862 16.9151C10.2303 17.437 8.95752 17.2158 8.13871 16.3692L4.50199 12.6075C2.92978 10.9812 3.92624 8.25878 6.1768 8.03128L26.0704 6.01956ZM12.5713 18.9414C12.1514 19.2214 11.96 19.7403 12.0987 20.2256L13.5381 25.2569C13.8051 26.1884 15.0291 26.4017 15.5957 25.6153L27.2842 9.39261C27.3716 9.27127 27.4277 9.14183 27.4629 9.01175L12.5713 18.9414ZM26.2256 7.5596L6.33207 9.57035C5.36751 9.66785 4.9404 10.8353 5.6143 11.5323L9.25102 15.294C9.60195 15.6567 10.1482 15.7511 10.6006 15.5274L26.6446 7.59378C26.5145 7.55943 26.3741 7.54463 26.2256 7.5596Z" fill="#FFF9FF" />
                     </svg>
