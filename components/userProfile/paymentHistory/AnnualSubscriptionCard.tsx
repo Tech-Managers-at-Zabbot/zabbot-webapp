@@ -27,7 +27,7 @@ const SubscriptionAnnual: React.FC<SubscriptionAnnualProps> = ({
           </h2>
 
           <div className="mb-2 sm:mb-4 flex items-baseline text-[#EE9705]">
-            <span className="text-2xl sm:text-3xl md:text-4xl font-bold">US$69.99/</span>
+            <span className="text-2xl sm:text-3xl md:text-4xl font-bold">US$112.50/</span>
             <span className="text-lg sm:text-xl md:text-2xl font-semibold ml-1 sm:ml-2">
               year
             </span>

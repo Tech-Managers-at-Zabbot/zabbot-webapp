@@ -21,7 +21,7 @@ const SubscriptionMonthly: React.FC<SubscriptionMonthlyProps> = ({
 
           <div className="flex flex-col gap-2 sm:gap-4">
             <div className="mb-2 sm:mb-4 leading-snug sm:leading-[135%] text-[#1671D9] flex items-baseline">
-              <span className="text-3xl sm:text-4xl font-bold">US$9.99/</span>
+              <span className="text-3xl sm:text-4xl font-bold">US$12.50/</span>
               <span className="text-xl sm:text-2xl font-semibold ml-1 sm:ml-2">
                 month
               </span>
