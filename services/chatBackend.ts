@@ -23,7 +23,7 @@ export type ServerChatUsage = {
 };
 export type ServerChatSendResult = ServerChatUsage & { reply: string };
 
-const prefix = "/chat";
+const prefix = "/users/chat";
 
 export const chatBackend = {
   async usage(): Promise<ServerChatUsage> {
