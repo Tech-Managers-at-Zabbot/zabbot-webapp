@@ -118,8 +118,8 @@ const ChatWithOre = () => {
   //} = useConversations();
     } = useConversations(userDetails?.id);
 
-  const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } =
-    useDailyLimit();
+  //const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } = useDailyLimit();
+  const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } = useDailyLimit(userDetails?.id);
 
   return (
     <div>
