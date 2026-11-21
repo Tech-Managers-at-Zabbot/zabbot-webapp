@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@/contexts/UserContext";
 import {
   changePassword,
   changeUserProfileImage,
@@ -52,14 +53,15 @@ export function useChangeUserNames() {
 }
 
 export function useGetSingleUserData() {
+  const { userDetails } = useUser();
+  const userId = userDetails?.id;
+
   return useQuery({
-    queryKey: ["getSingleUserData"],
+    queryKey: ["getSingleUserData", userId],
     queryFn: getSingleUser,
-    refetchOnMount: false,
+    enabled: Boolean(userId),
+    refetchOnMount: "always",
     refetchOnWindowFocus: false,
-    //   onError: (error) => {
-    //     toast.error(error?.response?.data?.message || "An error occurred while fetching rent");
-    //   },
   });
 }
 
