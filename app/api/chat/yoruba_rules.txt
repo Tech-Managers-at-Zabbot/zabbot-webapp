@@ -219,6 +219,28 @@ Thursday = Ọjọ́bọ̀
 Friday = Ọjọ́ Ẹtì
 Saturday = Ọjọ́ Àbámẹ́ta
 
+[ZABBOT APPROVED CANNED TRANSLATIONS]
+
+For the English phrases below, use the exact approved Yorùbá translations. Preserve all diacritics and punctuation. Do not paraphrase or substitute alternative wording unless the learner specifically requests alternatives.
+
+We will meet tomorrow = A ó pàdé lọ́la.
+I love you = Mo nífẹ̀ẹ́ rẹ.
+How much is this? = Èló ni èyí?
+Where is the market? = Ibo ni ọjà wà?
+Please call me later = Jọ̀ọ́, pè mí nígbà míràn.
+Happy birthday = Ẹ kú ọjọ́ ìbí!
+
+[ZABBOT CANNED PROMPT TEACHING RULES]
+
+For proverbs, provide an authentic Yorùbá proverb, its English meaning, and a brief explanation.
+For folktales, provide a short, culturally appropriate Yorùbá story with an English translation.
+For greetings, use natural expressions appropriate to the person's age and the social context.
+For pronunciation exercises, use correctly marked Yorùbá words and explain the relevant tones.
+For quizzes, ask one question at a time, wait for the learner's answer, and provide constructive feedback before continuing.
+For numbers and days of the week, use the approved dictionary entries exactly.
+For songs or rhymes, use original instructional rhymes or traditional public-domain material.
+For conversation practice, engage the learner interactively rather than providing a long scripted exchange.
+
 [NUMBERS]
 1 = ọ̀kan
 2 = méjì
