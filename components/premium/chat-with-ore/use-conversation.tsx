@@ -3,36 +3,69 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-const LOCAL_STORAGE_KEY = 'chat_conversations';
+//const LOCAL_STORAGE_KEY = 'chat_conversations';
+const getStorageKey = (userId: string) =>
+  `chat_conversations_${userId}`;
 
-export const useConversations = () => {
+//export const useConversations = () => {
+export const useConversations = (userId?: string) => {
   const [conversations, setConversations] = useState<any[]>([]);
+  const [loadedUserId, setLoadedUserId] = useState<string | null>(null);
   const [currentConversationId, setCurrentConversationId] = useState('');
   const [searchTerm, setSearchTerm] = useState(''); // Add state for the search term
 
   // Load conversations from local storage on initial render
-  useEffect(() => {
-    const storedConversations = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storedConversations) {
-      const parsed = JSON.parse(storedConversations);
-      setConversations(parsed);
-      if (parsed.length > 0) {
-        // Set the most recent conversation as the current one
-        setCurrentConversationId(parsed[0].id);
-      }
-    } else {
-      // If no conversations exist, create a new one
-      startNewChat();
-    }
-  }, []);
+useEffect(() => {
+  if (!userId) {
+    setConversations([]);
+    setCurrentConversationId('');
+    setLoadedUserId(null);
+    return;
+  }
 
-  // Sync conversations to local storage whenever they change
-  useEffect(() => {
-    if (conversations.length > 0) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(conversations));
-    }
-  }, [conversations]);
+  const storageKey = getStorageKey(userId);
+  const storedConversations = localStorage.getItem(storageKey);
 
+  let parsed = [];
+
+  try {
+    const data = storedConversations
+      ? JSON.parse(storedConversations)
+      : [];
+
+    parsed = Array.isArray(data) ? data : [];
+  } catch {
+    parsed = [];
+  }
+
+  if (parsed.length > 0) {
+    setConversations(parsed);
+    setCurrentConversationId(parsed[0].id);
+  } else {
+    const newConversation = {
+      id: uuidv4(),
+      title: 'New Chat',
+      date: new Date().toLocaleString(),
+      messages: []
+    };
+
+    setConversations([newConversation]);
+    setCurrentConversationId(newConversation.id);
+  }
+
+  setLoadedUserId(userId);
+}, [userId]);
+
+// Save conversations only for the authenticated user
+useEffect(() => {
+  if (!userId || loadedUserId !== userId) return;
+
+  localStorage.setItem(
+    getStorageKey(userId),
+    JSON.stringify(conversations)
+  );
+}, [conversations, userId, loadedUserId]);
+  
   // Start a new chat session
   const startNewChat = () => {
     const newId = uuidv4();
@@ -96,7 +129,8 @@ export const useConversations = () => {
       
       // If the deleted conversation was the current one, switch to the first remaining conversation
       if (currentConversationId === id) {
-        setCurrentConversationId(updatedConversations.length > 0 ? updatedConversations[0].conversationId : null);
+        setCurrentConversationId(updatedConversations.length > 0 ? updatedConversations[0].id : '');
+        //setCurrentConversationId(updatedConversations.length > 0 ? updatedConversations[0].conversationId : null);
       }
       
       return updatedConversations;
