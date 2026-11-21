@@ -77,7 +77,7 @@ const ChatWithOre = () => {
   const currentConversation = { messages };
   const callsRemaining = usage?.remaining ?? 0;
   const totalCalls = usage?.limit ?? 30;
-  const dailyLimitReached = Boolean(usage) && usage.remaining === 0;
+  const dailyLimitReached = usage?.remaining === 0;
   const canMakeCall = Boolean(userDetails?.id) && !loading && !error && Boolean(usage) && callsRemaining > 0;
 
   const handleNewChat = async () => {
