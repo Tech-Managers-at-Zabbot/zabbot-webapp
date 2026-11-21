@@ -233,14 +233,14 @@ const ChatWithOre = () => {
                           <div
                             key={item.id}
                             className="cursor-pointer"
-                            onClick={() => switchConversation(item.id)}
+                            onClick={() => setActiveId(item.id)}
                           >
                             <ConversationCard
                               id={item.id}
                               title={item.title}
-                              date={item.date}
-                              onRename={renameConversation}
-                              onDelete={deleteConversation}
+                              date={new Date(item.updated_at).toLocaleString()}
+                              onRename={handleRename}
+                              onDelete={handleDelete}
                             />
                           </div>
                         ))}
