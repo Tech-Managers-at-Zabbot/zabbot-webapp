@@ -115,7 +115,8 @@ const ChatWithOre = () => {
     deleteConversation,
     searchTerm, // Get the search term state
     setSearchTerm, // Get the function to update search term
-  } = useConversations();
+  //} = useConversations();
+    } = useConversations(userDetails?.id);
 
   const { callsRemaining, canMakeCall, TOTAL_CALLS, decrementCalls } =
     useDailyLimit();
