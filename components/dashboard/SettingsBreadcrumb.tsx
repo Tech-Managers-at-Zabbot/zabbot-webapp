@@ -11,6 +11,7 @@ import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { useLoading } from "@/contexts/LoadingProvider";
+import { useUser } from "@/contexts/UserContext";
 import { MdOutlinePayments } from "react-icons/md";
 
 const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
@@ -21,35 +22,23 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const router = useRouter();
   const { addAlert } = useAlert();
   const { setLoading } = useLoading();
+  const { setUserDetails } = useUser();
 
   const { getPageText } = usePageLanguage("userDashboard");
 
-  const handleLogout = () => {
-    const keepChatHistory = localStorage.getItem("chat_conversations");
-    const keepChatLastResetDate = localStorage.getItem("last_reset_date");
-    const keepLastLoggedInEmail = localStorage.getItem("remembered_email");
-    const keepDailyCallsRemaining = localStorage.getItem(
-      "daily_calls_remaining"
-    );
+const handleLogout = () => {
+  setLogoutLoading(true);
+  addAlert("Success", "Logout successful", "success");
 
-    setLogoutLoading(true);
-    addAlert("Success", "Logout successful", "success");
-    localStorage.removeItem("userProfile");
-    localStorage.clear();
+  localStorage.removeItem("userProfile");
 
-    localStorage.setItem("chat_conversations", keepChatHistory || "[]");
-    localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
-    localStorage.setItem("remembered_email", keepLastLoggedInEmail || "");
-    localStorage.setItem(
-      "daily_calls_remaining",
-      keepDailyCallsRemaining || "30"
-    );
+  Cookies.remove("access_token");
+  Cookies.remove("userProfile");
+  Cookies.remove("remember_me");
+  setUserDetails({ id: "", languageId: "" });
 
-    Cookies.remove("access_token");
-    Cookies.remove("userProfile");
-    Cookies.remove("remember_me");
-    router.push("/login");
-  };
+  router.push("/login");
+};
 
   useEffect(() => {
     const handleResize = () => {
