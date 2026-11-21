@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 
 const TOTAL_CALLS = 30;
-const CALLS_REMAINING_KEY = 'daily_calls_remaining';
-const LAST_RESET_DATE_KEY = 'last_reset_date';
+//const CALLS_REMAINING_KEY = 'daily_calls_remaining';
+//const LAST_RESET_DATE_KEY = 'last_reset_date';
 
-export const useDailyLimit = () => {
+//export const useDailyLimit = () => {
+  export const useDailyLimit = (userId?: string) => {
+  const CALLS_REMAINING_KEY = `daily_calls_remaining_${userId}`;
+  const LAST_RESET_DATE_KEY = `last_reset_date_${userId}`;
   const [callsRemaining, setCallsRemaining] = useState(TOTAL_CALLS);
 
   useEffect(() => {
+    if (!userId) return;
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const lastResetDate = localStorage.getItem(LAST_RESET_DATE_KEY);
 
@@ -23,7 +27,8 @@ export const useDailyLimit = () => {
         setCallsRemaining(parseInt(storedCount, 10));
       }
     }
-  }, []); // The empty array ensures this runs only once on initial load
+  //}, []); // The empty array ensures this runs only once on initial load
+      }, [userId, CALLS_REMAINING_KEY, LAST_RESET_DATE_KEY]);
 
   // Function to decrement the count
   const decrementCalls = () => {
