@@ -123,19 +123,32 @@ useEffect(() => {
   };
 
   // Function to delete a conversation
-  const deleteConversation = (id: string) => {
-    setConversations(prevConversations => {
-      const updatedConversations = prevConversations.filter(convo => convo.id !== id);
-      
-      // If the deleted conversation was the current one, switch to the first remaining conversation
-      if (currentConversationId === id) {
-        setCurrentConversationId(updatedConversations.length > 0 ? updatedConversations[0].id : '');
-        //setCurrentConversationId(updatedConversations.length > 0 ? updatedConversations[0].conversationId : null);
+const deleteConversation = (id: string) => {
+  setConversations(prevConversations => {
+    const updatedConversations = prevConversations.filter(
+      convo => convo.id !== id
+    );
+
+    if (currentConversationId === id) {
+      if (updatedConversations.length > 0) {
+        setCurrentConversationId(updatedConversations[0].id);
+      } else {
+        // Always keep one active conversation available
+        const newConversation = {
+          id: uuidv4(),
+          title: 'New Chat',
+          date: new Date().toLocaleString(),
+          messages: []
+        };
+
+        setCurrentConversationId(newConversation.id);
+        return [newConversation];
       }
-      
-      return updatedConversations;
-    });
-  };
+    }
+
+    return updatedConversations;
+  });
+};
 
   // Filter conversations based on the search term
   const filteredConversations = conversations.filter(convo =>
