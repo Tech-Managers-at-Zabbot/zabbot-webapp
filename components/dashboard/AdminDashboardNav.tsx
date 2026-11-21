@@ -11,10 +11,12 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import Cookies from "js-cookie";
+import { useUser } from "@/contexts/UserContext";
 // import { useUser } from "@/contexts/UserGoalsContext";
 
 const AdminNavBar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
+  const { setUserDetails } = useUser();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -26,10 +28,10 @@ const AdminNavBar = ({ showLogo = false }) => {
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);
     localStorage.removeItem("userProfile");
-    localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     Cookies.remove("remember_me");
+    setUserDetails({ id: "", languageId: "" });
     setLoading(true);
     router.push("/login");
   };
