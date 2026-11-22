@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/services/axiosInstance";
 import type { EntitlementState } from "./tileAccess";
+import { useUser } from "@/contexts/UserContext";
 
 export interface UserEntitlement {
   hasAccess: boolean;
@@ -34,18 +35,23 @@ export function useSubscriptionEntitlement(): {
   isUnavailable: boolean;
 } {
   const gatingEnabled = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true";
+  const { userDetails } = useUser();
+  const authenticatedUserId: string = userDetails?.id ?? "";
   const query = useQuery({
-    queryKey: ["subscriptionEntitlement"],
+    queryKey: ["subscriptionEntitlement", authenticatedUserId],
     queryFn: fetchEntitlement,
-    staleTime: 15_000,
+    staleTime: 0,
+    refetchOnMount: "always",
     refetchOnWindowFocus: true,
     retry: 1,
-    enabled: gatingEnabled,
+    enabled: gatingEnabled && Boolean(authenticatedUserId),
   });
 
   return {
     state: !gatingEnabled
       ? "granted"
+      : !authenticatedUserId
+      ? "loading"
       : query.isError
       ? "unavailable"
       : query.isPending
