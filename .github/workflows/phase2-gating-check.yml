@@ -1,0 +1,30 @@
+name: Phase 2 frontend typecheck
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - "components/**"
+      - "contexts/**"
+      - "lib/**"
+      - "services/**"
+      - "tsconfig.json"
+      - "package*.json"
+      - ".github/workflows/phase2-gating-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - name: TypeScript typecheck (no app deploy)
+        run: npx tsc --noEmit
