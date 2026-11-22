@@ -23,10 +23,19 @@ function AuthHandler() {
     if (exchangeStarted.current) return;
     exchangeStarted.current = true;
 
-    const code = new URLSearchParams(window.location.search).get("code");
-    const authType = new URLSearchParams(window.location.search).get("authType");
+    const callbackParams = new URLSearchParams(window.location.search);
+    const code = callbackParams.get("code");
+    const authType = callbackParams.get("authType");
     if (!code) {
-      router.replace("/login?error=google_missing_code");
+      // Report only a parameter category; never expose raw tokens or code values.
+      const failure = callbackParams.has("token")
+        ? "google_legacy_token_callback"
+        : callbackParams.has("error")
+        ? "google_oauth_callback_error"
+        : callbackParams.has("user")
+        ? "google_legacy_user_callback"
+        : "google_missing_parameters";
+      router.replace(`/login?error=${failure}`);
       return;
     }
 
