@@ -234,7 +234,9 @@ const AllSteps = () => {
                   >
                     {(() => {
                       const tileState = resolveTileAccess({
-                        isActive: lessonProgressData?.isActive === true,
+                        isActive:
+                          lessonProgressData?.isActive === true &&
+                          lessonProgressData?.course?.isActive === true,
                         isFreePreview: isFreePreviewLesson(lessonProgressData?.id),
                         entitlement: entitlementState,
                       });
