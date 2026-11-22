@@ -91,21 +91,21 @@ export const resetPassword = async (formData: {
   return response.data;
 };
 
-export const initiateGoogleRegister = () => {
-  const urlLink = process.env.NEXT_PUBLIC_GOOGLE_REGISTER_URL as string;
-  const timezone = getUserTimezone();
-  const url = new URL(urlLink);
-  url.searchParams.append("timezone", timezone);
-  window.location.href = url.toString();
+// Keep Google OAuth on the exact same backend as Zabbot's other STAGING APIs.
+// Separate build-time Google URLs can accidentally point at a different deployment.
+const beginGoogleOAuth = (action: "login" | "register") => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!baseUrl) {
+    throw new Error("Zabbot API URL is not configured");
+  }
+  const url = new URL(`${baseUrl.replace(/\\/$/, "")}/users/auth/google/${action}`);
+  url.searchParams.set("timezone", getUserTimezone());
+  window.location.assign(url.toString());
 };
 
-export const initiateGoogleLogin = () => {
-  const urlLink = process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL as string;
-  const timezone = getUserTimezone();
-  const url = new URL(urlLink);
-  url.searchParams.append("timezone", timezone);
-  window.location.href = url.toString();
-};
+export const initiateGoogleRegister = () => beginGoogleOAuth("register");
+
+export const initiateGoogleLogin = () => beginGoogleOAuth("login");
 
 export const handleGoogleAuthCallback = () => {
   const urlParams = new URLSearchParams(window.location.search);
