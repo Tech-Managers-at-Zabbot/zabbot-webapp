@@ -23,7 +23,8 @@ export const proxyPost = async (url: string, payload: unknown) => {
 export const setRefreshCookie = (response: NextResponse, token: string, stayLoggedIn = false) => {
   response.cookies.set(COOKIE_NAME, token, {
     httpOnly: true, secure: true, sameSite: "strict", path: "/",
-    maxAge: (stayLoggedIn ? 60 : 30) * 24 * 60 * 60,
+    // "Remember me" persists across browser restarts; otherwise use a session cookie.
+    ...(stayLoggedIn ? { maxAge: 60 * 24 * 60 * 60 } : {}),
   });
 };
 
