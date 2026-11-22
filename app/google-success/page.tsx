@@ -26,7 +26,7 @@ function AuthHandler() {
     const code = new URLSearchParams(window.location.search).get("code");
     const authType = new URLSearchParams(window.location.search).get("authType");
     if (!code) {
-      router.replace("/login?error=login_failed");
+      router.replace("/login?error=google_missing_code");
       return;
     }
 
@@ -39,9 +39,19 @@ function AuthHandler() {
           cache: "no-store",
           body: JSON.stringify({ code }),
         });
-        if (!response.ok) throw new Error("Google session exchange failed");
+        if (!response.ok) {
+          const reason = response.status === 401 ? "google_code_rejected"
+            : response.status === 404 ? "google_exchange_not_found"
+            : response.status >= 500 ? "google_exchange_server_error"
+            : "google_exchange_failed";
+          router.replace(`/login?error=${reason}`);
+          return;
+        }
         const session = await response.json();
-        if (!session?.token || !session?.user) throw new Error("Missing session data");
+        if (!session?.token || !session?.user) {
+          router.replace("/login?error=google_exchange_missing_session");
+          return;
+        }
 
         Cookies.set("userProfile", JSON.stringify(session.user), {
           expires: 1, secure: true, sameSite: "strict",
@@ -59,9 +69,8 @@ function AuthHandler() {
         setRedirectPath(destination);
         router.replace(`/${destination}`);
       } catch {
-        // Do not attempt to redeem the same single-use code again.
-        window.history.replaceState(window.history.state, "", "/google-success");
-        router.replace("/login?error=login_failed");
+        // Do not reveal any OAuth code, token, or user profile in the error.
+        router.replace("/login?error=google_exchange_network_error");
       }
     };
 
