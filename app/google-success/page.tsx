@@ -17,37 +17,45 @@ function AuthHandler() {
   const [redirectPath, setRedirectPath] = useState("");
 
   useEffect(() => {
-    const token = searchParams.get("token");
-    const userData = searchParams.get("user");
+    const code = searchParams.get("code");
     const authType = searchParams.get("authType");
-    if (authType === "login") {
-      setRedirectPath("user-dashboard");
-    } else {
-      setRedirectPath("login");
+    // Remove OAuth code from browser history immediately.
+    window.history.replaceState({}, "", "/google-success");
+    if (!code) {
+      router.replace("/login?error=login_failed");
+      return;
     }
-    if (token && userData) {
+    let cancelled = false;
+    const finishGoogleLogin = async () => {
       try {
-        Cookies.set("userProfile", userData, {
-          expires: 30,
-          secure: true,
-          sameSite: "strict",
+        const response = await fetch("/api/auth/session/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ code }),
         });
-        Cookies.set("access_token", token, {
-          expires: 30,
-          secure: true,
-          sameSite: "strict",
+        if (!response.ok) throw new Error("Google session exchange failed");
+        const session = await response.json();
+        if (cancelled || !session?.token || !session?.user) return;
+        Cookies.set("userProfile", JSON.stringify(session.user), {
+          expires: 1, secure: true, sameSite: "strict",
         });
-      } catch (error) {
-        console.error("Error processing Google auth data:", error);
+        Cookies.set("access_token", session.token, {
+          expires: 1, secure: true, sameSite: "strict",
+        });
+        Cookies.set("remember_me", "false", {
+          expires: 1, secure: true, sameSite: "strict",
+        });
+        const destination = authType === "login" ? "user-dashboard" : "login";
+        setRedirectPath(destination);
+        router.replace(`/${destination}`);
+      } catch {
+        if (!cancelled) router.replace("/login?error=login_failed");
       }
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      router.push(`/${redirectPath}`);
-    }, 3000);
-  }, [redirectPath]);
+    };
+    void finishGoogleLogin();
+    return () => { cancelled = true; };
+  }, [router, searchParams]);
 
   if (isLanguageLoading) {
     return (
