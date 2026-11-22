@@ -54,7 +54,7 @@ export function SubscriptionTileOverlay({
         <p className="text-base font-semibold">Unlock with Zabbot</p>
         <p className="mt-1 text-xs">Start your 7-day free trial or subscribe.</p>
         <Link
-          href="/payment-page"
+          href="/"
           onClick={(event) => event.stopPropagation()}
           className="mt-3 inline-block rounded-lg bg-[#0089C8] px-4 py-2 text-sm font-semibold text-white hover:bg-[#006CA0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0089C8]"
         >
