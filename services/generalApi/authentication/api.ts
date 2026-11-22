@@ -1,5 +1,6 @@
 import { getUserTimezone } from "@/utilities/utilities";
 import axiosInstance from "../../axiosInstance";
+import axios from "axios";
 
 export const registerUser = async (formData: {
   firstName: string;
@@ -52,7 +53,7 @@ export const loginUser = async (formData: {
   stayLoggedIn: boolean;
   timeZone: string;
 }) => {
-  const response = await axiosInstance.post("/users/auth/login", formData, {
+  const response = await axios.post("/api/auth/session/login", formData, {
     headers: {
       "Content-Type": "application/json",
     },
