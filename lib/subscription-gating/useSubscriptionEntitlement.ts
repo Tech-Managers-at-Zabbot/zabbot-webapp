@@ -43,7 +43,7 @@ export function useSubscriptionEntitlement(): {
 
   return {
     state: query.isError
-      ? "loading"
+      ? "unavailable"
       : query.isPending
         ? "loading"
         : query.data?.hasAccess
