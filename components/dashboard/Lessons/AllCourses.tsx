@@ -329,9 +329,11 @@ const AllCourses = () => {
                         <>
                           <CoursesCard
                             data={lessonProgressData}
-                            isClickable={tileState === "accessible"}
+                            isClickable={process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" ? tileState === "accessible" : lessonProgressData?.isActive}
                           />
-                          <SubscriptionTileOverlay state={tileState} />
+                          {process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" && (
+                            <SubscriptionTileOverlay state={tileState} />
+                          )}
                         </>
                       );
                     })()}
