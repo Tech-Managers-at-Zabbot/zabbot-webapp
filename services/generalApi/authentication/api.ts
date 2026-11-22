@@ -98,7 +98,7 @@ const beginGoogleOAuth = (action: "login" | "register") => {
   if (!baseUrl) {
     throw new Error("Zabbot API URL is not configured");
   }
-  const url = new URL(`${baseUrl.replace(/\\/$/, "")}/users/auth/google/${action}`);
+  const url = new URL(`${baseUrl.replace(/\/$/, "")}/users/auth/google/${action}`);
   url.searchParams.set("timezone", getUserTimezone());
   window.location.assign(url.toString());
 };
