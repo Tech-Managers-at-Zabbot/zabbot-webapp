@@ -96,9 +96,11 @@ const AllCourseLessons = () => {
                           <>
                             <LessonsCard2
                               data={lessonProgressData}
-                              isClickable={tileState === "accessible"}
+                              isClickable={process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" ? tileState === "accessible" : lessonProgressData?.isActive}
                             />
+                            {process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" && (
                             <SubscriptionTileOverlay state={tileState} />
+                          )}
                           </>
                         );
                       })()}
