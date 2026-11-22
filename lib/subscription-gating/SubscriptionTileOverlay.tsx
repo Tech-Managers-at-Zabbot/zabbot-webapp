@@ -31,6 +31,20 @@ export function SubscriptionTileOverlay({
     );
   }
 
+  if (state === "unavailable") {
+    return (
+      <div
+        aria-label="Unable to check subscription"
+        className="absolute inset-0 z-10 flex items-center justify-center rounded-[14px] bg-slate-950/55 p-4 text-center"
+      >
+        <div className="rounded-lg bg-white px-4 py-3 text-slate-900 shadow-md">
+          <p className="text-sm font-semibold">Access check unavailable</p>
+          <p className="mt-1 text-xs">Please refresh and try again.</p>
+        </div>
+      </div>
+    );
+  }
+
   if (state === "admin_inactive") {
     return (
       <div
