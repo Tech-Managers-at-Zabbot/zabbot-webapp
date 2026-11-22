@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   // Legacy behavior is retained only while the release flag is OFF.
   if (process.env.ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true") {
     const bearer = req.headers.get("authorization");
-    if (!bearer || !/^Bearer\\s+\\S+$/i.test(bearer)) {
+    if (!bearer || !/^Bearer\s+\S+$/i.test(bearer)) {
       return NextResponse.json({ code: "LOGIN_REQUIRED" }, { status: 401 });
     }
     let payload: unknown;
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     }
     try {
       const upstream = await fetch(
-        `${base.replace(/\\/$/, "")}/users/chat/lesson-practice`,
+        `${base.replace(/\/$/, "")}/users/chat/lesson-practice`,
         {
           method: "POST",
           headers: {
