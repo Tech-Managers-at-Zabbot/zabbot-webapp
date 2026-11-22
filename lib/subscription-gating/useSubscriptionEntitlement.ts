@@ -33,16 +33,20 @@ export function useSubscriptionEntitlement(): {
   entitlement: UserEntitlement | null;
   isUnavailable: boolean;
 } {
+  const gatingEnabled = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true";
   const query = useQuery({
     queryKey: ["subscriptionEntitlement"],
     queryFn: fetchEntitlement,
     staleTime: 15_000,
     refetchOnWindowFocus: true,
     retry: 1,
+    enabled: gatingEnabled,
   });
 
   return {
-    state: query.isError
+    state: !gatingEnabled
+      ? "granted"
+      : query.isError
       ? "unavailable"
       : query.isPending
         ? "loading"
@@ -50,6 +54,6 @@ export function useSubscriptionEntitlement(): {
           ? "granted"
           : "denied",
     entitlement: query.data ?? null,
-    isUnavailable: query.isError,
+    isUnavailable: gatingEnabled && query.isError,
   };
 }
