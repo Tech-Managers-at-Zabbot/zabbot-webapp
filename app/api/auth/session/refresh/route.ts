@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       return denied;
     }
     const response = NextResponse.json({ token: data.token });
-    setRefreshCookie(response, data.refreshToken);
+    setRefreshCookie(response, data.refreshToken, data.stayLoggedIn === true);
     response.headers.set("Cache-Control", "no-store");
     return response;
   } catch {
