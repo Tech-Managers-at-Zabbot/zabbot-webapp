@@ -177,6 +177,7 @@ const NormalComponentComponent = ({
         <InLessonChatWithOreModal
           isOpen={showChatModal}
           onClose={() => setShowChatModal(false)}
+          contentId={content.id}
           word={contentData[1]}
         // files={content.files}
         // pronunciationId={"12345"} 
