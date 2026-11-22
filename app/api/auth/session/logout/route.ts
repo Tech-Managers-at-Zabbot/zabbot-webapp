@@ -5,9 +5,15 @@ export async function POST(request: NextRequest) {
   const token = request.cookies.get(COOKIE_NAME)?.value;
   if (token) {
     try {
-      await proxyPost(backendAuthUrl("logout-session"), { refreshToken: token });
+      const { response: upstream } = await proxyPost(
+        backendAuthUrl("logout-session"), { refreshToken: token },
+      );
+      // A revoked/expired session is already unusable; an upstream outage is not.
+      if (upstream.status >= 500) {
+        return NextResponse.json({ message: "Logout temporarily unavailable" }, { status: 503 });
+      }
     } catch {
-      // Clear the browser cookie even if server revocation is temporarily unavailable.
+      return NextResponse.json({ message: "Logout temporarily unavailable" }, { status: 503 });
     }
   }
   const response = NextResponse.json({ message: "Signed out" });
