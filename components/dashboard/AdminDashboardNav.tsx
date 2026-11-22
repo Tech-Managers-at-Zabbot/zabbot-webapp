@@ -24,7 +24,17 @@ const AdminNavBar = ({ showLogo = false }) => {
   const router = useRouter();
   const { addAlert } = useAlert();
   // const { userDetails } = useUser();
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/session/logout", {
+        method: "POST", credentials: "same-origin",
+      });
+      if (!response.ok) throw new Error("Server-side logout failed");
+    } catch {
+      addAlert("Error", "Unable to end the session securely. Please try again.", "error");
+      setLogoutLoading(false);
+      return;
+    }
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);
     localStorage.removeItem("userProfile");
