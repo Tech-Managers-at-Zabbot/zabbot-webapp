@@ -4,12 +4,14 @@
 import { useState, useEffect } from "react";
 import { useAlert } from "next-alert";
 import { useUser } from "@/contexts/UserContext";
+import Cookies from "js-cookie";
 // import { useDailyLimit } from "@/hooks/useChatDailyLimit";
 
 interface InLessonChatWithOreModalProps {
   isOpen: boolean;
   onClose: () => void;
   word: string;
+  contentId: string;
   backgroundColor?: string;
 }
 
@@ -22,6 +24,7 @@ const InLessonChatWithOreModal: React.FC<InLessonChatWithOreModalProps> = ({
   isOpen,
   onClose,
   word,
+  contentId,
 //   backgroundColor = "#dff9fb",
 }) => {
   const [inputValue, setInputValue] = useState("");
@@ -121,12 +124,19 @@ const sendMessage = async () => {
   setLoading(true);
 
   try {
+    const token = Cookies.get("access_token");
     const res = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: inputValue }),
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({ message: inputValue, contentId }),
     });
     const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data?.code || data?.error || "Chat unavailable");
+    }
     const reply =
       data.choices?.[0]?.message?.content || "No response received.";
 

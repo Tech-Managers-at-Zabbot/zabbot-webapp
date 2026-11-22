@@ -9,11 +9,18 @@ import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/Dashbo
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { LessonsCard2 } from "../dashboard/UserLessonDataComponent";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscriptionEntitlement";
+import { resolveTileAccess } from "@/lib/subscription-gating/tileAccess";
+import { SubscriptionTileOverlay } from "@/lib/subscription-gating/SubscriptionTileOverlay";
+import { isFreePreviewLesson } from "@/lib/subscription-gating/freePreview";
+
 
 const AllCourseLessons = () => {
   const { courseId } = useParams<{ courseId: string }>();
 
   const { theme } = useTheme();
+  const { state: entitlementState } = useSubscriptionEntitlement();
+
 
   const { data: _courseLessons, isLoading: isCourseLessonsLoading } =
     useGetCourseLessons(courseId);
@@ -73,13 +80,30 @@ const AllCourseLessons = () => {
               {courseInfo?.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
-                    key={index}
+                    key={lessonProgressData?.id ?? index}
                     className="min-w-0 w-full flex justify-center"
                   >
-                    <div className="w-full max-w-[278px]">
-                      <LessonsCard2
-                        data={lessonProgressData}
-                      />
+                    <div className="relative w-full max-w-[278px]">
+                      {(() => {
+                        const tileState = resolveTileAccess({
+                          isActive:
+                            lessonProgressData?.isActive === true &&
+                            lessonProgressData?.course?.isActive === true,
+                          isFreePreview: isFreePreviewLesson(lessonProgressData?.id),
+                          entitlement: entitlementState,
+                        });
+                        return (
+                          <>
+                            <LessonsCard2
+                              data={lessonProgressData}
+                              isClickable={process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" ? tileState === "accessible" : lessonProgressData?.isActive}
+                            />
+                            {process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" && (
+                            <SubscriptionTileOverlay state={tileState} />
+                          )}
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
                 )

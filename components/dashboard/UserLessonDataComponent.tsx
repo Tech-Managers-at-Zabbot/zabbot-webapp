@@ -288,8 +288,10 @@ export const LessonsCard = ({
 
 export const LessonsCard2 = ({
   data,
+  isClickable,
 }: {
   data: any;
+  isClickable?: boolean;
 }) => {
   const router = useRouter();
   const { setLoading } = useLoading();
@@ -298,13 +300,13 @@ export const LessonsCard2 = ({
   return (
     <div
       // className="bg-white hover:cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex flex-col relative gap-[20px] w-full max-w-[278px] min-w-[200px] h-[300px] rounded-lg border border-[#E1E1E1] flex-shrink-0 mx-auto"
-      className={`flex flex-col relative gap-[20px] w-full h-[300px] rounded-[14px] border border-[#254E83] ${data?.isActive
+      className={`flex flex-col relative gap-[20px] w-full h-[300px] rounded-[14px] border border-[#254E83] ${(isClickable ?? data?.isActive)
         ? "hover:cursor-pointer transform hover:scale-105 hover:shadow-xl"
         : "opacity-60 cursor-not-allowed"
         }`}
       style={{ fontFamily: "Lexend" }}
       onClick={() => {
-        if (data?.isActive) {
+        if (isClickable ?? data?.isActive) {
           router.push(`/lesson/${data?.courseId}/${data?.id}/learn-intro`);
           setLoading(true);
         }
