@@ -26,7 +26,17 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
 
   const { getPageText } = usePageLanguage("userDashboard");
 
-const handleLogout = () => {
+const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/session/logout", {
+        method: "POST", credentials: "same-origin",
+      });
+      if (!response.ok) throw new Error("Server-side logout failed");
+    } catch {
+      addAlert("Error", "Unable to end the session securely. Please try again.", "error");
+      setLogoutLoading(false);
+      return;
+    }
   setLogoutLoading(true);
   addAlert("Success", "Logout successful", "success");
 
