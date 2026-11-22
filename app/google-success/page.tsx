@@ -3,8 +3,8 @@
 import Navbar from "@/components/general/Navbar";
 import SuccessComponent from "@/components/general/SuccessComponent";
 import Head from "next/head";
-import React, { useEffect, Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, Suspense, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 import { CustomSpinner } from "@/components/CustomSpinner";
 import Cookies from "js-cookie";
@@ -12,31 +12,37 @@ import Cookies from "js-cookie";
 function AuthHandler() {
   const { getPageText, isPageLoading: isLanguageLoading } =
     usePageLanguage("googleSuccess");
-  const searchParams = useSearchParams();
+  const exchangeStarted = useRef(false);
   const router = useRouter();
   const [redirectPath, setRedirectPath] = useState("");
 
   useEffect(() => {
-    const code = searchParams.get("code");
-    const authType = searchParams.get("authType");
-    // Remove OAuth code from browser history immediately.
-    window.history.replaceState({}, "", "/google-success");
+    // A one-time OAuth code must be redeemed only once. Changing the URL
+    // before exchange previously caused Next.js searchParams to update,
+    // re-ran this effect, and canceled the first (valid) exchange.
+    if (exchangeStarted.current) return;
+    exchangeStarted.current = true;
+
+    const code = new URLSearchParams(window.location.search).get("code");
+    const authType = new URLSearchParams(window.location.search).get("authType");
     if (!code) {
       router.replace("/login?error=login_failed");
       return;
     }
-    let cancelled = false;
+
     const finishGoogleLogin = async () => {
       try {
         const response = await fetch("/api/auth/session/google", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "same-origin",
+          cache: "no-store",
           body: JSON.stringify({ code }),
         });
         if (!response.ok) throw new Error("Google session exchange failed");
         const session = await response.json();
-        if (cancelled || !session?.token || !session?.user) return;
+        if (!session?.token || !session?.user) throw new Error("Missing session data");
+
         Cookies.set("userProfile", JSON.stringify(session.user), {
           expires: 1, secure: true, sameSite: "strict",
         });
@@ -46,16 +52,21 @@ function AuthHandler() {
         Cookies.set("remember_me", "false", {
           expires: 1, secure: true, sameSite: "strict",
         });
+
+        // Remove the code from browser history once redeemed.
+        window.history.replaceState(window.history.state, "", "/google-success");
         const destination = authType === "login" ? "user-dashboard" : "login";
         setRedirectPath(destination);
         router.replace(`/${destination}`);
       } catch {
-        if (!cancelled) router.replace("/login?error=login_failed");
+        // Do not attempt to redeem the same single-use code again.
+        window.history.replaceState(window.history.state, "", "/google-success");
+        router.replace("/login?error=login_failed");
       }
     };
+
     void finishGoogleLogin();
-    return () => { cancelled = true; };
-  }, [router, searchParams]);
+  }, [router]);
 
   if (isLanguageLoading) {
     return (
