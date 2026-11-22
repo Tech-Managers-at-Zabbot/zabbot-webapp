@@ -77,6 +77,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     userDetails,
+    setUserDetails,
     userGoal: userGoal?.data,
     // userProfile,
     // userDataLoading,

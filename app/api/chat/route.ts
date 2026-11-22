@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json();
     
-    const apiKey = process.env.NEXT_PUBLIC_CHAT_API_KEY
+    const apiKey = process.env.OPENAI_API_KEY;
 
     // Load Yoruba rules prompt from file
     const promptPath = path.join(process.cwd(), 'app', 'api', 'chat', 'yoruba_rules.txt');

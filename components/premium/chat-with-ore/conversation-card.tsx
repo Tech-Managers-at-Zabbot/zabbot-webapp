@@ -20,20 +20,28 @@ const ConversationCard = ({
   const [isOpen, setIsOpen] = useState(false);
 
   // Close the menu when a button is clicked
-  const handleRenameClick = () => {
-    setIsOpen(false);
-    const newTitle = prompt("Enter a new title:");
-    if (newTitle) {
-      onRename(id, newTitle);
-    }
-  };
+const handleRenameClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
 
-  const handleDeleteClick = () => {
-    setIsOpen(false);
-    if (confirm("Are you sure you want to delete this conversation?")) {
-      onDelete(id);
-    }
-  };
+  setIsOpen(false);
+
+  const newTitle = prompt("Enter a new title:");
+  if (newTitle) {
+    onRename(id, newTitle);
+  }
+};
+
+const handleDeleteClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  setIsOpen(false);
+
+  if (confirm("Are you sure you want to delete this conversation?")) {
+    onDelete(id);
+  }
+};
 
   return (
     <div className="mt-5 flex items-center p-4 bg-blue-400 rounded-lg shadow-md max-w-sm relative h-full">
@@ -63,10 +71,13 @@ const ConversationCard = ({
 
       {/* Right Side: Hamburger Menu Button and Dropdown */}
       <div className="ml-auto relative">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="text-white focus:outline-none hover:text-gray-200"
-        >
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+    setIsOpen(!isOpen);
+  }}
+  className="text-white focus:outline-none hover:text-gray-200"
+>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"

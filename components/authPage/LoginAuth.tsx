@@ -20,6 +20,7 @@ import { GoogleIcon } from "@/constants/SvgPaths";
 import { useSearchParams } from "next/navigation";
 import { getGoogleAuthErrorMessage } from "@/utilities/utilities";
 import { usePageLanguage } from "@/contexts/LanguageContext";
+import { useUser } from "@/contexts/UserContext";
 
 const REMEMBERED_EMAIL_KEY = "remembered_email";
 
@@ -31,6 +32,7 @@ const LoginAuth: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const { addAlert } = useAlert();
+  const { setUserDetails } = useUser();
   const router = useRouter();
   const { initiateGoogleSignIn, isLoading: isGoogleAuthLoading } =
     useGoogleAuth();
@@ -96,6 +98,7 @@ const LoginAuth: React.FC = () => {
         },
         {
           onSuccess: (data: Record<string, any>) => {
+            setUserDetails(data?.data?.user);
             Cookies.set("userProfile", JSON.stringify(data?.data?.user), {
               expires: stayLoggedIn ? 30 : 1,
               secure: true,

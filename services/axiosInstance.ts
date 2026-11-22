@@ -20,6 +20,26 @@ const setAccessToken = (token: string) => {
     sameSite: 'strict'
   });
 };
+// One refresh at a time avoids concurrent requests racing token rotation.
+let sessionRefresh: Promise<string | null> | null = null;
+export const refreshSessionAccessToken = (): Promise<string | null> => {
+  if (sessionRefresh) return sessionRefresh;
+  sessionRefresh = fetch("/api/auth/session/refresh", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json" },
+  }).then(async (response) => {
+    if (!response.ok) return null;
+    const data = await response.json();
+    if (typeof data?.token !== "string") return null;
+    setAccessToken(data.token);
+    return data.token as string;
+  }).catch(() => null).finally(() => {
+    sessionRefresh = null;
+  });
+  return sessionRefresh;
+};
+
 const clearTokens = () => {
   Cookies.remove("access_token");
   Cookies.remove("userProfile");
@@ -52,6 +72,19 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
+    const original = error.config as (typeof error.config & { _refreshRetried?: boolean }) | undefined;
+    if (error.response?.status === 401 &&
+        error.response?.data?.message === "Access token expired" &&
+        original && !original._refreshRetried) {
+      original._refreshRetried = true;
+      const token = await refreshSessionAccessToken();
+      if (token) {
+        original.headers.set("Authorization", `Bearer ${token}`);
+        return axiosInstance(original);
+      }
+      clearTokens();
+      if (typeof window !== "undefined") window.location.href = "/login";
+    }
     if (error.response?.status === 403) {
       const errorMessage = error.response?.data?.message?.toLowerCase() || '';
       

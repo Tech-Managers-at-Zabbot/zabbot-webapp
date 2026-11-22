@@ -11,10 +11,12 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import { useLoading } from "@/contexts/LoadingProvider";
 import Cookies from "js-cookie";
+import { useUser } from "@/contexts/UserContext";
 // import { useUser } from "@/contexts/UserGoalsContext";
 
 const AdminNavBar = ({ showLogo = false }) => {
   const { setLoading } = useLoading();
+  const { setUserDetails } = useUser();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -22,14 +24,24 @@ const AdminNavBar = ({ showLogo = false }) => {
   const router = useRouter();
   const { addAlert } = useAlert();
   // const { userDetails } = useUser();
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/session/logout", {
+        method: "POST", credentials: "same-origin",
+      });
+      if (!response.ok) throw new Error("Server-side logout failed");
+    } catch {
+      addAlert("Error", "Unable to end the session securely. Please try again.", "error");
+      setLogoutLoading(false);
+      return;
+    }
     addAlert("Success", "Logout successful", "success");
     setLogoutLoading(true);
     localStorage.removeItem("userProfile");
-    localStorage.clear();
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     Cookies.remove("remember_me");
+    setUserDetails({ id: "", languageId: "" });
     setLoading(true);
     router.push("/login");
   };

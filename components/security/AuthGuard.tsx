@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useAlert } from "next-alert";
 import Loader from "../general/Loader";
+import { refreshSessionAccessToken } from "@/services/axiosInstance";
 
 function parseJwt(token: string) {
   try {
@@ -36,7 +37,6 @@ export default function AuthGuard({
   const [isChecking, setIsChecking] = useState(true);
   const { setLoading, loading } = useLoading();
   const { addAlert } = useAlert();
-  const [hasRedirected, setHasRedirected] = useState(false);
 
   const [isDark, setIsDark] = useState(false);
 
@@ -52,73 +52,56 @@ export default function AuthGuard({
   }, []);
 
   useEffect(() => {
-    const pathname = window.location.pathname;
-    if (pathname === '/login' || pathname === '/signup' || pathname === '/forgot-password') {
-    setIsChecking(false);
-    return;
-  }
-    const token = Cookies.get("access_token");
- if (hasRedirected) return;
-    if (!token) {
-      setHasRedirected(true);
-      addAlert("Error", "Session expired. Please log in again.", "error");
-      localStorage.removeItem("token");
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("userProfile");
-      setTimeout(() => {
-        router.replace("/login");
-      }, 200);
-      return;
-    }
-
-    const rememberMe = Cookies.get("remember_me") === "true";
-    const decoded = parseJwt(token);
-    const expired = !decoded?.exp || decoded.exp * 1000 < Date.now();
-
-    if (expired && !rememberMe) {
+    let cancelled = false;
+    const redirectToLogin = (message: string) => {
+      if (cancelled) return;
       Cookies.remove("access_token");
       Cookies.remove("userProfile");
       Cookies.remove("remember_me");
       localStorage.removeItem("token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("userProfile");
-      addAlert("Error", "Session expired. Please log in again.", "error");
-      setTimeout(() => {
-        router.replace("/login");
-      }, 200);
-      return;
-    }
-
-    if (isAdmin) {
-      const userDetails = Cookies.get("userProfile");
-
-      if (!userDetails) {
-        Cookies.remove("access_token");
-        Cookies.remove("userProfile");
-        Cookies.remove("remember_me");
-        localStorage.removeItem("token");
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("userProfile");
-        addAlert("Error", "Please login again", "error");
-        setTimeout(() => {
-          router.replace("/login");
-        }, 200);
+      addAlert("Error", message, "error");
+      router.replace("/login");
+    };
+    const checkSession = async () => {
+      const pathname = window.location.pathname;
+      if (pathname === "/login" || pathname === "/signup" || pathname === "/forgot-password") {
+        if (!cancelled) setIsChecking(false);
         return;
       }
-
-      const user = JSON.parse(userDetails);
-      if (user?.role !== "admin") {
-        addAlert(
-          "Error",
-          "You are not authorized to access this page",
-          "error"
-        );
-        return setIsChecking(false);
+      let token = Cookies.get("access_token");
+      if (!token) {
+        // A valid HttpOnly refresh session may survive a browser restart.
+        token = (await refreshSessionAccessToken()) || undefined;
       }
-    }
-
-    setIsChecking(false);
-  }, [router]);
+      const decoded = token ? parseJwt(token) : null;
+      if (!decoded?.exp || decoded.exp * 1000 <= Date.now()) {
+        token = (await refreshSessionAccessToken()) || undefined;
+      }
+      const verifiedClaims = token ? parseJwt(token) : null;
+      if (!verifiedClaims?.exp || verifiedClaims.exp * 1000 <= Date.now()) {
+        redirectToLogin("Session expired. Please log in again.");
+        return;
+      }
+      if (isAdmin) {
+        const serialized = Cookies.get("userProfile");
+        let profile: { role?: string } | null = null;
+        try { profile = serialized ? JSON.parse(serialized) : null; } catch { profile = null; }
+        // This controls UI visibility only; the backend enforces current roles.
+        if (!profile || profile.role !== "admin") {
+          if (!cancelled) {
+            addAlert("Error", "You are not authorized to access this page", "error");
+            router.replace("/user-dashboard");
+          }
+          return;
+        }
+      }
+      if (!cancelled) setIsChecking(false);
+    };
+    void checkSession();
+    return () => { cancelled = true; };
+  }, [router, isAdmin]);
 
   useEffect(() => {
     if (isChecking && !loading) {

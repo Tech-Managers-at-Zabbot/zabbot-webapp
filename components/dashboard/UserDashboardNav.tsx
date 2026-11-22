@@ -23,31 +23,27 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("tab");
   const { addAlert } = useAlert();
-  const { userDetails } = useUser();
+  const { userDetails, setUserDetails } = useUser();
   const isDashboardRoute = pathname === "/user-dashboard";
 
-  const handleLogout = () => {
-    const keepChatHistory = localStorage.getItem("chat_conversations");
-    const keepChatLastResetDate = localStorage.getItem("last_reset_date");
-    const keepDailyCallsRemaining = localStorage.getItem(
-      "daily_calls_remaining",
-    );
-
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/session/logout", {
+        method: "POST", credentials: "same-origin",
+      });
+      if (!response.ok) throw new Error("Server-side logout failed");
+    } catch {
+      addAlert("Error", "Unable to end the session securely. Please try again.", "error");
+      setLogoutLoading(false);
+      return;
+    }
     setLogoutLoading(true);
     addAlert("Success", "Logout successful", "success");
     localStorage.removeItem("userProfile");
     Cookies.remove("access_token");
     Cookies.remove("userProfile");
     Cookies.remove("remember_me");
-    localStorage.clear();
-
-    localStorage.setItem("chat_conversations", keepChatHistory || "[]");
-    localStorage.setItem("last_reset_date", keepChatLastResetDate || "");
-    localStorage.setItem(
-      "daily_calls_remaining",
-      keepDailyCallsRemaining || "30",
-    );
-
+    setUserDetails({ id: "", languageId: "" });
     setLoading(true);
     router.push("/login");
   };
