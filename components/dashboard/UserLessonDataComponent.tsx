@@ -98,7 +98,7 @@ export const LessonProgressCard = ({
           <div className="w-full">
             <LinearProgress
               className=""
-              value={data?.isCompleted === false && Number(data?.userProgress) >= 100 ? 0 : Math.min(100, Math.max(0, Number(data?.userProgress) || 0))}
+              value={Math.min(data?.isCompleted === false ? 99 : 100, Math.max(0, Number(data?.userProgress) || 0))}
               variant="determinate"
               sx={{
                 height: 8,
