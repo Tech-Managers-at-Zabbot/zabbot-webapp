@@ -8,10 +8,16 @@ import { useUser } from "@/contexts/UserContext";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 import { usePageLanguage } from "@/contexts/LanguageContext";
+import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscriptionEntitlement";
+import { resolveTileAccess } from "@/lib/subscription-gating/tileAccess";
+import { isFreePreviewLesson } from "@/lib/subscription-gating/freePreview";
+import { SubscriptionTileOverlay } from "@/lib/subscription-gating/SubscriptionTileOverlay";
 
 const ProgressSection = () => {
   const { getPageText } = usePageLanguage("userDashboard");
   const { userDetails } = useUser();
+  const { state: entitlementState } = useSubscriptionEntitlement();
+  const gatingEnabled = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true";
   const { data: allLessonsData, isLoading: allLessonsLoading } = useGetAllLessons();
   const { data: userLessonsData, isLoading: userLessonsLoading } = useGetUserLessons();
   const trackedLessons = Array.isArray(userLessonsData?.data) ? userLessonsData.data : [];
@@ -53,20 +59,31 @@ const ProgressSection = () => {
                 )
                 .map(
                   (lessonData: Record<string, any>, index: number) => (
-                    <div key={index} className="flex-shrink-0">
-                      <LessonProgressCard
-                        data={{
-                          ...lessonData,
-                          // Progress belongs to this authenticated learner, not a shared lesson record.
-                          userProgress: lessonData?.isActive === false ? 0 : (progressByLesson.get(lessonData?.id)?.percentageCompletion ?? 0),
-                          isCompleted: lessonData?.isActive !== false && progressByLesson.get(lessonData?.id)?.isCompleted === true,
-                        }}
-                        courseId={lessonData?.courseId}
-                        lessonId={lessonData?.id}
-                        imagePath={lessonData.lessonImg || "/userDashboard/yoruba/coming-soon.svg"
-                        }
-                        isClickable={lessonData?.isActive}
-                      />
+                    <div key={lessonData?.id ?? index} className="relative flex-shrink-0">
+                      {(() => {
+                        const tileState = resolveTileAccess({
+                          isActive: lessonData?.isActive === true && lessonData?.course?.isActive !== false,
+                          isFreePreview: isFreePreviewLesson(lessonData?.id),
+                          entitlement: entitlementState,
+                        });
+                        return (
+                          <>
+                            <LessonProgressCard
+                              data={{
+                                ...lessonData,
+                                // Progress belongs to this authenticated learner, not a shared lesson record.
+                                userProgress: lessonData?.isActive === false ? 0 : (progressByLesson.get(lessonData?.id)?.percentageCompletion ?? 0),
+                                isCompleted: lessonData?.isActive !== false && progressByLesson.get(lessonData?.id)?.isCompleted === true,
+                              }}
+                              courseId={lessonData?.courseId}
+                              lessonId={lessonData?.id}
+                              imagePath={lessonData.lessonImg || "/userDashboard/yoruba/coming-soon.svg"}
+                              isClickable={gatingEnabled ? tileState === "accessible" : lessonData?.isActive === true}
+                            />
+                            {gatingEnabled && <SubscriptionTileOverlay state={tileState} />}
+                          </>
+                        );
+                      })()}
                     </div>
                   )
                 )
