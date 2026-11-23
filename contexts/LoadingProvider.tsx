@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from "react";
 import Loader from "@/components/general/Loader";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type LoadingContextType = {
   loading: boolean;
@@ -29,19 +29,16 @@ export const LoadingProvider = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
-  const previousPath = useRef(pathname);
+  const searchParams = useSearchParams();
+  const currentLocation = `${pathname}?${searchParams.toString()}`;
+  const previousPath = useRef(currentLocation);
 
   useEffect(() => {
-    if (previousPath.current !== pathname) {
-      const timeout = setTimeout(() => {
-        setLoading(false);
-      }, 2500);
-
-      previousPath.current = pathname;
-
-      return () => clearTimeout(timeout);
+    if (previousPath.current !== currentLocation) {
+      previousPath.current = currentLocation;
+      setLoading(false);
     }
-  }, [pathname]);
+  }, [currentLocation]);
 
   useEffect(() => {
     if (loading) {
