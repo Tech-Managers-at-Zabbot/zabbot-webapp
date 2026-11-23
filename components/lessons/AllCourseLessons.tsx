@@ -88,7 +88,7 @@ const AllCourseLessons = () => {
                         const tileState = resolveTileAccess({
                           isActive:
                             lessonProgressData?.isActive === true &&
-                            lessonProgressData?.course?.isActive === true,
+                            lessonProgressData?.course?.isActive !== false,
                           isFreePreview: isFreePreviewLesson(lessonProgressData?.id),
                           entitlement: entitlementState,
                         });
