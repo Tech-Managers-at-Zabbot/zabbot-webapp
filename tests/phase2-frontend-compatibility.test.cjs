@@ -118,3 +118,19 @@ test("frontend ON handles free, paid, unavailable and unauthenticated states", (
     else process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE = previous;
   }
 });
+
+
+test("home dashboard Journey and Step cards apply the same access policy as listing pages", () => {
+  const journey = fs.readFileSync(path.join(root, "components/dashboard/PopularCourses.tsx"), "utf8");
+  const step = fs.readFileSync(path.join(root, "components/dashboard/ProgressSection.tsx"), "utf8");
+  for (const [name, content] of [["Journey", journey], ["Step", step]]) {
+    assert.match(content, /useSubscriptionEntitlement\(\)/, `${name} must request entitlement`);
+    assert.match(content, /resolveTileAccess\(\{/, `${name} must resolve the shared tile policy`);
+    assert.match(content, /<SubscriptionTileOverlay state=\{tileState\}/, `${name} must display the shared overlay`);
+    assert.match(content, /isClickable=\{gatingEnabled \? tileState === "accessible" :/, `${name} must block navigation when access is denied`);
+    assert.match(content, /NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE/, `${name} must retain the feature flag`);
+  }
+  assert.match(journey, /isFreePreviewJourney\(lessonProgressData\?\.id\)/);
+  assert.match(step, /isFreePreviewLesson\(lessonData\?\.id\)/);
+  assert.match(step, /lessonData\?\.course\?\.isActive !== false/);
+});
