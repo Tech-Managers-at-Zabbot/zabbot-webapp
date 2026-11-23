@@ -55,6 +55,10 @@ const UserSettings = () => {
   const { mutate: subscriptionCancellation, isPending: subscriptionCancellationLoading } = useUserSubscriptionCancellation();
 
   const [menuKeyword, setMenukeyword] = useState(defaultTab);
+  // Top-nav tab changes update the query without remounting this page.
+  useEffect(() => {
+    setMenukeyword(defaultTab);
+  }, [defaultTab]);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [currentPlan, setCurrentPlan] = useState("no-subscription");
