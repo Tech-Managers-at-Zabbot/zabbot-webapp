@@ -3,14 +3,24 @@ import React from "react";
 import UserLessonDataComponent, {
   LessonProgressCard,
 } from "./UserLessonDataComponent";
-import { useGetAllLessons } from "@/services/generalApi/lessons/mutation";
+import { useGetAllLessons, useGetUserLessons } from "@/services/generalApi/lessons/mutation";
+import { useUser } from "@/contexts/UserContext";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 import { usePageLanguage } from "@/contexts/LanguageContext";
 
 const ProgressSection = () => {
   const { getPageText } = usePageLanguage("userDashboard");
+  const { userDetails } = useUser();
   const { data: allLessonsData, isLoading: allLessonsLoading } = useGetAllLessons();
+  const { data: userLessonsData, isLoading: userLessonsLoading } = useGetUserLessons();
+  const trackedLessons = Array.isArray(userLessonsData?.data) ? userLessonsData.data : [];
+  const progressByLesson = new Map<string, { percentageCompletion?: number; isCompleted?: boolean }>(
+    trackedLessons
+      .filter((item: { lessonId?: string; languageId?: string }) =>
+        item.lessonId && item.languageId === userDetails?.languageId)
+      .map((item: { lessonId: string; percentageCompletion?: number; isCompleted?: boolean }) => [item.lessonId, item])
+  );
 
   return (
     <div className="flex flex-col xl:flex-row gap-[20px] w-full z-10">
@@ -21,7 +31,7 @@ const ProgressSection = () => {
           maxWidth="100%"
         >
           <section className="flex gap-[15px] min-w-max">
-            {allLessonsLoading ? (
+            {allLessonsLoading || userLessonsLoading ? (
               <div className="flex gap-[15px] min-w-max">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <DashboardMetricCardSkeleton key={index} />
@@ -45,7 +55,12 @@ const ProgressSection = () => {
                   (lessonData: Record<string, any>, index: number) => (
                     <div key={index} className="flex-shrink-0">
                       <LessonProgressCard
-                        data={lessonData}
+                        data={{
+                          ...lessonData,
+                          // Progress belongs to this authenticated learner, not a shared lesson record.
+                          userProgress: lessonData?.isActive === false ? 0 : (progressByLesson.get(lessonData?.id)?.percentageCompletion ?? 0),
+                          isCompleted: lessonData?.isActive !== false && progressByLesson.get(lessonData?.id)?.isCompleted === true,
+                        }}
                         courseId={lessonData?.courseId}
                         lessonId={lessonData?.id}
                         imagePath={lessonData.lessonImg || "/userDashboard/yoruba/coming-soon.svg"
