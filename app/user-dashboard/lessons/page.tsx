@@ -73,7 +73,7 @@ const Lessons = () => {
         ></div>
         <div className="max-w-screen-2xl">
           <div className="w-full">
-            <div className="flex absolute top-6 right-[5%] items-center z-10 gap-20 flex-shrink-0">
+            <div className="flex absolute top-6 right-[5%] items-center z-[100] gap-20 flex-shrink-0">
               {/* <div className="w-[70px] mt-1 flex">
                 <div className="h-[80px]">
                   <Image
