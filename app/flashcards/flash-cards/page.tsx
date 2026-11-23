@@ -14,6 +14,7 @@ import { RxCornerBottomRight } from "react-icons/rx";
 import { PiSpeakerSimpleHighBold } from "react-icons/pi";
 // import IconAttribution from "@/components/flashCards/IconContribution";
 import { Modal } from "@/components/general/Modal";
+import SubscriptionSection from "@/components/landingPage/SubscriptionSection";
 import { useLoading } from "@/contexts/LoadingProvider";
 import { useRouter } from "next/navigation";
 import { useWindowSize } from "react-use";
@@ -278,6 +279,7 @@ const Flashcards = () => {
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+  const [isPlansModalOpen, setIsPlansModalOpen] = useState(false);
   const { setLoading } = useLoading();
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -401,10 +403,11 @@ const Flashcards = () => {
   };
 
   const handleSeePlans = () => {
+    // Open the same in-app subscription overlay used in User Settings.
+    // /#pricing navigates to the landing-page section; it does not open a modal.
     setIsFinishModalOpen(false);
     setShowConfetti(false);
-    setLoading(true);
-    router.push("/#pricing");
+    setIsPlansModalOpen(true);
   };
 
   const handleGoToDashboard = () => {
@@ -549,7 +552,7 @@ const Flashcards = () => {
               What would you like to do next?
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full">
+            <div className="flex flex-col gap-4 w-full sm:flex-row sm:flex-wrap sm:justify-center">
               <InAppButton background="#006045" onClick={handleRestart}>
                 {isFreePreview ? "Review 3 Free Cards" : "Restart Flashcards"}
               </InAppButton>
@@ -564,6 +567,19 @@ const Flashcards = () => {
                 Go to Dashboard
               </InAppButton>
             </div>
+          </div>
+        </Modal>
+        <Modal
+          isOpen={isPlansModalOpen}
+          onClose={() => setIsPlansModalOpen(false)}
+          size="full"
+          containerClassName="w-full"
+        >
+          <div className="w-full p-4 sm:p-6" style={{ fontFamily: "Lexend" }}>
+            <SubscriptionSection
+              onCloseModal={() => setIsPlansModalOpen(false)}
+              showTitle={false}
+            />
           </div>
         </Modal>
       </div>
