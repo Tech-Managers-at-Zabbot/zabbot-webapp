@@ -10,7 +10,6 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
 import { usePageLanguage } from "@/contexts/LanguageContext";
-import { useLoading } from "@/contexts/LoadingProvider";
 import { useUser } from "@/contexts/UserContext";
 import { MdOutlinePayments } from "react-icons/md";
 
@@ -21,7 +20,6 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  const { setLoading } = useLoading();
   const { setUserDetails } = useUser();
 
   const { getPageText } = usePageLanguage("userDashboard");
