@@ -58,8 +58,8 @@ const ProgressSection = () => {
                         data={{
                           ...lessonData,
                           // Progress belongs to this authenticated learner, not a shared lesson record.
-                          userProgress: progressByLesson.get(lessonData?.id)?.percentageCompletion ?? 0,
-                          isCompleted: progressByLesson.get(lessonData?.id)?.isCompleted === true,
+                          userProgress: lessonData?.isActive === false ? 0 : (progressByLesson.get(lessonData?.id)?.percentageCompletion ?? 0),
+                          isCompleted: lessonData?.isActive !== false && progressByLesson.get(lessonData?.id)?.isCompleted === true,
                         }}
                         courseId={lessonData?.courseId}
                         lessonId={lessonData?.id}
