@@ -15,6 +15,7 @@ import EditProfileCard from "@/components/userProfile/profile/EditProfileCard";
 import ChangePasswordCard from "@/components/userProfile/profile/ChangePasswordCard";
 import { useRouter } from "next/navigation";
 import AchievementsCard from "@/components/dashboard/AchievementsCard";
+import SettingsBreadcrumb from "@/components/dashboard/SettingsBreadcrumb";
 
 import Table from "@/components/general/Table";
 
@@ -54,6 +55,10 @@ const UserSettings = () => {
   const { mutate: subscriptionCancellation, isPending: subscriptionCancellationLoading } = useUserSubscriptionCancellation();
 
   const [menuKeyword, setMenukeyword] = useState(defaultTab);
+  // Top-nav tab changes update the query without remounting this page.
+  useEffect(() => {
+    setMenukeyword(defaultTab);
+  }, [defaultTab]);
   const [subscriptionModalOpen, setSubScriptionModalOpen] = useState(false);
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [currentPlan, setCurrentPlan] = useState("no-subscription");
@@ -167,7 +172,10 @@ const UserSettings = () => {
       {/* MAIN CONTAINER px-4 sm:px-6 md:px-10 */}
       <div className="flex flex-col z-20 min-h-screen px-[5%] py-6 bg-[#F9FAFB] gap-6">
         {/* PAGE HEADER */}
-        <section>
+        <section className="relative pr-12">
+          <div className="absolute right-0 top-0 z-[100]">
+            <SettingsBreadcrumb isDark={false} />
+          </div>
           <h1 className="text-[#0A0A0A] text-xl sm:text-2xl font-[500]">
             My Profile
           </h1>

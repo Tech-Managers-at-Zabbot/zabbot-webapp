@@ -10,7 +10,6 @@ import { CustomSpinner } from "../CustomSpinner";
 import { useAlert } from "next-alert";
 import Cookies from "js-cookie";
 import { usePageLanguage } from "@/contexts/LanguageContext";
-import { useLoading } from "@/contexts/LoadingProvider";
 import { useUser } from "@/contexts/UserContext";
 import { MdOutlinePayments } from "react-icons/md";
 
@@ -21,7 +20,6 @@ const SettingsBreadcrumb = ({ isDark }: { isDark: boolean }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
   const { addAlert } = useAlert();
-  const { setLoading } = useLoading();
   const { setUserDetails } = useUser();
 
   const { getPageText } = usePageLanguage("userDashboard");
@@ -69,7 +67,6 @@ const handleLogout = async () => {
       name: getPageText("profile"),
       icon: "/userDashboard/profile.svg",
       action: () => {
-        setLoading(true);
         router.push("/user-settings?tab=profile");
       },
       isActive: true,
@@ -78,7 +75,6 @@ const handleLogout = async () => {
       name: getPageText("payment"),
       icon: <MdOutlinePayments size={25} color="#4d4f56" /> as unknown as string,
       action: () => {
-        setLoading(true);
         router.push("/user-settings?tab=payment");
       },
       isReactIcon: true,
@@ -88,7 +84,6 @@ const handleLogout = async () => {
       name: getPageText("notifications"),
       icon: "/userDashboard/notifications.svg",
       action: () => {
-        setLoading(true);
         router.push("/user-settings?tab=notifications");
       },
       isActive: true,
@@ -97,7 +92,6 @@ const handleLogout = async () => {
       name: getPageText("settings"),
       icon: "/userDashboard/settings.svg",
       action: () => {
-        setLoading(true);
         router.push("/user-settings");
       },
       isActive: true,

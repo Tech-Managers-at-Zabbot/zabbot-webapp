@@ -274,7 +274,7 @@ useEffect(() => {
             "Signup successful! An email has been sent to you for account verification",
             "success"
           );
-          router.push(`/otp?email=${encodeURIComponent(email)}`);
+          router.push(`/otp?email=${encodeURIComponent(userData.email)}`);
         },
         onError: (error: any) => {
           console.error("Registration error:", error);

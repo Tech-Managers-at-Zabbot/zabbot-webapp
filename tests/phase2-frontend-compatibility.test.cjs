@@ -1,0 +1,120 @@
+/**
+ * Phase 2 UI policy / flag compatibility.
+ * Compile the real TypeScript modules with the repository's TypeScript dependency.
+ * Mock only external React/query hooks; never contact the staging API.
+ */
+const { test } = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const Module = require("node:module");
+const ts = require("typescript");
+
+const root = path.resolve(__dirname, "..");
+function loadTS(file, mocks = {}) {
+  const filename = path.join(root, file);
+  const source = fs.readFileSync(filename, "utf8");
+  const compiled = ts.transpileModule(source, {
+    fileName: filename,
+    compilerOptions: {
+      target: ts.ScriptTarget.ES2022,
+      module: ts.ModuleKind.CommonJS,
+      esModuleInterop: true,
+    },
+  }).outputText;
+  const m = new Module(filename, module);
+  m.filename = filename;
+  m.paths = Module._nodeModulePaths(path.dirname(filename));
+  const originalRequire = m.require.bind(m);
+  m.require = (name) => Object.prototype.hasOwnProperty.call(mocks, name)
+    ? mocks[name] : originalRequire(name);
+  m._compile(compiled, filename);
+  return m.exports;
+}
+
+test("existing tile decision cases are actually executed by CI", () => {
+  const policy = loadTS("lib/subscription-gating/tileAccess.ts");
+  const policyCases = loadTS("lib/subscription-gating/tileAccess.policy.test.ts", {
+    "./tileAccess": policy,
+  });
+  policyCases.verifyTileAccessPolicy();
+  assert.equal(policyCases.tilePolicyCases.length, 8);
+  assert.equal(policy.resolveTileAccess({
+    isActive: false, isFreePreview: true, entitlement: "granted",
+  }), "admin_inactive");
+  assert.equal(policy.resolveTileAccess({
+    isActive: true, isFreePreview: false, entitlement: "unavailable",
+  }), "unavailable");
+});
+
+test("free-preview lesson ID is narrow and does not unlock a whole Journey", () => {
+  const free = loadTS("lib/subscription-gating/freePreview.ts");
+  assert.equal(free.isFreePreviewLesson(free.FREE_PREVIEW_LESSON_ID), true);
+  assert.equal(free.isFreePreviewLesson(free.FREE_PREVIEW_JOURNEY_ID), false);
+  assert.equal(free.isFreePreviewJourney(free.FREE_PREVIEW_JOURNEY_ID), true);
+  assert.equal(free.isFreePreviewLesson("not-an-authorized-lesson"), false);
+});
+
+test("frontend OFF does not query entitlement and preserves legacy accessible state", () => {
+  const previous = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE;
+  let lastOptions;
+  try {
+    delete process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE;
+    const hook = loadTS("lib/subscription-gating/useSubscriptionEntitlement.ts", {
+      "@tanstack/react-query": { useQuery: options => {
+        lastOptions = options;
+        return { isPending: true, isError: false, data: null };
+      }},
+      "@/services/axiosInstance": { __esModule: true, default: { get: () => {
+        throw Error("network requests prohibited in this test");
+      } }},
+      "@/contexts/UserContext": { useUser: () => ({ userDetails: { id: "free-user" } }) },
+    });
+    let result = hook.useSubscriptionEntitlement();
+    assert.equal(result.state, "granted");
+    assert.equal(lastOptions.enabled, false);
+    process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE = "false";
+    result = hook.useSubscriptionEntitlement();
+    assert.equal(result.state, "granted");
+    assert.equal(lastOptions.enabled, false);
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE;
+    else process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE = previous;
+  }
+});
+
+test("frontend ON handles free, paid, unavailable and unauthenticated states", () => {
+  const previous = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE;
+  let user = "free-user";
+  let queryResult = { isPending: true, isError: false, data: null };
+  let lastOptions;
+  try {
+    process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE = "true";
+    const hook = loadTS("lib/subscription-gating/useSubscriptionEntitlement.ts", {
+      "@tanstack/react-query": { useQuery: options => {
+        lastOptions = options;
+        return queryResult;
+      }},
+      "@/services/axiosInstance": { __esModule: true, default: { get: () => {
+        throw Error("network requests prohibited in this test");
+      } }},
+      "@/contexts/UserContext": { useUser: () => ({ userDetails: user ? { id: user } : null }) },
+    });
+    assert.equal(hook.useSubscriptionEntitlement().state, "loading");
+    assert.equal(lastOptions.enabled, true);
+    queryResult = { isPending: false, isError: false, data: { hasAccess: false } };
+    assert.equal(hook.useSubscriptionEntitlement().state, "denied");
+    queryResult = { isPending: false, isError: false, data: { hasAccess: true } };
+    assert.equal(hook.useSubscriptionEntitlement().state, "granted");
+    queryResult = { isPending: false, isError: true, data: null };
+    const error = hook.useSubscriptionEntitlement();
+    assert.equal(error.state, "unavailable");
+    assert.equal(error.isUnavailable, true);
+    user = "";
+    assert.equal(hook.useSubscriptionEntitlement().state, "loading");
+    assert.equal(lastOptions.enabled, false);
+  } finally {
+    if (previous === undefined) delete process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE;
+    else process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE = previous;
+  }
+});

@@ -33,13 +33,8 @@ export const LoadingProvider = ({
 
   useEffect(() => {
     if (previousPath.current !== pathname) {
-      const timeout = setTimeout(() => {
-        setLoading(false);
-      }, 2500);
-
       previousPath.current = pathname;
-
-      return () => clearTimeout(timeout);
+      setLoading(false);
     }
   }, [pathname]);
 

@@ -12,6 +12,11 @@ import { useUser } from "@/contexts/UserContext";
 import { DashboardMetricCardSkeleton } from "@/components/skeletonLoaders/DashboardSkeletons";
 import { EmptyStateCard } from "@/components/general/EmptyState";
 import { useTheme } from "@/contexts/ThemeProvider";
+import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscriptionEntitlement";
+import { resolveTileAccess } from "@/lib/subscription-gating/tileAccess";
+import { SubscriptionTileOverlay } from "@/lib/subscription-gating/SubscriptionTileOverlay";
+import { isFreePreviewJourney } from "@/lib/subscription-gating/freePreview";
+
 
 const AllCourses = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +24,8 @@ const AllCourses = () => {
   const { userDetails } = useUser();
 
   const { theme } = useTheme();
+  const { state: entitlementState } = useSubscriptionEntitlement();
+
 
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
     userDetails?.languageId,
@@ -308,14 +315,28 @@ const AllCourses = () => {
               {allData.map(
                 (lessonProgressData: Record<string, any>, index: number) => (
                   <div
-                    key={index}
-                    className="w-full min-w-[280px] max-w-[320px] flex-1 basis-[280px]"
+                    key={lessonProgressData?.id ?? index}
+                    className="relative w-full min-w-[280px] max-w-[320px] flex-1 basis-[280px]"
                     style={{ maxWidth: "calc(20% - 1.6rem)" }}
                   >
-                    <CoursesCard
-                      data={lessonProgressData}
-                      isClickable={lessonProgressData?.isActive}
-                    />
+                    {(() => {
+                      const tileState = resolveTileAccess({
+                        isActive: lessonProgressData?.isActive === true,
+                        isFreePreview: isFreePreviewJourney(lessonProgressData?.id),
+                        entitlement: entitlementState,
+                      });
+                      return (
+                        <>
+                          <CoursesCard
+                            data={lessonProgressData}
+                            isClickable={process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" ? tileState === "accessible" : lessonProgressData?.isActive}
+                          />
+                          {process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true" && (
+                            <SubscriptionTileOverlay state={tileState} />
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 )
               )}
