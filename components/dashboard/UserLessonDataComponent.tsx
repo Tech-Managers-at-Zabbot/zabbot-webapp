@@ -103,7 +103,7 @@ export const LessonProgressCard = ({
               sx={{
                 height: 8,
                 borderRadius: 5,
-                backgroundColor: "#6FB6C8",
+                backgroundColor: "#E5E7EB",
                 "& .MuiLinearProgress-bar": {
                   backgroundColor: "#162B6E",
                   borderRadius: 5,
