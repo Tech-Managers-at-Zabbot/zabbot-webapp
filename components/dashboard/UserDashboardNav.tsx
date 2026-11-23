@@ -261,8 +261,10 @@ const UserDashboardNavbar = ({ showLogo = false }) => {
 
     if (pathname === path && routeTab === currentTab) return;
 
+    // Settings tabs share one pathname. Do not start a global loader that
+    // only resets on pathname changes when switching ?tab= values.
+    if (path !== "/user-settings") setLoading(true);
     router.push(route);
-    setLoading(true);
     setIsMobileMenuOpen(false);
   };
 
