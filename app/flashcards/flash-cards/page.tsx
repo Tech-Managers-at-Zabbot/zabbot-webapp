@@ -21,6 +21,7 @@ import Confetti from "react-confetti";
 import { useGetAllFlashcards } from "@/services/generalApi/flashcards/mutation";
 import { Flashcard } from "@/types/interfaces";
 import { FLASHCARD_STORAGE_KEY } from "@/constants/localstorageKeys";
+import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscriptionEntitlement";
 
 
 interface PreviewCardProps {
@@ -284,12 +285,16 @@ const Flashcards = () => {
 
   const router = useRouter();
 
-  const { data: flashcardsResponse, isLoading: flashcardsLoading } =
+  const { data: flashcardsResponse, isLoading: flashcardsLoading, isError: flashcardsError } =
     useGetAllFlashcards();
+  const { state: entitlementState } = useSubscriptionEntitlement();
 
   const flashcardsData: Flashcard[] = Array.isArray(flashcardsResponse?.data)
     ? flashcardsResponse.data
     : [];
+  // The backend, not this UI, filters the records that a free user may retrieve.
+  const previewEnabled = process.env.NEXT_PUBLIC_ZABBOT_FLASHCARDS_FREE_PREVIEW_ENABLED === "true";
+  const isFreePreview = previewEnabled && entitlementState === "denied" && flashcardsData.length === 3;
 
   const playAudio = (audioArray: string[]) => {
     if (!audioArray || audioArray.length === 0) return;
@@ -395,6 +400,13 @@ const Flashcards = () => {
     }, 600);
   };
 
+  const handleSeePlans = () => {
+    setIsFinishModalOpen(false);
+    setShowConfetti(false);
+    setLoading(true);
+    router.push("/#pricing");
+  };
+
   const handleGoToDashboard = () => {
     setLoading(true);
     setIsFinishModalOpen(false);
@@ -406,6 +418,15 @@ const Flashcards = () => {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen">
         <CustomSpinner title="loading flashcards..." spinnerColor="#223F1F" />
+      </main>
+    );
+  }
+
+  if (flashcardsError) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen px-4 text-center gap-4">
+        <p role="alert">Flashcards are unavailable right now. Please try again later.</p>
+        <InAppButton background="#223F1F" onClick={handleGoToDashboard}>Back to Dashboard</InAppButton>
       </main>
     );
   }
@@ -429,6 +450,11 @@ const Flashcards = () => {
         className="flex flex-col items-center justify-center gap-10 sm:gap-10 min-h-screen px-4"
         style={{ fontFamily: "Lexend" }}
       >
+        {isFreePreview && (
+          <p className="text-sm font-semibold text-[#223F1F] bg-[#FFF6E3] px-4 py-2 rounded-lg" role="status">
+            Free preview · Card {currentIndex + 1} of 3
+          </p>
+        )}
         {showConfetti && (
           <Confetti
             width={width}
@@ -510,12 +536,13 @@ const Flashcards = () => {
         >
           <div className="flex flex-col items-center text-center gap-6 px-6 py-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1B3718]">
-              🎉 Congratulations!
+              {isFreePreview ? "🎉 Your free preview is complete!" : "🎉 Congratulations!"}
             </h2>
 
             <p className="text-[#57534D] text-[16px] leading-relaxed">
-              You’ve completed all the flashcards in this set — amazing work!
-              You’re building real confidence in Yoruba, one word at a time.
+              {isFreePreview
+                ? "You’ve explored three Yorùbá Flashcards. Start your seven-day free trial to unlock the full collection and continue learning!"
+                : "You’ve completed all the flashcards in this set — amazing work! You’re building real confidence in Yoruba, one word at a time."}
             </p>
 
             <p className="text-[#7B3306] font-[500]">
@@ -524,10 +551,16 @@ const Flashcards = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 w-full">
               <InAppButton background="#006045" onClick={handleRestart}>
-                Restart Flashcards
+                {isFreePreview ? "Review 3 Free Cards" : "Restart Flashcards"}
               </InAppButton>
 
-              <InAppButton background="#FF6900" onClick={handleGoToDashboard}>
+              {isFreePreview && (
+                <InAppButton background="#FF6900" onClick={handleSeePlans}>
+                  View Plans & Start Free Trial
+                </InAppButton>
+              )}
+
+              <InAppButton background={isFreePreview ? "#223F1F" : "#FF6900"} onClick={handleGoToDashboard}>
                 Go to Dashboard
               </InAppButton>
             </div>

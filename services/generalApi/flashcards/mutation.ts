@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Flashcard } from "@/types/interfaces";
+import { useUser } from "@/contexts/UserContext";
 import {
   getFlashcards,
   getFlashcardById,
@@ -10,10 +11,14 @@ import {
 } from "./api";
 
 export function useGetAllFlashcards() {
+  const { userDetails } = useUser();
+  const userId = userDetails?.id;
   return useQuery({
-    queryKey: ["getAllFlashcards"],
+    // A full premium deck must never be reused from another user's cache.
+    queryKey: ["getAllFlashcards", userId],
     queryFn: () => getFlashcards(),
-    refetchOnMount: true,
+    enabled: Boolean(userId),
+    refetchOnMount: "always",
     refetchOnWindowFocus: false,
   });
 }
