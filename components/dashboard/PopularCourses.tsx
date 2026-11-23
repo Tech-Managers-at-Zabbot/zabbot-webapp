@@ -9,9 +9,15 @@ import { useGetAllCourses } from "@/services/generalApi/lessons/mutation";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
 import { usePageLanguage } from "@/contexts/LanguageContext";
+import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscriptionEntitlement";
+import { resolveTileAccess } from "@/lib/subscription-gating/tileAccess";
+import { isFreePreviewJourney } from "@/lib/subscription-gating/freePreview";
+import { SubscriptionTileOverlay } from "@/lib/subscription-gating/SubscriptionTileOverlay";
 
 const PopularCourses = () => {
   const { userDetails } = useUser();
+  const { state: entitlementState } = useSubscriptionEntitlement();
+  const gatingEnabled = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true";
   const { data: allCourses, isLoading: coursesLoading } = useGetAllCourses(
     userDetails?.languageId,
     true,
@@ -61,12 +67,23 @@ const PopularCourses = () => {
                 (lessonProgressData: Record<string, any>, index: number) => {
 
                   return (
-                    <div key={index}>
-                      <LessonsCard
-                        data={lessonProgressData}
-                        isClickable={lessonProgressData?.isActive}
-                      />
-
+                    <div key={lessonProgressData?.id ?? index} className="relative">
+                      {(() => {
+                        const tileState = resolveTileAccess({
+                          isActive: lessonProgressData?.isActive === true,
+                          isFreePreview: isFreePreviewJourney(lessonProgressData?.id),
+                          entitlement: entitlementState,
+                        });
+                        return (
+                          <>
+                            <LessonsCard
+                              data={lessonProgressData}
+                              isClickable={gatingEnabled ? tileState === "accessible" : lessonProgressData?.isActive === true}
+                            />
+                            {gatingEnabled && <SubscriptionTileOverlay state={tileState} />}
+                          </>
+                        );
+                      })()}
                     </div>
                   )
                 }
