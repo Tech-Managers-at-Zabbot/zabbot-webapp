@@ -28,3 +28,5 @@ jobs:
       - run: npm ci
       - name: TypeScript typecheck (no app deploy)
         run: npx tsc --noEmit
+      - name: Phase 2 frontend access and flag compatibility tests (no API requests)
+        run: node --test tests/phase2-frontend-compatibility.test.cjs
