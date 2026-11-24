@@ -21,14 +21,14 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
   };
 
   const getScoreLabel = (score: number) => {
-    const roundedScore = Math.round(score * 100);
-    if (roundedScore >= 80) return "Excellent!";
-    if (roundedScore >= 60) return "Good";
-    if (roundedScore >= 40) return "Fair";
-    return "Needs improvement — listen and try again.";
+    const roundedScore = Math.round(Math.min(1, Math.max(0, score)) * 100);
+    if (roundedScore >= 80) return "High transcript similarity (tone not assessed)";
+    if (roundedScore >= 60) return "Moderate transcript similarity (tone not assessed)";
+    if (roundedScore >= 40) return "Low transcript similarity (tone not assessed)";
+    return "Transcript differs; listen and try again (tone not assessed).";
   };
 
-  const roundedPercentage = Math.round(finalScore * 100);
+  const roundedPercentage = Number.isFinite(finalScore) ? Math.round(Math.min(1, Math.max(0, finalScore)) * 100) : 0;
 
   return (
     <div className="w-full max-w-md" style={{ fontFamily: "Lexend" }}>
@@ -255,7 +255,7 @@ const InLessonRecordWithPara = ({
               </h2>
             </div>
 
-            {processedData && processedData.finalScore > 0 && (
+            {processedData && Number.isFinite(processedData.finalScore) && (
               <div className="flex flex-col items-center">
                 <ScoreBar finalScore={processedData.finalScore} />
               </div>
@@ -285,7 +285,7 @@ const InLessonRecordWithPara = ({
                 {processedData.plot && (
                   <div className="rounded-lg bg-white w-full">
                     <p className="text-gray-700 text-sm mb-2 text-center font-medium">
-                      Quality of Intonation (Comparison)
+                      Waveform comparison (not tonal accuracy)
                     </p>
                     <img
                       src={processedData.plot}
