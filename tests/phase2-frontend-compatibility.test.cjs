@@ -217,7 +217,7 @@ test("Release B #2: Pàrà word changes remount feedback and new recordings clea
   assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\} data=\{selectedPwpItem\}/);
   assert.match(page, /selectedPwpItem\?\.id === selectedItem/);
   assert.match(selected, /setProcessedData\(null\);\s*setFeedbackError\(null\);\s*if \(audioURL\)/);
-  assert.match(selected, /setAudioURL\(null\);\s*chunks\.current = \[\]/);
+  assert.match(selected, /setAudioURL\(null\);\s*setWavDownloadUrl\(null\);\s*chunks\.current = \[\]/);
   assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
 });
 
