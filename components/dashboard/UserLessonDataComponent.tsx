@@ -344,7 +344,7 @@ export const LessonsCard2 = ({
             <span>{data?.estimatedDuration} min</span>
             <span>
               {data?.totalContents}{" "}
-              {data?.totalContents === 1 ? "step" : "steps"}
+              {data?.totalContents === 1 ? "spark" : "sparks"}
             </span>
           </div>
         </div>
