@@ -134,3 +134,45 @@ test("home dashboard Journey and Step cards apply the same access policy as list
   assert.match(step, /isFreePreviewLesson\(lessonData\?\.id\)/);
   assert.match(step, /lessonData\?\.course\?\.isActive !== false/);
 });
+
+
+test("Steps page keeps each Journey's Admin-defined order ahead of inactive Journeys", () => {
+  const { orderStepsByJourney } = loadTS("lib/steps/orderStepsByJourney.ts");
+  const active = { isActive: true, orderNumber: 1 };
+  const inactive = { isActive: false, orderNumber: 2 };
+  // Recreates staging: 16 inactive first Steps with orderNumber=1 must NOT
+  // displace Show You Care (#2) or Introductions (#3) from top row.
+  const records = [
+    ...Array.from({ length: 16 }, (_, i) => ({
+      id: `inactive-${i}`, courseId: `journey-${i}`,
+      orderNumber: 1, course: inactive,
+    })),
+    { id: "intro", courseId: "first", orderNumber: 3, course: active },
+    { id: "hello", courseId: "first", orderNumber: 1, course: active },
+    { id: "care", courseId: "first", orderNumber: 2, course: active },
+  ];
+  const ordered = orderStepsByJourney(records);
+  assert.deepEqual(ordered.slice(0, 3).map(x => x.id), ["hello", "care", "intro"]);
+  assert.equal(ordered.length, records.length);
+  assert.deepEqual(records.slice(-3).map(x => x.id), ["intro", "hello", "care"]);
+});
+
+test("multiple active Journeys follow Admin Journey order and preserve their Step order", () => {
+  const { orderStepsByJourney } = loadTS("lib/steps/orderStepsByJourney.ts");
+  const steps = [
+    { id: "b2", courseId: "b", orderNumber: 2, course: { isActive: true, orderNumber: 2 } },
+    { id: "a2", courseId: "a", orderNumber: 2, course: { isActive: true, orderNumber: 1 } },
+    { id: "b1", courseId: "b", orderNumber: 1, course: { isActive: true, orderNumber: 2 } },
+    { id: "a1", courseId: "a", orderNumber: 1, course: { isActive: true, orderNumber: 1 } },
+  ];
+  assert.deepEqual(orderStepsByJourney(steps).map(x => x.id), ["a1", "a2", "b1", "b2"]);
+});
+
+
+test("Steps page hamburger and dropdown stack above the lesson grid", () => {
+  const page = fs.readFileSync(path.join(root, "app/user-dashboard/steps/page.tsx"), "utf8");
+  assert.match(page, /right-\[5%\] z-\[200\]/, "settings header must stack above the Steps grid");
+  assert.match(page, /z-\[201\] hidden lg:flex pointer-events-auto/, "settings trigger must remain interactive");
+  assert.match(page, /<section className="relative z-0 mt-30">/, "Steps grid must remain in lower stacking context");
+  assert.match(page, /pointer-events-none absolute bg-cover/, "decorative clouds must not intercept clicks");
+});
