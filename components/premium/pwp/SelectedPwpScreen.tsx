@@ -128,8 +128,12 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     }
 
                 } catch (error) {
-                    const responseMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
-                    setFeedbackError(responseMessage || "Pàrà comparison failed. Your recording was saved locally; please try again.");
+                    const apiError = error as { response?: { status?: number; data?: { code?: string; message?: string } } };
+                    const subscriptionRequired = apiError.response?.status === 403 &&
+                        apiError.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+                    setFeedbackError(subscriptionRequired
+                        ? "An active subscription is required to receive Pàrà pronunciation feedback."
+                        : apiError.response?.data?.message || "Pàrà comparison failed. Please try again.");
                     setIsProcessingRecord(false);
                     console.error("Pàrà feedback request failed:", error);
                 }
@@ -207,7 +211,6 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                         {processedData.plot && (
                             <div className='flex flex-col items-center gap-2'>
-                                <p className='text-sm text-white'>Waveform comparison (not a pitch or tone graph)</p>
                                 <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
                                     <Image src={processedData.plot} alt="Reference and learner waveform overlay" fill quality={99} />
                                 </div>

@@ -22,10 +22,10 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
 
   const getScoreLabel = (score: number) => {
     const roundedScore = Math.round(Math.min(1, Math.max(0, score)) * 100);
-    if (roundedScore >= 80) return "High transcript similarity (tone not assessed)";
-    if (roundedScore >= 60) return "Moderate transcript similarity (tone not assessed)";
-    if (roundedScore >= 40) return "Low transcript similarity (tone not assessed)";
-    return "Transcript differs; listen and try again (tone not assessed).";
+    if (roundedScore >= 80) return "Excellent!";
+    if (roundedScore >= 60) return "Good";
+    if (roundedScore >= 40) return "Fair";
+    return "Needs improvement — listen and try again.";
   };
 
   const roundedPercentage = Number.isFinite(finalScore) ? Math.round(Math.min(1, Math.max(0, finalScore)) * 100) : 0;
@@ -166,7 +166,15 @@ const InLessonRecordWithPara = ({
             },
             {
               onError: (error: any) => {
-                addAlert("Error", error?.response?.data?.message || "Unable to get feedback, try again please", "error");
+                const subscriptionRequired = error?.response?.status === 403 &&
+                  error?.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+                addAlert(
+                  "Error",
+                  subscriptionRequired
+                    ? "An active subscription is required to receive Pàrà pronunciation feedback."
+                    : error?.response?.data?.message || "Unable to get feedback, try again please",
+                  "error",
+                );
               },
             }
           );
@@ -188,7 +196,9 @@ const InLessonRecordWithPara = ({
             console.error("Feedback request failed");
           }
         } catch (error) {
-          console.error("❌ Upload failed:", error);
+          // React Query calls the per-mutation onError callback above; avoid
+          // duplicating its subscription alert here.
+          console.error("Pàrà comparison failed:", error);
         } finally {
           setIsProcessing(false);
         }
@@ -292,7 +302,7 @@ const InLessonRecordWithPara = ({
                 {processedData.plot && (
                   <div className="rounded-lg bg-white w-full">
                     <p className="text-gray-700 text-sm mb-2 text-center font-medium">
-                      Waveform comparison (not tonal accuracy)
+                      Quality of Intonation (Comparison)
                     </p>
                     <img
                       src={processedData.plot}
