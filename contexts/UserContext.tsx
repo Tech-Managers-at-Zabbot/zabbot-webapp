@@ -49,18 +49,29 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const goalsCount = userGoalsCount?.data || 0;
 
-  const completeGoal = () => {
-    if (userDetails?.id && goalId) {
-      completeUserDailyGoal(
-        { userId: userDetails.id, goalId },
-        {
-          onSuccess: () => {
-            refetchGoals();
-          },
-          onError: () => {},
-        }
-      );
+  // The Word of the Day UI opens its congratulations modal only after
+  // the backend confirms that this learner's daily goal was completed.
+  const completeGoal = (
+    onSuccess?: () => void,
+    onError?: (error: unknown) => void,
+  ) => {
+    if (!userDetails?.id || !goalId) {
+      onError?.(new Error("Daily goal is not ready to complete"));
+      return;
     }
+
+    completeUserDailyGoal(
+      { userId: userDetails.id, goalId },
+      {
+        onSuccess: () => {
+          onSuccess?.();
+          void refetchGoals();
+        },
+        onError: (error: unknown) => {
+          onError?.(error);
+        },
+      },
+    );
   };
 
   useEffect(() => {

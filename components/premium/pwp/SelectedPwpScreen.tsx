@@ -26,6 +26,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
     const chunks = React.useRef<Blob[]>([]);
     const randomSuffix = generateRandomString();
     const [processedData, setProcessedData] = React.useState<ProcessedData | null>(null);
+    const [feedbackError, setFeedbackError] = React.useState<string | null>(null);
 
     const { mutateAsync: getPronunciationFeedback, isPending: getFeedbackLoading } =
         usePronunciationFeedback();
@@ -66,6 +67,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
         try {
             // A new attempt must not display the preceding recording’s graph or score.
             setProcessedData(null);
+            setFeedbackError(null);
             if (audioURL) URL.revokeObjectURL(audioURL);
             setAudioURL(null);
             chunks.current = [];
@@ -81,12 +83,20 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
             mediaRecorder.onstop = async () => {
                 setIsProcessingRecord(true)
-                const blob = new Blob(chunks.current, { type: "audio/wav" });
+                // Use the format actually produced by MediaRecorder. Relabeling
+                // WebM/MP4 data as WAV can prevent backend transcription.
+                const recordedType = mediaRecorder.mimeType || chunks.current[0]?.type || "audio/webm";
+                const mimeType = recordedType.split(";")[0];
+                const extension = mimeType.includes("webm") ? "webm" :
+                    mimeType.includes("ogg") ? "ogg" :
+                    mimeType.includes("mp4") ? "m4a" :
+                    mimeType.includes("wav") ? "wav" : "webm";
+                const blob = new Blob(chunks.current, { type: recordedType });
 
                 chunks.current = [];
                 const url = URL.createObjectURL(blob);
                 setAudioURL(url);
-                const fileName = `recording-${randomSuffix}.wav`;
+                const fileName = `recording-${randomSuffix}.${extension}`;
 
                 const formData = new FormData();
                 formData.append("file", blob, fileName);
@@ -95,15 +105,17 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     const feedbackRes = await getPronunciationFeedback({ id: data?.id, payload: formData });
 
                     if (!feedbackRes) {
+                        setFeedbackError("Pàrà returned no comparison result. Please try recording again.");
                         setIsProcessingRecord(false);
                         return;
                     }
 
-                    if (feedbackRes?.status === 'success' && feedbackRes?.data) {
+                    if (feedbackRes?.status === 'success' && feedbackRes?.data &&
+                        Number.isFinite(Number(feedbackRes.data.finalScore))) {
                         // Handle successful feedback response
                         setProcessedData({
                             embeddingSimilarity: feedbackRes.data?.embeddingSimilarity,
-                            finalScore: feedbackRes.data?.finalScore,
+                            finalScore: Number(feedbackRes.data.finalScore),
                             plot: feedbackRes.data?.plot,
                             remark: feedbackRes.data?.remark,
                             textSimilarity: feedbackRes.data?.textSimilarity,
@@ -111,12 +123,19 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                         setIsProcessingRecord(false);
                     } else {
+                        setFeedbackError(feedbackRes?.message || "Pàrà could not calculate a score. Please try again.");
                         setIsProcessingRecord(false);
                     }
 
                 } catch (error) {
+                    const apiError = error as { response?: { status?: number; data?: { code?: string; message?: string } } };
+                    const subscriptionRequired = apiError.response?.status === 403 &&
+                        apiError.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+                    setFeedbackError(subscriptionRequired
+                        ? "An active subscription is required to receive Pàrà pronunciation feedback."
+                        : apiError.response?.data?.message || "Pàrà comparison failed. Please try again.");
                     setIsProcessingRecord(false);
-                    console.error("❌ Upload failed:", error);
+                    console.error("Pàrà feedback request failed:", error);
                 }
             };
 
@@ -150,6 +169,10 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     </div>
                 )}
 
+                {feedbackError && (
+                    <div role="alert" className='text-[#FFDBD2] text-center p-2'>{feedbackError}</div>
+                )}
+
                 {isProcessingRecord && (<div className='text-[#f7f7f7] text-[16px] lg:text-[20px] justify-center items-center flex p-2'><Image src='/general/recording-circle-icon.svg' alt="song-icon" height={40} width={40} /> Recorded Audio Processing in Progress </div>)}
 
                 <div className='flex flex-col lg:flex-row justify-center items-center gap-2 mb-4'>
@@ -174,21 +197,25 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     <div className='flex justify-center'><audio controls src={audioURL} className="mt-4 w-full max-w-sm" /></div>
                 )}
 
-                {processedData && processedData.plot && (
+                {processedData && (
                     <div className='flex justify-center items-center mt-[15px] gap-2 flex-col'>
-                        {processedData.remark.length > 0 && (
+                        {processedData.remark?.length > 0 && (
                             <div className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>{processedData.remark}</div>
                         )}
 
-                        {processedData.finalScore > 0 && (
+                        {Number.isFinite(processedData.finalScore) && (
                             <div className='flex flex-col items-center w-full'>
                                 <ScoreBar finalScore={processedData.finalScore} />
                             </div>
                         )}
 
-                        <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
-                            <Image src={processedData.plot} alt="plot-image" fill quality={99} />
-                        </div>
+                        {processedData.plot && (
+                            <div className='flex flex-col items-center gap-2'>
+                                <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
+                                    <Image src={processedData.plot} alt="Reference and learner waveform overlay" fill quality={99} />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 

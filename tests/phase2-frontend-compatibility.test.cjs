@@ -216,7 +216,7 @@ test("Release B #2: Pàrà word changes remount feedback and new recordings clea
   const selected = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
   assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\} data=\{selectedPwpItem\}/);
   assert.match(page, /selectedPwpItem\?\.id === selectedItem/);
-  assert.match(selected, /setProcessedData\(null\);\s*if \(audioURL\)/);
+  assert.match(selected, /setProcessedData\(null\);\s*setFeedbackError\(null\);\s*if \(audioURL\)/);
   assert.match(selected, /setAudioURL\(null\);\s*chunks\.current = \[\]/);
   assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
 });
@@ -278,4 +278,55 @@ test("Dashboard layout never paints a broken image source during first render", 
   assert.match(layout, /\{timeSunMoonLink && \(/);
   assert.match(layout, /src=\{timeSunMoonLink\}/);
   assert.doesNotMatch(layout, /src=\{"#"\}/);
+});
+
+
+test("Word of Day success callback opens congratulations only after goal mutation succeeds", () => {
+  const context = fs.readFileSync(path.join(root, "contexts/UserContext.tsx"), "utf8");
+  const widget = fs.readFileSync(path.join(root, "components/dashboard/UserGoals.tsx"), "utf8");
+  assert.match(context, /const completeGoal = \(\s*onSuccess\?: \(\) => void,\s*onError\?: \(error: unknown\) => void/);
+  assert.match(context, /completeUserDailyGoal\([\s\S]*?onSuccess: \(\) => \{\s*onSuccess\?\.\(\);/);
+  assert.match(context, /onError: \(error: unknown\) => \{\s*onError\?\.\(error\);/);
+  assert.match(widget, /completeGoal\(\s*\(\) => \{\s*setShowCongrats\(true\);/);
+  assert.match(widget, /<CongratulationsModal[\s\S]*?isOpen=\{showCongrats\}/);
+  assert.match(widget, /onClose=\{\(\) => \{\s*setShowCongrats\(false\);/);
+});
+
+test("Word of Day goal completion refuses to report success if user or goal is unavailable", () => {
+  const context = fs.readFileSync(path.join(root, "contexts/UserContext.tsx"), "utf8");
+  assert.match(context, /if \(!userDetails\?\.id \|\| !goalId\) \{\s*onError\?\.\(new Error\("Daily goal is not ready to complete"\)\);\s*return;/);
+  assert.match(context, /void refetchGoals\(\);/);
+});
+
+
+test("Pàrà preserves approved score, graph, and feedback wording", () => {
+  const scorebar = fs.readFileSync(path.join(root, "components/general/Scorebar.tsx"), "utf8");
+  const practice = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  const inLesson = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
+  assert.match(scorebar, /Pronunciation Accuracy:/);
+  assert.doesNotMatch(scorebar, /Transcript comparison estimate/);
+  assert.match(practice, /Number\.isFinite\(processedData\.finalScore\)/);
+  assert.doesNotMatch(practice, /Waveform comparison \(not a pitch or tone graph\)/);
+  assert.match(inLesson, /Quality of Intonation \(Comparison\)/);
+  assert.doesNotMatch(inLesson, /Waveform comparison \(not tonal accuracy\)/);
+});
+
+
+test("Pàrà recording sends the real MediaRecorder format and reports scoring failures", () => {
+  const screen = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  assert.match(screen, /mediaRecorder\.mimeType \|\| chunks\.current\[0\]\?\.type/);
+  assert.match(screen, /new Blob\(chunks\.current, \{ type: recordedType \}\)/);
+  assert.match(screen, /recording-\$\{randomSuffix\}\.\$\{extension\}/);
+  assert.doesNotMatch(screen, /new Blob\(chunks\.current, \{ type: "audio\/wav" \}\)/);
+  assert.match(screen, /role="alert"/);
+  assert.match(screen, /SUBSCRIPTION_REQUIRED/);
+  assert.match(screen, /An active subscription is required/);
+  assert.match(screen, /Number\.isFinite\(Number\(feedbackRes\.data\.finalScore\)\)/);
+});
+
+
+test("Pàrà in-Bite feedback explicitly explains a premium subscription 403", () => {
+  const source = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
+  assert.match(source, /SUBSCRIPTION_REQUIRED/);
+  assert.match(source, /An active subscription is required/);
 });

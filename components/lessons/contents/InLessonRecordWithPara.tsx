@@ -21,14 +21,14 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
   };
 
   const getScoreLabel = (score: number) => {
-    const roundedScore = Math.round(score * 100);
+    const roundedScore = Math.round(Math.min(1, Math.max(0, score)) * 100);
     if (roundedScore >= 80) return "Excellent!";
     if (roundedScore >= 60) return "Good";
     if (roundedScore >= 40) return "Fair";
     return "Needs improvement — listen and try again.";
   };
 
-  const roundedPercentage = Math.round(finalScore * 100);
+  const roundedPercentage = Number.isFinite(finalScore) ? Math.round(Math.min(1, Math.max(0, finalScore)) * 100) : 0;
 
   return (
     <div className="w-full max-w-md" style={{ fontFamily: "Lexend" }}>
@@ -136,14 +136,21 @@ const InLessonRecordWithPara = ({
 
       mediaRecorder.onstop = async () => {
         setIsProcessing(true);
-        const blob = new Blob(chunksRef.current, { type: "audio/wav" });
+        // The recorded bytes must retain their actual browser media format.
+        const recordedType = mediaRecorder.mimeType || chunksRef.current[0]?.type || "audio/webm";
+        const mimeType = recordedType.split(";")[0];
+        const extension = mimeType.includes("webm") ? "webm" :
+          mimeType.includes("ogg") ? "ogg" :
+          mimeType.includes("mp4") ? "m4a" :
+          mimeType.includes("wav") ? "wav" : "webm";
+        const blob = new Blob(chunksRef.current, { type: recordedType });
         chunksRef.current = [];
 
         const url = URL.createObjectURL(blob);
         setAudioURL(url);
         setHasRecorded(true);
 
-        const fileName = `recording-${Date.now()}.wav`;
+        const fileName = `recording-${Date.now()}.${extension}`;
         const formData = new FormData();
         formData.append("file", blob, fileName);
         formData.append("isInLesson", "true");
@@ -159,7 +166,15 @@ const InLessonRecordWithPara = ({
             },
             {
               onError: (error: any) => {
-                addAlert("Error", `${error.response.data.message || "Unable to get feedback, try again please"}`, "error");
+                const subscriptionRequired = error?.response?.status === 403 &&
+                  error?.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+                addAlert(
+                  "Error",
+                  subscriptionRequired
+                    ? "An active subscription is required to receive Pàrà pronunciation feedback."
+                    : error?.response?.data?.message || "Unable to get feedback, try again please",
+                  "error",
+                );
               },
             }
           );
@@ -181,7 +196,9 @@ const InLessonRecordWithPara = ({
             console.error("Feedback request failed");
           }
         } catch (error) {
-          console.error("❌ Upload failed:", error);
+          // React Query calls the per-mutation onError callback above; avoid
+          // duplicating its subscription alert here.
+          console.error("Pàrà comparison failed:", error);
         } finally {
           setIsProcessing(false);
         }
@@ -255,7 +272,7 @@ const InLessonRecordWithPara = ({
               </h2>
             </div>
 
-            {processedData && processedData.finalScore > 0 && (
+            {processedData && Number.isFinite(processedData.finalScore) && (
               <div className="flex flex-col items-center">
                 <ScoreBar finalScore={processedData.finalScore} />
               </div>

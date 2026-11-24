@@ -1,7 +1,7 @@
 "use client";
 
 const ScoreBar = ({ finalScore }: { finalScore: number }) => {
-    const percentage = Math.round(finalScore * 100); // 0–100
+    const percentage = Number.isFinite(finalScore) ? Math.min(100, Math.max(0, Math.round(finalScore * 100))) : 0; // 0–100
 
     let barColor = "bg-green-500";
     
