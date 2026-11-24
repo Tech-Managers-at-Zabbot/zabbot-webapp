@@ -167,3 +167,12 @@ test("multiple active Journeys follow Admin Journey order and preserve their Ste
   ];
   assert.deepEqual(orderStepsByJourney(steps).map(x => x.id), ["a1", "a2", "b1", "b2"]);
 });
+
+
+test("Steps page hamburger and dropdown stack above the lesson grid", () => {
+  const page = fs.readFileSync(path.join(root, "app/user-dashboard/steps/page.tsx"), "utf8");
+  assert.match(page, /right-\[5%\] z-\[200\]/, "settings header must stack above the Steps grid");
+  assert.match(page, /z-\[201\] hidden lg:flex pointer-events-auto/, "settings trigger must remain interactive");
+  assert.match(page, /<section className="relative z-0 mt-30">/, "Steps grid must remain in lower stacking context");
+  assert.match(page, /pointer-events-none absolute bg-cover/, "decorative clouds must not intercept clicks");
+});
