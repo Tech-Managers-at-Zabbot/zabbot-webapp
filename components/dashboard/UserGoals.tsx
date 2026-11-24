@@ -286,23 +286,25 @@ const WordForTheDay = () => {
               </div>
             </div>
 
-            <CongratulationsModal
-              isOpen={showCongrats}
-              onClose={() => {
-                setShowCongrats(false);
-                setShowDailyGoalCard(true);
-              }}
-              title="Congratulations!"
-              message="You've completed your daily goal! Keep up the great work!"
-              imageUrl="/userDashboard/parrot-head.svg"
-              imageAlt="Zabbot mascot celebrating"
-              darkMode={theme === "dark"}
-              buttonText="Awesome!"
-              showConfetti={true}
-            />
           </div>
         </>
       )}
+      {/* Keep the congratulatory modal mounted when completing the goal
+          switches the Daily Word card to its completed state. */}
+      <CongratulationsModal
+        isOpen={showCongrats}
+        onClose={() => {
+          setShowCongrats(false);
+          setShowDailyGoalCard(true);
+        }}
+        title="Congratulations!"
+        message="You've completed your daily goal! Keep up the great work!"
+        imageUrl="/userDashboard/parrot-head.svg"
+        imageAlt="Zabbot mascot celebrating"
+        darkMode={theme === "dark"}
+        buttonText="Awesome!"
+        showConfetti={true}
+      />
     </>
   );
 };
