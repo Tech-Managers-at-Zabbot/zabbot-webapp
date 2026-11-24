@@ -9,10 +9,7 @@ import { Alerts } from "next-alert";
 import { Providers } from "@/components/Providers";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [timeSunMoonLink, setTimeSunMoonLink] = useState(
-    // "/userDashboard/morning-sun.png"
-    "#"
-  );
+  const [timeSunMoonLink, setTimeSunMoonLink] = useState<string | null>(null);
 
   useEffect(() => {
     const currentTime = new Date();
@@ -50,11 +47,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       "
                   style={{ zIndex: 1 }}
                 >
-                  <img
-                    src={`${timeSunMoonLink}`}
-                    alt="image of the sun/moon"
-                    width={120}
-                  />
+                  {timeSunMoonLink && (
+                    <img
+                      src={timeSunMoonLink}
+                      alt="image of the sun/moon"
+                      width={120}
+                    />
+                  )}
                 </section>
                 {children}
               </div>
