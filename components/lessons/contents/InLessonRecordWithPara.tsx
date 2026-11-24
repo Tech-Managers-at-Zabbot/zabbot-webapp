@@ -166,7 +166,15 @@ const InLessonRecordWithPara = ({
             },
             {
               onError: (error: any) => {
-                addAlert("Error", error?.response?.data?.message || "Unable to get feedback, try again please", "error");
+                const subscriptionRequired = error?.response?.status === 403 &&
+                  error?.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+                addAlert(
+                  "Error",
+                  subscriptionRequired
+                    ? "An active subscription is required to receive Pàrà pronunciation feedback."
+                    : error?.response?.data?.message || "Unable to get feedback, try again please",
+                  "error",
+                );
               },
             }
           );
@@ -187,8 +195,14 @@ const InLessonRecordWithPara = ({
           } else {
             console.error("Feedback request failed");
           }
-        } catch (error) {
-          console.error("❌ Upload failed:", error);
+        } catch (error: any) {
+          // Some failures bypass the mutateAsync per-call onError handler.
+          const subscriptionRequired = error?.response?.status === 403 &&
+            error?.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+          if (subscriptionRequired) {
+            addAlert("Error", "An active subscription is required to receive Pàrà pronunciation feedback.", "error");
+          }
+          console.error("Pàrà comparison failed:", error);
         } finally {
           setIsProcessing(false);
         }
