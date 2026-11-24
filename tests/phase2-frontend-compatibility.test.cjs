@@ -176,3 +176,25 @@ test("Steps page hamburger and dropdown stack above the lesson grid", () => {
   assert.match(page, /<section className="relative z-0 mt-30">/, "Steps grid must remain in lower stacking context");
   assert.match(page, /pointer-events-none absolute bg-cover/, "decorative clouds must not intercept clicks");
 });
+
+
+test("Home Steps carousel reuses the Steps page Journey-first ordering and language-scoped data", () => {
+  const home = fs.readFileSync(path.join(root, "components/dashboard/ProgressSection.tsx"), "utf8");
+  assert.match(home, /useGetLanguageLessons\(userDetails\?\.languageId\)/);
+  assert.match(home, /orderStepsByJourney\(allLessonsData\.data\)/);
+  assert.doesNotMatch(home, /useGetAllLessons\(/);
+  assert.doesNotMatch(home, /Number\(Boolean\(b\?\.isActive\)\)/);
+  const { orderStepsByJourney } = loadTS("lib/steps/orderStepsByJourney.ts");
+  const first = { isActive: true, orderNumber: 1 };
+  const twelfth = { isActive: false, orderNumber: 12 };
+  const shuffled = [
+    { id: "directions", courseId: "journey12", orderNumber: 1, course: twelfth },
+    { id: "origins", courseId: "journey1", orderNumber: 5, course: first },
+    { id: "intro", courseId: "journey1", orderNumber: 3, course: first },
+    { id: "hello", courseId: "journey1", orderNumber: 1, course: first },
+    { id: "care", courseId: "journey1", orderNumber: 2, course: first },
+    { id: "know", courseId: "journey1", orderNumber: 4, course: first },
+  ];
+  assert.deepEqual(orderStepsByJourney(shuffled).map(x => x.id),
+    ["hello", "care", "intro", "know", "origins", "directions"]);
+});
