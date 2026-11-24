@@ -279,3 +279,21 @@ test("Dashboard layout never paints a broken image source during first render", 
   assert.match(layout, /src=\{timeSunMoonLink\}/);
   assert.doesNotMatch(layout, /src=\{"#"\}/);
 });
+
+
+test("Word of Day success callback opens congratulations only after goal mutation succeeds", () => {
+  const context = fs.readFileSync(path.join(root, "contexts/UserContext.tsx"), "utf8");
+  const widget = fs.readFileSync(path.join(root, "components/dashboard/UserGoals.tsx"), "utf8");
+  assert.match(context, /const completeGoal = \(\s*onSuccess\?: \(\) => void,\s*onError\?: \(error: unknown\) => void/);
+  assert.match(context, /completeUserDailyGoal\([\s\S]*?onSuccess: \(\) => \{\s*onSuccess\?\.\(\);/);
+  assert.match(context, /onError: \(error: unknown\) => \{\s*onError\?\.\(error\);/);
+  assert.match(widget, /completeGoal\(\s*\(\) => \{\s*setShowCongrats\(true\);/);
+  assert.match(widget, /<CongratulationsModal[\s\S]*?isOpen=\{showCongrats\}/);
+  assert.match(widget, /onClose=\{\(\) => \{\s*setShowCongrats\(false\);/);
+});
+
+test("Word of Day goal completion refuses to report success if user or goal is unavailable", () => {
+  const context = fs.readFileSync(path.join(root, "contexts/UserContext.tsx"), "utf8");
+  assert.match(context, /if \(!userDetails\?\.id \|\| !goalId\) \{\s*onError\?\.\(new Error\("Daily goal is not ready to complete"\)\);\s*return;/);
+  assert.match(context, /void refetchGoals\(\);/);
+});
