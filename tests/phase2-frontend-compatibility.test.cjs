@@ -262,3 +262,20 @@ test("Release B: Bite Home icon only opens confirmation; navigation requires Exi
   assert.ok(redirect);
   assert.match(redirect[0], /router\.push\("\/user-dashboard"\)/);
 });
+
+
+test("Flashcards Dashboard return never renders uninitialized localized dashboard", () => {
+  const flashcards = fs.readFileSync(path.join(root, "app/flashcards/flash-cards/page.tsx"), "utf8");
+  const dashboard = fs.readFileSync(path.join(root, "app/user-dashboard/page.tsx"), "utf8");
+  assert.match(flashcards, /const handleGoToDashboard = \(\) => \{[\s\S]*?router\.push\("\/user-dashboard"\)/);
+  assert.match(dashboard, /if \(isLanguageLoading\) \{\s*return <Loader \/>;\s*\}/);
+  assert.match(dashboard, /usePageLanguage\("userDashboard"\)/);
+});
+
+test("Dashboard layout never paints a broken image source during first render", () => {
+  const layout = fs.readFileSync(path.join(root, "app/user-dashboard/layout.tsx"), "utf8");
+  assert.match(layout, /useState<string \| null>\(null\)/);
+  assert.match(layout, /\{timeSunMoonLink && \(/);
+  assert.match(layout, /src=\{timeSunMoonLink\}/);
+  assert.doesNotMatch(layout, /src=\{"#"\}/);
+});
