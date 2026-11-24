@@ -64,6 +64,11 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
     const startRecording = async () => {
         try {
+            // A new attempt must not display the preceding recording’s graph or score.
+            setProcessedData(null);
+            if (audioURL) URL.revokeObjectURL(audioURL);
+            setAudioURL(null);
+            chunks.current = [];
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mediaRecorder = new MediaRecorder(stream);
             mediaRecorderRef.current = mediaRecorder;
@@ -124,6 +129,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
     const stopRecording = () => {
         mediaRecorderRef.current?.stop();
+        mediaRecorderRef.current?.stream.getTracks().forEach(track => track.stop());
         setIsRecording(false);
     };
 
