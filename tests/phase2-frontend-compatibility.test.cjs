@@ -240,3 +240,25 @@ test("Release B #3: learner labels use Journey > Step > Bite", () => {
   assert.match(introPage, /STEP \{lesson\?\.orderNumber\}/);
   assert.match(introPage, /lesson\?\.totalContents === 1 \? "Bite" : "Bites"/);
 });
+
+
+test("Release B: Bite screen labels the parent lesson as STEP, not LESSON", () => {
+  const tracker = fs.readFileSync(path.join(root, "components/lessons/LessonProgressTracker.tsx"), "utf8");
+  assert.match(tracker, /STEP \{lessonNumber\}/);
+  assert.doesNotMatch(tracker, /LESSON \{lessonNumber\}/);
+});
+
+
+test("Release B: Bite Home icon only opens confirmation; navigation requires Exit", () => {
+  const source = fs.readFileSync(path.join(root, "components/lessons/LessonContent.tsx"), "utf8");
+  const homeIcon = source.match(/<img\s+src="\/lessons\/lessons-home\.svg"[\s\S]*?\/>/);
+  assert.ok(homeIcon, "Bite Home icon must exist");
+  assert.doesNotMatch(homeIcon[0], /onClick=/, "nested icon click must not bypass exit confirmation");
+  assert.match(source, /onClick=\{\(\) => \{\s*setHomeModal\(true\);\s*\}\}/);
+  assert.match(source, /title="Leave this Step\?"/);
+  assert.match(source, /onClick=\{\(\) => setHomeModal\(false\)\}/);
+  assert.match(source, /onClick=\{handleRedirectHome\}/);
+  const redirect = source.match(/const handleRedirectHome = \(\) => \{[\s\S]*?\n  \};/);
+  assert.ok(redirect);
+  assert.match(redirect[0], /router\.push\("\/user-dashboard"\)/);
+});
