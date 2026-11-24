@@ -195,13 +195,9 @@ const InLessonRecordWithPara = ({
           } else {
             console.error("Feedback request failed");
           }
-        } catch (error: any) {
-          // Some failures bypass the mutateAsync per-call onError handler.
-          const subscriptionRequired = error?.response?.status === 403 &&
-            error?.response?.data?.code === "SUBSCRIPTION_REQUIRED";
-          if (subscriptionRequired) {
-            addAlert("Error", "An active subscription is required to receive Pàrà pronunciation feedback.", "error");
-          }
+        } catch (error) {
+          // React Query calls the per-mutation onError callback above; avoid
+          // duplicating its subscription alert here.
           console.error("Pàrà comparison failed:", error);
         } finally {
           setIsProcessing(false);
