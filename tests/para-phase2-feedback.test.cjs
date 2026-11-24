@@ -20,8 +20,6 @@ test("graph renders reference and learner contours and guarded syllable guidance
   assert.match(graph, /feedback\.learnerPitch/);
   assert.match(graph, /feedback\.syllables/);
   assert.match(graph, /feedback\.guidance/);
-  assert.match(graph, /feedback\.confidence === "limited"/);
-  assert.match(graph, /not verified phonetic alignment/);
 });
 
 test("learner graph shows clean predefined tone targets without technical disclaimers", () => {
