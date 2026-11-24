@@ -61,23 +61,12 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
     <section className="w-full rounded-xl bg-white p-3 text-slate-900 text-left" aria-label="Pàrà syllable tone comparison">
       <h3 className="text-base font-semibold">Compare your tone movement</h3>
       <p className="text-xs text-slate-600 mt-1">
-        Relative pitch, independently centered for each voice. Higher lines mean higher pitch;
-        this is not a fixed DO–RE–MI frequency scale.
+        Relative pitch comparison
       </p>
       <div className="w-full overflow-x-auto">
         <svg viewBox={`0 0 ${W} ${H}`} role="img"
           aria-label="Green reference pitch and orange learner pitch, shown across estimated syllable intervals"
           className="w-full min-w-[280px] h-auto mt-2">
-          {[-200, 0, 200].map(cents => {
-            const y = PAD_TOP + (hi - cents) / (hi - lo) * (H - PAD_TOP - PAD_BOTTOM);
-            return y >= PAD_TOP && y <= H - PAD_BOTTOM ? (
-              <g key={cents}>
-                <line x1={PAD_X} y1={y} x2={W-PAD_X} y2={y}
-                  stroke="#cbd5e1" strokeDasharray="4 4" />
-                <text x={PAD_X+4} y={y-5} fontSize="11" fill="#64748b">{cents > 0 ? "+" : ""}{cents}¢</text>
-              </g>
-            ) : null;
-          })}
           {feedback.syllables.map(s => {
             const left = PAD_X + s.start * (W-2*PAD_X);
             const right = PAD_X + s.end * (W-2*PAD_X);
@@ -98,22 +87,16 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
         <span><span className="inline-block w-4 h-0.5 bg-emerald-700 align-middle mr-1" />Reference</span>
         <span><span className="inline-block w-4 h-0.5 bg-orange-500 align-middle mr-1" />Your recording</span>
       </div>
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3 flex flex-wrap gap-2" aria-label="Expected syllable tones">
         {feedback.syllables.map(s => (
-          <span key={s.index} className={`rounded-md border px-2 py-1 text-sm ${
-            s.status === "practice" ? "border-amber-500 bg-amber-50" :
-            s.status === "close" ? "border-emerald-300 bg-emerald-50" : "border-slate-200 bg-slate-50"
-          }`}>
-            {s.index}. {s.label} — {s.solfege} ({s.status === "practice" ? "practice" :
-              s.status === "close" ? "close" : "not certain"})
+          <span key={s.index} className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-sm">
+            {s.index}. {s.label} — {s.solfege}
           </span>
         ))}
       </div>
-      <p className="mt-3 text-sm font-medium" role="status">{feedback.guidance}</p>
-      <p className="mt-2 text-xs text-slate-600">
-        Syllable boundaries are estimates, not verified phonetic alignment.
-        {feedback.confidence === "limited" ? " This recording does not support a confident syllable correction." : ""}
-      </p>
+      {feedback.guidance && (
+        <p className="mt-3 text-sm font-medium" role="status">{feedback.guidance}</p>
+      )}
     </section>
   );
 }
