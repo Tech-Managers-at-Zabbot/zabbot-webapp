@@ -221,7 +221,7 @@ test("Release B #2: Pàrà word changes remount feedback and new recordings clea
   assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
 });
 
-test("Release B #3: learner labels use Journey > Step > Spark", () => {
+test("Release B #3: learner labels use Journey > Step > Bite", () => {
   const cards = fs.readFileSync(path.join(root, "components/dashboard/UserLessonDataComponent.tsx"), "utf8");
   const english = JSON.parse(fs.readFileSync(path.join(root, "public/data/languageData/englishDataSet/userDashboard.json"), "utf8"));
   const steps = fs.readFileSync(path.join(root, "components/dashboard/Lessons/AllSteps.tsx"), "utf8");
@@ -229,8 +229,14 @@ test("Release B #3: learner labels use Journey > Step > Spark", () => {
   const ready = fs.readFileSync(path.join(root, "components/lessons/LessonOneReady.tsx"), "utf8");
   assert.equal(english.immersion_tagline, "Immerse yourself in Yorùbá, one Step at a time");
   assert.equal(english.journey_grows, "Your Journey grows with every Step you finish.");
-  assert.doesNotMatch(cards, /data\?\.totalContents === 1 \? "step" : "steps"/);
+  assert.match(cards, /data\?\.totalContents === 1 \? "Bite" : "Bites"/);
+  assert.doesNotMatch(cards, /data\?\.totalContents === 1 \? "spark" : "sparks"/);
   assert.match(steps, /subtitle="No Steps yet"/);
   assert.match(journeys, /subtitle="No Journeys yet"/);
   assert.match(ready, /Finish this Step and see what awaits you/);
+  const intro = fs.readFileSync(path.join(root, "components/lessons/LessonIntro.tsx"), "utf8");
+  const introPage = fs.readFileSync(path.join(root, "app/lesson/[courseId]/[lessonId]/learn-intro/page.tsx"), "utf8");
+  assert.match(intro, /STEP \{numberToWords\(lessonNumber\)\.toUpperCase\(\)\}/);
+  assert.match(introPage, /STEP \{lesson\?\.orderNumber\}/);
+  assert.match(introPage, /lesson\?\.totalContents === 1 \? "Bite" : "Bites"/);
 });
