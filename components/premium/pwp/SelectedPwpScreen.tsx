@@ -26,6 +26,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
     const chunks = React.useRef<Blob[]>([]);
     const randomSuffix = generateRandomString();
     const [processedData, setProcessedData] = React.useState<ProcessedData | null>(null);
+    const [feedbackError, setFeedbackError] = React.useState<string | null>(null);
 
     const { mutateAsync: getPronunciationFeedback, isPending: getFeedbackLoading } =
         usePronunciationFeedback();
@@ -66,6 +67,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
         try {
             // A new attempt must not display the preceding recording’s graph or score.
             setProcessedData(null);
+            setFeedbackError(null);
             if (audioURL) URL.revokeObjectURL(audioURL);
             setAudioURL(null);
             chunks.current = [];
@@ -81,12 +83,20 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
             mediaRecorder.onstop = async () => {
                 setIsProcessingRecord(true)
-                const blob = new Blob(chunks.current, { type: "audio/wav" });
+                // Use the format actually produced by MediaRecorder. Relabeling
+                // WebM/MP4 data as WAV can prevent backend transcription.
+                const recordedType = mediaRecorder.mimeType || chunks.current[0]?.type || "audio/webm";
+                const mimeType = recordedType.split(";")[0];
+                const extension = mimeType.includes("webm") ? "webm" :
+                    mimeType.includes("ogg") ? "ogg" :
+                    mimeType.includes("mp4") ? "m4a" :
+                    mimeType.includes("wav") ? "wav" : "webm";
+                const blob = new Blob(chunks.current, { type: recordedType });
 
                 chunks.current = [];
                 const url = URL.createObjectURL(blob);
                 setAudioURL(url);
-                const fileName = `recording-${randomSuffix}.wav`;
+                const fileName = `recording-${randomSuffix}.${extension}`;
 
                 const formData = new FormData();
                 formData.append("file", blob, fileName);
@@ -95,15 +105,17 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     const feedbackRes = await getPronunciationFeedback({ id: data?.id, payload: formData });
 
                     if (!feedbackRes) {
+                        setFeedbackError("Pàrà returned no comparison result. Please try recording again.");
                         setIsProcessingRecord(false);
                         return;
                     }
 
-                    if (feedbackRes?.status === 'success' && feedbackRes?.data) {
+                    if (feedbackRes?.status === 'success' && feedbackRes?.data &&
+                        Number.isFinite(Number(feedbackRes.data.finalScore))) {
                         // Handle successful feedback response
                         setProcessedData({
                             embeddingSimilarity: feedbackRes.data?.embeddingSimilarity,
-                            finalScore: feedbackRes.data?.finalScore,
+                            finalScore: Number(feedbackRes.data.finalScore),
                             plot: feedbackRes.data?.plot,
                             remark: feedbackRes.data?.remark,
                             textSimilarity: feedbackRes.data?.textSimilarity,
@@ -111,12 +123,15 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                         setIsProcessingRecord(false);
                     } else {
+                        setFeedbackError(feedbackRes?.message || "Pàrà could not calculate a score. Please try again.");
                         setIsProcessingRecord(false);
                     }
 
                 } catch (error) {
+                    const responseMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+                    setFeedbackError(responseMessage || "Pàrà comparison failed. Your recording was saved locally; please try again.");
                     setIsProcessingRecord(false);
-                    console.error("❌ Upload failed:", error);
+                    console.error("Pàrà feedback request failed:", error);
                 }
             };
 
@@ -148,6 +163,10 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                         <div className='m-0.5'><Image src='/general/zabbot-audio-wave-red.gif' alt="audio-wave-icon" height={70} width={200} /></div>
                         <div className='text-[#FBCCBD] text-l justify-center items-center flex p-2'><Image src='/general/recording-circle-icon.svg' alt="song-icon" height={40} width={40} className='pr-1.5' /> Recording in Progress </div>
                     </div>
+                )}
+
+                {feedbackError && (
+                    <div role="alert" className='text-[#FFDBD2] text-center p-2'>{feedbackError}</div>
                 )}
 
                 {isProcessingRecord && (<div className='text-[#f7f7f7] text-[16px] lg:text-[20px] justify-center items-center flex p-2'><Image src='/general/recording-circle-icon.svg' alt="song-icon" height={40} width={40} /> Recorded Audio Processing in Progress </div>)}

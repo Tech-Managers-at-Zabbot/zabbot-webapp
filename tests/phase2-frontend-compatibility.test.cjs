@@ -216,7 +216,7 @@ test("Release B #2: Pàrà word changes remount feedback and new recordings clea
   const selected = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
   assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\} data=\{selectedPwpItem\}/);
   assert.match(page, /selectedPwpItem\?\.id === selectedItem/);
-  assert.match(selected, /setProcessedData\(null\);\s*if \(audioURL\)/);
+  assert.match(selected, /setProcessedData\(null\);\s*setFeedbackError\(null\);\s*if \(audioURL\)/);
   assert.match(selected, /setAudioURL\(null\);\s*chunks\.current = \[\]/);
   assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
 });
@@ -309,4 +309,16 @@ test("Release C: Pàrà describes transcript scoring without claiming Yorùbá t
   assert.match(practice, /Waveform comparison \(not a pitch or tone graph\)/);
   assert.match(inLesson, /Waveform comparison \(not tonal accuracy\)/);
   assert.doesNotMatch(inLesson, /Quality of Intonation \(Comparison\)/);
+});
+
+
+test("Pàrà recording sends the real MediaRecorder format and reports scoring failures", () => {
+  const screen = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  assert.match(screen, /mediaRecorder\.mimeType \|\| chunks\.current\[0\]\?\.type/);
+  assert.match(screen, /new Blob\(chunks\.current, \{ type: recordedType \}\)/);
+  assert.match(screen, /recording-\$\{randomSuffix\}\.\$\{extension\}/);
+  assert.doesNotMatch(screen, /new Blob\(chunks\.current, \{ type: "audio\/wav" \}\)/);
+  assert.match(screen, /role="alert"/);
+  assert.match(screen, /setFeedbackError\(responseMessage \|\|/);
+  assert.match(screen, /Number\.isFinite\(Number\(feedbackRes\.data\.finalScore\)\)/);
 });

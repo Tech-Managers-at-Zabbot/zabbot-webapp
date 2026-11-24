@@ -136,14 +136,21 @@ const InLessonRecordWithPara = ({
 
       mediaRecorder.onstop = async () => {
         setIsProcessing(true);
-        const blob = new Blob(chunksRef.current, { type: "audio/wav" });
+        // The recorded bytes must retain their actual browser media format.
+        const recordedType = mediaRecorder.mimeType || chunksRef.current[0]?.type || "audio/webm";
+        const mimeType = recordedType.split(";")[0];
+        const extension = mimeType.includes("webm") ? "webm" :
+          mimeType.includes("ogg") ? "ogg" :
+          mimeType.includes("mp4") ? "m4a" :
+          mimeType.includes("wav") ? "wav" : "webm";
+        const blob = new Blob(chunksRef.current, { type: recordedType });
         chunksRef.current = [];
 
         const url = URL.createObjectURL(blob);
         setAudioURL(url);
         setHasRecorded(true);
 
-        const fileName = `recording-${Date.now()}.wav`;
+        const fileName = `recording-${Date.now()}.${extension}`;
         const formData = new FormData();
         formData.append("file", blob, fileName);
         formData.append("isInLesson", "true");
@@ -159,7 +166,7 @@ const InLessonRecordWithPara = ({
             },
             {
               onError: (error: any) => {
-                addAlert("Error", `${error.response.data.message || "Unable to get feedback, try again please"}`, "error");
+                addAlert("Error", error?.response?.data?.message || "Unable to get feedback, try again please", "error");
               },
             }
           );
