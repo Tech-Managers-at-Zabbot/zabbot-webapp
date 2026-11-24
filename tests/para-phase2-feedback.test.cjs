@@ -20,6 +20,12 @@ test("graph renders reference and learner contours and guarded syllable guidance
   assert.match(graph, /feedback\.learnerPitch/);
   assert.match(graph, /feedback\.syllables/);
   assert.match(graph, /feedback\.guidance/);
-  assert.match(graph, /feedback\.confidence === "limited"/);
-  assert.match(graph, /not verified phonetic alignment/);
+});
+
+test("learner graph shows clean predefined tone targets without technical disclaimers", () => {
+  const graph = file("components/general/ParaPitchGraph.tsx");
+  assert.match(graph, /Relative pitch comparison/);
+  assert.match(graph, /aria-label="Expected syllable tones"/);
+  assert.doesNotMatch(graph, /¢|not certain|not a fixed DO|does not support a confident|Syllable boundaries are estimates/);
+  assert.doesNotMatch(graph, /\{s\.status === "practice" \? "practice"/);
 });
