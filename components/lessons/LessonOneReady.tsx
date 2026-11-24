@@ -59,7 +59,7 @@ const LessonOneReady = ({ onClick }: { onClick: () => void }) => {
       {/* Text Content */}
       <div className="text-center font-[400] text-[16px] sm:text-[18px] md:text-[20px] lg:text-[24px] leading-[1.45] text-[#777980] max-w-md px-4">
         Ready to level up? <br />
-        Finish this lesson and see what awaits you
+        Finish this Step and see what awaits you
       </div>
 
       {/* Next Button */}
