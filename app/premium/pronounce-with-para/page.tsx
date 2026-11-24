@@ -48,7 +48,7 @@ const PronounceWithPara = () => {
                 setSelectedPwpItem(null);
             }
 
-            if (!pronunciationHistoryList.some((item: string) => item === selected.id)) {
+            if (selected && !pronunciationHistoryList.some((item: string) => item === selected.id)) {
                 pronunciationHistoryList.push(selected.id);
             }
 
@@ -141,8 +141,8 @@ const PronounceWithPara = () => {
                                 <PwpTipScreen />
                             )}
 
-                            {selectedItem && selectedPwpItem && (
-                                <SelectedPwpScreen data={selectedPwpItem} />
+                            {selectedItem && selectedPwpItem?.id === selectedItem && (
+                                <SelectedPwpScreen key={selectedPwpItem.id} data={selectedPwpItem} />
                             )}
 
                         </div>
