@@ -299,16 +299,16 @@ test("Word of Day goal completion refuses to report success if user or goal is u
 });
 
 
-test("Release C: Pàrà describes transcript scoring without claiming Yorùbá tone accuracy", () => {
+test("Pàrà preserves approved score, graph, and feedback wording", () => {
   const scorebar = fs.readFileSync(path.join(root, "components/general/Scorebar.tsx"), "utf8");
   const practice = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
   const inLesson = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
-  assert.match(scorebar, /Transcript comparison estimate \(not tone accuracy\)/);
-  assert.doesNotMatch(scorebar, /Pronunciation Accuracy:/);
+  assert.match(scorebar, /Pronunciation Accuracy:/);
+  assert.doesNotMatch(scorebar, /Transcript comparison estimate/);
   assert.match(practice, /Number\.isFinite\(processedData\.finalScore\)/);
-  assert.match(practice, /Waveform comparison \(not a pitch or tone graph\)/);
-  assert.match(inLesson, /Waveform comparison \(not tonal accuracy\)/);
-  assert.doesNotMatch(inLesson, /Quality of Intonation \(Comparison\)/);
+  assert.doesNotMatch(practice, /Waveform comparison \(not a pitch or tone graph\)/);
+  assert.match(inLesson, /Quality of Intonation \(Comparison\)/);
+  assert.doesNotMatch(inLesson, /Waveform comparison \(not tonal accuracy\)/);
 });
 
 
@@ -319,6 +319,14 @@ test("Pàrà recording sends the real MediaRecorder format and reports scoring f
   assert.match(screen, /recording-\$\{randomSuffix\}\.\$\{extension\}/);
   assert.doesNotMatch(screen, /new Blob\(chunks\.current, \{ type: "audio\/wav" \}\)/);
   assert.match(screen, /role="alert"/);
-  assert.match(screen, /setFeedbackError\(responseMessage \|\|/);
+  assert.match(screen, /SUBSCRIPTION_REQUIRED/);
+  assert.match(screen, /An active subscription is required/);
   assert.match(screen, /Number\.isFinite\(Number\(feedbackRes\.data\.finalScore\)\)/);
+});
+
+
+test("Pàrà in-Bite feedback explicitly explains a premium subscription 403", () => {
+  const source = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
+  assert.match(source, /SUBSCRIPTION_REQUIRED/);
+  assert.match(source, /An active subscription is required/);
 });
