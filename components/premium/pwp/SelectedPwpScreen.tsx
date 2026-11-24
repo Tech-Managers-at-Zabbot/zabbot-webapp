@@ -4,6 +4,7 @@ import { PronunciationProps } from '../types';
 
 import { usePronunciationFeedback } from '@/services/generalApi/pronounciations/mutation';
 import ScoreBar from '@/components/general/Scorebar';
+import ParaPitchGraph, { type ParaPitchFeedback } from '@/components/general/ParaPitchGraph';
 import { convertRecordingToWav } from '@/lib/audio/convertRecordingToWav';
 
 const generateRandomString = (length = 6) => {
@@ -16,6 +17,7 @@ type ProcessedData = {
     plot: string;
     remark: string;
     textSimilarity: number;
+    pitchFeedback?: ParaPitchFeedback | null;
 };
 
 const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
@@ -133,6 +135,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                             plot: feedbackRes.data?.plot,
                             remark: feedbackRes.data?.remark,
                             textSimilarity: feedbackRes.data?.textSimilarity,
+                            pitchFeedback: feedbackRes.data?.pitchFeedback,
                         });
 
                         setIsProcessingRecord(false);
@@ -228,7 +231,8 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                             </div>
                         )}
 
-                        {processedData.plot && (
+                        {processedData.pitchFeedback && <ParaPitchGraph feedback={processedData.pitchFeedback} />}
+                        {!processedData.pitchFeedback && processedData.plot && (
                             <div className='flex flex-col items-center gap-2'>
                                 <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
                                     <Image src={processedData.plot} alt="Reference and learner waveform overlay" fill quality={99} />
