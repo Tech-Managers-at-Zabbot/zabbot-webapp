@@ -297,3 +297,16 @@ test("Word of Day goal completion refuses to report success if user or goal is u
   assert.match(context, /if \(!userDetails\?\.id \|\| !goalId\) \{\s*onError\?\.\(new Error\("Daily goal is not ready to complete"\)\);\s*return;/);
   assert.match(context, /void refetchGoals\(\);/);
 });
+
+
+test("Release C: Pàrà describes transcript scoring without claiming Yorùbá tone accuracy", () => {
+  const scorebar = fs.readFileSync(path.join(root, "components/general/Scorebar.tsx"), "utf8");
+  const practice = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  const inLesson = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
+  assert.match(scorebar, /Transcript comparison estimate \(not tone accuracy\)/);
+  assert.doesNotMatch(scorebar, /Pronunciation Accuracy:/);
+  assert.match(practice, /Number\.isFinite\(processedData\.finalScore\)/);
+  assert.match(practice, /Waveform comparison \(not a pitch or tone graph\)/);
+  assert.match(inLesson, /Waveform comparison \(not tonal accuracy\)/);
+  assert.doesNotMatch(inLesson, /Quality of Intonation \(Comparison\)/);
+});
