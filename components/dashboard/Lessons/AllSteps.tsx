@@ -16,6 +16,7 @@ import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscri
 import { resolveTileAccess } from "@/lib/subscription-gating/tileAccess";
 import { SubscriptionTileOverlay } from "@/lib/subscription-gating/SubscriptionTileOverlay";
 import { isFreePreviewLesson } from "@/lib/subscription-gating/freePreview";
+import { orderStepsByJourney } from "@/lib/steps/orderStepsByJourney";
 
 // import { steps } from '@/constants/data-to-populate/dashboardData';
 
@@ -45,10 +46,9 @@ const AllSteps = () => {
     }
   }, [allLanguageSteps])
 
-  const stepsToMap = [
-    ...allSteps,
-    // ...steps
-  ]
+  // Admin orderNumber is per Journey. Sort before pagination so later Steps
+  // in the active Journey are not displaced by first Steps in inactive Journeys.
+  const stepsToMap = orderStepsByJourney(allSteps);
   // Calculate total pages based on your data
   const totalPages = Math.ceil(stepsToMap.length / itemsPerPage);
 
