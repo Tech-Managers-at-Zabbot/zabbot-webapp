@@ -10,7 +10,7 @@ test("both Pàrà surfaces share one graph and preserve waveform fallback", () =
   const lesson = file("components/lessons/contents/InLessonRecordWithPara.tsx");
   for (const source of [standalone, lesson]) {
     assert.match(source, /ParaPitchGraph/);
-    assert.match(source, /pitchFeedback: feedbackRes\.data/);
+    assert.match(source, /pitchFeedback: feedbackRes\\.data\\??\\.pitchFeedback/);
     assert.match(source, /!processedData\.pitchFeedback && processedData\.plot/);
   }
 });
