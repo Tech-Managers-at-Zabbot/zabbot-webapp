@@ -93,7 +93,7 @@ export const LessonProgressCard = ({
         <div className="flex flex-col gap-[4px]">
           <div className="font-medium text-[11px] sm:text-[12px] flex justify-between leading-[145%] text-[#1D2739]">
             <span>{data?.estimatedDuration} min</span>
-            <span>{data?.totalContents} sparks</span>
+            <span>{data?.totalContents} {data?.totalContents === 1 ? "Bite" : "Bites"}</span>
           </div>
           <div className="w-full">
             <LinearProgress
@@ -344,7 +344,7 @@ export const LessonsCard2 = ({
             <span>{data?.estimatedDuration} min</span>
             <span>
               {data?.totalContents}{" "}
-              {data?.totalContents === 1 ? "spark" : "sparks"}
+              {data?.totalContents === 1 ? "Bite" : "Bites"}
             </span>
           </div>
         </div>
@@ -457,7 +457,7 @@ export const StepsCard = ({
             <span>{data?.estimatedDuration} min</span>
             <span>
               {data?.totalContents}{" "}
-              {data?.totalContents === 1 ? "spark" : "sparks"}
+              {data?.totalContents === 1 ? "Bite" : "Bites"}
             </span>
           </div>
         </div>
