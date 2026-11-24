@@ -117,7 +117,7 @@ const WordForTheDay = () => {
 
     audio.addEventListener("ended", () => {
       if (!isGoalComplete) {
-        setShowCongrats(true);
+        // Only show success after completeGoal confirms the update.
         completeUserGoal();
       }
       setIsPlaying(false);
