@@ -22,7 +22,7 @@ const ScoreBar = ({ finalScore }: { finalScore: number }) => {
                 ></div>
             </div>
             <div className="flex justify-between mb-1 pt-[3px]">
-                <span className="text-sm font-medium text-gray-200 pr-[6px]">Transcript comparison estimate (not tone accuracy): </span>
+                <span className="text-sm font-medium text-gray-200 pr-[6px]">Pronunciation Accuracy: </span>
                 <span className="text-sm font-medium text-gray-300">{percentage}%</span>
             </div>            
         </div>
