@@ -4,6 +4,7 @@ import { PronunciationProps } from '../types';
 
 import { usePronunciationFeedback } from '@/services/generalApi/pronounciations/mutation';
 import ScoreBar from '@/components/general/Scorebar';
+import { convertRecordingToWav } from '@/lib/audio/convertRecordingToWav';
 
 const generateRandomString = (length = 6) => {
     return Math.random().toString(36).substring(2, 2 + length);
@@ -22,6 +23,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
     const [isRecording, setIsRecording] = React.useState(false);
     const [isProcessingRecord, setIsProcessingRecord] = React.useState(false);
     const [audioURL, setAudioURL] = React.useState<string | null>(null);
+    const [wavDownloadUrl, setWavDownloadUrl] = React.useState<string | null>(null);
     const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
     const chunks = React.useRef<Blob[]>([]);
     const randomSuffix = generateRandomString();
@@ -70,6 +72,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
             setFeedbackError(null);
             if (audioURL) URL.revokeObjectURL(audioURL);
             setAudioURL(null);
+            setWavDownloadUrl(null);
             chunks.current = [];
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const mediaRecorder = new MediaRecorder(stream);
@@ -94,8 +97,19 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                 const blob = new Blob(chunks.current, { type: recordedType });
 
                 chunks.current = [];
-                const url = URL.createObjectURL(blob);
+                // Playback and download use real PCM WAV bytes when conversion
+                // succeeds. Keep the original browser blob for API upload.
+                let playback = blob;
+                let convertedToWav = false;
+                try {
+                    playback = await convertRecordingToWav(blob);
+                    convertedToWav = true;
+                } catch (conversionError) {
+                    console.error("Unable to convert recording to WAV", conversionError);
+                }
+                const url = URL.createObjectURL(playback);
                 setAudioURL(url);
+                setWavDownloadUrl(convertedToWav ? url : null);
                 const fileName = `recording-${randomSuffix}.${extension}`;
 
                 const formData = new FormData();
@@ -194,7 +208,12 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                 </div>
 
                 {audioURL && (
-                    <div className='flex justify-center'><audio controls src={audioURL} className="mt-4 w-full max-w-sm" /></div>
+                    <div className='flex flex-col justify-center items-center gap-2'>
+                        <audio controls src={audioURL} className="mt-4 w-full max-w-sm" />
+                        {wavDownloadUrl && (
+                            <a href={wavDownloadUrl} download={`para-recording-${randomSuffix}.wav`} className="text-white underline">Download WAV</a>
+                        )}
+                    </div>
                 )}
 
                 {processedData && (
