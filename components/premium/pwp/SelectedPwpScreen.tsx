@@ -174,21 +174,26 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     <div className='flex justify-center'><audio controls src={audioURL} className="mt-4 w-full max-w-sm" /></div>
                 )}
 
-                {processedData && processedData.plot && (
+                {processedData && (
                     <div className='flex justify-center items-center mt-[15px] gap-2 flex-col'>
-                        {processedData.remark.length > 0 && (
+                        {processedData.remark?.length > 0 && (
                             <div className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>{processedData.remark}</div>
                         )}
 
-                        {processedData.finalScore > 0 && (
+                        {Number.isFinite(processedData.finalScore) && (
                             <div className='flex flex-col items-center w-full'>
                                 <ScoreBar finalScore={processedData.finalScore} />
                             </div>
                         )}
 
-                        <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
-                            <Image src={processedData.plot} alt="plot-image" fill quality={99} />
-                        </div>
+                        {processedData.plot && (
+                            <div className='flex flex-col items-center gap-2'>
+                                <p className='text-sm text-white'>Waveform comparison (not a pitch or tone graph)</p>
+                                <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
+                                    <Image src={processedData.plot} alt="Reference and learner waveform overlay" fill quality={99} />
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
