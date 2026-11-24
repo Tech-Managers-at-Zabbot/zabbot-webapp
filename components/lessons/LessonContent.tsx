@@ -228,9 +228,6 @@ const LessonContent = () => {
               src="/lessons/lessons-home.svg"
               alt="home"
               className="w-8 h-8 sm:w-10 sm:h-10 md:w-[55px] md:h-[55px]"
-              onClick={() => {
-                router.push("/user-dashboard");
-              }}
             />
           </button>
         </div>
@@ -276,7 +273,7 @@ const LessonContent = () => {
         <Modal
           isOpen={homeModal}
           onClose={() => setHomeModal(false)}
-          title="Are you sure you?"
+          title="Leave this Step?"
           showCloseButton={false}
         >
           <div className="p-6 text-center">
