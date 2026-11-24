@@ -8,6 +8,7 @@ import { HiOutlineSpeakerWave } from "react-icons/hi2";
 import { useAlert } from "next-alert";
 import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
+import { convertRecordingToWav } from "@/lib/audio/convertRecordingToWav";
 
 // Import the actual API hook
 import { usePronunciationFeedback } from "@/services/generalApi/pronounciations/mutation";
@@ -69,6 +70,7 @@ const InLessonRecordWithPara = ({
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [audioURL, setAudioURL] = useState<string | null>(null);
+  const [wavDownloadUrl, setWavDownloadUrl] = useState<string | null>(null);
   const [processedData, setProcessedData] = useState<any>(null);
   const [hasRecorded, setHasRecorded] = useState(false);
   const { addAlert } = useAlert();
@@ -120,7 +122,9 @@ const InLessonRecordWithPara = ({
         audioRef.current = null;
       }
       setIsProcessing(false);
+      if (audioURL) URL.revokeObjectURL(audioURL);
       setAudioURL(null);
+      setWavDownloadUrl(null);
       setProcessedData(null);
       setHasRecorded(false);
 
@@ -146,8 +150,19 @@ const InLessonRecordWithPara = ({
         const blob = new Blob(chunksRef.current, { type: recordedType });
         chunksRef.current = [];
 
-        const url = URL.createObjectURL(blob);
+        // Save genuine PCM WAV locally. Retain the browser's encoded audio
+        // blob for the existing backend upload and transcription pipeline.
+        let playback = blob;
+        let convertedToWav = false;
+        try {
+          playback = await convertRecordingToWav(blob);
+          convertedToWav = true;
+        } catch (conversionError) {
+          console.error("Unable to convert recording to WAV", conversionError);
+        }
+        const url = URL.createObjectURL(playback);
         setAudioURL(url);
+        setWavDownloadUrl(convertedToWav ? url : null);
         setHasRecorded(true);
 
         const fileName = `recording-${Date.now()}.${extension}`;
@@ -236,6 +251,7 @@ const InLessonRecordWithPara = ({
     setIsRecording(false);
     setIsProcessing(false);
     setAudioURL(null);
+    setWavDownloadUrl(null);
     setProcessedData(null);
     setHasRecorded(false);
 
@@ -286,6 +302,9 @@ const InLessonRecordWithPara = ({
                   className="w-full rounded-lg"
                   style={{ filter: "invert(1) hue-rotate(180deg)" }}
                 />
+                {wavDownloadUrl && (
+                  <a href={wavDownloadUrl} download={`para-recording-${Date.now()}.wav`} className="text-white underline">Download WAV</a>
+                )
               </div>
             )}
 
