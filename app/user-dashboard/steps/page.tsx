@@ -67,12 +67,12 @@ const Steps = () => {
         }}
       >
         <div
-          className="absolute bg-cover inset-0 top-0 h-40 bg-center"
+          className="pointer-events-none absolute bg-cover inset-0 top-0 h-40 bg-center"
           style={{ backgroundImage: `url(${cloudsUrl})` }}
         ></div>
         <div className="max-w-screen-2xl">
           <div className="w-full">
-            <div className="flex absolute top-6 right-[5%] items-center z-[100] gap-20 flex-shrink-0">
+            <div className="absolute top-6 right-[5%] z-[200] flex items-center gap-20 flex-shrink-0">
               {/* <div className="w-[70px] mt-1 flex">
                 <div className="h-[80px]">
                   <Image
@@ -90,7 +90,7 @@ const Steps = () => {
               >
                 Steps
               </div>
-              <div className="hidden lg:flex">
+              <div className="relative z-[201] hidden lg:flex pointer-events-auto">
                 <SettingsBreadcrumb isDark={theme === 'dark'} />
               </div>
             </div>
@@ -121,9 +121,7 @@ const Steps = () => {
             <UserLessons />
           </section> */}
 
-          <section className="mt-30 z-50"
-          style={{zIndex: 50}}
-          >
+          <section className="relative z-0 mt-30">
             <AllSteps />
           </section>
         </div>
