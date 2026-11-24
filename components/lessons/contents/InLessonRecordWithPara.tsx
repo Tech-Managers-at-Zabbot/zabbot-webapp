@@ -9,6 +9,7 @@ import { useAlert } from "next-alert";
 import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
 import { convertRecordingToWav } from "@/lib/audio/convertRecordingToWav";
+import ParaPitchGraph from "@/components/general/ParaPitchGraph";
 
 // Import the actual API hook
 import { usePronunciationFeedback } from "@/services/generalApi/pronounciations/mutation";
@@ -206,6 +207,7 @@ const InLessonRecordWithPara = ({
               plot: feedbackRes.data.plot,
               remark: feedbackRes.data.remark,
               textSimilarity: feedbackRes.data.textSimilarity,
+              pitchFeedback: feedbackRes.data.pitchFeedback,
             });
           } else {
             console.error("Feedback request failed");
@@ -318,7 +320,8 @@ const InLessonRecordWithPara = ({
                   </div>
                 )} */}
 
-                {processedData.plot && (
+                {processedData.pitchFeedback && <ParaPitchGraph feedback={processedData.pitchFeedback} />}
+                {!processedData.pitchFeedback && processedData.plot && (
                   <div className="rounded-lg bg-white w-full">
                     <p className="text-gray-700 text-sm mb-2 text-center font-medium">
                       Quality of Intonation (Comparison)
