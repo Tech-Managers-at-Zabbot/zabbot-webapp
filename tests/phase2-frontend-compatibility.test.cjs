@@ -217,7 +217,7 @@ test("Release B #2: Pàrà word changes remount feedback and new recordings clea
   assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\} data=\{selectedPwpItem\}/);
   assert.match(page, /selectedPwpItem\?\.id === selectedItem/);
   assert.match(selected, /setProcessedData\(null\);\s*setFeedbackError\(null\);\s*if \(audioURL\)/);
-  assert.match(selected, /setAudioURL\(null\);\s*chunks\.current = \[\]/);
+  assert.match(selected, /setAudioURL\(null\);\s*setWavDownloadUrl\(null\);\s*chunks\.current = \[\]/);
   assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
 });
 
@@ -329,4 +329,24 @@ test("Pàrà in-Bite feedback explicitly explains a premium subscription 403", (
   const source = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
   assert.match(source, /SUBSCRIPTION_REQUIRED/);
   assert.match(source, /An active subscription is required/);
+});
+
+
+test("Pàrà audio download uses decoded, true RIFF PCM WAV; API keeps browser recording", () => {
+  const converter = fs.readFileSync(path.join(root, "lib/audio/convertRecordingToWav.ts"), "utf8");
+  const practice = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  const bite = fs.readFileSync(path.join(root, "components/lessons/contents/InLessonRecordWithPara.tsx"), "utf8");
+  assert.match(converter, /decodeAudioData\(source\.slice\(0\)\)/);
+  for (const header of ['"RIFF"', '"WAVE"', '"fmt "', '"data"']) {
+    assert.ok(converter.includes(header), "Missing WAV header " + header);
+  }
+  assert.match(converter, /setInt16\(offset, pcm, true\)/);
+  assert.match(converter, /new Blob\(\[wav\], \{ type: "audio\/wav" \}\)/);
+  for (const screen of [practice, bite]) {
+    assert.match(screen, /convertRecordingToWav\(blob\)/);
+    assert.match(screen, /setWavDownloadUrl\(convertedToWav \? url : null\)/);
+    assert.match(screen, /download=\{.*\.wav/);
+    assert.match(screen, /Download WAV/);
+    assert.match(screen, /formData\.append\("file", blob, fileName\)/);
+  }
 });
