@@ -128,8 +128,12 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     }
 
                 } catch (error) {
-                    const responseMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
-                    setFeedbackError(responseMessage || "Pàrà comparison failed. Your recording was saved locally; please try again.");
+                    const apiError = error as { response?: { status?: number; data?: { code?: string; message?: string } } };
+                    const subscriptionRequired = apiError.response?.status === 403 &&
+                        apiError.response?.data?.code === "SUBSCRIPTION_REQUIRED";
+                    setFeedbackError(subscriptionRequired
+                        ? "An active subscription is required to receive Pàrà pronunciation feedback."
+                        : apiError.response?.data?.message || "Pàrà comparison failed. Please try again.");
                     setIsProcessingRecord(false);
                     console.error("Pàrà feedback request failed:", error);
                 }
