@@ -255,7 +255,7 @@ const InLessonRecordWithPara = ({
               </h2>
             </div>
 
-            {processedData && processedData.finalScore > 0 && (
+            {processedData && Number.isFinite(processedData.finalScore) && (
               <div className="flex flex-col items-center">
                 <ScoreBar finalScore={processedData.finalScore} />
               </div>
