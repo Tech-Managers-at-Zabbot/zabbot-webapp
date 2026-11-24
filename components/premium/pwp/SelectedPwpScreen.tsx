@@ -207,7 +207,6 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                         {processedData.plot && (
                             <div className='flex flex-col items-center gap-2'>
-                                <p className='text-sm text-white'>Waveform comparison (not a pitch or tone graph)</p>
                                 <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
                                     <Image src={processedData.plot} alt="Reference and learner waveform overlay" fill quality={99} />
                                 </div>
