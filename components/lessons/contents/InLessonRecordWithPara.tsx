@@ -304,7 +304,7 @@ const InLessonRecordWithPara = ({
                 />
                 {wavDownloadUrl && (
                   <a href={wavDownloadUrl} download={`para-recording-${Date.now()}.wav`} className="text-white underline">Download WAV</a>
-                )
+                )}
               </div>
             )}
 
