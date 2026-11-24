@@ -240,3 +240,10 @@ test("Release B #3: learner labels use Journey > Step > Bite", () => {
   assert.match(introPage, /STEP \{lesson\?\.orderNumber\}/);
   assert.match(introPage, /lesson\?\.totalContents === 1 \? "Bite" : "Bites"/);
 });
+
+
+test("Release B: Bite screen labels the parent lesson as STEP, not LESSON", () => {
+  const tracker = fs.readFileSync(path.join(root, "components/lessons/LessonProgressTracker.tsx"), "utf8");
+  assert.match(tracker, /STEP \{lessonNumber\}/);
+  assert.doesNotMatch(tracker, /LESSON \{lessonNumber\}/);
+});
