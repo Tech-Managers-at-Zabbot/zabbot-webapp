@@ -43,7 +43,7 @@ const LessonOneIntro = ({
 
           {/* Lesson Title */}
           <div className="font-bold text-[32px] sm:text-[40px] md:text-[50px] lg:text-[40px] leading-[1.2] text-[#F15B29] text-center">
-            SPARK {numberToWords(lessonNumber).toUpperCase()}
+            STEP {numberToWords(lessonNumber).toUpperCase()}
           </div>
 
           {/* Next Button */}

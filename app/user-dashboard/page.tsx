@@ -23,6 +23,7 @@ import { useLoading } from "@/contexts/LoadingProvider";
 import { useGetUserCount } from "@/services/generalApi/users/mutation";
 // import LatestQuiz from "@/components/dashboard/LatestQuiz";
 import PremiumFeaturesComponents from "@/components/dashboard/PremiumFeatures";
+import Loader from "@/components/general/Loader";
 
 const Dashboard = () => {
   const [cloudsUrl, setCloudsUrl] = useState("/userDashboard/light-clouds.svg");
@@ -143,6 +144,12 @@ const Dashboard = () => {
       setGreeting("Káalẹ́");
     }
   }, []);
+
+  // Never paint an incomplete dashboard while its localized labels load.
+  // This avoids the briefly broken/placeholder Dashboard frame after Flashcards.
+  if (isLanguageLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="min-h-screen">

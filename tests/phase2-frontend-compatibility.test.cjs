@@ -198,3 +198,84 @@ test("Home Steps carousel reuses the Steps page Journey-first ordering and langu
   assert.deepEqual(orderStepsByJourney(shuffled).map(x => x.id),
     ["hello", "care", "intro", "know", "origins", "directions"]);
 });
+
+
+test("Release B #5: Daily Word congratulations remains outside the conditional card state", () => {
+  const src = fs.readFileSync(path.join(root, "components/dashboard/UserGoals.tsx"), "utf8");
+  const modalIndex = src.lastIndexOf("<CongratulationsModal");
+  const cardsEnd = src.lastIndexOf("      )}");
+  assert.ok(modalIndex > cardsEnd, "congratulations modal must survive transition to completed-goal card");
+  assert.equal((src.match(/<CongratulationsModal/g) || []).length, 1);
+  assert.match(src, /completeGoal\(\s*\(\) => \{\s*setShowCongrats\(true\)/);
+  assert.doesNotMatch(src, /if \(!isGoalComplete\) \{\s*setShowCongrats\(true\)/);
+  assert.match(src, /onClose=\{\(\) => \{\s*setShowCongrats\(false\)/);
+});
+
+test("Release B #2: Pàrà word changes remount feedback and new recordings clear old results", () => {
+  const page = fs.readFileSync(path.join(root, "app/premium/pronounce-with-para/page.tsx"), "utf8");
+  const selected = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\} data=\{selectedPwpItem\}/);
+  assert.match(page, /selectedPwpItem\?\.id === selectedItem/);
+  assert.match(selected, /setProcessedData\(null\);\s*if \(audioURL\)/);
+  assert.match(selected, /setAudioURL\(null\);\s*chunks\.current = \[\]/);
+  assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
+});
+
+test("Release B #3: learner labels use Journey > Step > Bite", () => {
+  const cards = fs.readFileSync(path.join(root, "components/dashboard/UserLessonDataComponent.tsx"), "utf8");
+  const english = JSON.parse(fs.readFileSync(path.join(root, "public/data/languageData/englishDataSet/userDashboard.json"), "utf8"));
+  const steps = fs.readFileSync(path.join(root, "components/dashboard/Lessons/AllSteps.tsx"), "utf8");
+  const journeys = fs.readFileSync(path.join(root, "components/dashboard/Lessons/AllCourses.tsx"), "utf8");
+  const ready = fs.readFileSync(path.join(root, "components/lessons/LessonOneReady.tsx"), "utf8");
+  assert.equal(english.immersion_tagline, "Immerse yourself in Yorùbá, one Step at a time");
+  assert.equal(english.journey_grows, "Your Journey grows with every Step you finish.");
+  assert.match(cards, /data\?\.totalContents === 1 \? "Bite" : "Bites"/);
+  assert.doesNotMatch(cards, /data\?\.totalContents === 1 \? "spark" : "sparks"/);
+  assert.match(steps, /subtitle="No Steps yet"/);
+  assert.match(journeys, /subtitle="No Journeys yet"/);
+  assert.match(ready, /Finish this Step and see what awaits you/);
+  const intro = fs.readFileSync(path.join(root, "components/lessons/LessonIntro.tsx"), "utf8");
+  const introPage = fs.readFileSync(path.join(root, "app/lesson/[courseId]/[lessonId]/learn-intro/page.tsx"), "utf8");
+  assert.match(intro, /STEP \{numberToWords\(lessonNumber\)\.toUpperCase\(\)\}/);
+  assert.match(introPage, /STEP \{lesson\?\.orderNumber\}/);
+  assert.match(introPage, /lesson\?\.totalContents === 1 \? "Bite" : "Bites"/);
+});
+
+
+test("Release B: Bite screen labels the parent lesson as STEP, not LESSON", () => {
+  const tracker = fs.readFileSync(path.join(root, "components/lessons/LessonProgressTracker.tsx"), "utf8");
+  assert.match(tracker, /STEP \{lessonNumber\}/);
+  assert.doesNotMatch(tracker, /LESSON \{lessonNumber\}/);
+});
+
+
+test("Release B: Bite Home icon only opens confirmation; navigation requires Exit", () => {
+  const source = fs.readFileSync(path.join(root, "components/lessons/LessonContent.tsx"), "utf8");
+  const homeIcon = source.match(/<img\s+src="\/lessons\/lessons-home\.svg"[\s\S]*?\/>/);
+  assert.ok(homeIcon, "Bite Home icon must exist");
+  assert.doesNotMatch(homeIcon[0], /onClick=/, "nested icon click must not bypass exit confirmation");
+  assert.match(source, /onClick=\{\(\) => \{\s*setHomeModal\(true\);\s*\}\}/);
+  assert.match(source, /title="Leave this Step\?"/);
+  assert.match(source, /onClick=\{\(\) => setHomeModal\(false\)\}/);
+  assert.match(source, /onClick=\{handleRedirectHome\}/);
+  const redirect = source.match(/const handleRedirectHome = \(\) => \{[\s\S]*?\n  \};/);
+  assert.ok(redirect);
+  assert.match(redirect[0], /router\.push\("\/user-dashboard"\)/);
+});
+
+
+test("Flashcards Dashboard return never renders uninitialized localized dashboard", () => {
+  const flashcards = fs.readFileSync(path.join(root, "app/flashcards/flash-cards/page.tsx"), "utf8");
+  const dashboard = fs.readFileSync(path.join(root, "app/user-dashboard/page.tsx"), "utf8");
+  assert.match(flashcards, /const handleGoToDashboard = \(\) => \{[\s\S]*?router\.push\("\/user-dashboard"\)/);
+  assert.match(dashboard, /if \(isLanguageLoading\) \{\s*return <Loader \/>;\s*\}/);
+  assert.match(dashboard, /usePageLanguage\("userDashboard"\)/);
+});
+
+test("Dashboard layout never paints a broken image source during first render", () => {
+  const layout = fs.readFileSync(path.join(root, "app/user-dashboard/layout.tsx"), "utf8");
+  assert.match(layout, /useState<string \| null>\(null\)/);
+  assert.match(layout, /\{timeSunMoonLink && \(/);
+  assert.match(layout, /src=\{timeSunMoonLink\}/);
+  assert.doesNotMatch(layout, /src=\{"#"\}/);
+});

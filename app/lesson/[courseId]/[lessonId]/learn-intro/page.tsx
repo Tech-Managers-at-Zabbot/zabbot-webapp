@@ -88,11 +88,11 @@ const LessonDescriptionComponent = ({
           {/* Badge */}
           <div className="flex mb-6">
             <div className="bg-[#CF0A5C] font-[500] leading-[100%] text-[14px] p-5 rounded-lg">
-              {lesson?.totalContents} Steps
+              {lesson?.totalContents} {lesson?.totalContents === 1 ? "Bite" : "Bites"}
             </div>
           </div>
           <div className="text-[#B6822E] flex flex-col gap-2 font-medium text-[16px] md:text-[18px] lg:text-[20px] leading-[1.4] max-w-full md:max-w-[380px] rounded-2xl text-center md:text-left">
-            <div className="text-[#AA0000]">SPARK {lesson?.orderNumber}</div>
+            <div className="text-[#AA0000]">STEP {lesson?.orderNumber}</div>
 
             <div className="text-[#620000] font-[600] text-[40px] leading-[110%]">
               {lesson?.title}

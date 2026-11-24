@@ -62,7 +62,7 @@ const LessonProgress: React.FC<LessonProgressProps> = ({
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-red-800 text-sm font-semibold tracking-wider uppercase mb-2">
-            LESSON {lessonNumber}
+            STEP {lessonNumber}
           </h2>
           <h1 className="text-red-900 text-4xl md:text-5xl font-bold">
             {lessonTitle}

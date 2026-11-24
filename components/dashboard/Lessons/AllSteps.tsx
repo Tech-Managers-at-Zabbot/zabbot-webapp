@@ -220,7 +220,7 @@ const AllSteps = () => {
             allLanguageSteps?.data?.length === 0 ? (
             <div className="w-full flex gap-2">
               {/* {Array.from({ length: 6 }).map((_, index) => ( */}
-              <EmptyStateCard title="No data" subtitle="No courses yet" />
+              <EmptyStateCard title="No data" subtitle="No Steps yet" />
               {/* // ))} */}
             </div>
           ) : (

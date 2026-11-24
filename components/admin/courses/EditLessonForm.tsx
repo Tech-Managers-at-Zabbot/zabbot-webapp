@@ -147,7 +147,7 @@ export const EditLessonForm: React.FC<EditLessonFormProps> = ({
                   <div>
                     {lesson?.lessonImg
                       ? "Change Image"
-                      : "Add Image to Spark"}
+                      : "Add Image to Bite"}
                   </div>
                 </button>
               ) : (
