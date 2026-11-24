@@ -141,7 +141,7 @@ const PronounceWithPara = () => {
                                 <PwpTipScreen />
                             )}
 
-                            {selectedItem && selectedPwpItem && (
+                            {selectedItem && selectedPwpItem?.id === selectedItem && (
                                 <SelectedPwpScreen key={selectedPwpItem.id} data={selectedPwpItem} />
                             )}
 
