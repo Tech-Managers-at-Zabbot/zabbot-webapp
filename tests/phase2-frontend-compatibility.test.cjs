@@ -198,3 +198,39 @@ test("Home Steps carousel reuses the Steps page Journey-first ordering and langu
   assert.deepEqual(orderStepsByJourney(shuffled).map(x => x.id),
     ["hello", "care", "intro", "know", "origins", "directions"]);
 });
+
+
+test("Release B #5: Daily Word congratulations remains outside the conditional card state", () => {
+  const src = fs.readFileSync(path.join(root, "components/dashboard/UserGoals.tsx"), "utf8");
+  const modalIndex = src.lastIndexOf("<CongratulationsModal");
+  const cardsEnd = src.lastIndexOf("      )}");
+  assert.ok(modalIndex > cardsEnd, "congratulations modal must survive transition to completed-goal card");
+  assert.equal((src.match(/<CongratulationsModal/g) || []).length, 1);
+  assert.match(src, /completeGoal\(\s*\(\) => \{\s*setShowCongrats\(true\)/);
+  assert.doesNotMatch(src, /if \(!isGoalComplete\) \{\s*setShowCongrats\(true\)/);
+  assert.match(src, /onClose=\{\(\) => \{\s*setShowCongrats\(false\)/);
+});
+
+test("Release B #2: Pàrà word changes remount feedback and new recordings clear old results", () => {
+  const page = fs.readFileSync(path.join(root, "app/premium/pronounce-with-para/page.tsx"), "utf8");
+  const selected = fs.readFileSync(path.join(root, "components/premium/pwp/SelectedPwpScreen.tsx"), "utf8");
+  assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\} data=\{selectedPwpItem\}/);
+  assert.match(page, /selectedPwpItem\?\.id === selectedItem/);
+  assert.match(selected, /setProcessedData\(null\);\s*if \(audioURL\)/);
+  assert.match(selected, /setAudioURL\(null\);\s*chunks\.current = \[\]/);
+  assert.match(selected, /mediaRecorderRef\.current\?\.stream\.getTracks\(\)\.forEach/);
+});
+
+test("Release B #3: learner labels use Journey > Step > Spark", () => {
+  const cards = fs.readFileSync(path.join(root, "components/dashboard/UserLessonDataComponent.tsx"), "utf8");
+  const english = JSON.parse(fs.readFileSync(path.join(root, "public/data/languageData/englishDataSet/userDashboard.json"), "utf8"));
+  const steps = fs.readFileSync(path.join(root, "components/dashboard/Lessons/AllSteps.tsx"), "utf8");
+  const journeys = fs.readFileSync(path.join(root, "components/dashboard/Lessons/AllCourses.tsx"), "utf8");
+  const ready = fs.readFileSync(path.join(root, "components/lessons/LessonOneReady.tsx"), "utf8");
+  assert.equal(english.immersion_tagline, "Immerse yourself in Yorùbá, one Step at a time");
+  assert.equal(english.journey_grows, "Your Journey grows with every Step you finish.");
+  assert.doesNotMatch(cards, /data\?\.totalContents === 1 \? "step" : "steps"/);
+  assert.match(steps, /subtitle="No Steps yet"/);
+  assert.match(journeys, /subtitle="No Journeys yet"/);
+  assert.match(ready, /Finish this Step and see what awaits you/);
+});
