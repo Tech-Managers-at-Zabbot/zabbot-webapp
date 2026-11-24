@@ -3,7 +3,7 @@ import React from "react";
 import UserLessonDataComponent, {
   LessonProgressCard,
 } from "./UserLessonDataComponent";
-import { useGetAllLessons, useGetUserLessons } from "@/services/generalApi/lessons/mutation";
+import { useGetLanguageLessons, useGetUserLessons } from "@/services/generalApi/lessons/mutation";
 import { useUser } from "@/contexts/UserContext";
 import { EmptyStateCard } from "../general/EmptyState";
 import { DashboardMetricCardSkeleton } from "../skeletonLoaders/DashboardSkeletons";
@@ -12,13 +12,15 @@ import { useSubscriptionEntitlement } from "@/lib/subscription-gating/useSubscri
 import { resolveTileAccess } from "@/lib/subscription-gating/tileAccess";
 import { isFreePreviewLesson } from "@/lib/subscription-gating/freePreview";
 import { SubscriptionTileOverlay } from "@/lib/subscription-gating/SubscriptionTileOverlay";
+import { orderStepsByJourney } from "@/lib/steps/orderStepsByJourney";
 
 const ProgressSection = () => {
   const { getPageText } = usePageLanguage("userDashboard");
   const { userDetails } = useUser();
   const { state: entitlementState } = useSubscriptionEntitlement();
   const gatingEnabled = process.env.NEXT_PUBLIC_ZABBOT_SUBSCRIPTION_GATING_ENFORCE === "true";
-  const { data: allLessonsData, isLoading: allLessonsLoading } = useGetAllLessons();
+  // Reuse the same language-scoped, Journey-enriched dataset as the Steps page.
+  const { data: allLessonsData, isLoading: allLessonsLoading } = useGetLanguageLessons(userDetails?.languageId);
   const { data: userLessonsData, isLoading: userLessonsLoading } = useGetUserLessons();
   const trackedLessons = Array.isArray(userLessonsData?.data) ? userLessonsData.data : [];
   const progressByLesson = new Map<string, { percentageCompletion?: number; isCompleted?: boolean }>(
@@ -52,11 +54,8 @@ const ProgressSection = () => {
                 />
               </div>
             ) : (
-              [...allLessonsData.data]
-                .sort(
-                  (a: Record<string, any>, b: Record<string, any>) =>
-                    Number(Boolean(b?.isActive)) - Number(Boolean(a?.isActive))
-                )
+              // Keep the Home carousel in exactly the same Journey/Step order as the Steps page.
+              orderStepsByJourney(allLessonsData.data)
                 .map(
                   (lessonData: Record<string, any>, index: number) => (
                     <div key={lessonData?.id ?? index} className="relative flex-shrink-0">
