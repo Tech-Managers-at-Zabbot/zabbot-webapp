@@ -29,4 +29,4 @@ jobs:
       - name: TypeScript typecheck (no app deploy)
         run: npx tsc --noEmit
       - name: Phase 2 frontend access and flag compatibility tests (no API requests)
-        run: node --test tests/phase2-frontend-compatibility.test.cjs
+        run: node --test tests/phase2-frontend-compatibility.test.cjs tests/para-phase2-feedback.test.cjs
