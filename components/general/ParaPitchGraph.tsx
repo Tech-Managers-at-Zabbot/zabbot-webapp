@@ -99,12 +99,12 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
           </span>
         ))}
       </div>
-      <p className="mt-2 text-xs text-slate-600">
-        Syllable boundaries are estimates, not verified phonetic alignment.
-      </p>
       {feedback.guidance && (
         <p className="mt-3 text-sm font-medium" role="status">{feedback.guidance}</p>
       )}
+      <p className="mt-2 text-xs text-slate-600">
+        Syllable boundaries are estimates, not verified phonetic alignment.
+      </p>
     </section>
   );
 }
