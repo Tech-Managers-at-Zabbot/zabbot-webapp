@@ -91,7 +91,7 @@ const InLessonRecordWithPara = ({
   if (!isOpen) return null;
 
   const handleListen = async () => {
-    if (files.length === 0) return;
+    if (files.length === 0 || isProcessing || getFeedbackLoading || isRecording) return;
 
     try {
       if (audioRef.current) {
@@ -117,6 +117,7 @@ const InLessonRecordWithPara = ({
   };
 
   const startRecording = async () => {
+    if (speaking || isProcessing || getFeedbackLoading) return;
     try {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -391,7 +392,7 @@ const InLessonRecordWithPara = ({
             <div className="flex flex-col sm:flex-row gap-4 mb-6 w-full max-w-md">
               <button
                 onClick={handleListen}
-                disabled={speaking || isProcessing || isRecording}
+                disabled={speaking || isProcessing || isRecording || getFeedbackLoading}
                 className="flex-1 bg-cyan-500 hover:bg-cyan-600 disabled:bg-gray-500 disabled:cursor-not-allowed text-white font-semibold px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <svg
@@ -406,7 +407,7 @@ const InLessonRecordWithPara = ({
 
               <button
                 onClick={isRecording ? stopRecording : startRecording}
-                disabled={speaking || isProcessing}
+                disabled={speaking || isProcessing || getFeedbackLoading}
                 className={`flex-1 font-semibold px-6 py-3 rounded-lg transition-colors flex items-center justify-center gap-2 ${isRecording
                   ? "bg-red-500 hover:bg-red-600"
                   : "bg-orange-500 hover:bg-orange-600"
