@@ -53,7 +53,7 @@ const PronunciationList = ({
           </div>
           <div className="text-[12px] hidden lg:block">{item?.tone}</div>
         </div>
-        <div className="text-[11px] text-[#98A2B3] pt-[4px] pl-[30px]">
+        <div className="text-[11px] text-[#F9C10F] pt-[4px] pl-[30px]">
           {item.englishWord}
         </div>
       </div>

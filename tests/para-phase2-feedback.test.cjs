@@ -107,3 +107,11 @@ test("approved casing is the only post-344 visual change; old ungraded path is g
   assert.doesNotMatch(graph, /buildLearnerToneFeedback|Your tone feedback/);
   assert.doesNotMatch(panel, /retainFallback/);
 });
+
+test("all English sidebar words use same gold as main Pàrà tone names", () => {
+  const sidebar = file("components/premium/pwp/PronunciationList.tsx");
+  const detail = file("components/premium/pwp/SelectedPwpScreen.tsx");
+  assert.match(sidebar, /text-\[#F9C10F\] pt-\[4px\] pl-\[30px\]/);
+  assert.match(sidebar, /\{item\.englishWord\}/);
+  assert.match(detail, /text-\[#F9C10F\]/);
+});
