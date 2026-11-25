@@ -76,3 +76,13 @@ test("STAGING scoring diagnostics appear only when the gated backend includes pa
   assert.match(panel, /is a research comparison/);
   assert.match(panel, /isLearnerScore: false/);
 });
+
+test("corrected pitch and unreliable baseline ASR remain diagnostic-only", () => {
+  const panel = file("components/general/ParaScoringDiagnosticsPanel.tsx");
+  assert.match(panel, /evidenceQualityCalibration\.correctedAcousticScore/);
+  assert.match(panel, /evidenceQualityCalibration\.correctedRelativeScore/);
+  assert.match(panel, /evidenceQualityCalibration\.asrDecision/);
+  assert.match(panel, /does not affect your grade/);
+  assert.match(panel, /changesLiveScore: false/);
+  assert.doesNotMatch(panel, /setProcessedData\(/);
+});
