@@ -1,3 +1,4 @@
+import { formatYorubaDisplayWord, formatSyllableTone, formatToneName } from "./formatTone";
 /**
  * Learner-facing guidance derived from trusted target tone labels and existing
  * Pàrà syllable movement evidence. No new pronunciation judgments are inferred.
@@ -26,14 +27,14 @@ export type LearnerToneFeedback = {
   items: LearnerFeedbackItem[];
   nextStep: string;
 };
-const target = (s: ToneSyllable) => `${s.label} (${s.solfege})`;
-const sequence = (syllables: ToneSyllable[]) => syllables.map(s => s.solfege).join("–");
+const target = (s: ToneSyllable) => formatSyllableTone(s.label, s.solfege);
+const sequence = (syllables: ToneSyllable[]) => syllables.map(s => formatToneName(s.solfege)).join("–");
 
 export function buildLearnerToneFeedback(evidence: LearnerToneEvidence): LearnerToneFeedback | null {
   if (!evidence?.syllables?.length) return null;
   const syllables = evidence.syllables;
   const pattern = sequence(syllables);
-  const nextStep = `Listen to the reference, then say ${syllables.map(s => s.label).join("–")} using ${pattern}. Record again to check your tone movement.`;
+  const nextStep = `Listen to the reference, then say ${syllables.map(s => formatYorubaDisplayWord(s.label)).join("–")} using ${pattern}. Record again to check your tone movement.`;
 
   if (evidence.confidence !== "moderate") {
     return {
@@ -59,10 +60,11 @@ export function buildLearnerToneFeedback(evidence: LearnerToneEvidence): Learner
     }
     if (s.status === "practice" && s.differenceCents !== null && Number.isFinite(s.differenceCents)) {
       const relative = s.differenceCents > 0
-        ? "rises more (or falls less)" : "falls more (or rises less)";
+        ? "ends higher relative to the preceding syllable"
+        : "ends lower relative to the preceding syllable";
       return {
         key: String(s.index), kind: "practice", title,
-        message: `Your movement from ${target(previous)} into this syllable ${relative} than the reference. Practice the ${previous.solfege}–${s.solfege} transition.`,
+        message: `Compared with the reference, your movement from ${target(previous)} into this syllable ${relative}. Practice the ${formatToneName(previous.solfege)}–${formatToneName(s.solfege)} transition.`,
       };
     }
     if (s.status === "close" && s.differenceCents !== null) {
