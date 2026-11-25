@@ -10,6 +10,7 @@ import React, { useState, useRef } from "react";
 import { X } from "lucide-react";
 import { convertRecordingToWav } from "@/lib/audio/convertRecordingToWav";
 import ParaPitchGraph from "@/components/general/ParaPitchGraph";
+import ParaScoringDiagnosticsPanel from "@/components/general/ParaScoringDiagnosticsPanel";
 
 // Import the actual API hook
 import { usePronunciationFeedback } from "@/services/generalApi/pronounciations/mutation";
@@ -209,6 +210,7 @@ const InLessonRecordWithPara = ({
               remark: feedbackRes.data.remark,
               textSimilarity: feedbackRes.data.textSimilarity,
               pitchFeedback: feedbackRes.data.pitchFeedback,
+              scoringDiagnostics: feedbackRes.data.scoringDiagnostics,
             });
           } else {
             console.error("Feedback request failed");
@@ -322,6 +324,7 @@ const InLessonRecordWithPara = ({
                 )} */}
 
                 {processedData.pitchFeedback && <ParaPitchGraph feedback={processedData.pitchFeedback} />}
+                {processedData.scoringDiagnostics && <ParaScoringDiagnosticsPanel diagnostics={processedData.scoringDiagnostics} />}
                 {!processedData.pitchFeedback && processedData.plot && (
                   <div className="rounded-lg bg-white w-full">
                     <p className="text-gray-700 text-sm mb-2 text-center font-medium">
