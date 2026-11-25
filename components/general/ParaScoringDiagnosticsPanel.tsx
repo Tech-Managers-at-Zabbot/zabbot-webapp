@@ -23,6 +23,19 @@ export type ParaScoringDiagnostics = {
     reconstruction: number;
   };
   pitchQuality: { referenceOctaveJumpCandidates: number | null; learnerOctaveJumpCandidates: number | null };
+  evidenceQualityCalibration?: {
+    referenceAsrReliable: boolean | null;
+    asrDecision: "withhold-unreliable-reference" | "retain-provisional" | "unknown";
+    rawAcousticScore: number | null;
+    correctedAcousticScore: number | null;
+    correctedRelativeScore: number | null;
+    correctedAcousticDelta: number | null;
+    correctedReferenceOctaveJumpCandidates: number | null;
+    correctedLearnerOctaveJumpCandidates: number | null;
+    transcriptUsedInCandidate: boolean;
+    changesLiveScore: false;
+    explanation: string;
+  };
   shadowCalibration: {
     score: number | null;
     weights: { acoustic: number; syllableTone: number; transcript: number } | null;
@@ -42,7 +55,7 @@ export default function ParaScoringDiagnosticsPanel({
   if (!diagnostics || diagnostics.version !== 1 ||
       diagnostics.kind !== "experimental-shadow-calibration") return null;
 
-  const { reference, recognition, scoring, pitchQuality, shadowCalibration } = diagnostics;
+  const { reference, recognition, scoring, pitchQuality, shadowCalibration, evidenceQualityCalibration } = diagnostics;
   return (
     <details className="w-full rounded-xl border border-slate-300 bg-slate-50 text-slate-900 p-3 text-left mt-3">
       <summary className="font-semibold cursor-pointer">
@@ -72,6 +85,20 @@ export default function ParaScoringDiagnosticsPanel({
         <p className="text-sm mt-3 font-medium">
           The speech recognizer may be unreliable on this attempt. This does not prove a pronunciation error.
         </p>
+      )}
+      {evidenceQualityCalibration && (
+        <div className="mt-3 border-t border-slate-300 pt-3">
+          <p className="font-semibold text-sm">Quality-corrected experiment — does not affect your grade</p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm mt-2">
+            <div><dt className="font-semibold">Original acoustic score</dt><dd>{pct(evidenceQualityCalibration.rawAcousticScore)}</dd></div>
+            <div><dt className="font-semibold">After isolated-octave correction</dt><dd>{pct(evidenceQualityCalibration.correctedAcousticScore)}</dd></div>
+            <div><dt className="font-semibold">Reference speech recognition</dt><dd>{evidenceQualityCalibration.asrDecision === "withhold-unreliable-reference" ? "Unreliable — excluded in experimental calculation" : evidenceQualityCalibration.asrDecision === "unknown" ? "Cannot verify without trusted word" : "Provisionally accepted"}</dd></div>
+            <div><dt className="font-semibold">Corrected experimental composite</dt><dd>{pct(evidenceQualityCalibration.correctedRelativeScore)}</dd></div>
+            <div><dt className="font-semibold">Corrected reference octave jump candidates</dt><dd>{evidenceQualityCalibration.correctedReferenceOctaveJumpCandidates ?? "Not available"}</dd></div>
+            <div><dt className="font-semibold">Corrected learner octave jump candidates</dt><dd>{evidenceQualityCalibration.correctedLearnerOctaveJumpCandidates ?? "Not available"}</dd></div>
+          </dl>
+          <p className="text-xs mt-2">{evidenceQualityCalibration.explanation}</p>
+        </div>
       )}
       <div className="mt-3 border-t border-slate-300 pt-3">
         <p className="font-semibold text-sm">Research-only shadow score: {pct(shadowCalibration.score)}</p>
