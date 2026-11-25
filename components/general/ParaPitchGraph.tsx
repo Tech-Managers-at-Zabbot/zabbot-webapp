@@ -61,12 +61,17 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
     <section className="w-full rounded-xl bg-white p-3 text-slate-900 text-left" aria-label="Pàrà syllable tone comparison">
       <h3 className="text-base font-semibold">Compare your tone movement</h3>
       <p className="text-xs text-slate-600 mt-1">
-        Relative pitch comparison
+        Relative pitch, independently centered for each voice. Higher lines mean higher pitch.
       </p>
       <div className="w-full overflow-x-auto">
         <svg viewBox={`0 0 ${W} ${H}`} role="img"
           aria-label="Green reference pitch and orange learner pitch, shown across estimated syllable intervals"
           className="w-full min-w-[280px] h-auto mt-2">
+          {(() => {
+            const zeroY = PAD_TOP + (hi / (hi - lo)) * (H - PAD_TOP - PAD_BOTTOM);
+            return <line x1={PAD_X} y1={zeroY} x2={W-PAD_X} y2={zeroY}
+              stroke="#cbd5e1" strokeDasharray="4 4" />;
+          })()}
           {feedback.syllables.map(s => {
             const left = PAD_X + s.start * (W-2*PAD_X);
             const right = PAD_X + s.end * (W-2*PAD_X);
@@ -76,7 +81,7 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
               <line x1={left} y1={PAD_TOP} x2={left} y2={H-PAD_BOTTOM}
                 stroke="#94a3b8" strokeDasharray="3 4" />
               <text x={(left+right)/2} y={H-15} fontSize="13" fill="#334155"
-                textAnchor="middle">{s.label} · {s.solfege}</text>
+                textAnchor="middle">{s.label} ({s.solfege})</text>
             </g>;
           })}
           <path d={refPath} fill="none" stroke="#10865b" strokeWidth="2.8" />
@@ -90,13 +95,16 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
       <div className="mt-3 flex flex-wrap gap-2" aria-label="Expected syllable tones">
         {feedback.syllables.map(s => (
           <span key={s.index} className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-sm">
-            {s.index}. {s.label} — {s.solfege}
+            {s.index}. {s.label} ({s.solfege})
           </span>
         ))}
       </div>
       {feedback.guidance && (
         <p className="mt-3 text-sm font-medium" role="status">{feedback.guidance}</p>
       )}
+      <p className="mt-2 text-xs text-slate-600">
+        Syllable boundaries are estimates, not verified phonetic alignment.
+      </p>
     </section>
   );
 }

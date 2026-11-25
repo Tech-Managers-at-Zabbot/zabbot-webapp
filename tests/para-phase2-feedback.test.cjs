@@ -24,8 +24,19 @@ test("graph renders reference and learner contours and guarded syllable guidance
 
 test("learner graph shows clean predefined tone targets without technical disclaimers", () => {
   const graph = file("components/general/ParaPitchGraph.tsx");
-  assert.match(graph, /Relative pitch comparison/);
+  assert.ok(graph.includes("Relative pitch, independently centered for each voice. Higher lines mean higher pitch."));
   assert.match(graph, /aria-label="Expected syllable tones"/);
-  assert.doesNotMatch(graph, /¢|not certain|not a fixed DO|does not support a confident|Syllable boundaries are estimates/);
+  assert.doesNotMatch(graph, /¢|not certain|not a fixed DO|does not support a confident/);
   assert.doesNotMatch(graph, /\{s\.status === "practice" \? "practice"/);
+});
+
+test("four exact Pàrà graph presentation requirements are preserved", () => {
+  const graph = file("components/general/ParaPitchGraph.tsx");
+  assert.ok(graph.includes("Relative pitch, independently centered for each voice. Higher lines mean higher pitch."));
+  assert.match(graph, /const zeroY = PAD_TOP/);
+  assert.match(graph, /stroke="#cbd5e1" strokeDasharray="4 4"/);
+  assert.match(graph, /\{s.label\} \(\{s.solfege\}\)/);
+  assert.match(graph, /\{s.index\}\. \{s.label\} \(\{s.solfege\}\)/);
+  assert.ok(graph.includes("Syllable boundaries are estimates, not verified phonetic alignment."));
+  assert.doesNotMatch(graph, /0¢|200¢|not certain|not a fixed DO–RE–MI frequency scale/);
 });
