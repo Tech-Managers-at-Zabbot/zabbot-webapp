@@ -40,3 +40,13 @@ test("four exact Pàrà graph presentation requirements are preserved", () => {
   assert.ok(graph.includes("Syllable boundaries are estimates, not verified phonetic alignment."));
   assert.doesNotMatch(graph, /0¢|200¢|not certain|not a fixed DO–RE–MI frequency scale/);
 });
+
+test("Listen and Record are locked during acoustic and graph processing on both surfaces", () => {
+  const standalone = file("components/premium/pwp/SelectedPwpScreen.tsx");
+  const lesson = file("components/lessons/contents/InLessonRecordWithPara.tsx");
+  assert.match(standalone, /disabled=\{speaking \|\| isRecording \|\| isProcessingRecord \|\| getFeedbackLoading\}/);
+  assert.match(standalone, /disabled=\{speaking \|\| isProcessingRecord \|\| getFeedbackLoading\}/);
+  assert.match(standalone, /await audio\.play\(\)/);
+  assert.match(lesson, /disabled=\{speaking \|\| isProcessing \|\| isRecording \|\| getFeedbackLoading\}/);
+  assert.match(lesson, /disabled=\{speaking \|\| isProcessing \|\| getFeedbackLoading\}/);
+});
