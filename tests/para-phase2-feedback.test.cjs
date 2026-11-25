@@ -106,6 +106,14 @@ test("actionable feedback respects uncertain first syllable and praises measured
   const m = new Module(path.join(root, "lib/para/learnerFeedback.ts"), module);
   m.filename = path.join(root, "lib/para/learnerFeedback.ts");
   m.paths = module.paths;
+  const fmt = new Module(path.join(root, "lib/para/formatTone.ts"), module);
+  fmt.filename = path.join(root, "lib/para/formatTone.ts");
+  fmt.paths = module.paths;
+  fmt._compile(ts.transpileModule(file("lib/para/formatTone.ts"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 }
+  }).outputText, fmt.filename);
+  const moduleRequire = m.require.bind(m);
+  m.require = id => id === "./formatTone" ? fmt.exports : moduleRequire(id);
   m._compile(compiled, m.filename);
   const derive = m.exports.buildLearnerToneFeedback;
   const base = {
@@ -119,7 +127,7 @@ test("actionable feedback respects uncertain first syllable and praises measured
   assert.match(result.summary, /close to the reference/);
   assert.match(result.items[0].message, /cannot independently confirm/);
   assert.match(result.items[1].message, /close to the reference/);
-  assert.match(result.nextStep, /RE–RE/);
+  assert.match(result.nextStep, /re–re/);
   assert.doesNotMatch(result.items[0].message, /wrong|too high|too low/);
 
   const limited = derive({ ...base, confidence: "limited" });
@@ -131,13 +139,13 @@ test("actionable feedback respects uncertain first syllable and praises measured
     ...base,
     syllables: [base.syllables[0], { ...base.syllables[1], status: "practice", differenceCents: 240 }],
   });
-  assert.match(practice.items[1].message, /rises more \(or falls less\)/);
-  assert.match(practice.items[1].message, /RE–RE transition/);
+  assert.match(practice.items[1].message, /ends higher relative to the preceding syllable/);
+  assert.match(practice.items[1].message, /re–re transition/);
   const negative = derive({
     ...base,
     syllables: [base.syllables[0], { ...base.syllables[1], status: "practice", differenceCents: -240 }],
   });
-  assert.match(negative.items[1].message, /falls more \(or rises less\)/);
+  assert.match(negative.items[1].message, /ends lower relative to the preceding syllable/);
   const unknown = derive({
     ...base,
     syllables: [base.syllables[0], { ...base.syllables[1], status: "uncertain", differenceCents: null }],
@@ -156,4 +164,31 @@ test("both surfaces retain shared chart, trusted labels and original graph wordi
   assert.match(standalone, /Review your tone feedback below to see what to practice/);
   assert.match(standalone, /processedData\.pitchFeedback \? /);
   assert.match(lesson, /<ParaPitchGraph feedback=\{processedData\.pitchFeedback\}/);
+});
+
+test("word and tone presentation is consistently uppercase and parenthesized lowercase", () => {
+  const ts = require("typescript");
+  const Module = require("node:module");
+  const fmt = new Module(path.join(root, "lib/para/formatTone.ts"), module);
+  fmt.filename = path.join(root, "lib/para/formatTone.ts");
+  fmt.paths = module.paths;
+  fmt._compile(ts.transpileModule(file("lib/para/formatTone.ts"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 }
+  }).outputText, fmt.filename);
+  const { formatYorubaDisplayWord, formatTonePattern, formatSyllableTone } = fmt.exports;
+  assert.equal(formatYorubaDisplayWord("àbúrò"), "ÀBÚRÒ");
+  assert.equal(formatTonePattern("Do Mi Do"), "(do–mi–do)");
+  assert.equal(formatTonePattern("RE RE"), "(re–re)");
+  assert.equal(formatSyllableTone("bú", "MI"), "BÚ (mi)");
+  const graph = file("components/general/ParaPitchGraph.tsx");
+  assert.match(graph, /formatSyllableTone\(s\.label, s\.solfege\)/);
+});
+test("ungraded status never becomes a fake zero percent score", () => {
+  const screen = file("components/premium/pwp/SelectedPwpScreen.tsx");
+  assert.match(screen, /payload\?\.graded === false/);
+  assert.match(screen, /finalScore: null/);
+  assert.match(screen, /feedbackRes\.data\.finalScore !== null/);
+  assert.match(screen, /Practice recorded — no score assigned/);
+  assert.match(screen, /processedData\.graded !== false/);
+  assert.match(screen, /formData\.append\("voice", referenceVoice\)/);
 });
