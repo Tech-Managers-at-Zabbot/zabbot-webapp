@@ -95,3 +95,65 @@ test("conditional ASR evidence decision and effective weights appear distinctly 
   assert.match(panel, /Previous formula \(for comparison\)/);
   assert.match(panel, /Reference ASR withheld/);
 });
+
+test("actionable feedback respects uncertain first syllable and praises measured GBOGBO transition", () => {
+  const ts = require("typescript");
+  const Module = require("node:module");
+  const source = file("lib/para/learnerFeedback.ts");
+  const compiled = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 }
+  }).outputText;
+  const m = new Module(path.join(root, "lib/para/learnerFeedback.ts"), module);
+  m.filename = path.join(root, "lib/para/learnerFeedback.ts");
+  m.paths = module.paths;
+  m._compile(compiled, m.filename);
+  const derive = m.exports.buildLearnerToneFeedback;
+  const base = {
+    confidence: "moderate",
+    syllables: [
+      { index: 1, label: "GBO", solfege: "RE", status: "uncertain", differenceCents: null },
+      { index: 2, label: "GBO", solfege: "RE", status: "close", differenceCents: 18 },
+    ],
+  };
+  const result = derive(base);
+  assert.match(result.summary, /close to the reference/);
+  assert.match(result.items[0].message, /cannot independently confirm/);
+  assert.match(result.items[1].message, /close to the reference/);
+  assert.match(result.nextStep, /RE–RE/);
+  assert.doesNotMatch(result.items[0].message, /wrong|too high|too low/);
+
+  const limited = derive({ ...base, confidence: "limited" });
+  assert.equal(limited.items.length, 1);
+  assert.match(limited.items[0].message, /won't guess/);
+  assert.doesNotMatch(limited.summary, /close to the reference/);
+
+  const practice = derive({
+    ...base,
+    syllables: [base.syllables[0], { ...base.syllables[1], status: "practice", differenceCents: 240 }],
+  });
+  assert.match(practice.items[1].message, /rises more \(or falls less\)/);
+  assert.match(practice.items[1].message, /RE–RE transition/);
+  const negative = derive({
+    ...base,
+    syllables: [base.syllables[0], { ...base.syllables[1], status: "practice", differenceCents: -240 }],
+  });
+  assert.match(negative.items[1].message, /falls more \(or rises less\)/);
+  const unknown = derive({
+    ...base,
+    syllables: [base.syllables[0], { ...base.syllables[1], status: "uncertain", differenceCents: null }],
+  });
+  assert.match(unknown.items[1].message, /no specific correction/);
+});
+
+test("both surfaces retain shared chart, trusted labels and original graph wording", () => {
+  const graph = file("components/general/ParaPitchGraph.tsx");
+  const standalone = file("components/premium/pwp/SelectedPwpScreen.tsx");
+  const lesson = file("components/lessons/contents/InLessonRecordWithPara.tsx");
+  assert.match(graph, /buildLearnerToneFeedback\(feedback\)/);
+  assert.match(graph, /Your tone feedback/);
+  assert.match(graph, /Next practice goal:/);
+  assert.match(graph, /Syllable boundaries are estimates, not verified phonetic alignment/);
+  assert.match(standalone, /Review your tone feedback below to see what to practice/);
+  assert.match(standalone, /processedData\.pitchFeedback \? /);
+  assert.match(lesson, /<ParaPitchGraph feedback=\{processedData\.pitchFeedback\}/);
+});

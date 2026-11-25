@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { buildLearnerToneFeedback } from "@/lib/para/learnerFeedback";
 
 export type ParaPitchFeedback = {
   version: 2;
@@ -54,6 +55,7 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
   const max = Math.max(...values);
   const lo = Math.min(-100, min - 60);
   const hi = Math.max(100, max + 60);
+  const learnerGuidance = buildLearnerToneFeedback(feedback);
   const refPath = plotPath(feedback.referencePitch, lo, hi);
   const learnerPath = plotPath(feedback.learnerPitch, lo, hi);
 
@@ -99,9 +101,23 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
           </span>
         ))}
       </div>
-      {feedback.guidance && (
+      {learnerGuidance ? (
+        <div className="mt-3 border-t border-slate-200 pt-3" aria-label="Your tone feedback">
+          <h4 className="text-sm font-semibold">Your tone feedback</h4>
+          <p className="mt-1 text-sm">{learnerGuidance.summary}</p>
+          <ul className="mt-2 space-y-2" aria-label="Syllable-by-syllable practice guidance">
+            {learnerGuidance.items.map(item => (
+              <li key={item.key} className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
+                <p className="font-semibold">{item.title}</p>
+                <p className="mt-1">{item.message}</p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm font-medium"><strong>Next practice goal:</strong> {learnerGuidance.nextStep}</p>
+        </div>
+      ) : feedback.guidance ? (
         <p className="mt-3 text-sm font-medium" role="status">{feedback.guidance}</p>
-      )}
+      ) : null}
       <p className="mt-2 text-xs text-slate-600">
         Syllable boundaries are estimates, not verified phonetic alignment.
       </p>
