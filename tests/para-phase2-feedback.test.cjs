@@ -62,3 +62,17 @@ test("Pàrà randomly selects one voice per word and uses it for both Listen and
   assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\}/);
   assert.doesNotMatch(standalone, /const REFERENCE_VOICE = 'maleVoice'/);
 });
+
+test("STAGING scoring diagnostics appear only when the gated backend includes payload", () => {
+  const standalone = file("components/premium/pwp/SelectedPwpScreen.tsx");
+  const lesson = file("components/lessons/contents/InLessonRecordWithPara.tsx");
+  const panel = file("components/general/ParaScoringDiagnosticsPanel.tsx");
+  for (const source of [standalone, lesson]) {
+    assert.match(source, /scoringDiagnostics: feedbackRes\.data/);
+    assert.match(source, /processedData\.scoringDiagnostics && <ParaScoringDiagnosticsPanel/);
+  }
+  assert.match(panel, /STAGING scoring diagnostics \(experimental\)/);
+  assert.match(panel, /shadowCalibration\.score/);
+  assert.match(panel, /not your pronunciation accuracy/);
+  assert.match(panel, /isLearnerScore: false/);
+});
