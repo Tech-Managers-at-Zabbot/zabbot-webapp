@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { buildLearnerToneFeedback } from "@/lib/para/learnerFeedback";
+import { formatSyllableTone } from "@/lib/para/formatTone";
 
 export type ParaPitchFeedback = {
   version: 2;
@@ -83,7 +84,7 @@ export default function ParaPitchGraph({ feedback }: { feedback?: ParaPitchFeedb
               <line x1={left} y1={PAD_TOP} x2={left} y2={H-PAD_BOTTOM}
                 stroke="#94a3b8" strokeDasharray="3 4" />
               <text x={(left+right)/2} y={H-15} fontSize="13" fill="#334155"
-                textAnchor="middle">{s.label} ({s.solfege})</text>
+                textAnchor="middle">{formatSyllableTone(s.label, s.solfege)}</text>
             </g>;
           })}
           <path d={refPath} fill="none" stroke="#10865b" strokeWidth="2.8" />
