@@ -5,6 +5,7 @@ import { PronunciationProps } from '../types';
 import { usePronunciationFeedback } from '@/services/generalApi/pronounciations/mutation';
 import ScoreBar from '@/components/general/Scorebar';
 import ParaPitchGraph, { type ParaPitchFeedback } from '@/components/general/ParaPitchGraph';
+import ParaScoringDiagnosticsPanel, { type ParaScoringDiagnostics } from '@/components/general/ParaScoringDiagnosticsPanel';
 import { convertRecordingToWav } from '@/lib/audio/convertRecordingToWav';
 
 const generateRandomString = (length = 6) => {
@@ -18,6 +19,7 @@ type ProcessedData = {
     remark: string;
     textSimilarity: number;
     pitchFeedback?: ParaPitchFeedback | null;
+    scoringDiagnostics?: ParaScoringDiagnostics | null;
 };
 
 type ReferenceVoice = 'maleVoice' | 'femaleVoice';
@@ -145,6 +147,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                             remark: feedbackRes.data?.remark,
                             textSimilarity: feedbackRes.data?.textSimilarity,
                             pitchFeedback: feedbackRes.data?.pitchFeedback,
+                            scoringDiagnostics: feedbackRes.data?.scoringDiagnostics,
                         });
 
                         setIsProcessingRecord(false);
@@ -241,6 +244,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                         )}
 
                         {processedData.pitchFeedback && <ParaPitchGraph feedback={processedData.pitchFeedback} />}
+                        {processedData.scoringDiagnostics && <ParaScoringDiagnosticsPanel diagnostics={processedData.scoringDiagnostics} />}
                         {!processedData.pitchFeedback && processedData.plot && (
                             <div className='flex flex-col items-center gap-2'>
                                 <div className='w-150 h-70 justify-center items-center relative bg-white hidden lg:flex'>
