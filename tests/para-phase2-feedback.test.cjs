@@ -51,10 +51,14 @@ test("Listen and Record are locked during acoustic and graph processing on both 
   assert.match(lesson, /disabled=\{speaking \|\| isProcessing \|\| getFeedbackLoading\}/);
 });
 
-test("Pàrà Listen and compare share precisely the same trusted voice choice", () => {
+test("Pàrà randomly selects one voice per word and uses it for both Listen and scoring", () => {
   const standalone = file("components/premium/pwp/SelectedPwpScreen.tsx");
-  assert.match(standalone, /const REFERENCE_VOICE = 'maleVoice' as const/);
-  assert.match(standalone, /handleListen\(data\[REFERENCE_VOICE\]\)/);
-  assert.match(standalone, /formData\.append\("voice", REFERENCE_VOICE\)/);
-  assert.doesNotMatch(standalone, /onClick=\{\(\) => handleListen\(data\.maleVoice\)\}/);
+  const page = file("app/premium/pronounce-with-para/page.tsx");
+  assert.match(standalone, /type ReferenceVoice = 'maleVoice' \| 'femaleVoice'/);
+  assert.match(standalone, /React\.useState<ReferenceVoice>\(/);
+  assert.match(standalone, /Math\.random\(\) < 0\.5 \? 'maleVoice' : 'femaleVoice'/);
+  assert.match(standalone, /handleListen\(data\[referenceVoice\]\)/);
+  assert.match(standalone, /formData\.append\("voice", referenceVoice\)/);
+  assert.match(page, /<SelectedPwpScreen key=\{selectedPwpItem\.id\}/);
+  assert.doesNotMatch(standalone, /const REFERENCE_VOICE = 'maleVoice'/);
 });
