@@ -35,8 +35,8 @@ test("four exact Pàrà graph presentation requirements are preserved", () => {
   assert.ok(graph.includes("Relative pitch, independently centered for each voice. Higher lines mean higher pitch."));
   assert.match(graph, /const zeroY = PAD_TOP/);
   assert.match(graph, /stroke="#cbd5e1" strokeDasharray="4 4"/);
-  assert.match(graph, /\{s.label\} \(\{s.solfege\}\)/);
-  assert.match(graph, /\{s.index\}\. \{s.label\} \(\{s.solfege\}\)/);
+  assert.match(graph, /formatSyllableTone\(s\.label, s\.solfege\)/);
+  assert.match(graph, /\{s.index\}\. \{formatSyllableTone\(s\.label, s\.solfege\)\}/);
   assert.ok(graph.includes("Syllable boundaries are estimates, not verified phonetic alignment."));
   assert.doesNotMatch(graph, /0¢|200¢|not certain|not a fixed DO–RE–MI frequency scale/);
 });
@@ -92,110 +92,18 @@ test("conditional ASR evidence decision and effective weights appear distinctly 
   assert.match(panel, /scoring\.effectiveAsrDecision/);
   assert.match(panel, /scoring\.effectiveWeights/);
   assert.match(panel, /scoring\.effectiveScore/);
-  assert.match(panel, /Formula reconstruction \(for comparison\)/);
+  assert.match(panel, /Previous formula \(for comparison\)/);
   assert.match(panel, /Reference ASR withheld/);
 });
 
-test("actionable feedback respects uncertain first syllable and praises measured GBOGBO transition", () => {
-  const ts = require("typescript");
-  const Module = require("node:module");
-  const source = file("lib/para/learnerFeedback.ts");
-  const compiled = ts.transpileModule(source, {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 }
-  }).outputText;
-  const m = new Module(path.join(root, "lib/para/learnerFeedback.ts"), module);
-  m.filename = path.join(root, "lib/para/learnerFeedback.ts");
-  m.paths = module.paths;
-  const fmt = new Module(path.join(root, "lib/para/formatTone.ts"), module);
-  fmt.filename = path.join(root, "lib/para/formatTone.ts");
-  fmt.paths = module.paths;
-  fmt._compile(ts.transpileModule(file("lib/para/formatTone.ts"), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 }
-  }).outputText, fmt.filename);
-  const moduleRequire = m.require.bind(m);
-  m.require = id => id === "./formatTone" ? fmt.exports : moduleRequire(id);
-  m._compile(compiled, m.filename);
-  const derive = m.exports.buildLearnerToneFeedback;
-  const base = {
-    confidence: "moderate",
-    syllables: [
-      { index: 1, label: "GBO", solfege: "RE", status: "uncertain", differenceCents: null },
-      { index: 2, label: "GBO", solfege: "RE", status: "close", differenceCents: 18 },
-    ],
-  };
-  const result = derive(base);
-  assert.match(result.summary, /close to the reference/);
-  assert.match(result.items[0].message, /cannot independently confirm/);
-  assert.match(result.items[1].message, /close to the reference/);
-  assert.match(result.nextStep, /re–re/);
-  assert.doesNotMatch(result.items[0].message, /wrong|too high|too low/);
-
-  const limited = derive({ ...base, confidence: "limited" });
-  assert.equal(limited.items.length, 1);
-  assert.match(limited.items[0].message, /won't guess/);
-  assert.doesNotMatch(limited.summary, /close to the reference/);
-
-  const practice = derive({
-    ...base,
-    syllables: [base.syllables[0], { ...base.syllables[1], status: "practice", differenceCents: 240 }],
-  });
-  assert.match(practice.items[1].message, /ends higher relative to the preceding syllable/);
-  assert.match(practice.items[1].message, /re–re transition/);
-  const negative = derive({
-    ...base,
-    syllables: [base.syllables[0], { ...base.syllables[1], status: "practice", differenceCents: -240 }],
-  });
-  assert.match(negative.items[1].message, /ends lower relative to the preceding syllable/);
-  const unknown = derive({
-    ...base,
-    syllables: [base.syllables[0], { ...base.syllables[1], status: "uncertain", differenceCents: null }],
-  });
-  assert.match(unknown.items[1].message, /no specific correction/);
-});
-
-test("both surfaces retain shared chart, trusted labels and original graph wording", () => {
-  const graph = file("components/general/ParaPitchGraph.tsx");
-  const standalone = file("components/premium/pwp/SelectedPwpScreen.tsx");
-  const lesson = file("components/lessons/contents/InLessonRecordWithPara.tsx");
-  assert.match(graph, /buildLearnerToneFeedback\(feedback\)/);
-  assert.match(graph, /Your tone feedback/);
-  assert.match(graph, /Next practice goal:/);
-  assert.match(graph, /Syllable boundaries are estimates, not verified phonetic alignment/);
-  assert.match(standalone, /Review your tone feedback below to see what to practice/);
-  assert.match(standalone, /processedData\.pitchFeedback \? /);
-  assert.match(lesson, /<ParaPitchGraph feedback=\{processedData\.pitchFeedback\}/);
-});
-
-test("word and tone presentation is consistently uppercase and parenthesized lowercase", () => {
-  const ts = require("typescript");
-  const Module = require("node:module");
-  const fmt = new Module(path.join(root, "lib/para/formatTone.ts"), module);
-  fmt.filename = path.join(root, "lib/para/formatTone.ts");
-  fmt.paths = module.paths;
-  fmt._compile(ts.transpileModule(file("lib/para/formatTone.ts"), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 }
-  }).outputText, fmt.filename);
-  const { formatYorubaDisplayWord, formatTonePattern, formatSyllableTone } = fmt.exports;
-  assert.equal(formatYorubaDisplayWord("àbúrò"), "ÀBÚRÒ");
-  assert.equal(formatTonePattern("Do Mi Do"), "(do–mi–do)");
-  assert.equal(formatTonePattern("RE RE"), "(re–re)");
-  assert.equal(formatSyllableTone("bú", "MI"), "BÚ (mi)");
-  const graph = file("components/general/ParaPitchGraph.tsx");
-  assert.match(graph, /formatSyllableTone\(s\.label, s\.solfege\)/);
-});
-test("ungraded status never becomes a fake zero percent score", () => {
+test("approved casing is the only post-344 visual change; old ungraded path is gone", () => {
   const screen = file("components/premium/pwp/SelectedPwpScreen.tsx");
-  assert.match(screen, /payload\?\.graded === false/);
-  assert.match(screen, /finalScore: null/);
-  assert.match(screen, /feedbackRes\.data\.finalScore !== null/);
-  assert.match(screen, /Practice recorded — no score assigned/);
-  assert.match(screen, /processedData\.graded !== false/);
-  assert.match(screen, /formData\.append\("voice", referenceVoice\)/);
-});
-
-test("fallback diagnostic identifies trusted ASR with unavailable syllable tone", () => {
+  const graph = file("components/general/ParaPitchGraph.tsx");
   const panel = file("components/general/ParaScoringDiagnosticsPanel.tsx");
-  assert.match(panel, /effectiveAsrDecision\?: "retain" \| "withhold" \| "retainFallback"/);
-  assert.match(panel, /Trusted word recognition accepted; syllable-tone estimate unavailable/);
-  assert.match(panel, /Reference ASR withheld/);
+  assert.match(screen, /formatYorubaDisplayWord\(data\.yorubaWord\)/);
+  assert.match(screen, /formatTonePattern\(data\.tone\)/);
+  assert.match(graph, /formatSyllableTone\(s\.label, s\.solfege\)/);
+  assert.doesNotMatch(screen, /Practice recorded — no score assigned|assessmentStatus|graded === false/);
+  assert.doesNotMatch(graph, /buildLearnerToneFeedback|Your tone feedback/);
+  assert.doesNotMatch(panel, /retainFallback/);
 });
