@@ -20,10 +20,15 @@ type ProcessedData = {
     pitchFeedback?: ParaPitchFeedback | null;
 };
 
-// Keep Listen and comparison bound to the same trusted reference voice.
-const REFERENCE_VOICE = 'maleVoice' as const;
+type ReferenceVoice = 'maleVoice' | 'femaleVoice';
 
+// Pick a reference once when a new word practice screen mounts. The parent
+// keys this screen by pronunciation id, so switching words makes a new choice.
+// Listen and scoring must always use the same choice throughout this screen.
 const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
+    const [referenceVoice] = React.useState<ReferenceVoice>(
+        () => Math.random() < 0.5 ? 'maleVoice' : 'femaleVoice'
+    );
     const [speaking, setSpeaking] = React.useState(false);
     const [isRecording, setIsRecording] = React.useState(false);
     const [isProcessingRecord, setIsProcessingRecord] = React.useState(false);
@@ -119,7 +124,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                 const formData = new FormData();
                 formData.append("file", blob, fileName);
-                formData.append("voice", REFERENCE_VOICE);
+                formData.append("voice", referenceVoice);
 
                 try {
                     const feedbackRes = await getPronunciationFeedback({ id: data?.id, payload: formData });
@@ -198,7 +203,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                 <div className='flex flex-col lg:flex-row justify-center items-center gap-2 mb-4'>
                     <button
-                        onClick={() => handleListen(data[REFERENCE_VOICE])}
+                        onClick={() => handleListen(data[referenceVoice])}
                         disabled={speaking || isRecording || isProcessingRecord || getFeedbackLoading}
                         className="bg-[#42C2FE] cursor-pointer flex justify-center text-white px-4 py-2 mt-3 rounded hover:bg-[#42C2FE]-500 min-w-[175px] disabled:opacity-50 disabled:cursor-not-allowed"
                     > <Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15} className='mr-4' />
