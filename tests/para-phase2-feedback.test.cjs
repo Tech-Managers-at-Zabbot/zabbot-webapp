@@ -50,3 +50,11 @@ test("Listen and Record are locked during acoustic and graph processing on both 
   assert.match(lesson, /disabled=\{speaking \|\| isProcessing \|\| isRecording \|\| getFeedbackLoading\}/);
   assert.match(lesson, /disabled=\{speaking \|\| isProcessing \|\| getFeedbackLoading\}/);
 });
+
+test("Pàrà Listen and compare share precisely the same trusted voice choice", () => {
+  const standalone = file("components/premium/pwp/SelectedPwpScreen.tsx");
+  assert.match(standalone, /const REFERENCE_VOICE = 'maleVoice' as const/);
+  assert.match(standalone, /handleListen\(data\[REFERENCE_VOICE\]\)/);
+  assert.match(standalone, /formData\.append\("voice", REFERENCE_VOICE\)/);
+  assert.doesNotMatch(standalone, /onClick=\{\(\) => handleListen\(data\.maleVoice\)\}/);
+});
