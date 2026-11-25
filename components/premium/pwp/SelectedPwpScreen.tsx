@@ -7,6 +7,7 @@ import ScoreBar from '@/components/general/Scorebar';
 import ParaPitchGraph, { type ParaPitchFeedback } from '@/components/general/ParaPitchGraph';
 import ParaScoringDiagnosticsPanel, { type ParaScoringDiagnostics } from '@/components/general/ParaScoringDiagnosticsPanel';
 import { convertRecordingToWav } from '@/lib/audio/convertRecordingToWav';
+import { formatYorubaDisplayWord, formatTonePattern } from '@/lib/para/formatTone';
 
 const generateRandomString = (length = 6) => {
     return Math.random().toString(36).substring(2, 2 + length);
@@ -14,7 +15,10 @@ const generateRandomString = (length = 6) => {
 
 type ProcessedData = {
     embeddingSimilarity: number;
-    finalScore: number;
+    finalScore: number | null;
+    graded?: boolean;
+    assessmentStatus?: "ungraded";
+    message?: string;
     plot: string;
     remark: string;
     textSimilarity: number;
@@ -137,7 +141,30 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                         return;
                     }
 
-                    if (feedbackRes?.status === 'success' && feedbackRes?.data &&
+                    const payload = feedbackRes?.data as (typeof feedbackRes.data & {
+                        graded?: boolean;
+                        assessmentStatus?: "ungraded";
+                        message?: string;
+                    }) | undefined;
+                    if (feedbackRes?.status === 'success' && payload?.graded === false &&
+                        payload?.assessmentStatus === "ungraded") {
+                        // null is not 0%. Do not let Number(null) turn an
+                        // ungraded practice response into a fake 0% score.
+                        setProcessedData({
+                            embeddingSimilarity: 0,
+                            finalScore: null,
+                            graded: false,
+                            assessmentStatus: "ungraded",
+                            message: payload.message || "We couldn't grade this attempt reliably.",
+                            plot: "",
+                            remark: "",
+                            textSimilarity: 0,
+                            pitchFeedback: payload.pitchFeedback,
+                        });
+                        setIsProcessingRecord(false);
+                    } else if (feedbackRes?.status === 'success' && feedbackRes?.data &&
+                        feedbackRes.data.finalScore !== null &&
+                        feedbackRes.data.finalScore !== undefined &&
                         Number.isFinite(Number(feedbackRes.data.finalScore))) {
                         // Handle successful feedback response
                         setProcessedData({
@@ -186,9 +213,9 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
             <div className='flex flex-col justify-center' style={{
                 fontFamily: "Lexend", textAlign: "center"
             }}>
-                <div className='text-[#FCFFFF] mb-1 text-[25px] md:text-[30px] lg:text-[44px]'>{data.yorubaWord.toLocaleUpperCase()}</div>
+                <div className='text-[#FCFFFF] mb-1 text-[25px] md:text-[30px] lg:text-[44px]'>{formatYorubaDisplayWord(data.yorubaWord)}</div>
 
-                <div className='text-[#F9C10F] mb-4 text-[18px] md:text-[20px] lg:text-[26px]'>{data.tone}</div>
+                <div className='text-[#F9C10F] mb-4 text-[18px] md:text-[20px] lg:text-[26px]'>{formatTonePattern(data.tone)}</div>
 
                 {speaking && (<div className='text-white text-l justify-center items-center flex p-2'><Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15} /> Playing audio. </div>)}
                 {isRecording && (
@@ -233,7 +260,11 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                 {processedData && (
                     <div className='flex justify-center items-center mt-[15px] gap-2 flex-col'>
-                        {processedData.pitchFeedback ? (
+                        {processedData.graded === false ? (
+                            <div role="status" className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>
+                                Practice recorded — no score assigned. {processedData.message}
+                            </div>
+                        ) : processedData.pitchFeedback ? (
                             <div className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>
                                 Review your tone feedback below to see what to practice.
                             </div>
@@ -241,9 +272,9 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                             <div className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>{processedData.remark}</div>
                         ) : null}
 
-                        {Number.isFinite(processedData.finalScore) && (
+                        {processedData.graded !== false && processedData.finalScore !== null && Number.isFinite(processedData.finalScore) && (
                             <div className='flex flex-col items-center w-full'>
-                                <ScoreBar finalScore={processedData.finalScore} />
+                                <ScoreBar finalScore={processedData.finalScore!} />
                             </div>
                         )}
 
