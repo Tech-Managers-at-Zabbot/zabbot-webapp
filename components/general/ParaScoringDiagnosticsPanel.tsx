@@ -21,7 +21,7 @@ export type ParaScoringDiagnostics = {
     components: { acoustic: number | null; syllableTone: number | null; transcript: number; syllablePattern: number | null; interSyllable: number | null };
     liveScore: number;
     reconstruction: number;
-    effectiveAsrDecision?: "retain" | "withhold";
+    effectiveAsrDecision?: "retain" | "withhold" | "retainFallback";
     effectiveWeights?: { acoustic: number; syllableTone: number; transcript: number };
     effectiveScore?: number;
   };
@@ -80,8 +80,8 @@ export default function ParaScoringDiagnosticsPanel({
         <div><dt className="font-semibold">ASR transcript component</dt><dd>{pct(scoring.components.transcript)} (weight {pct(scoring.weights.transcript)})</dd></div>
         <div><dt className="font-semibold">Scoring path</dt><dd className="break-words">{scoring.path}</dd></div>
         <div><dt className="font-semibold">Actual score</dt><dd>{pct(scoring.liveScore)}</dd></div>
-        <div><dt className="font-semibold">{scoring.effectiveAsrDecision ? "Previous formula (for comparison)" : "Reconstructed score"}</dt><dd>{pct(scoring.reconstruction)}</dd></div>
-        {scoring.effectiveAsrDecision && <div><dt className="font-semibold">Actual ASR evidence decision</dt><dd>{scoring.effectiveAsrDecision === "withhold" ? "Reference ASR withheld" : "Both transcriptions accepted"}</dd></div>}
+        <div><dt className="font-semibold">{scoring.effectiveAsrDecision ? "Formula reconstruction (for comparison)" : "Reconstructed score"}</dt><dd>{pct(scoring.reconstruction)}</dd></div>
+        {scoring.effectiveAsrDecision && <div><dt className="font-semibold">Actual ASR evidence decision</dt><dd>{scoring.effectiveAsrDecision === "withhold" ? "Reference ASR withheld" : scoring.effectiveAsrDecision === "retainFallback" ? "Trusted word recognition accepted; syllable-tone estimate unavailable, using acoustic + transcript" : "Both transcriptions accepted"}</dd></div>}
         {scoring.effectiveWeights && <div><dt className="font-semibold">Effective scoring weights</dt><dd>Acoustic {pct(scoring.effectiveWeights.acoustic)} · Tone {pct(scoring.effectiveWeights.syllableTone)} · ASR {pct(scoring.effectiveWeights.transcript)}</dd></div>}
         {scoring.effectiveScore !== undefined && <div><dt className="font-semibold">Effective final score</dt><dd>{pct(scoring.effectiveScore)}</dd></div>}
         <div><dt className="font-semibold">Reference octave-jump candidates</dt><dd>{pitchQuality.referenceOctaveJumpCandidates ?? "Not available"}</dd></div>
