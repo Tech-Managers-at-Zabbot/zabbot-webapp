@@ -233,9 +233,13 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
 
                 {processedData && (
                     <div className='flex justify-center items-center mt-[15px] gap-2 flex-col'>
-                        {processedData.remark?.length > 0 && (
+                        {processedData.pitchFeedback ? (
+                            <div className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>
+                                Review your tone feedback below to see what to practice.
+                            </div>
+                        ) : processedData.remark?.length > 0 ? (
                             <div className='rounded-[6px] text-[#FCFFFF] text-[16px] md:text-[18px] lg:text-[20px]'>{processedData.remark}</div>
-                        )}
+                        ) : null}
 
                         {Number.isFinite(processedData.finalScore) && (
                             <div className='flex flex-col items-center w-full'>
