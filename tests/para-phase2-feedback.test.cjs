@@ -86,3 +86,12 @@ test("corrected pitch and unreliable baseline ASR remain diagnostic-only", () =>
   assert.match(panel, /changesLiveScore: false/);
   assert.doesNotMatch(panel, /setProcessedData\(/);
 });
+
+test("conditional ASR evidence decision and effective weights appear distinctly from research shadows", () => {
+  const panel = file("components/general/ParaScoringDiagnosticsPanel.tsx");
+  assert.match(panel, /scoring\.effectiveAsrDecision/);
+  assert.match(panel, /scoring\.effectiveWeights/);
+  assert.match(panel, /scoring\.effectiveScore/);
+  assert.match(panel, /Previous formula \(for comparison\)/);
+  assert.match(panel, /Reference ASR withheld/);
+});
