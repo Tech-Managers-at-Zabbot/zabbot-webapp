@@ -73,6 +73,6 @@ test("STAGING scoring diagnostics appear only when the gated backend includes pa
   }
   assert.match(panel, /STAGING scoring diagnostics \(experimental\)/);
   assert.match(panel, /shadowCalibration\.score/);
-  assert.match(panel, /not your pronunciation accuracy/);
+  assert.match(panel, /is a research comparison/);
   assert.match(panel, /isLearnerScore: false/);
 });
