@@ -92,7 +92,7 @@ test("conditional ASR evidence decision and effective weights appear distinctly 
   assert.match(panel, /scoring\.effectiveAsrDecision/);
   assert.match(panel, /scoring\.effectiveWeights/);
   assert.match(panel, /scoring\.effectiveScore/);
-  assert.match(panel, /Previous formula \(for comparison\)/);
+  assert.match(panel, /Formula reconstruction \(for comparison\)/);
   assert.match(panel, /Reference ASR withheld/);
 });
 
@@ -191,4 +191,11 @@ test("ungraded status never becomes a fake zero percent score", () => {
   assert.match(screen, /Practice recorded — no score assigned/);
   assert.match(screen, /processedData\.graded !== false/);
   assert.match(screen, /formData\.append\("voice", referenceVoice\)/);
+});
+
+test("fallback diagnostic identifies trusted ASR with unavailable syllable tone", () => {
+  const panel = file("components/general/ParaScoringDiagnosticsPanel.tsx");
+  assert.match(panel, /effectiveAsrDecision\?: "retain" \| "withhold" \| "retainFallback"/);
+  assert.match(panel, /Trusted word recognition accepted; syllable-tone estimate unavailable/);
+  assert.match(panel, /Reference ASR withheld/);
 });
