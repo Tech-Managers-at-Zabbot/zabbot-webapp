@@ -196,7 +196,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     <button
                         onClick={() => handleListen(data.maleVoice)}
                         disabled={speaking || isRecording || isProcessingRecord || getFeedbackLoading}
-                        className="bg-[#42C2FE] cursor-pointer flex justify-center text-white px-4 py-2 mt-3 rounded hover:bg-[#42C2FE]-500 min-w-[175px]"
+                        className="bg-[#42C2FE] cursor-pointer flex justify-center text-white px-4 py-2 mt-3 rounded hover:bg-[#42C2FE]-500 min-w-[175px] disabled:opacity-50 disabled:cursor-not-allowed"
                     > <Image src='/general/song-icon.svg' alt="song-icon" height={15} width={15} className='mr-4' />
                         {!getFeedbackLoading && speaking ? 'Listening...' : 'Listen'}
                     </button>
@@ -204,7 +204,7 @@ const PwpTipScreen: React.FC<{ data: PronunciationProps }> = ({ data }) => {
                     <button
                         onClick={isRecording ? stopRecording : startRecording}
                         disabled={speaking || isProcessingRecord || getFeedbackLoading}
-                        className={`bg-[#F15B29] flex justify-center cursor-pointer text-white px-4 py-2 mt-3 rounded hover:bg-[#F15B29]-700 min-w-[175px] ${isRecording ? 'bg-[#F15B29] hover:bg-[#f15b29]-500' : 'bg-[#03A7F3] hover:bg-[#03A7F3]-500'}`}
+                        className={`bg-[#F15B29] flex justify-center cursor-pointer text-white px-4 py-2 mt-3 rounded hover:bg-[#F15B29]-700 min-w-[175px] ${isRecording ? 'bg-[#F15B29] hover:bg-[#f15b29]-500' : 'bg-[#03A7F3] hover:bg-[#03A7F3]-500'} disabled:opacity-50 disabled:cursor-not-allowed`}
                     > <Image src='/general/record-mic-icon.svg' alt="song-icon" height={15} width={15} className='mr-4' />
                         {isRecording ? 'Stop Recording' : 'Record'}
                     </button>
